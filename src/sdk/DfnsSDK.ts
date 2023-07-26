@@ -45,8 +45,7 @@ export interface DfnsSDKOptions {
 
   appLogoUrl?: string | null;
   /** @optional Use dark theme */
-  darkMode?: boolean;
-  /** @optional DFNS endpoint URL */ endpoint: string;
+  darkMode?: boolean; 
 }
 
 export class DfnsSDK implements Eip1193Provider {
