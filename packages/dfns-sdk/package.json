@@ -1,0 +1,15 @@
+{
+  "name": "@mattieb/hello",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "target": "browser",
+  "scripts": {
+    "build": "tsc"
+  },
+  "devDependencies": {
+    "typescript": "^4.7.3"
+  },
+  "dependencies": {
+    "ethers": "^6.6.5"
+  }
+}
