@@ -48,7 +48,7 @@ export interface DfnsSDKOptions {
   darkMode?: boolean; 
 }
 
-export class DfnsSDK implements Eip1193Provider {
+export default class DfnsSDK implements Eip1193Provider {
   protected readonly messageHandlers = new Set<
     (event: DfnsMessageEvent) => any
   >();
@@ -67,7 +67,7 @@ export class DfnsSDK implements Eip1193Provider {
         const url = new URL(this.options.frameUrl);
         const iframe = document.createElement("iframe");
         iframe.classList.add("dfns-iframe");
-        iframe.dataset.dfnsIframeLabel = url.host;
+        iframe.dataset["dfnsIframeLabel"] = url.host;
         iframe.title = "DFNS";
         iframe.src = url.href;
         applyOverlayStyles(iframe);
@@ -177,7 +177,7 @@ export class DfnsSDK implements Eip1193Provider {
 
   request(request: {
     method: string;
-    params?: any[] | Record<string, any> | undefined;
+    params?: any[] | Record<string, any>;
   }): Promise<any> {
     return this.post(DFNSMessageType.DFNS_HANDLE_REQUEST, request);
   }
