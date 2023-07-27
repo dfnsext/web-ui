@@ -1,5 +1,5 @@
 {
-  "name": "@smart-chain/dfns-sdk",
+  "name": "@smart-chain-fr/dfns-sdk",
   "version": "0.0.1",
   "description": "A SDK for the DFNS Iframe",
   "main": "lib/main.js",
@@ -25,9 +25,9 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/smart-massi/asyncbatch"
+    "url": "git+https://github.com/smart-chain-fr/dfns-sdk"
   },
-  "author": "Smartchain",
+  "author": "smart-chain-fr",
   "license": "ISC",
   "devDependencies": {
     "@types/jest": "^29.5.2",
