@@ -54,107 +54,96 @@ export interface DfnsSDKOptions {
 }
 
 export default class DfnsSDK implements Eip1193Provider {
+	private iframe!: Promise<HTMLIFrameElement>;
 	protected readonly messageHandlers = new Set<(event: DfnsMessageEvent) => any>();
-
-	private iframe?: HTMLIFrameElement = undefined;
 
 	constructor(protected options: DfnsSDKOptions) {
 		this.init();
 		this.listen();
 	}
 
-	init() {
-		// Check DOM state and load...
-		if (["loaded", "interactive", "complete"].includes(document.readyState)) {
-			this.loadIframe();
-		} else {
-			// ...or check load events to load
-			window.addEventListener("load", this.loadIframe, false);
-		}
-	}
-
 	connect(): Promise<any> {
 		return new Promise(async (resolve) => {
-      console.log("connect")
-			await this._post({ type: DFNSMessageType.DFNS_CONNECT, payload: {} });
-      console.log("posted")
 			const removeResponseListener = this.on(DFNSMessageType.DFNS_CONNECT, (event: DfnsMessageEvent) => {
 				const { response } = event.data;
-        console.log("listen")
 				removeResponseListener();
 				return resolve(response);
 			});
+			await this._post({ type: DFNSMessageType.DFNS_CONNECT, payload: {} });
 		});
 	}
 
-  disconnect(): Promise<Partial<any>> {
+	disconnect(): Promise<Partial<any>> {
 		return new Promise(async (resolve) => {
-			await this._post({ type: DFNSMessageType.DFNS_DISCONNECT, payload: {} });
 			const removeResponseListener = this.on(DFNSMessageType.DFNS_DISCONNECT, (event: DfnsMessageEvent) => {
 				const { response } = event.data;
 				removeResponseListener();
 				return resolve(response);
 			});
+			await this._post({ type: DFNSMessageType.DFNS_DISCONNECT, payload: {} });
 		});
 	}
 
-	protected async loadIframe(): Promise<HTMLIFrameElement> {
-		return new Promise(async (resolve) => {
-			if (this.iframe) return resolve(this.iframe);
-			const existingIframe = checkForSameSrcInstances();
+	protected async init() {
+		this.iframe = new Promise((resolve) => {
+			const load = () => {
+				let iframe: HTMLIFrameElement | undefined = undefined;
+				const existingIframe = checkForSameSrcInstances();
 
-			if (existingIframe.length) {
-				this.iframe = existingIframe[0]!;
-				resolve(this.iframe);
-				return;
-			}
+				if (existingIframe.length) {
+					iframe = existingIframe[0]!;
+				}
 
-			const url = new URL(this.options.frameUrl);
-			const iframe = document.createElement("iframe");
-			iframe.classList.add("dfns-iframe");
-			iframe.dataset["dfnsIframeLabel"] = url.host;
-			iframe.title = "DFNS";
-			iframe.src = url.href;
-			iframe.allow = "publickey-credentials-get *";
-			applyOverlayStyles(iframe);
-			document.body.appendChild(iframe);
-			this.iframe = iframe;
+				if (!iframe) {
+					const url = new URL(this.options.frameUrl);
+					iframe = document.createElement("iframe");
+					iframe.classList.add("dfns-iframe");
+					iframe.dataset["dfnsIframeLabel"] = url.host;
+					iframe.title = "DFNS";
+					iframe.src = url.href;
+					iframe.allow = "publickey-credentials-get *";
+					applyOverlayStyles(iframe);
+					document.body.appendChild(iframe);
+				}
 
-			const removeResponseListener = this.on(DFNSMessageType.DFNS_OVERLAY_READY, () => {
-				removeResponseListener();
 				resolve(iframe);
-			});
+			};
 
-			window.addEventListener("message", (event: MessageEvent) => {
-				if (event.origin === this.options.frameUrl) {
-					if (event.data && event.data.type && this.messageHandlers.size) {
-						event.data.response = event.data.response ?? {};
-            console.log(event.data)
-						for (const handler of this.messageHandlers.values()) {
-							handler(event);
-						}
+			if (["loaded", "interactive", "complete"].includes(document.readyState)) {
+				load();
+			} else {
+				// ...or check load events to load
+				window.addEventListener("load", load, false);
+			}
+		});
+
+		window.addEventListener("message", (event: MessageEvent) => {
+			if (event.origin === this.options.frameUrl) {
+				if (event.data && event.data.type && this.messageHandlers.size) {
+					event.data.response = event.data.response ?? {};
+					console.log(event.data);
+					for (const handler of this.messageHandlers.values()) {
+						handler(event);
 					}
 				}
-			});
+			}
 		});
 	}
 
 	protected async showOverlay() {
-		const iframe = await this.loadIframe();
+		const iframe = await this.iframe;
 
 		iframe.style.display = "block";
 		iframe.focus();
 	}
 
 	protected async hideOverlay() {
-		const iframe = await this.loadIframe();
+		const iframe = await this.iframe;
 		iframe.style.display = "none";
 	}
 
 	public async post(type: DFNSMessageType, payload: Partial<JsonRpcPayload>): Promise<Partial<JsonRpcPayload>> {
 		return new Promise(async (resolve) => {
-			await this._post({ type, payload });
-
 			const removeResponseListener = this.on(type, (event: DfnsMessageEvent) => {
 				const { response } = event.data;
 
@@ -163,23 +152,24 @@ export default class DfnsSDK implements Eip1193Provider {
 					resolve(response);
 				}
 			});
+			await this._post({ type, payload });
 		});
 	}
 
 	public on(type: DFNSMessageType, handler: (this: Window, event: DfnsMessageEvent) => any): () => void {
 		const boundHandler = handler.bind(window);
-
+		console.log("add message handler", type);
 		const listener = (event: DfnsMessageEvent) => {
+			console.log("event type", event.data.type, "type", type);
 			if (event.data.type === type) boundHandler(event);
 		};
 
 		this.messageHandlers.add(listener);
-    console.log(type, this.messageHandlers)
 		return () => this.messageHandlers.delete(listener);
 	}
 
 	protected async _post(data: { type: DFNSMessageType; payload: Partial<JsonRpcPayload> }) {
-    const iframe = await this.loadIframe();
+		const iframe = await this.iframe;
 		if (iframe && iframe.contentWindow) {
 			iframe.contentWindow.postMessage(data, this.options.frameUrl);
 		} else {
