@@ -1,4 +1,6 @@
 import { Eip1193Provider, JsonRpcError, JsonRpcPayload } from "ethers";
+import { UserRegistrationChallenge } from "@dfns/sdk";
+import { WebAuthn } from "@dfns/sdk-webauthn";
 
 export enum DFNSMessageType {
 	DFNS_OVERLAY_READY = "DFNS_OVERLAY_READY",
@@ -7,10 +9,16 @@ export enum DFNSMessageType {
 	DFNS_HANDLE_REQUEST = "DFNS_HANDLE_REQUEST",
 	DFNS_CONNECT = "DFNS_CONNECT",
 	DFNS_DISCONNECT = "DFNS_DISCONNECT",
+	DFNS_SIGN_CHALLENGE = "DFNS_SIGN_CHALLENGE",
+	DFNS_CHALLENGE_SIGNED = "DFNS_CHALLENGE_SIGNED",
+	DFNS_CREATE_ACCOUNT_SUCCESS = "DFNS_CREATE_ACCOUNT_SUCCESS",
+	DFNS_OPEN_CREATE_ACCOUT = "DFNS_OPEN_CREATE_ACCOUT",
+	DFNS_CLOSE_CREATE_ACCOUT = "DFNS_CLOSE_CREATE_ACCOUT",
 }
 export interface DfnsMessageResponse {
 	type: string;
 	response: Partial<JsonRpcError> & Partial<any>;
+	payload: any;
 }
 
 export interface DfnsMessageEvent extends Partial<MessageEvent> {
@@ -51,13 +59,21 @@ export interface DfnsSDKOptions {
 	appLogoUrl?: string | null;
 	/** @optional Use dark theme */
 	darkMode?: boolean;
+
+	rpId: string;
 }
 
 export default class DfnsSDK implements Eip1193Provider {
 	private iframe!: Promise<HTMLIFrameElement>;
 	protected readonly messageHandlers = new Set<(event: DfnsMessageEvent) => any>();
 
+	public static instance: DfnsSDK | null = null;
+
 	constructor(protected options: DfnsSDKOptions) {
+		if (DfnsSDK.instance) {
+			return DfnsSDK.instance;
+		}
+		DfnsSDK.instance = this;
 		this.init();
 		this.listen();
 	}
@@ -101,11 +117,10 @@ export default class DfnsSDK implements Eip1193Provider {
 					iframe.dataset["dfnsIframeLabel"] = url.host;
 					iframe.title = "DFNS";
 					iframe.src = url.href;
-					iframe.allow = "publickey-credentials-get *";
+					iframe.allow = "publickey-credentials-get *; publickey-credentials-create *";
 					applyOverlayStyles(iframe);
 					document.body.appendChild(iframe);
 				}
-
 				resolve(iframe);
 			};
 
@@ -115,18 +130,17 @@ export default class DfnsSDK implements Eip1193Provider {
 				// ...or check load events to load
 				window.addEventListener("load", load, false);
 			}
-		});
 
-		window.addEventListener("message", (event: MessageEvent) => {
-			if (event.origin === this.options.frameUrl) {
-				if (event.data && event.data.type && this.messageHandlers.size) {
-					event.data.response = event.data.response ?? {};
-					console.log(event.data);
-					for (const handler of this.messageHandlers.values()) {
-						handler(event);
+			window.addEventListener("message", (event: MessageEvent) => {
+				if (event.origin === this.options.frameUrl) {
+					if (event.data && event.data.type && this.messageHandlers.size) {
+						event.data.response = event.data.response ?? {};
+						for (const handler of this.messageHandlers.values()) {
+							handler(event);
+						}
 					}
 				}
-			}
+			});
 		});
 	}
 
@@ -140,6 +154,23 @@ export default class DfnsSDK implements Eip1193Provider {
 	protected async hideOverlay() {
 		const iframe = await this.iframe;
 		iframe.style.display = "none";
+	}
+
+	protected async signChallenge(challenge: UserRegistrationChallenge) {
+		const attestation = await new WebAuthn({ rpId: this.options.rpId }).create(challenge);
+		this._post({ type: DFNSMessageType.DFNS_CHALLENGE_SIGNED, payload: attestation });
+	}
+	protected async openCreateAccountTab() {
+		const windowOpened: Window | null = window.open(this.options.frameUrl + "/create-account", "_blank");
+		if (!windowOpened) throw new Error("Failed to open create account tab");
+		windowOpened.focus();
+		return new Promise(async (resolve) => {
+			const removeResponseListener = this.on(DFNSMessageType.DFNS_CLOSE_CREATE_ACCOUT, () => {
+				windowOpened.close();
+				removeResponseListener();
+				return resolve(true);
+			});
+		});
 	}
 
 	public async post(type: DFNSMessageType, payload: Partial<JsonRpcPayload>): Promise<Partial<JsonRpcPayload>> {
@@ -158,9 +189,7 @@ export default class DfnsSDK implements Eip1193Provider {
 
 	public on(type: DFNSMessageType, handler: (this: Window, event: DfnsMessageEvent) => any): () => void {
 		const boundHandler = handler.bind(window);
-		console.log("add message handler", type);
 		const listener = (event: DfnsMessageEvent) => {
-			console.log("event type", event.data.type, "type", type);
 			if (event.data.type === type) boundHandler(event);
 		};
 
@@ -168,7 +197,7 @@ export default class DfnsSDK implements Eip1193Provider {
 		return () => this.messageHandlers.delete(listener);
 	}
 
-	protected async _post(data: { type: DFNSMessageType; payload: Partial<JsonRpcPayload> }) {
+	protected async _post(data: { type: DFNSMessageType; payload: Partial<any> }) {
 		const iframe = await this.iframe;
 		if (iframe && iframe.contentWindow) {
 			iframe.contentWindow.postMessage(data, this.options.frameUrl);
@@ -184,6 +213,13 @@ export default class DfnsSDK implements Eip1193Provider {
 
 		this.on(DFNSMessageType.DFNS_SHOW_OVERLAY, () => {
 			this.showOverlay();
+		});
+		this.on(DFNSMessageType.DFNS_OPEN_CREATE_ACCOUT, () => {
+			this.openCreateAccountTab();
+		});
+
+		this.on(DFNSMessageType.DFNS_SIGN_CHALLENGE, (event: DfnsMessageEvent) => {
+			this.signChallenge(event.data.payload);
 		});
 	}
 

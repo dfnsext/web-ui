@@ -1,6 +1,6 @@
 {
   "name": "@smart-chain-fr/dfns-sdk",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "A SDK for the DFNS Iframe",
   "main": "lib/main.js",
   "types": "lib/main.d.ts",
@@ -40,6 +40,8 @@
   },
   "dependencies": {
     "ethers": "^6.6.5",
-    "uuid": "^9.0.0"
+    "@dfns/sdk": "^0.1.0-alpha.8",
+		"@dfns/sdk-keysigner": "^0.1.0-alpha.8",
+		"@dfns/sdk-webauthn": "^0.1.0-alpha.8"
   }
 }
