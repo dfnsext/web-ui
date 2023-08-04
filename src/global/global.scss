@@ -1,0 +1,11 @@
+body {
+	background-color: var(--background-primary);
+	font-family: var(--font-primary);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	margin: var(--root-margin);
+	max-width: var(--root-max-width);
+	min-width: 100%;
+	min-height: calc(100vh - 83px);
+}

@@ -1,0 +1,41 @@
+:host {
+	display: flex;
+	max-width: 493px;
+	padding: $spacing-2;
+	flex-direction: row;
+	align-items: stretch;
+	align-content: center;
+	justify-content: center;
+	gap: $spacing-3;
+	border-radius: $radius-lg;
+
+	&[variant="info"] {
+		border: 1px solid var(--alert-info-border);
+		background: var(--alert-info-background);
+		color: var(--alert-info-color);
+	}
+	&[variant="success"] {
+		border: 1px solid var(--alert-success-border);
+		background: var(--alert-success-background);
+		color: var(--alert-success-color);
+	}
+	&[variant="warning"] {
+		border: 1px solid var(--alert-warning-border);
+		background: var(--alert-warning-background);
+		color: var(--alert-warning-color);
+	}
+	&[variant="error"] {
+		border: 1px solid var(--alert-error-border);
+		background: var(--alert-error-background);
+		color: var(--alert-error-color);
+	}
+	.icon {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		svg {
+			width: 24px;
+			height: 24px;
+		}
+	}
+}
