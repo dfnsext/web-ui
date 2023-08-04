@@ -6,7 +6,11 @@
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 import { EAlertVariant } from "./utils/enums/alerts-variants";
+import { EButtonSize, EButtonVariant } from "./utils/enums/buttons-enums";
+import { ITypo, ITypoColor } from "./utils/enums/typography-enums";
 export { EAlertVariant } from "./utils/enums/alerts-variants";
+export { EButtonSize, EButtonVariant } from "./utils/enums/buttons-enums";
+export { ITypo, ITypoColor } from "./utils/enums/typography-enums";
 export namespace Components {
     interface DfnsAlert {
         "classCss"?: string;
@@ -15,31 +19,35 @@ export namespace Components {
         "variant": EAlertVariant;
     }
     interface DfnsButton {
+        "classCss"?: string;
+        "disabled": boolean;
+        "fullwidth": boolean;
+        "icon"?: string | null | false;
+        "iconposition": 'left' | 'right';
+        "iconstyle"?: any;
+        "isloading": boolean;
+        "sizing": EButtonSize;
+        "type": 'button' | 'submit';
+        "variant": EButtonVariant;
     }
     interface DfnsLayout {
         "bloomLogoSrc": string;
-        "bottomSection"?: string;
         "closeBtn"?: boolean;
         "closeBtnShouldDisconnect"?: boolean;
-        "contentSection"?: string;
         "crossIconSrc": string;
         "molitorLogoSrc": string;
-        "topSection"?: string;
+    }
+    interface DfnsTypography {
+        "classCss"?: string;
+        "color"?: ITypoColor;
+        "typo": ITypo;
     }
     interface MyComponent {
-        /**
-          * The first name
-         */
-        "first": string;
-        /**
-          * The last name
-         */
-        "last": string;
-        /**
-          * The middle name
-         */
-        "middle": string;
     }
+}
+export interface DfnsButtonCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLDfnsButtonElement;
 }
 declare global {
     interface HTMLDfnsAlertElement extends Components.DfnsAlert, HTMLStencilElement {
@@ -60,6 +68,12 @@ declare global {
         prototype: HTMLDfnsLayoutElement;
         new (): HTMLDfnsLayoutElement;
     };
+    interface HTMLDfnsTypographyElement extends Components.DfnsTypography, HTMLStencilElement {
+    }
+    var HTMLDfnsTypographyElement: {
+        prototype: HTMLDfnsTypographyElement;
+        new (): HTMLDfnsTypographyElement;
+    };
     interface HTMLMyComponentElement extends Components.MyComponent, HTMLStencilElement {
     }
     var HTMLMyComponentElement: {
@@ -70,6 +84,7 @@ declare global {
         "dfns-alert": HTMLDfnsAlertElement;
         "dfns-button": HTMLDfnsButtonElement;
         "dfns-layout": HTMLDfnsLayoutElement;
+        "dfns-typography": HTMLDfnsTypographyElement;
         "my-component": HTMLMyComponentElement;
     }
 }
@@ -81,35 +96,37 @@ declare namespace LocalJSX {
         "variant"?: EAlertVariant;
     }
     interface DfnsButton {
+        "classCss"?: string;
+        "disabled"?: boolean;
+        "fullwidth"?: boolean;
+        "icon"?: string | null | false;
+        "iconposition"?: 'left' | 'right';
+        "iconstyle"?: any;
+        "isloading"?: boolean;
+        "onButtonClick"?: (event: DfnsButtonCustomEvent<void>) => void;
+        "sizing"?: EButtonSize;
+        "type"?: 'button' | 'submit';
+        "variant"?: EButtonVariant;
     }
     interface DfnsLayout {
         "bloomLogoSrc"?: string;
-        "bottomSection"?: string;
         "closeBtn"?: boolean;
         "closeBtnShouldDisconnect"?: boolean;
-        "contentSection"?: string;
         "crossIconSrc"?: string;
         "molitorLogoSrc"?: string;
-        "topSection"?: string;
+    }
+    interface DfnsTypography {
+        "classCss"?: string;
+        "color"?: ITypoColor;
+        "typo"?: ITypo;
     }
     interface MyComponent {
-        /**
-          * The first name
-         */
-        "first"?: string;
-        /**
-          * The last name
-         */
-        "last"?: string;
-        /**
-          * The middle name
-         */
-        "middle"?: string;
     }
     interface IntrinsicElements {
         "dfns-alert": DfnsAlert;
         "dfns-button": DfnsButton;
         "dfns-layout": DfnsLayout;
+        "dfns-typography": DfnsTypography;
         "my-component": MyComponent;
     }
 }
@@ -120,6 +137,7 @@ declare module "@stencil/core" {
             "dfns-alert": LocalJSX.DfnsAlert & JSXBase.HTMLAttributes<HTMLDfnsAlertElement>;
             "dfns-button": LocalJSX.DfnsButton & JSXBase.HTMLAttributes<HTMLDfnsButtonElement>;
             "dfns-layout": LocalJSX.DfnsLayout & JSXBase.HTMLAttributes<HTMLDfnsLayoutElement>;
+            "dfns-typography": LocalJSX.DfnsTypography & JSXBase.HTMLAttributes<HTMLDfnsTypographyElement>;
             "my-component": LocalJSX.MyComponent & JSXBase.HTMLAttributes<HTMLMyComponentElement>;
         }
     }

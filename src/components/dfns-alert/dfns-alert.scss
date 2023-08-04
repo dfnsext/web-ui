@@ -1,4 +1,7 @@
 :host {
+	display: block;
+}
+.root {
 	display: flex;
 	max-width: 493px;
 	padding: $spacing-2;
