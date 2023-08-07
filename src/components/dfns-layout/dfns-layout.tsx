@@ -16,8 +16,9 @@ export class DfnsLayout {
 	@Prop() bloomLogoSrc = "images/bloom.svg";
 
 	render() {
+		const style = { display: "flex !important" };
 		return (
-			<div class="root">
+			<div class="root" theme-mode="accor" style={style}>
 				<div class="top-section">
 					<slot name="topSection" />
 					{this.closeBtn && (
@@ -30,7 +31,7 @@ export class DfnsLayout {
 					<slot name="contentSection" />
 				</div>
 				<div class="bottom-section">
-					<slot name="bottomSection" />
+					<slot name="bottomSection"  />
 				</div>
 				<div class="logos-section">
 					<img src={getAssetPath(`./assets/${this.molitorLogoSrc}`)} alt="Molitor logo" width={47} height={16} />

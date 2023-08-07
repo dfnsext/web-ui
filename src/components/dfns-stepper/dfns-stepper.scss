@@ -1,0 +1,70 @@
+:host {
+	.wrapper-stepper {
+		display: flex;
+		flex-direction: column;
+		width: 100%;
+		height: 100%;
+    
+		.stepper li {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+			list-style-type: none;
+			float: left;
+			width: 30%;
+			position: relative;
+			text-align: center;
+			color: var(--color-neutral-500);
+      
+		}
+
+		.stepper li:before {
+			content: "\25A0";
+			width: 20px;
+			height: 20px;
+			border: 2px solid var(--color-neutral-300);
+			display: block;
+			text-align: center;
+			margin: 0 auto 10px;
+      background: var(--color-generic-white);
+      z-index: 1;
+
+		}
+
+		.stepper li:after {
+			content: "";
+			position: absolute;
+			width: 100%;
+			height: 2px;
+			background-color: var(--color-neutral-300);
+			top: 10px;
+			left: -50%;
+			z-index: 0;
+		}
+
+		.stepper li:first-child:after {
+			content: none;
+		}
+
+		.stepper li.active {
+			color: var(--color-neutral-900);
+      z-index: 1;
+		}
+
+		.stepper li.active:before {
+			border-color: var(--color-generic-black);
+			background-color: var(--color-generic-black);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+			content: "✓";
+      color: var(--color-neutral-50);
+			width: 20px;
+			height: 20px;
+		}
+
+		.stepper .active:after {
+			background-color: var(--color-generic-black);
+		}
+
+    
+	}
+}

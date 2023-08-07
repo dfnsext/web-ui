@@ -1,6 +1,6 @@
 import { Component, Prop, h } from "@stencil/core";
 import classNames from "classnames";
-import { EAlertVariant } from "../../utils/enums/alerts-variants";
+import { EAlertVariant } from "../../utils/enums/alerts-enums";
 import { ITypo } from "../../utils/enums/typography-enums";
 
 @Component({

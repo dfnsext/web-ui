@@ -29,7 +29,7 @@ class EventEmitter<T = any> {
 
 export class ThemeMode {
 	private static ctx: ThemeMode;
-	private _type: EThemeModeType = (localStorage.getItem('theme-mode') as EThemeModeType) ?? EThemeModeType.LIGHT;
+	private _type: EThemeModeType = (localStorage.getItem('theme-mode') as EThemeModeType) ?? EThemeModeType.FNAC;
 	private readonly event = new EventEmitter<EThemeModeType>();
 
 	private constructor() {
@@ -53,15 +53,6 @@ export class ThemeMode {
 	 */
 	public onSwitch(callback: (type: EThemeModeType) => void) {
 		return this.event.on('switch-theme-mode', callback);
-	}
-
-	public toggle() {
-		if (this.type === EThemeModeType.DARK) {
-			this.switch(EThemeModeType.LIGHT);
-			return this.type;
-		}
-		this.switch(EThemeModeType.DARK);
-		return this.type;
 	}
 
 	public switch(type: EThemeModeType) {
