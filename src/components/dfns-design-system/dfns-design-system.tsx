@@ -6,11 +6,11 @@ import { EThemeModeType } from "../../utils/enums/themes-enums";
 import { ThemeMode } from "../../utils/theme-modes";
 
 @Component({
-	tag: "my-component",
-	styleUrl: "my-component.scss",
+	tag: "dfns-design-system",
+	styleUrl: "dfns-design-system.scss",
 	shadow: true,
 })
-export class MyComponent {
+export class DfnsDesignSystem {
 	private themeMode = ThemeMode.getInstance();
 
 	componentWillLoad() {
@@ -37,11 +37,13 @@ export class MyComponent {
 						</dfns-typography>
 					</div>
 					<div slot="contentSection">
-						<dfns-stepper steps={["Identification", "Create passkey", "Validate wallet"]} activeIndices={[0]}></dfns-stepper>
-						<dfns-alert variant={EAlertVariant.ERROR} icon="!" iconstyle={{ color: "red" }}>
-							generate text with lorem ipsum generator. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam
-							ullamcorper, odio sed aliquam ultrices, diam diam ultricies lorem, eget ultricies diam diam ut nisl. Sed
-							consectetur, nisl eget aliquam ultrices, diam diam ultricies lorem, eget ultricies diam diam ut nisl. Sed
+						<dfns-stepper steps={["Identification", "Create passkey", "Validate wallet"]} activeIndices={[0, 1]}></dfns-stepper>
+						<dfns-alert variant={EAlertVariant.INFO}>
+							<div slot="title">Create a backup passkey</div>
+							<div slot="content">
+								We strongly recommend to create a backup passkey, as this is the only way to recover your account if you
+								lose your current passkey.
+							</div>
 						</dfns-alert>
 					</div>
 					<div slot="bottomSection">

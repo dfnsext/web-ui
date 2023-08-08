@@ -16,9 +16,10 @@ export { ITypo, ITypoColor } from "./utils/enums/typography-enums";
 export namespace Components {
     interface DfnsAlert {
         "classCss"?: string;
-        "icon"?: string | null | false;
-        "iconstyle"?: any;
+        "errorIconSrc": string;
+        "infoIconSrc": string;
         "variant": EAlertVariant;
+        "warningIconSrc": string;
     }
     interface DfnsButton {
         "classCss"?: string;
@@ -32,6 +33,8 @@ export namespace Components {
         "sizing": EButtonSize;
         "type": "button" | "submit";
         "variant": EButtonVariant;
+    }
+    interface DfnsDesignSystem {
     }
     interface DfnsLayout {
         "bloomLogoSrc": string;
@@ -56,8 +59,6 @@ export namespace Components {
         "color"?: ITypoColor;
         "typo": ITypo;
     }
-    interface MyComponent {
-    }
 }
 export interface DfnsButtonCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -75,6 +76,12 @@ declare global {
     var HTMLDfnsButtonElement: {
         prototype: HTMLDfnsButtonElement;
         new (): HTMLDfnsButtonElement;
+    };
+    interface HTMLDfnsDesignSystemElement extends Components.DfnsDesignSystem, HTMLStencilElement {
+    }
+    var HTMLDfnsDesignSystemElement: {
+        prototype: HTMLDfnsDesignSystemElement;
+        new (): HTMLDfnsDesignSystemElement;
     };
     interface HTMLDfnsLayoutElement extends Components.DfnsLayout, HTMLStencilElement {
     }
@@ -100,28 +107,23 @@ declare global {
         prototype: HTMLDfnsTypographyElement;
         new (): HTMLDfnsTypographyElement;
     };
-    interface HTMLMyComponentElement extends Components.MyComponent, HTMLStencilElement {
-    }
-    var HTMLMyComponentElement: {
-        prototype: HTMLMyComponentElement;
-        new (): HTMLMyComponentElement;
-    };
     interface HTMLElementTagNameMap {
         "dfns-alert": HTMLDfnsAlertElement;
         "dfns-button": HTMLDfnsButtonElement;
+        "dfns-design-system": HTMLDfnsDesignSystemElement;
         "dfns-layout": HTMLDfnsLayoutElement;
         "dfns-loader": HTMLDfnsLoaderElement;
         "dfns-stepper": HTMLDfnsStepperElement;
         "dfns-typography": HTMLDfnsTypographyElement;
-        "my-component": HTMLMyComponentElement;
     }
 }
 declare namespace LocalJSX {
     interface DfnsAlert {
         "classCss"?: string;
-        "icon"?: string | null | false;
-        "iconstyle"?: any;
+        "errorIconSrc"?: string;
+        "infoIconSrc"?: string;
         "variant"?: EAlertVariant;
+        "warningIconSrc"?: string;
     }
     interface DfnsButton {
         "classCss"?: string;
@@ -136,6 +138,8 @@ declare namespace LocalJSX {
         "sizing"?: EButtonSize;
         "type"?: "button" | "submit";
         "variant"?: EButtonVariant;
+    }
+    interface DfnsDesignSystem {
     }
     interface DfnsLayout {
         "bloomLogoSrc"?: string;
@@ -160,16 +164,14 @@ declare namespace LocalJSX {
         "color"?: ITypoColor;
         "typo"?: ITypo;
     }
-    interface MyComponent {
-    }
     interface IntrinsicElements {
         "dfns-alert": DfnsAlert;
         "dfns-button": DfnsButton;
+        "dfns-design-system": DfnsDesignSystem;
         "dfns-layout": DfnsLayout;
         "dfns-loader": DfnsLoader;
         "dfns-stepper": DfnsStepper;
         "dfns-typography": DfnsTypography;
-        "my-component": MyComponent;
     }
 }
 export { LocalJSX as JSX };
@@ -178,11 +180,11 @@ declare module "@stencil/core" {
         interface IntrinsicElements {
             "dfns-alert": LocalJSX.DfnsAlert & JSXBase.HTMLAttributes<HTMLDfnsAlertElement>;
             "dfns-button": LocalJSX.DfnsButton & JSXBase.HTMLAttributes<HTMLDfnsButtonElement>;
+            "dfns-design-system": LocalJSX.DfnsDesignSystem & JSXBase.HTMLAttributes<HTMLDfnsDesignSystemElement>;
             "dfns-layout": LocalJSX.DfnsLayout & JSXBase.HTMLAttributes<HTMLDfnsLayoutElement>;
             "dfns-loader": LocalJSX.DfnsLoader & JSXBase.HTMLAttributes<HTMLDfnsLoaderElement>;
             "dfns-stepper": LocalJSX.DfnsStepper & JSXBase.HTMLAttributes<HTMLDfnsStepperElement>;
             "dfns-typography": LocalJSX.DfnsTypography & JSXBase.HTMLAttributes<HTMLDfnsTypographyElement>;
-            "my-component": LocalJSX.MyComponent & JSXBase.HTMLAttributes<HTMLMyComponentElement>;
         }
     }
 }

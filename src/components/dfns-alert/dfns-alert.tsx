@@ -1,4 +1,4 @@
-import { Component, Prop, h } from "@stencil/core";
+import { Component, Prop, h, getAssetPath, JSX, Fragment } from "@stencil/core";
 import classNames from "classnames";
 import { EAlertVariant } from "../../utils/enums/alerts-enums";
 import { ITypo } from "../../utils/enums/typography-enums";
@@ -6,27 +6,52 @@ import { ITypo } from "../../utils/enums/typography-enums";
 @Component({
 	tag: "dfns-alert",
 	styleUrl: "dfns-alert.scss",
+	assetsDirs: ["assets"],
 	shadow: true,
 })
 export class DfnsAlert {
-	@Prop() variant: EAlertVariant = EAlertVariant.INFO;
-	@Prop() icon?: string | null | false;
-	@Prop() iconstyle?: any;
+	@Prop({ mutable: true }) variant: EAlertVariant = EAlertVariant.INFO;
 	@Prop() classCss?: string;
+	@Prop() errorIconSrc = "icons/x-circle.svg";
+	@Prop() warningIconSrc = "icons/exclamation-triangle.svg";
+	@Prop() infoIconSrc = "icons/exclamation-circle.svg";
+
+	private getIconVariant(): JSX.Element | null {
+		switch (this.variant) {
+			case EAlertVariant.WARNING:
+				return <img alt="Warning" src={getAssetPath(`./assets/${this.warningIconSrc}`)} width={24} height={24} />;
+			case EAlertVariant.ERROR:
+				return <img alt="Error" src={getAssetPath(`./assets/${this.errorIconSrc}`)} width={24} height={24} />;
+			case EAlertVariant.INFO:
+				return <img alt="Info" src={getAssetPath(`./assets/${this.infoIconSrc}`)} width={24} height={24} />;
+			default:
+				return null;
+		}
+	}
 
 	render() {
 		const attributes = {
 			variant: this.variant,
 			class: classNames("root", this.classCss),
-			style: this.iconstyle,
 		};
 		return (
-			<div {...attributes}>
-				{this.icon ? <div class="icon">{this.icon}</div> : null}
-				<my-typography typo={ITypo.TEXTE_SM_REGULAR}>
-					<slot></slot>
-				</my-typography>
-			</div>
+			<Fragment>
+				<div {...attributes}>
+					<div class="icon">{this.getIconVariant()}</div>
+					<div class="container">
+						<div class="title">
+							<dfns-typography typo={ITypo.TEXTE_MD_SEMIBOLD}>
+								<slot name="title"></slot>
+							</dfns-typography>
+						</div>
+						<div class="content">
+							<dfns-typography typo={ITypo.TEXTE_SM_REGULAR}>
+								<slot name="content"></slot>
+							</dfns-typography>
+						</div>
+					</div>
+				</div>
+			</Fragment>
 		);
 	}
 }

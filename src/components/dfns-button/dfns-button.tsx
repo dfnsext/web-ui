@@ -6,6 +6,7 @@ import { ITypo } from "../../utils/enums/typography-enums";
 @Component({
 	tag: "dfns-button",
 	styleUrl: "dfns-button.scss",
+	shadow: true,
 })
 export class DfnsButton {
 	@Prop({ mutable: true }) variant: EButtonVariant = EButtonVariant.PRIMARY;
@@ -46,19 +47,19 @@ export class DfnsButton {
 		switch (this.sizing) {
 			case EButtonSize.SMALL:
 				return (
-					<dfns-typography typo={ITypo.TEXTE_SM_MEDIUM}>
+					<dfns-typography typo={ITypo.TEXTE_SM_REGULAR}>
 						{this.content}
 					</dfns-typography>
 				);
 			case EButtonSize.MEDIUM:
 				return (
-					<dfns-typography typo={ITypo.TEXTE_MD_MEDIUM}>
+					<dfns-typography typo={ITypo.TEXTE_MD_REGULAR}>
 						{this.content}
 					</dfns-typography>
 				);
 			case EButtonSize.LARGE:
 				return (
-					<dfns-typography typo={ITypo.TEXTE_LG_MEDIUM}>
+					<dfns-typography typo={ITypo.TEXTE_LG_REGULAR}>
 						{this.content}
 					</dfns-typography>
 				);

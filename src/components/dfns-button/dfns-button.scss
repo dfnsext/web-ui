@@ -17,12 +17,10 @@
 		white-space: nowrap;
 		user-select: none;
 		cursor: pointer;
-
 		font-family: var($font-primary);
 		font-weight: 700;
 		font-size: 16px;
 		line-height: 140%;
-
 		border-radius: 6px;
 
 		svg {
@@ -123,13 +121,7 @@
 		}
 
 		&[fullwidthattr="true"] {
-			width: 468px;
-			@media screen and (max-width: $screen-s) {
-				width: 360px;
-			}
-			@media screen and (max-width: $screen-xs) {
-				width: 280px;
-			}
+			width: 100%;
 		}
 
 		&[touppercase="false"] {
