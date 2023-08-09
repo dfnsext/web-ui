@@ -1,0 +1,133 @@
+{
+    "common": {
+      "connect_wallet": "Connect wallet",
+      "logout": "Logout",
+      "settings": "Settings",
+      "search": "Search",
+      "cancel": "Cancel",
+      "save_changes": "Save changes",
+      "modify": "Modify",
+      "to": "to",
+      "by": "By",
+      "or": "Or",
+      "apply": "Apply",
+      "remove": "Remove"
+    },
+    "header": {
+      "nav_links": {
+      }
+    },
+    "pages": {
+      "home": {
+        "title": "Home"
+      },
+      "utilities": {
+        "title": "Utilities"
+      },
+      "profile": {
+        "title": "Profile",
+        "you": "You"
+        }
+      },
+      "settings": {
+        "title": "Settings",
+        "subPages": {
+          "general": {
+            "title": "General",
+            "form": {
+              "email": "Email",
+              "email_description": "This email will be use for notification. It can be different from your authentification email. You will be able to change it whenever you want.",
+              "user_name": "Username",
+              "first_name": "First name",
+              "last_name": "Last name",
+              "description": "Description"
+            }
+          }
+        }
+      },
+      "launches": {
+        "title": "Launches",
+        "subpages": {
+          "in_mint": {
+            "title": "Now minting"
+          },
+          "sold_out": {
+            "title": "Sold out"
+          }
+        }
+      },
+    "alerts": {
+      "error": {
+        "title": "Error",
+        "an_error_occured": "Please try refreshing the page, or return back later."
+      },
+      "success": {
+        "title": "Success",
+        "copy_success": "Copied to clipboard",
+        "save_information": "Your information have been saved"
+      },
+      "tx": {
+        "pending": {
+          "title": "Pending transaction",
+          "content": "Transfer takes about 30 seconds"
+        },
+        "confirmed": "Transaction confirmed",
+        "failed": {
+          "title": "Transaction failed",
+          "button": "Retry transaction"
+        }
+      },
+      "authentication": {
+        "login": "You have been logged in successfully",
+        "logout": "You have been logged out successfully"
+      }
+    },
+    "footer": {
+    },
+    "policies": {
+      "privacy_policy": "Privacy Policy",
+      "terms_of_service": "Terms of Service"
+    },
+    "components": {
+      "register": {
+        "title": "Create an account",
+        "create_account": "Create account",
+        "complete_later": "Complete later",
+        "form": {
+          "email": "Email",
+          "notification_email": "Notification email",
+          "account_name": "Account name",
+          "username": "Username",
+          "first_name": "First name",
+          "last_name": "Last name",
+          "description": "Description"
+        }
+      },
+      "file_input": {
+        "title": "Profile picture",
+        "description": "We recommend that you use an image of at least {{recommandedWidth}} x {{recommandedHeight}} pixels and that it is no larger than {{maxMbSize}} MB. Import a PNG or JPEG file."
+      }
+    },
+    "buttons": {
+      "back": "Back",
+      "next": "Next",
+      "view": "View",
+      "view_more": "View More",
+      "view_less": "View Less",
+      "confirm_payment": "Confirm payment",
+      "place_bid": "Place bid",
+      "approve_payment": "Approve payment",
+      "approve_listing": "Approve listing",
+      "buy_now": "Buy it now",
+      "close": "Close"
+    },
+    "inputs": {
+      "placeholder": {
+        "wallet": "Wallet address"
+      },
+      "tips": {
+        "available": "available"
+      }
+    }
+  }
+  

@@ -1,9 +1,10 @@
-import { Component, JSX, h } from "@stencil/core";
+import { Component, JSX, State, h } from "@stencil/core";
 import { ITypo, ITypoColor } from "../../utils/enums/typography-enums";
 import { EAlertVariant } from "../../utils/enums/alerts-enums";
 import { EButtonSize, EButtonVariant } from "../../utils/enums/buttons-enums";
 import { EThemeModeType } from "../../utils/enums/themes-enums";
 import { ThemeMode } from "../../utils/theme-modes";
+import { LanguageService } from "../../services/language-services";
 
 @Component({
 	tag: "dfns-design-system",
@@ -12,6 +13,7 @@ import { ThemeMode } from "../../utils/theme-modes";
 })
 export class DfnsDesignSystem {
 	private themeMode = ThemeMode.getInstance();
+  @State() private connect_wallet = LanguageService.getContent('common.connect_wallet');
 
 	componentWillLoad() {
 		// Manually set the theme mode to DARK or LIGHT as desired
@@ -37,7 +39,7 @@ export class DfnsDesignSystem {
 						</dfns-typography>
 					</div>
 					<div slot="contentSection">
-						<dfns-stepper steps={["Identification", "Create passkey", "Validate wallet"]} activeIndices={[0, 1]}></dfns-stepper>
+						<dfns-stepper steps={["Identification", "Create passkey", "Validate wallet"]} activeIndices={[0, 1]} />
 						<dfns-alert variant={EAlertVariant.INFO}>
 							<div slot="title">Create a backup passkey</div>
 							<div slot="content">
@@ -48,7 +50,7 @@ export class DfnsDesignSystem {
 					</div>
 					<div slot="bottomSection">
 						<dfns-button
-							content="Validate wallet"
+							content={this.connect_wallet}
 							variant={EButtonVariant.PRIMARY}
 							sizing={EButtonSize.LARGE}
 							fullwidth
