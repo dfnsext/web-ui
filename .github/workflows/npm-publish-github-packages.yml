@@ -4,34 +4,33 @@
 name: Node Package
 
 on:
-    push:
-        branches:
-            - feature/web-component
+  release:
+    types: [released]
 
 jobs:
-    build:
-        runs-on: ubuntu-latest
-        steps:
-            - uses: actions/checkout@v3
-            - uses: actions/setup-node@v3
-              with:
-                  node-version: 19
-            - run: npm ci
-            - run: npm run build
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 19
+      - run: npm ci
+      - run: npm run build
 
-    publish:
-        needs: build
-        runs-on: ubuntu-latest
-        permissions:
-            contents: read
-            packages: write
-        steps:
-            - uses: actions/checkout@v3
-            - uses: actions/setup-node@v3
-              with:
-                  node-version: 19
-                  registry-url: https://npm.pkg.github.com/
-            - run: npm ci
-            - run: npm publish
-              env:
-                  NODE_AUTH_TOKEN: ${{SECRETS.GITHUB_TOKEN}}
+  publish:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 19
+          registry-url: https://npm.pkg.github.com/
+      - run: npm ci
+      - run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{SECRETS.GITHUB_TOKEN}}
