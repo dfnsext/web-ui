@@ -10,15 +10,22 @@
   "collection": "dist/collection/collection-manifest.json",
   "collection:main": "dist/collection/index.js",
   "unpkg": "dist/dfns-web-component/dfns-web-component.esm.js",
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
   "repository": {
     "type": "git",
-    "url": "https://github.com/ionic-team/stencil-component-starter.git"
+    "url": "git+https://github.com/smart-chain-fr/dfns-sdk"
   },
   "files": [
     "dist/",
     "loader/"
   ],
   "scripts": {
+    "prepare": "npm run build",
+    "prepublishOnly": "",
+    "version": "npm run format && git add -A src",
+    "postversion": "git push && git push --tags",
     "build": "stencil build --docs",
     "start": "stencil build --dev --watch --serve",
     "test": "stencil test --spec --e2e",
@@ -26,7 +33,6 @@
     "generate": "stencil generate"
   },
   "dependencies": {
-    "@heroicons/react": "^2.0.18",
     "@stencil/core": "^4.0.3",
     "classnames": "^2.3.2",
     "prettier": "^3.0.1"
