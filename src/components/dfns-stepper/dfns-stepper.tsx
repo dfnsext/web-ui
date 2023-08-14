@@ -20,7 +20,7 @@ export class DfnsStepper {
 					<ul class="stepper">
 						{this.steps.map((step, index) => (
 							<li key={step} class={this.getActiveClass(index)}>
-								<dfns-typography typo={ITypo.TEXTE_XS_REGULAR}>{step}</dfns-typography>
+								<dfns-typography typo={ITypo.TEXTE_SM_MEDIUM}>{step}</dfns-typography>
 							</li>
 						))}
 					</ul>

@@ -33,17 +33,27 @@
     "generate": "stencil generate"
   },
   "dependencies": {
+    "@dfns/sdk": "^0.1.0-beta.1",
+    "@dfns/sdk-keysigner": "^0.1.0-beta.1",
+    "@dfns/sdk-webauthn": "^0.1.0-beta.1",
+    "@heroicons/react": "^2.0.18",
     "@stencil/core": "^4.0.3",
     "classnames": "^2.3.2",
+    "defer-promise": "^3.0.0",
+    "ethers": "^6.6.5",
+    "js-cookie": "^3.0.5",
+    "jsonwebtoken": "^9.0.1",
     "prettier": "^3.0.1"
   },
   "devDependencies": {
     "@stencil/sass": "^3.0.5",
+    "@types/defer-promise": "^1.0.1",
     "@types/jest": "^27.5.2",
     "@types/node": "^16.18.11",
     "jest": "^27.5.1",
     "jest-cli": "^27.5.1",
-    "puppeteer": "^20.7.3"
+    "puppeteer": "^20.7.3",
+    "rollup-plugin-node-polyfills": "^0.2.1"
   },
   "license": "MIT"
 }
