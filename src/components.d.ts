@@ -77,6 +77,7 @@ export namespace Components {
     }
     interface DfnsWalletValidation {
         "appId": string;
+        "confirmationImgSrc": string;
         "dfnsUserToken": string;
         "rpId": string;
         "visible": string;
@@ -236,6 +237,7 @@ declare namespace LocalJSX {
     }
     interface DfnsWalletValidation {
         "appId"?: string;
+        "confirmationImgSrc"?: string;
         "dfnsUserToken"?: string;
         "onWalletValidated"?: (event: DfnsWalletValidationCustomEvent<Wallet>) => void;
         "rpId"?: string;

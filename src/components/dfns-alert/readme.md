@@ -20,6 +20,7 @@
 
 ### Used by
 
+ - [dfns-create-account](../dfns-create-account)
  - [dfns-design-system](../dfns-design-system)
 
 ### Depends on
@@ -30,6 +31,7 @@
 ```mermaid
 graph TD;
   dfns-alert --> dfns-typography
+  dfns-create-account --> dfns-alert
   dfns-design-system --> dfns-alert
   style dfns-alert fill:#f9f,stroke:#333,stroke-width:4px
 ```

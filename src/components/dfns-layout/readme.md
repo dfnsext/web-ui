@@ -20,7 +20,10 @@
 
 ### Used by
 
+ - [dfns-create-account](../dfns-create-account)
  - [dfns-design-system](../dfns-design-system)
+ - [dfns-validate-wallet](../dfns-validate-wallet)
+ - [dfns-wallet-validation](../dfns-wallet-validation)
 
 ### Depends on
 
@@ -30,7 +33,10 @@
 ```mermaid
 graph TD;
   dfns-layout --> dfns-typography
+  dfns-create-account --> dfns-layout
   dfns-design-system --> dfns-layout
+  dfns-validate-wallet --> dfns-layout
+  dfns-wallet-validation --> dfns-layout
   style dfns-layout fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

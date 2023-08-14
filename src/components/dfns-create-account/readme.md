@@ -5,6 +5,22 @@
 <!-- Auto Generated Below -->
 
 
+## Properties
+
+| Property           | Attribute            | Description | Type     | Default     |
+| ------------------ | -------------------- | ----------- | -------- | ----------- |
+| `oauthAccessToken` | `oauth-access-token` |             | `string` | `undefined` |
+| `rpId`             | `rp-id`              |             | `string` | `undefined` |
+| `visible`          | `visible`            |             | `string` | `undefined` |
+
+
+## Events
+
+| Event            | Description | Type                                    |
+| ---------------- | ----------- | --------------------------------------- |
+| `passkeyCreated` |             | `CustomEvent<RegisterCompleteResponse>` |
+
+
 ## Dependencies
 
 ### Depends on

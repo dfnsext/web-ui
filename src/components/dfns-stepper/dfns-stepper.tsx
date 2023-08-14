@@ -14,10 +14,12 @@ export class DfnsStepper {
 	@Prop() activeIndices: number[] = [];
 
 	render() {
+		const shouldRemoveClasses = this.activeIndices.includes(0) && this.activeIndices.includes(1);
+
 		return (
 			<Host>
 				<div class="wrapper-stepper">
-					<ul class="stepper">
+					<ul class={`stepper ${shouldRemoveClasses ? "remove-classes" : ""}`}>
 						{this.steps.map((step, index) => (
 							<li key={step} class={this.getActiveClass(index)}>
 								<dfns-typography typo={ITypo.TEXTE_SM_MEDIUM}>{step}</dfns-typography>
