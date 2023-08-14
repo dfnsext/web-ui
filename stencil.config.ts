@@ -1,5 +1,6 @@
 import { Config } from '@stencil/core';
 import { sass } from '@stencil/sass';
+import nodePolyfills from 'rollup-plugin-node-polyfills';
 
 export const config: Config = {
   namespace: 'dfns-web-component',
@@ -39,6 +40,11 @@ export const config: Config = {
       ]
     })
   ],
+  rollupPlugins: {
+    after: [
+      nodePolyfills(),
+    ]
+  },
   testing: {
     browserHeadless: "new",
   },

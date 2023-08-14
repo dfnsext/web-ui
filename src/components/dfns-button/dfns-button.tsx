@@ -11,7 +11,7 @@ import { ITypo } from "../../utils/enums/typography-enums";
 export class DfnsButton {
 	@Prop({ mutable: true }) variant: EButtonVariant = EButtonVariant.PRIMARY;
 	@Prop({ mutable: true }) sizing: EButtonSize = EButtonSize.LARGE;
-  @Prop({ mutable: true }) content: string;
+  	@Prop({ mutable: true }) content: string;
 	@Prop() disabled = false;
 	@Prop() type: "button" | "submit" = "button";
 	@Prop() isloading = false;
@@ -20,6 +20,7 @@ export class DfnsButton {
 	@Prop() icon?: JSX.Element;
 	@Prop() iconstyle?: any;
 	@Prop() classCss?: string;
+	@Prop() onClick: () => any;
 
 	@Event() buttonClick: EventEmitter<void>;
 
@@ -37,11 +38,6 @@ export class DfnsButton {
 		}
 	}
 
-	private handleClick = () => {
-		if (!this.disabled && !this.isloading) {
-			this.buttonClick.emit(); // Emit the custom event when the button is clicked
-		}
-	};
 
 	private formatWithTypo(): JSX.Element | null {
 		switch (this.sizing) {
@@ -79,7 +75,7 @@ export class DfnsButton {
     };
   
     return (
-      <button onClick={this.handleClick.bind(this)} {...attributes} class={classNames("root", this.classCss)} type={this.type}>
+      <button onClick={this.onClick} {...attributes} class={classNames("root", this.classCss)} type={this.type}>
         <Fragment>
           {this.isloading ? <dfns-loader /> : null}
           {!this.isloading && this.icon && this.iconposition === "left" ? <div class="icon">{this.icon}</div> : null}

@@ -9,6 +9,19 @@
     <script nomodule src="/build/dfns-web-component.js"></script>
   </head>
   <body >
-    <dfns-design-system></dfns-design-system>
+    
   </body>
+  <script type="module">
+    import { DfnsSDK } from '/build/index.esm.js';
+
+    const dfnsSdkOptions = {
+	    rpId: "localhost",
+      appId: "ap-5i7r1-sndgk-9gc9isroh4h9epk4"
+    }
+    const dfnsSDK = new DfnsSDK(dfnsSdkOptions);
+    dfnsSDK.init()
+    dfnsSDK.connectAccorSocial("eyJhbGciOiJSUzI1NiIsImtpZCI6IlVBVEFTNDZMS0Q3OUYzR0FYUlM4RzNYRDBaWTlHQ1JVUkNPTU1PTElUT1JORlQwMDAxIiwicGkuYXRtIjoibXJtZSJ9.eyJzY3AiOiJvcGVuaWQiLCJjbGllbnRJZCI6ImNvbS5tb2xpdG9yTkZUIiwianRpIjoieUNoWFVRSXM0RUJ1dXNXYXgxdGJPeiIsImNvbnRhY3RJZCI6IjIwMTAwMDAwMDgyNzk4OSIsInRva2VuX3VzZSI6ImFjY2VzcyIsInBtaWQiOiIwNDQ3ODUzQiIsImV4cCI6MTY5MTczODA5MX0.IJIkScGiJ4i4ZL2yejr89oVPHbd25iF9vk9Ezhoc-QdzrHKFdtJEjg7DAtGJxO3cb_8uPTQIfrEWBflaCY6dir52oKb08Z0QzofsLqCH3JqZxjbxQRWaGlGXOR2WHwtk6BXI1MRcHyMHK1QP_5oi-VBZPdCYOqP-Sz78uoYZs4D4YzF9Q6E_VHL2GDEcsDKxWuvaUpRtwTfcNaIG-H9WlWl-R9itmp6wmTSZOGMssY8fsOlkXiJBEwRl7O7yXRfR2KeXaMkDLR2yBek2noqKY7Fnp21WOGGdaSM9MfSzOchagAxWLHRkRECd0qJuwLi313PBaVqgksO1jaAu1e_T6Q")
+
+    // setTimeout(() => dfnsSDK.waitForWalletValidation(), 2000)
+  </script>
 </html>
