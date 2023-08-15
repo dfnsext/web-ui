@@ -1,9 +1,14 @@
 import {
-	DfnsDelegatedApiClient
+	DfnsDelegatedApiClient, DfnsError
 } from "@dfns/sdk";
 import { SignatureStatus, WalletStatus } from "@dfns/sdk/codegen/datamodel/Wallets";
 import { dfnsHost } from "../common/constant";
+import { GetSignatureResponse } from "@dfns/sdk/codegen/Wallets";
 
+
+export function isDfnsError(err: unknown): err is DfnsError {
+	return err instanceof DfnsError;
+}
 
 export const getDfnsDelegatedClient = (appId: string, dnfsUserToken: string) =>
 	new DfnsDelegatedApiClient({
@@ -26,7 +31,7 @@ export async function waitForWalletActive(appId: string, dnfsUserToken: string, 
 	return wallet;
 }
 
-export async function waitSignatureSigned(appId: string, dnfsUserToken: string, walletId: string, signatureId: string) {
+export async function waitSignatureSigned(appId: string, dnfsUserToken: string, walletId: string, signatureId: string): Promise<GetSignatureResponse> {
 	let signature;
 	const dfnsDelegated = getDfnsDelegatedClient(appId, dnfsUserToken);
 	do {

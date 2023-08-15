@@ -1,21 +1,21 @@
 
-import Cookies from "js-cookie";
+import { Wallet } from "../components";
 
 
 export const DFNS_END_USER_TOKEN = 'dfnsEndUserToken'
-export const DFNS_ACTIVE_WALLET_ID = 'dfnsActiveWalletId'
+export const DFNS_ACTIVE_WALLET = 'dfnsActiveWallet'
 export const OAUTH_ACCESS_TOKEN = 'oauthAccessToken'
 
-export default class CookieStorageService {
-	private static instance: CookieStorageService;
+export default class LocalStorageService {
+	private static instance: LocalStorageService;
 
 	private constructor() {
-		CookieStorageService.instance = this;
+		LocalStorageService.instance = this;
 	}
 
 	public static getInstance(reset?: boolean) {
-		if (!CookieStorageService.instance || reset) return new this();
-		return CookieStorageService.instance;
+		if (!LocalStorageService.instance || reset) return new this();
+		return LocalStorageService.instance;
 	}
 
 	public items = {
@@ -24,10 +24,10 @@ export default class CookieStorageService {
 			set: (item: string) => this.setValue(DFNS_END_USER_TOKEN, item),
 			delete: () => this.delete(DFNS_END_USER_TOKEN),
 		},
-		[DFNS_ACTIVE_WALLET_ID]: {
-			get: () => this.getValue<string>(DFNS_ACTIVE_WALLET_ID),
-			set: (item: string) => this.setValue(DFNS_ACTIVE_WALLET_ID, item),
-			delete: () => this.delete(DFNS_ACTIVE_WALLET_ID),
+		[DFNS_ACTIVE_WALLET]: {
+			get: () => this.getValue<Wallet>(DFNS_ACTIVE_WALLET),
+			set: (item: Wallet) => this.setValue(DFNS_ACTIVE_WALLET, item),
+			delete: () => this.delete(DFNS_ACTIVE_WALLET),
 		},
 		[OAUTH_ACCESS_TOKEN]: {
 			get: () => this.getValue<string>(OAUTH_ACCESS_TOKEN),
@@ -37,7 +37,7 @@ export default class CookieStorageService {
 	};
 
 	private getValue<T>(key: keyof typeof this.items): T | null {
-		const item = Cookies.get(key);
+		const item = localStorage.getItem(key);
 		if (!item) {
 			return null;
 		}
@@ -48,10 +48,12 @@ export default class CookieStorageService {
 	}
 
 	private setValue<T>(key: keyof typeof this.items, item: T) {
-		Cookies.set(key, typeof item === "string" ? item : JSON.stringify(item));
+		localStorage.setItem(key, typeof item === "string" ? item : JSON.stringify(item));
+		const event = new Event('localStorageChanged');
+		window.dispatchEvent(event)
 	}
 
 	private delete(key: keyof typeof this.items) {
-		Cookies.remove(key);
+		localStorage.removeItem(key);
 	}
 }

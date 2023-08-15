@@ -1,6 +1,11 @@
+
 import { Wallet } from "@dfns/sdk/codegen/datamodel/Wallets";
-import CookieStorageService, { DFNS_ACTIVE_WALLET_ID, DFNS_END_USER_TOKEN, OAUTH_ACCESS_TOKEN } from "./services/CookieStorageService";
+import { GetSignatureResponse } from "./components";
+import LocalStorageService, { DFNS_ACTIVE_WALLET, DFNS_END_USER_TOKEN, OAUTH_ACCESS_TOKEN } from "./services/LocalStorageService";
 import { RegisterCompleteResponse } from "./services/api/Register";
+import { getDfnsDelegatedClient, isDfnsError } from "./utils/dfns";
+import { loginWithOAuth } from "./utils/helper";
+
 
 export interface DfnsSDKOptions {
 	rpId: string;
@@ -46,11 +51,14 @@ export class DfnsSDK {
     public dfnsCreateAccountElement: HTMLElement | null = null;
     public dfnsValidateWalletElement: HTMLElement | null = null;
     public dfnsWalletValidationElement: HTMLElement | null = null;
+    public dfnsSignMessageElement: HTMLElement | null = null;
     public dfnsContainer: HTMLElement | null = null;
+	private removeOnLocalStorageChanged: () => void = () => {}; 
 
 	constructor(protected options: DfnsSDKOptions, reset?: boolean) {
         if(reset){
             DfnsSDK.instance = null;
+			window.removeEventListener("localStorageChanged", this.removeOnLocalStorageChanged);
         }
 		if (DfnsSDK.instance) {
 			return DfnsSDK.instance;
@@ -63,78 +71,121 @@ export class DfnsSDK {
 		this.dfnsContainer.classList.add("dfns-container");
 		this.dfnsContainer.title = "DFNS";
 		applyOverlayStyles(this.dfnsContainer);
+
+		/** Init Create Account Element */
         this.dfnsCreateAccountElement = document.createElement("dfns-create-account");
-
+		this.dfnsCreateAccountElement.setAttribute("oauth-access-token", LocalStorageService.getInstance().items[OAUTH_ACCESS_TOKEN].get())
         this.dfnsCreateAccountElement.setAttribute("rp-id", this.options.rpId);
-        this.dfnsCreateAccountElement.setAttribute("oauth-access-token", CookieStorageService.getInstance().items[OAUTH_ACCESS_TOKEN].get())
-
         this.dfnsContainer.appendChild(this.dfnsCreateAccountElement);
-		document.body.appendChild(this.dfnsContainer);
 
+		/** Init Vailidate Wallet Element */
 		this.dfnsValidateWalletElement = document.createElement("dfns-validate-wallet");
-
+		this.dfnsValidateWalletElement.setAttribute("dfns-user-token", LocalStorageService.getInstance().items[DFNS_END_USER_TOKEN].get())
         this.dfnsValidateWalletElement.setAttribute("rp-id", this.options.rpId);
         this.dfnsValidateWalletElement.setAttribute("app-id", this.options.appId);
-        this.dfnsValidateWalletElement.setAttribute("dfns-user-token", CookieStorageService.getInstance().items[DFNS_END_USER_TOKEN].get())
+        
 
         this.dfnsContainer.appendChild(this.dfnsValidateWalletElement);
 
+		/** Init Wallet Validation Element */
 		this.dfnsWalletValidationElement = document.createElement("dfns-wallet-validation");
 
         this.dfnsWalletValidationElement.setAttribute("rp-id", this.options.rpId);
         this.dfnsWalletValidationElement.setAttribute("app-id", this.options.appId);
-        this.dfnsWalletValidationElement.setAttribute("dfns-user-token", CookieStorageService.getInstance().items[DFNS_END_USER_TOKEN].get())
-        this.dfnsWalletValidationElement.setAttribute("wallet-id", CookieStorageService.getInstance().items[DFNS_ACTIVE_WALLET_ID].get())
+        this.dfnsWalletValidationElement.setAttribute("dfns-user-token", LocalStorageService.getInstance().items[DFNS_END_USER_TOKEN].get())	
+        this.dfnsWalletValidationElement.setAttribute("wallet-id", LocalStorageService.getInstance().items[DFNS_ACTIVE_WALLET].get()?.id)
 
         this.dfnsContainer.appendChild(this.dfnsWalletValidationElement);
 
 
+		/** Init Sign Message Element */
+		this.dfnsSignMessageElement = document.createElement("dfns-sign-message");
+
+        this.dfnsSignMessageElement.setAttribute("rp-id", this.options.rpId);
+        this.dfnsSignMessageElement.setAttribute("app-id", this.options.appId);
+        this.dfnsSignMessageElement.setAttribute("dfns-user-token", LocalStorageService.getInstance().items[DFNS_END_USER_TOKEN].get())	
+        this.dfnsSignMessageElement.setAttribute("wallet-id", LocalStorageService.getInstance().items[DFNS_ACTIVE_WALLET].get()?.id)
+
+        this.dfnsContainer.appendChild(this.dfnsSignMessageElement);
+
+
+
+		/** Init Sign Message Element */
+
+
 		document.body.appendChild(this.dfnsContainer);
 
+		this.listenToChanges();
     }
+
 
 	public connect(): Promise<any> {
 		return 
 	}
 
-    public async connectAccorSocial(oauthToken?: string): Promise<any> {
-        await this.createAccount(oauthToken)
-		await this.validateWallet();
-		await this.waitForWalletValidation();
+    public async connectAccorSocial(oauthToken?: string): Promise<Wallet> {
+		let wallet : Wallet | null = null;
+        try {
+			LocalStorageService.getInstance().items[OAUTH_ACCESS_TOKEN].set(oauthToken)
+			const response = await loginWithOAuth(this.options.rpId, oauthToken)
+			LocalStorageService.getInstance().items[DFNS_END_USER_TOKEN].set(response.userAuthToken);
+			const dfnsDelegated = getDfnsDelegatedClient(this.options.appId, response.userAuthToken);
+			const wallets = await dfnsDelegated.wallets.listWallets({});
+			wallet = wallets.items[0];
+			if (!wallet) {
+				await this.validateWallet();
+				wallet = await this.waitForWalletValidation();
+			}
+		}catch(error){
+			if (isDfnsError(error) && error.httpStatus === 401) {
+				await this.createAccount();
+				await this.validateWallet();
+				wallet = await this.waitForWalletValidation();
+			} else {
+				throw error;
+			}
+		}
+		LocalStorageService.getInstance().items[DFNS_ACTIVE_WALLET].set(wallet);
+		return wallet;
 	}
 
 
-	protected async createAccount(oauthToken?: string){
+	public async createAccount(){
 		this.dfnsCreateAccountElement.setAttribute("visible", "true");
-        this.dfnsCreateAccountElement.setAttribute("oauth-access-token", oauthToken);
         const response = await this.waitForEvent<RegisterCompleteResponse>(this.dfnsCreateAccountElement, "passkeyCreated");
-		CookieStorageService.getInstance().items[DFNS_END_USER_TOKEN].set(response.userAuthToken);
+		LocalStorageService.getInstance().items[DFNS_END_USER_TOKEN].set(response.userAuthToken);
         this.dfnsCreateAccountElement.removeAttribute("visible");
 		return response
 	}
 
-	public async validateWallet(): Promise<any> {
+	public async validateWallet(): Promise<Wallet> {
         this.dfnsValidateWalletElement.setAttribute("visible", "true");
-		this.dfnsValidateWalletElement.setAttribute("dfns-user-token", CookieStorageService.getInstance().items[DFNS_END_USER_TOKEN].get())
         const response = await this.waitForEvent<Wallet>(this.dfnsValidateWalletElement, "walletValidated");
-		CookieStorageService.getInstance().items[DFNS_ACTIVE_WALLET_ID].set(response.id);
+		LocalStorageService.getInstance().items[DFNS_ACTIVE_WALLET].set(response);
         this.dfnsValidateWalletElement.removeAttribute("visible");
 		return response
 	}
 
-
 	public async waitForWalletValidation(): Promise<any> {
 		this.dfnsWalletValidationElement.setAttribute("visible", "true");
-		this.dfnsWalletValidationElement.setAttribute("dfns-user-token", CookieStorageService.getInstance().items[DFNS_END_USER_TOKEN].get())
-        this.dfnsWalletValidationElement.setAttribute("wallet-id", CookieStorageService.getInstance().items[DFNS_ACTIVE_WALLET_ID].get())
         const response = await this.waitForEvent(this.dfnsWalletValidationElement, "walletValidated");
         this.dfnsWalletValidationElement.removeAttribute("visible");
 		return response
 	}
 
+	public async signMessage(message: string) {
+		this.dfnsSignMessageElement.setAttribute("visible", "true");
+		this.dfnsSignMessageElement.setAttribute("message", message);
+        const response = await this.waitForEvent<GetSignatureResponse>(this.dfnsSignMessageElement, "signedMessage");
+        this.dfnsSignMessageElement.removeAttribute("visible");
+		return response
+	}
 
-	public disconnect(): Promise<Partial<any>> {
-		return
+
+	public disconnect() {
+		LocalStorageService.getInstance().items[DFNS_END_USER_TOKEN].delete();
+		LocalStorageService.getInstance().items[DFNS_ACTIVE_WALLET].delete();
+		LocalStorageService.getInstance().items[OAUTH_ACCESS_TOKEN].delete();
 	}
 
     protected waitForEvent<T>(element: HTMLElement, eventName: string): Promise<T> {
@@ -144,5 +195,22 @@ export class DfnsSDK {
             })
         });
     }
+
+	public testLocalStorage() {
+		LocalStorageService.getInstance().items[DFNS_END_USER_TOKEN].set("test");
+	}
+
+	private listenToChanges() {
+		this.removeOnLocalStorageChanged = () => {
+			this.dfnsCreateAccountElement.setAttribute("oauth-access-token", LocalStorageService.getInstance().items[OAUTH_ACCESS_TOKEN].get())
+			this.dfnsValidateWalletElement.setAttribute("dfns-user-token", LocalStorageService.getInstance().items[DFNS_END_USER_TOKEN].get())
+			this.dfnsWalletValidationElement.setAttribute("dfns-user-token", LocalStorageService.getInstance().items[DFNS_END_USER_TOKEN].get())
+			this.dfnsWalletValidationElement.setAttribute("wallet-id", LocalStorageService.getInstance().items[DFNS_ACTIVE_WALLET].get()?.id)
+
+		}
+		window.addEventListener("localStorageChanged", this.removeOnLocalStorageChanged);
+	}
+
+
 
 }

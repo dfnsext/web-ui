@@ -5,11 +5,12 @@ import { DfnsError, Fido2Attestation, UserActionChallengeResponse } from "@dfns/
 // import CookieStorageService, { DFNS_ACTIVE_WALLET_ID, DFNS_END_USER_TOKEN, OAUTH_TOKEN } from "../services/CookieStorageService";
 // import { ethereumRecIdOffset } from "../common/constant";
 // import { ethers, Transaction } from "ethers";
+import { WebAuthn } from "@dfns/sdk-webauthn";
+import { CreateWalletRequest, GenerateSignatureRequest } from "@dfns/sdk/codegen/Wallets";
+import { SignatureKind } from "@dfns/sdk/codegen/datamodel/Wallets";
 import Login from "../services/api/Login";
 import Register from "../services/api/Register";
-import { WebAuthn } from "@dfns/sdk-webauthn";
-import { getDfnsDelegatedClient } from "./dfns";
-import { CreateWalletRequest } from "@dfns/sdk/codegen/Wallets";
+import { getDfnsDelegatedClient, waitSignatureSigned } from "./dfns";
 
 
 export async function loginWithOAuth(rpId: string, oauthAccessToken: string) {
@@ -47,13 +48,6 @@ export async function registerWithOAuth(rpId: string, oauthAccessToken: string) 
 	}
 }
 
-// export async function checkUserHasWallet(dfnsHost: string, endUserAuthToken: string) {
-// 	const dfnsDelegated = getDfnsDelegatedClient(dfnsHost, endUserAuthToken);
-// 	const result = await dfnsDelegated.wallets.listWallets({});
-// 	if (result.items.length === 0) return false;
-// 	return true;
-// }
-
 export async function createWallet(appId: string, rpId: string, dfnsUserToken: string) {
 	const dfnsDelegated = getDfnsDelegatedClient(appId, dfnsUserToken);
 	const createWalletRequest: CreateWalletRequest = {
@@ -72,9 +66,38 @@ export async function createWallet(appId: string, rpId: string, dfnsUserToken: s
 		firstFactor: assertion,
 	});
     
-    // TO DO : MOVE TO SDK
-	// CookieStorageService.getInstance().items[DFNS_ACTIVE_WALLET_ID].set(wallet.id);
 	return wallet;
+}
+
+export async function signMessage(appId: string, rpId: string, dfnsUserToken: string, walletId: string, message: string){
+	const dfnsDelegated = getDfnsDelegatedClient(appId, dfnsUserToken);
+
+	const request : GenerateSignatureRequest  = {
+		walletId: walletId,
+		body: { kind: SignatureKind.Message,  message: message },
+	}
+
+	const challenge = await dfnsDelegated.wallets.generateSignatureInit(request);
+
+	const dfnsWebAuthn = new WebAuthn({ rpId });
+
+
+	const assertion = await dfnsWebAuthn.sign(challenge.challenge, challenge.allowCredentials);
+
+	const signatureInit = await dfnsDelegated.wallets.generateSignatureComplete(request, {
+		challengeIdentifier: challenge.challengeIdentifier,
+		firstFactor: assertion,
+	});
+
+
+	await dfnsDelegated.wallets.generateSignatureInit({
+		walletId: walletId,
+		body: { kind: SignatureKind.Message,  message: message },
+	});
+
+	const signature = await waitSignatureSigned(appId, dfnsUserToken, walletId, signatureInit.id);
+
+	return signature;
 }
 
 // export async function transfer(dfnsHost: string, endUserAuthToken: string, walletId: string, from: string, to: string, amount: string) {

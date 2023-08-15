@@ -9,12 +9,14 @@ import { EAlertVariant } from "./utils/enums/alerts-enums";
 import { EButtonSize, EButtonVariant } from "./utils/enums/buttons-enums";
 import { JSX } from "@stencil/core";
 import { RegisterCompleteResponse } from "./components";
+import { GetSignatureResponse } from "@dfns/sdk/codegen/Wallets";
 import { ITypo, ITypoColor } from "./utils/enums/typography-enums";
 import { Wallet } from "@dfns/sdk/codegen/datamodel/Wallets";
 export { EAlertVariant } from "./utils/enums/alerts-enums";
 export { EButtonSize, EButtonVariant } from "./utils/enums/buttons-enums";
 export { JSX } from "@stencil/core";
 export { RegisterCompleteResponse } from "./components";
+export { GetSignatureResponse } from "@dfns/sdk/codegen/Wallets";
 export { ITypo, ITypoColor } from "./utils/enums/typography-enums";
 export { Wallet } from "@dfns/sdk/codegen/datamodel/Wallets";
 export namespace Components {
@@ -57,6 +59,14 @@ export namespace Components {
         "LoaderIconSrc": string;
         "classCss"?: string;
     }
+    interface DfnsSignMessage {
+        "appId": string;
+        "dfnsUserToken": string;
+        "message": string;
+        "rpId": string;
+        "visible": string;
+        "walletId": string;
+    }
     interface DfnsStepper {
         "activeIndices": number[];
         "classCss"?: string;
@@ -90,6 +100,10 @@ export interface DfnsButtonCustomEvent<T> extends CustomEvent<T> {
 export interface DfnsCreateAccountCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLDfnsCreateAccountElement;
+}
+export interface DfnsSignMessageCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLDfnsSignMessageElement;
 }
 export interface DfnsValidateWalletCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -136,6 +150,12 @@ declare global {
         prototype: HTMLDfnsLoaderElement;
         new (): HTMLDfnsLoaderElement;
     };
+    interface HTMLDfnsSignMessageElement extends Components.DfnsSignMessage, HTMLStencilElement {
+    }
+    var HTMLDfnsSignMessageElement: {
+        prototype: HTMLDfnsSignMessageElement;
+        new (): HTMLDfnsSignMessageElement;
+    };
     interface HTMLDfnsStepperElement extends Components.DfnsStepper, HTMLStencilElement {
     }
     var HTMLDfnsStepperElement: {
@@ -167,6 +187,7 @@ declare global {
         "dfns-design-system": HTMLDfnsDesignSystemElement;
         "dfns-layout": HTMLDfnsLayoutElement;
         "dfns-loader": HTMLDfnsLoaderElement;
+        "dfns-sign-message": HTMLDfnsSignMessageElement;
         "dfns-stepper": HTMLDfnsStepperElement;
         "dfns-typography": HTMLDfnsTypographyElement;
         "dfns-validate-wallet": HTMLDfnsValidateWalletElement;
@@ -215,6 +236,15 @@ declare namespace LocalJSX {
         "LoaderIconSrc"?: string;
         "classCss"?: string;
     }
+    interface DfnsSignMessage {
+        "appId"?: string;
+        "dfnsUserToken"?: string;
+        "message"?: string;
+        "onSignedMessage"?: (event: DfnsSignMessageCustomEvent<GetSignatureResponse>) => void;
+        "rpId"?: string;
+        "visible"?: string;
+        "walletId"?: string;
+    }
     interface DfnsStepper {
         "activeIndices"?: number[];
         "classCss"?: string;
@@ -249,6 +279,7 @@ declare namespace LocalJSX {
         "dfns-design-system": DfnsDesignSystem;
         "dfns-layout": DfnsLayout;
         "dfns-loader": DfnsLoader;
+        "dfns-sign-message": DfnsSignMessage;
         "dfns-stepper": DfnsStepper;
         "dfns-typography": DfnsTypography;
         "dfns-validate-wallet": DfnsValidateWallet;
@@ -265,6 +296,7 @@ declare module "@stencil/core" {
             "dfns-design-system": LocalJSX.DfnsDesignSystem & JSXBase.HTMLAttributes<HTMLDfnsDesignSystemElement>;
             "dfns-layout": LocalJSX.DfnsLayout & JSXBase.HTMLAttributes<HTMLDfnsLayoutElement>;
             "dfns-loader": LocalJSX.DfnsLoader & JSXBase.HTMLAttributes<HTMLDfnsLoaderElement>;
+            "dfns-sign-message": LocalJSX.DfnsSignMessage & JSXBase.HTMLAttributes<HTMLDfnsSignMessageElement>;
             "dfns-stepper": LocalJSX.DfnsStepper & JSXBase.HTMLAttributes<HTMLDfnsStepperElement>;
             "dfns-typography": LocalJSX.DfnsTypography & JSXBase.HTMLAttributes<HTMLDfnsTypographyElement>;
             "dfns-validate-wallet": LocalJSX.DfnsValidateWallet & JSXBase.HTMLAttributes<HTMLDfnsValidateWalletElement>;

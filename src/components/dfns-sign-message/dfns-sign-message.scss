@@ -1,0 +1,9 @@
+:host {
+  display: block;
+  .container {
+    display: none;
+    &.visible{
+      display: block;
+    }
+  }
+}

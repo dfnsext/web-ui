@@ -33,9 +33,9 @@
     "generate": "stencil generate"
   },
   "dependencies": {
-    "@dfns/sdk": "^0.1.0-beta.1",
-    "@dfns/sdk-keysigner": "^0.1.0-beta.1",
-    "@dfns/sdk-webauthn": "^0.1.0-beta.1",
+    "@dfns/sdk": "^0.1.0-beta.2",
+    "@dfns/sdk-keysigner": "^0.1.0-beta.2",
+    "@dfns/sdk-webauthn": "^0.1.0-beta.2",
     "@heroicons/react": "^2.0.18",
     "@stencil/core": "^4.0.3",
     "classnames": "^2.3.2",
