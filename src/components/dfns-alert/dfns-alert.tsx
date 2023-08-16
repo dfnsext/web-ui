@@ -40,7 +40,7 @@ export class DfnsAlert {
 					<div class="icon">{this.getIconVariant()}</div>
 					<div class="container">
 						<div class="title">
-							<dfns-typography typo={ITypo.TEXTE_MD_SEMIBOLD}>
+							<dfns-typography typo={ITypo.TEXTE_SM_MEDIUM}>
 								<slot name="title"></slot>
 							</dfns-typography>
 						</div>

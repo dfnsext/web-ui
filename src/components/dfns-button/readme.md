@@ -35,6 +35,7 @@
 ### Used by
 
  - [dfns-create-account](../dfns-create-account)
+ - [dfns-create-passkey](../dfns-create-passkey)
  - [dfns-design-system](../dfns-design-system)
  - [dfns-validate-wallet](../dfns-validate-wallet)
  - [dfns-wallet-validation](../dfns-wallet-validation)
@@ -50,6 +51,7 @@ graph TD;
   dfns-button --> dfns-typography
   dfns-button --> dfns-loader
   dfns-create-account --> dfns-button
+  dfns-create-passkey --> dfns-button
   dfns-design-system --> dfns-button
   dfns-validate-wallet --> dfns-button
   dfns-wallet-validation --> dfns-button

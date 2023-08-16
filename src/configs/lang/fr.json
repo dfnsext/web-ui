@@ -19,7 +19,7 @@
 		"home": {
 			"title": "Accueil"
 		},
-		"create_passkey": {
+		"create_account": {
 			"title": "Créer une clé de passe",
 			"description": "Une clé de passe est un mot de passe qui vous permet de vous connecter à votre compte sans avoir à saisir votre clé privée. Vous pouvez créer une clé de passe en cliquant sur le bouton ci-dessous. Vous pouvez également vous connecter avec votre clé privée en cliquant sur le bouton ci-dessus.",
 			"button_create": "Créer une clé de passe"
@@ -33,7 +33,14 @@
 			"title": "Felicitation!",
 			"description": "Votre compte a été créé avec succès",
 			"wallet_address": "Votre adresse du portefeuille :",
-      "loading_message": "Chargement de l'adresse de votre portefeuille"
+			"loading_message": "Chargement de l'adresse de votre portefeuille"
+		},
+		"create_passkey": {
+			"title": "Créer une clé de passe",
+			"description": "Une clé de passe est un mot de passe qui vous permet de vous connecter à votre compte sans avoir à saisir votre clé privée. Vous pouvez créer une clé de passe en cliquant sur le bouton ci-dessous. Vous pouvez également vous connecter avec votre clé privée en cliquant sur le bouton ci-dessus.",
+			"button_create": "Créer une clé de passe",
+			"alert_title": "Nous ne pourrons pas récupérer vos codes d'accès.",
+			"alert_description": "Veillez à créer votre mot de passe sur un appareil personnel."
 		},
 		"profile": {
 			"title": "Profil",

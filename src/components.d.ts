@@ -44,7 +44,20 @@ export namespace Components {
         "rpId": string;
         "visible": string;
     }
+    interface DfnsCreatePasskey {
+        "visible": string;
+    }
     interface DfnsDesignSystem {
+    }
+    interface DfnsInputField {
+        "disableErrors": boolean;
+        "errors": string[];
+        "isReadOnly": boolean;
+        "leftElement": any;
+        "placeholder": string;
+        "rightElement": any;
+        "type": string;
+        "value": string;
     }
     interface DfnsLayout {
         "bloomLogoSrc": string;
@@ -92,6 +105,10 @@ export interface DfnsCreateAccountCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLDfnsCreateAccountElement;
 }
+export interface DfnsInputFieldCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLDfnsInputFieldElement;
+}
 export interface DfnsValidateWalletCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLDfnsValidateWalletElement;
@@ -119,11 +136,23 @@ declare global {
         prototype: HTMLDfnsCreateAccountElement;
         new (): HTMLDfnsCreateAccountElement;
     };
+    interface HTMLDfnsCreatePasskeyElement extends Components.DfnsCreatePasskey, HTMLStencilElement {
+    }
+    var HTMLDfnsCreatePasskeyElement: {
+        prototype: HTMLDfnsCreatePasskeyElement;
+        new (): HTMLDfnsCreatePasskeyElement;
+    };
     interface HTMLDfnsDesignSystemElement extends Components.DfnsDesignSystem, HTMLStencilElement {
     }
     var HTMLDfnsDesignSystemElement: {
         prototype: HTMLDfnsDesignSystemElement;
         new (): HTMLDfnsDesignSystemElement;
+    };
+    interface HTMLDfnsInputFieldElement extends Components.DfnsInputField, HTMLStencilElement {
+    }
+    var HTMLDfnsInputFieldElement: {
+        prototype: HTMLDfnsInputFieldElement;
+        new (): HTMLDfnsInputFieldElement;
     };
     interface HTMLDfnsLayoutElement extends Components.DfnsLayout, HTMLStencilElement {
     }
@@ -165,7 +194,9 @@ declare global {
         "dfns-alert": HTMLDfnsAlertElement;
         "dfns-button": HTMLDfnsButtonElement;
         "dfns-create-account": HTMLDfnsCreateAccountElement;
+        "dfns-create-passkey": HTMLDfnsCreatePasskeyElement;
         "dfns-design-system": HTMLDfnsDesignSystemElement;
+        "dfns-input-field": HTMLDfnsInputFieldElement;
         "dfns-layout": HTMLDfnsLayoutElement;
         "dfns-loader": HTMLDfnsLoaderElement;
         "dfns-stepper": HTMLDfnsStepperElement;
@@ -203,7 +234,21 @@ declare namespace LocalJSX {
         "rpId"?: string;
         "visible"?: string;
     }
+    interface DfnsCreatePasskey {
+        "visible"?: string;
+    }
     interface DfnsDesignSystem {
+    }
+    interface DfnsInputField {
+        "disableErrors"?: boolean;
+        "errors"?: string[];
+        "isReadOnly"?: boolean;
+        "leftElement"?: any;
+        "onChange"?: (event: DfnsInputFieldCustomEvent<string>) => void;
+        "placeholder"?: string;
+        "rightElement"?: any;
+        "type"?: string;
+        "value"?: string;
     }
     interface DfnsLayout {
         "bloomLogoSrc"?: string;
@@ -248,7 +293,9 @@ declare namespace LocalJSX {
         "dfns-alert": DfnsAlert;
         "dfns-button": DfnsButton;
         "dfns-create-account": DfnsCreateAccount;
+        "dfns-create-passkey": DfnsCreatePasskey;
         "dfns-design-system": DfnsDesignSystem;
+        "dfns-input-field": DfnsInputField;
         "dfns-layout": DfnsLayout;
         "dfns-loader": DfnsLoader;
         "dfns-stepper": DfnsStepper;
@@ -264,7 +311,9 @@ declare module "@stencil/core" {
             "dfns-alert": LocalJSX.DfnsAlert & JSXBase.HTMLAttributes<HTMLDfnsAlertElement>;
             "dfns-button": LocalJSX.DfnsButton & JSXBase.HTMLAttributes<HTMLDfnsButtonElement>;
             "dfns-create-account": LocalJSX.DfnsCreateAccount & JSXBase.HTMLAttributes<HTMLDfnsCreateAccountElement>;
+            "dfns-create-passkey": LocalJSX.DfnsCreatePasskey & JSXBase.HTMLAttributes<HTMLDfnsCreatePasskeyElement>;
             "dfns-design-system": LocalJSX.DfnsDesignSystem & JSXBase.HTMLAttributes<HTMLDfnsDesignSystemElement>;
+            "dfns-input-field": LocalJSX.DfnsInputField & JSXBase.HTMLAttributes<HTMLDfnsInputFieldElement>;
             "dfns-layout": LocalJSX.DfnsLayout & JSXBase.HTMLAttributes<HTMLDfnsLayoutElement>;
             "dfns-loader": LocalJSX.DfnsLoader & JSXBase.HTMLAttributes<HTMLDfnsLoaderElement>;
             "dfns-stepper": LocalJSX.DfnsStepper & JSXBase.HTMLAttributes<HTMLDfnsStepperElement>;

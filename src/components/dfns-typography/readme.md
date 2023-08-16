@@ -21,6 +21,7 @@
  - [dfns-alert](../dfns-alert)
  - [dfns-button](../dfns-button)
  - [dfns-create-account](../dfns-create-account)
+ - [dfns-create-passkey](../dfns-create-passkey)
  - [dfns-design-system](../dfns-design-system)
  - [dfns-layout](../dfns-layout)
  - [dfns-stepper](../dfns-stepper)
@@ -33,6 +34,7 @@ graph TD;
   dfns-alert --> dfns-typography
   dfns-button --> dfns-typography
   dfns-create-account --> dfns-typography
+  dfns-create-passkey --> dfns-typography
   dfns-design-system --> dfns-typography
   dfns-layout --> dfns-typography
   dfns-stepper --> dfns-typography

@@ -52,19 +52,19 @@ export class DfnsCreateAccount {
 						<div class="contentContainer">
 							<div class="title">
 								<dfns-typography typo={ITypo.TEXTE_SM_SEMIBOLD}>
-									{LanguageService.getContent("pages.create_passkey.title")}
+									{LanguageService.getContent("pages.create_account.title")}
 								</dfns-typography>
 							</div>
 							<div class="content">
 								<dfns-typography typo={ITypo.TEXTE_SM_REGULAR} color={ITypoColor.SECONDARY}>
-									{LanguageService.getContent("pages.create_passkey.description")}
+									{LanguageService.getContent("pages.create_account.description")}
 								</dfns-typography>
 							</div>
 						</div>
 					</div>
 					<div slot="bottomSection">
 						<dfns-button
-							content={LanguageService.getContent("pages.create_passkey.button_create")}
+							content={LanguageService.getContent("pages.create_account.button_create")}
 							variant={EButtonVariant.PRIMARY}
 							sizing={EButtonSize.MEDIUM}
 							fullwidth

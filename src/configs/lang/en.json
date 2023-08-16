@@ -19,7 +19,7 @@
 		"home": {
 			"title": "Home"
 		},
-		"create_passkey": {
+		"create_account": {
 			"title": "Create a passkey",
 			"description": "The passkey that you will create will be associated to the a device of your choice. Make sure you create your passkey on a personal device.",
 			"button_create": "Create a passkey"
@@ -34,6 +34,13 @@
 			"description": "Your account has been created",
 			"wallet_address": "Your wallet address is",
       "loading_message": "Loading your wallet address"
+		},
+    "create_passkey": {
+			"title": "Create a passkey",
+			"description": "The passkey that you will create will be associated to the a device of your choice. Make sure you create your passkey on a personal device.",
+			"button_create": "Create a passkey",
+      "alert_title": "We will not be able to recover your passkeys",
+      "alert_description": "Make sure you create your passkey on a personal device."
 		},
 		"profile": {
 			"title": "Profile",
