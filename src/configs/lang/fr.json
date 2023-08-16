@@ -1,132 +1,149 @@
 {
-    "common": {
-      "connect_wallet": "Connecter le portefeuille",
-      "logout": "Déconnexion",
-      "settings": "Paramètres",
-      "search": "Rechercher",
-      "cancel": "Annuler",
-      "save_changes": "Enregistrer les modifications",
-      "modify": "Modifier",
-      "to": "à",
-      "by": "Par",
-      "or": "Ou",
-      "apply": "Appliquer",
-      "remove": "Supprimer"
-    },
-    "header": {
-      "nav_links": {
-      }
-    },
-    "pages": {
-      "home": {
-        "title": "Accueil"
-      },
-      "utilities": {
-        "title": "Utilitaires"
-      },
-      "profile": {
-        "title": "Profil",
-        "you": "Vous"
-      },
-      "settings": {
-        "title": "Paramètres",
-        "subPages": {
-          "general": {
-            "title": "Général",
-            "form": {
-              "email": "E-mail",
-              "email_description": "Cet e-mail sera utilisé pour les notifications. Il peut être différent de votre e-mail d'authentification. Vous pourrez le changer quand vous le souhaitez.",
-              "user_name": "Nom d'utilisateur",
-              "first_name": "Prénom",
-              "last_name": "Nom de famille",
-              "description": "Description"
-            }
-          }
-        }
-      },
-      "launches": {
-        "title": "Lancements",
-        "subpages": {
-          "in_mint": {
-            "title": "En cours de création"
-          },
-          "sold_out": {
-            "title": "Épuisé"
-          }
-        }
-      },
-      "alerts": {
-        "error": {
-          "title": "Erreur",
-          "an_error_occured": "Veuillez essayer de rafraîchir la page ou revenir plus tard."
-        },
-        "success": {
-          "title": "Succès",
-          "copy_success": "Copié dans le presse-papiers",
-          "save_information": "Vos informations ont été enregistrées"
-        },
-        "tx": {
-          "pending": {
-            "title": "Transaction en attente",
-            "content": "Le transfert prend environ 30 secondes"
-          },
-          "confirmed": "Transaction confirmée",
-          "failed": {
-            "title": "Transaction échouée",
-            "button": "Réessayer la transaction"
-          }
-        },
-        "authentication": {
-          "login": "Vous avez été connecté avec succès",
-          "logout": "Vous avez été déconnecté avec succès"
-        }
-      },
-      "footer": {
-      },
-      "policies": {
-        "privacy_policy": "Politique de confidentialité",
-        "terms_of_service": "Conditions d'utilisation"
-      },
-      "components": {
-        "register": {
-          "title": "Créer un compte",
-          "create_account": "Créer un compte",
-          "complete_later": "Compléter ultérieurement",
-          "form": {
-            "email": "E-mail",
-            "notification_email": "E-mail de notification",
-            "account_name": "Nom du compte",
-            "username": "Nom d'utilisateur",
-            "first_name": "Prénom",
-            "last_name": "Nom de famille",
-            "description": "Description"
-          }
-        },
-        "file_input": {
-          "title": "Photo de profil",
-          "description": "Nous vous recommandons d'utiliser une image d'au moins {{recommandedWidth}} x {{recommandedHeight}} pixels et de ne pas dépasser {{maxMbSize}} Mo. Importez un fichier PNG ou JPEG."
-        }
-      },
-      "buttons": {
-        "back": "Retour",
-        "next": "Suivant",
-        "view": "Voir",
-        "view_more": "Voir plus",
-        "view_less": "Voir moins",
-        "confirm_payment": "Confirmer le paiement",
-        "place_bid": "Placer une enchère",
-        "approve_payment": "Approuver le paiement",
-        "approve_listing": "Approuver la liste",
-        "buy_now": "Acheter maintenant",
-        "close": "Fermer"
-      },
-      "inputs": {
-        "placeholder": {
-          "wallet": "Adresse du portefeuille"
-        },
-        "tips": {
-          "available": "disponible"
-        }
-      }
-    }
-  }
+	"common": {
+		"connect_wallet": "Connecter le portefeuille",
+		"settings": "Paramètres",
+		"search": "Rechercher",
+		"cancel": "Annuler",
+		"save_changes": "Enregistrer les modifications",
+		"modify": "Modifier",
+		"to": "à",
+		"by": "Par",
+		"or": "Ou",
+		"apply": "Appliquer",
+		"remove": "Supprimer"
+	},
+	"header": {
+		"nav_links": {}
+	},
+	"pages": {
+		"home": {
+			"title": "Accueil"
+		},
+		"create_account": {
+			"title": "Créer une clé de passe",
+			"description": "Une clé de passe est un mot de passe qui vous permet de vous connecter à votre compte sans avoir à saisir votre clé privée. Vous pouvez créer une clé de passe en cliquant sur le bouton ci-dessous. Vous pouvez également vous connecter avec votre clé privée en cliquant sur le bouton ci-dessus.",
+			"button_create": "Créer une clé de passe"
+		},
+		"validate_wallet": {
+			"title": "Valider votre portefeuille",
+			"description": "Validez votre portefeuille en vérifiant votre identité à l'aide de votre mot de passe.",
+			"button_validate": "Valider votre portefeuille"
+		},
+		"validation_success": {
+			"title": "Felicitation!",
+			"description": "Votre compte a été créé avec succès",
+			"wallet_address": "Votre adresse du portefeuille :",
+			"loading_message": "Chargement de l'adresse de votre portefeuille"
+		},
+		"create_passkey": {
+			"title": "Créer une clé de passe",
+			"description": "Une clé de passe est un mot de passe qui vous permet de vous connecter à votre compte sans avoir à saisir votre clé privée. Vous pouvez créer une clé de passe en cliquant sur le bouton ci-dessous. Vous pouvez également vous connecter avec votre clé privée en cliquant sur le bouton ci-dessus.",
+			"button_create": "Créer une clé de passe",
+			"alert_title": "Nous ne pourrons pas récupérer vos codes d'accès.",
+			"alert_description": "Veillez à créer votre mot de passe sur un appareil personnel."
+		},
+		"profile": {
+			"title": "Profil",
+			"you": "Vous"
+		},
+		"settings": {
+			"title": "Paramètres",
+			"subPages": {
+				"general": {
+					"title": "Général",
+					"form": {
+						"email": "E-mail",
+						"email_description": "Cet e-mail sera utilisé pour les notifications. Il peut être différent de votre e-mail d'authentification. Vous pourrez le changer quand vous le souhaitez.",
+						"user_name": "Nom d'utilisateur",
+						"first_name": "Prénom",
+						"last_name": "Nom de famille",
+						"description": "Description"
+					}
+				}
+			}
+		},
+		"launches": {
+			"title": "Lancements",
+			"subpages": {
+				"in_mint": {
+					"title": "En cours de création"
+				},
+				"sold_out": {
+					"title": "Épuisé"
+				}
+			}
+		},
+		"alerts": {
+			"error": {
+				"title": "Erreur",
+				"an_error_occured": "Veuillez essayer de rafraîchir la page ou revenir plus tard."
+			},
+			"success": {
+				"title": "Succès",
+				"copy_success": "Copié dans le presse-papiers",
+				"save_information": "Vos informations ont été enregistrées"
+			},
+			"tx": {
+				"pending": {
+					"title": "Transaction en attente",
+					"content": "Le transfert prend environ 30 secondes"
+				},
+				"confirmed": "Transaction confirmée",
+				"failed": {
+					"title": "Transaction échouée",
+					"button": "Réessayer la transaction"
+				}
+			},
+			"authentication": {
+				"login": "Vous avez été connecté avec succès",
+				"logout": "Vous avez été déconnecté avec succès"
+			}
+		},
+		"footer": {},
+		"policies": {
+			"privacy_policy": "Politique de confidentialité",
+			"terms_of_service": "Conditions d'utilisation"
+		},
+		"components": {
+			"register": {
+				"title": "Créer un compte",
+				"create_account": "Créer un compte",
+				"complete_later": "Compléter ultérieurement",
+				"form": {
+					"email": "E-mail",
+					"notification_email": "E-mail de notification",
+					"account_name": "Nom du compte",
+					"username": "Nom d'utilisateur",
+					"first_name": "Prénom",
+					"last_name": "Nom de famille",
+					"description": "Description"
+				}
+			},
+			"file_input": {
+				"title": "Photo de profil",
+				"description": "Nous vous recommandons d'utiliser une image d'au moins {{recommandedWidth}} x {{recommandedHeight}} pixels et de ne pas dépasser {{maxMbSize}} Mo. Importez un fichier PNG ou JPEG."
+			}
+		},
+		"buttons": {
+			"back": "Retour",
+			"next": "Suivant",
+			"view": "Voir",
+			"view_more": "Voir plus",
+			"view_less": "Voir moins",
+			"confirm_payment": "Confirmer le paiement",
+			"place_bid": "Placer une enchère",
+			"approve_payment": "Approuver le paiement",
+			"approve_listing": "Approuver la liste",
+			"buy_now": "Acheter maintenant",
+			"close": "Fermer"
+		},
+		"inputs": {
+			"placeholder": {
+				"wallet": "Adresse du portefeuille"
+			},
+			"tips": {
+				"available": "disponible"
+			}
+		}
+	}
+}

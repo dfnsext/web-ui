@@ -1,4 +1,4 @@
-import { Component, JSX, State, h } from "@stencil/core";
+import { Component, JSX, h } from "@stencil/core";
 import { ITypo, ITypoColor } from "../../utils/enums/typography-enums";
 import { EAlertVariant } from "../../utils/enums/alerts-enums";
 import { EButtonSize, EButtonVariant } from "../../utils/enums/buttons-enums";
@@ -13,11 +13,10 @@ import { LanguageService } from "../../services/language-services";
 })
 export class DfnsDesignSystem {
 	private themeMode = ThemeMode.getInstance();
-  @State() private connect_wallet = LanguageService.getContent('common.connect_wallet');
 
 	componentWillLoad() {
-		// Manually set the theme mode to DARK or LIGHT as desired
-		this.themeMode.switch(EThemeModeType.ACCOR); // Replace EThemeModeType.DARK with EThemeModeType.LIGHT if you want to set it to light mode
+		// Manually set the theme mode as desired
+		this.themeMode.switch(EThemeModeType.ACCOR);
 	}
 
 	render() {
@@ -50,7 +49,7 @@ export class DfnsDesignSystem {
 					</div>
 					<div slot="bottomSection">
 						<dfns-button
-							content={this.connect_wallet}
+							content={LanguageService.getContent('common.connect_wallet')}
 							variant={EButtonVariant.PRIMARY}
 							sizing={EButtonSize.LARGE}
 							fullwidth

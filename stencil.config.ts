@@ -9,9 +9,7 @@ export const config: Config = {
     {
       type: 'dist',
       esmLoaderPath: '../loader',
-    },
-    {
-      type: 'dist-custom-elements',
+      isPrimaryPackageOutputTarget: true,
     },
     {
       type: 'docs-readme',
@@ -31,6 +29,7 @@ export const config: Config = {
       ]
     }
   ],
+  validatePrimaryPackageOutputTarget: true,
   plugins: [
     sass({
       injectGlobalPaths: [

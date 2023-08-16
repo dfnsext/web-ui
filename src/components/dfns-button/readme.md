@@ -17,6 +17,7 @@
 | `iconposition` | `iconposition` |             | `"left" \| "right"`                                                                                   | `"right"`                |
 | `iconstyle`    | `iconstyle`    |             | `any`                                                                                                 | `undefined`              |
 | `isloading`    | `isloading`    |             | `boolean`                                                                                             | `false`                  |
+| `onClick`      | --             |             | `() => any`                                                                                           | `undefined`              |
 | `sizing`       | `sizing`       |             | `EButtonSize.LARGE \| EButtonSize.MEDIUM \| EButtonSize.SMALL`                                        | `EButtonSize.LARGE`      |
 | `type`         | `type`         |             | `"button" \| "submit"`                                                                                | `"button"`               |
 | `variant`      | `variant`      |             | `EButtonVariant.NEUTRAL \| EButtonVariant.PRIMARY \| EButtonVariant.SECONDARY \| EButtonVariant.TEXT` | `EButtonVariant.PRIMARY` |
@@ -33,7 +34,11 @@
 
 ### Used by
 
+ - [dfns-create-account](../dfns-create-account)
+ - [dfns-create-passkey](../dfns-create-passkey)
  - [dfns-design-system](../dfns-design-system)
+ - [dfns-validate-wallet](../dfns-validate-wallet)
+ - [dfns-wallet-validation](../dfns-wallet-validation)
 
 ### Depends on
 
@@ -45,7 +50,11 @@
 graph TD;
   dfns-button --> dfns-typography
   dfns-button --> dfns-loader
+  dfns-create-account --> dfns-button
+  dfns-create-passkey --> dfns-button
   dfns-design-system --> dfns-button
+  dfns-validate-wallet --> dfns-button
+  dfns-wallet-validation --> dfns-button
   style dfns-button fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

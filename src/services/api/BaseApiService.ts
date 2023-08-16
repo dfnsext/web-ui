@@ -140,12 +140,14 @@ export default abstract class BaseApiService {
 	}
 
 	private async sendRequest<T>(request: () => Promise<Response>, synchroneRequest = false): Promise<T> {
+		synchroneRequest = synchroneRequest || BaseApiService.queueAllRequests;
 		const response = await request();
 		return this.processResponse<T>(response, request);
 	}
 
 	protected async processResponse<T>(response: Response, request: () => Promise<Response>): Promise<T> {
 		let responseJson: unknown;
+		request = request.bind(this);
 		try {
 			responseJson = await response.json();
 		} catch (err: unknown) {
@@ -160,7 +162,10 @@ export default abstract class BaseApiService {
 		return responseJson as T;
 	}
 
-	protected async onError(error: unknown) {}
+	protected async onError(error: unknown) {
+		console.error(error);
+		return Promise.reject(error);
+	}
 }
 
 export interface IResponse {
