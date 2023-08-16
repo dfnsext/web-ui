@@ -18,11 +18,13 @@
 ### Used by
 
  - [dfns-button](../dfns-button)
+ - [dfns-wallet-validation](../dfns-wallet-validation)
 
 ### Graph
 ```mermaid
 graph TD;
   dfns-button --> dfns-loader
+  dfns-wallet-validation --> dfns-loader
   style dfns-loader fill:#f9f,stroke:#333,stroke-width:4px
 ```
 
