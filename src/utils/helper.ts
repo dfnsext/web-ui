@@ -1,17 +1,16 @@
-
-import { DfnsError, Fido2Attestation, UserActionChallengeResponse } from "@dfns/sdk";
+import { DfnsError, UserActionChallengeResponse } from "@dfns/sdk";
 // import { SignatureKind } from "@dfns/sdk/codegen/datamodel/Wallets";
 // import { CreateWalletRequest, GenerateSignatureRequest } from "@dfns/sdk/codegen/Wallets";
 // import CookieStorageService, { DFNS_ACTIVE_WALLET_ID, DFNS_END_USER_TOKEN, OAUTH_TOKEN } from "../services/CookieStorageService";
 // import { ethereumRecIdOffset } from "../common/constant";
-// import { ethers, Transaction } from "ethers";
+
 import { WebAuthn } from "@dfns/sdk-webauthn";
 import { CreateWalletRequest, GenerateSignatureRequest } from "@dfns/sdk/codegen/Wallets";
-import { SignatureKind } from "@dfns/sdk/codegen/datamodel/Wallets";
+import { BlockchainNetwork, SignatureKind } from "@dfns/sdk/codegen/datamodel/Wallets";
+import sha256 from "crypto-js/sha256";
 import Login from "../services/api/Login";
 import Register from "../services/api/Register";
 import { getDfnsDelegatedClient, waitSignatureSigned } from "./dfns";
-
 
 export async function loginWithOAuth(rpId: string, oauthAccessToken: string) {
 	let challenge: UserActionChallengeResponse;
@@ -23,7 +22,7 @@ export async function loginWithOAuth(rpId: string, oauthAccessToken: string) {
 		}
 		throw error;
 	}
-    const dfnsWebAuthn = new WebAuthn({ rpId });
+	const dfnsWebAuthn = new WebAuthn({ rpId });
 
 	const assertion = await dfnsWebAuthn.sign(challenge!.challenge, challenge!.allowCredentials);
 
@@ -33,15 +32,35 @@ export async function loginWithOAuth(rpId: string, oauthAccessToken: string) {
 	});
 }
 export async function registerWithOAuth(rpId: string, oauthAccessToken: string) {
-	const challenge = await Register.getInstance().init(oauthAccessToken);
-	let attestation: Fido2Attestation;
-
-    const dfnsWebAuthn = new WebAuthn({ rpId });
-
+	let challenge;
 	try {
-		attestation = await dfnsWebAuthn.create(challenge);
+		challenge = await Register.getInstance().init(oauthAccessToken);
+	} catch (error) {
+		if (error.httpStatus === 401 && error.context?.message === "User already exists.") {
+			challenge = await Register.getInstance().restart(oauthAccessToken);
+		}
+	}
+	try {
+		const dfnsWebAuthn = new WebAuthn({ rpId });
+		const attestation = await dfnsWebAuthn.create(challenge);
 		return Register.getInstance().complete(challenge.temporaryAuthenticationToken, {
 			firstFactorCredential: attestation,
+			// secondFactorCredential: {
+			// 	...secondAttestation,
+			// 	credentialKind: "Key"
+
+			// },
+			// recoveryCredential: {
+			// 	credentialKind: "RecoveryKey",
+			// 	credentialInfo: {
+			// 		credId: "GMkW0zlmcoMxI1OX0Z96LL_Mz7dgeu6vOH5_TOeGyNk",
+			// 		clientData:
+			// 			"eyJ0eXBlIjoia2V5LmNyZWF0ZSIsImNoYWxsZW5nZSI6Ik1XTTBNbVk1WVRRME1EUmlOemRoTlRGaE56WTVPRFF3TldJNVpUUTRZMlJoT0RaaU5EazNaVFl6T1RFNU9HWXlNRGN4WmpCall6azRNbVE1WXpZMU1BIiwib3JpZ2luIjoiaHR0cHM6Ly9hcHAuZGZucy5uaW5qYSIsImNyb3NzT3JpZ2luIjpmYWxzZX0",
+			// 		attestationData: "Wsdz5810zjVJEyEtx9jYU0dizfhIkdu9AOGl2kYtcBusAPsfjdncE6zKW8ms_VkhJ6Hw4HDfcYj5FHcdM-C4CA",
+			// 	},
+			// 	encryptedPrivateKey:
+			// 		"LsXVskHYqqrKKxBC9KvqStLEmxak5Y7NaboDDlRSIW7evUJpQTT1AYvx0EsFskmriaVb3AjTCGEv7gqUKokml1USL7+dVmrUVhV+cNWtS5AorvRuZr1FMGVKFkW1pKJhFNH2e2O661UhpyXsRXzcmksA7ZN/V37ZK7ITue0gs6I=",
+			// },
 		});
 	} catch (error: any) {
 		throw error;
@@ -51,8 +70,7 @@ export async function registerWithOAuth(rpId: string, oauthAccessToken: string) 
 export async function createWallet(appId: string, rpId: string, dfnsUserToken: string) {
 	const dfnsDelegated = getDfnsDelegatedClient(appId, dfnsUserToken);
 	const createWalletRequest: CreateWalletRequest = {
-		//@ts-ignore
-		body: { network: "PolygonMumbai" },
+		body: { network: BlockchainNetwork.PolygonMumbai },
 	};
 
 	const challenge = await dfnsDelegated.wallets.createWalletInit(createWalletRequest);
@@ -65,34 +83,27 @@ export async function createWallet(appId: string, rpId: string, dfnsUserToken: s
 		challengeIdentifier: challenge.challengeIdentifier,
 		firstFactor: assertion,
 	});
-    
+
 	return wallet;
 }
 
-export async function signMessage(appId: string, rpId: string, dfnsUserToken: string, walletId: string, message: string){
+export async function signMessage(appId: string, rpId: string, dfnsUserToken: string, walletId: string, message: string) {
 	const dfnsDelegated = getDfnsDelegatedClient(appId, dfnsUserToken);
-
-	const request : GenerateSignatureRequest  = {
+	const hexMessage = sha256(message).toString();
+	const request: GenerateSignatureRequest = {
 		walletId: walletId,
-		body: { kind: SignatureKind.Message,  message: message },
-	}
+		body: { kind: SignatureKind.Hash, hash: hexMessage },
+	};
 
 	const challenge = await dfnsDelegated.wallets.generateSignatureInit(request);
 
 	const dfnsWebAuthn = new WebAuthn({ rpId });
-
 
 	const assertion = await dfnsWebAuthn.sign(challenge.challenge, challenge.allowCredentials);
 
 	const signatureInit = await dfnsDelegated.wallets.generateSignatureComplete(request, {
 		challengeIdentifier: challenge.challengeIdentifier,
 		firstFactor: assertion,
-	});
-
-
-	await dfnsDelegated.wallets.generateSignatureInit({
-		walletId: walletId,
-		body: { kind: SignatureKind.Message,  message: message },
 	});
 
 	const signature = await waitSignatureSigned(appId, dfnsUserToken, walletId, signatureInit.id);

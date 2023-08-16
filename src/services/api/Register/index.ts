@@ -27,6 +27,16 @@ export default class Register extends BaseApiService {
 		}
 	}
 
+	public async restart(oAuthToken: string): Promise<UserRegistrationChallenge> {
+		const path = this.baseUrl.concat("/restart");
+		try {
+			return await this.postRequest(path, { oAuthToken });
+		} catch (err) {
+			this.onError(err);
+			return Promise.reject(err);
+		}
+	}
+
 	public async withUsername(username: string): Promise<UserRegistrationChallenge> {
 		const path = this.baseUrl.concat("/with-username");
 		try {

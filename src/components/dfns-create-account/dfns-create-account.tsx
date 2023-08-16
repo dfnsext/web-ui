@@ -33,8 +33,8 @@ export class DfnsCreateAccount {
 			const response = await registerWithOAuth(this.rpId, this.oauthAccessToken);
 			this.passkeyCreated.emit(response);
 			return response;
-		} catch (err) {
-			console.error(err);
+		} catch (error) {
+			console.error(error);
 		}
 	}
 
