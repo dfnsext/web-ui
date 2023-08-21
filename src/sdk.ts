@@ -66,7 +66,8 @@ export class DfnsSDK {
 		DfnsSDK.instance = this;
 	}
 
-    protected init() {
+    public init() {
+
         this.dfnsContainer = document.createElement("div");
 		this.dfnsContainer.classList.add("dfns-container");
 		this.dfnsContainer.title = "DFNS";
