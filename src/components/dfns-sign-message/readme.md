@@ -31,7 +31,6 @@
 - [dfns-layout](../dfns-layout)
 - [dfns-typography](../dfns-typography)
 - [dfns-button](../dfns-button)
-- [dfns-textarea](../dfns-textarea)
 - [dfns-alert](../dfns-alert)
 
 ### Graph
@@ -40,12 +39,10 @@ graph TD;
   dfns-sign-message --> dfns-layout
   dfns-sign-message --> dfns-typography
   dfns-sign-message --> dfns-button
-  dfns-sign-message --> dfns-textarea
   dfns-sign-message --> dfns-alert
   dfns-layout --> dfns-typography
   dfns-button --> dfns-typography
   dfns-button --> dfns-loader
-  dfns-textarea --> dfns-typography
   dfns-alert --> dfns-typography
   style dfns-sign-message fill:#f9f,stroke:#333,stroke-width:4px
 ```

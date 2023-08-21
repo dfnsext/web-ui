@@ -47,6 +47,7 @@
       "warning_content": "Ne signez ce message que si vous en comprenez pleinement le contenu et si vous avez confiance dans le site demandeur.",
       "error_title": "Signature échouée",
       "button_signing": "Signer",
+      "button_retry": "Réessayer",
       "button_reject": "Rejeter"
     },
 		"profile": {

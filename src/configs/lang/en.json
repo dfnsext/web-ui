@@ -47,6 +47,7 @@
       "warning_content": "Only sign this message if you fully understand the content and trust the requesting site.",
       "error_title": "Signature failed",
       "button_signing": "Sign",
+      "button_retry": "Retry",
       "button_reject": "Reject"
     },
 		"profile": {
