@@ -75,7 +75,7 @@ export class DfnsSignMessage {
 						<div class="contentContainer">
 							<div class="title">
 								<dfns-button
-									content={"https://3loom.io"}
+									content={this.rpId}
 									variant={EButtonVariant.SECONDARY}
 									sizing={EButtonSize.SMALL}
 									fullwidth
