@@ -7,10 +7,11 @@ import { DfnsError, UserActionChallengeResponse } from "@dfns/sdk";
 import { WebAuthn } from "@dfns/sdk-webauthn";
 import { CreateWalletRequest, GenerateSignatureRequest } from "@dfns/sdk/codegen/Wallets";
 import { BlockchainNetwork, SignatureKind } from "@dfns/sdk/codegen/datamodel/Wallets";
-import sha256 from "crypto-js/sha256";
+
 import Login from "../services/api/Login";
 import Register from "../services/api/Register";
 import { getDfnsDelegatedClient, waitSignatureSigned } from "./dfns";
+import { ethers } from "ethers";
 
 export async function loginWithOAuth(rpId: string, oauthAccessToken: string) {
 	let challenge: UserActionChallengeResponse;
@@ -89,7 +90,7 @@ export async function createWallet(appId: string, rpId: string, dfnsUserToken: s
 
 export async function signMessage(appId: string, rpId: string, dfnsUserToken: string, walletId: string, message: string) {
 	const dfnsDelegated = getDfnsDelegatedClient(appId, dfnsUserToken);
-	const hexMessage = sha256(message).toString();
+	const hexMessage = ethers.utils.hashMessage(message)
 	const request: GenerateSignatureRequest = {
 		walletId: walletId,
 		body: { kind: SignatureKind.Hash, hash: hexMessage },
@@ -172,3 +173,4 @@ export async function signMessage(appId: string, rpId: string, dfnsUserToken: st
 // 	CookieStorageService.getInstance().items[OAUTH_TOKEN].delete();
 // 	return true;
 // }
+
