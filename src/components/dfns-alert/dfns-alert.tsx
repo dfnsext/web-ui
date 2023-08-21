@@ -15,6 +15,7 @@ export class DfnsAlert {
 	@Prop() errorIconSrc = "icons/x-circle.svg";
 	@Prop() warningIconSrc = "icons/exclamation-triangle.svg";
 	@Prop() infoIconSrc = "icons/exclamation-circle.svg";
+	@Prop({ mutable: true }) hasTitle = false;
 
 	private getIconVariant(): JSX.Element | null {
 		switch (this.variant) {
@@ -39,11 +40,13 @@ export class DfnsAlert {
 				<div {...attributes}>
 					<div class="icon">{this.getIconVariant()}</div>
 					<div class="container">
-						<div class="title">
-							<dfns-typography typo={ITypo.TEXTE_SM_MEDIUM}>
-								<slot name="title"></slot>
-							</dfns-typography>
-						</div>
+						{this.hasTitle && (
+							<div class="title">
+								<dfns-typography typo={ITypo.TEXTE_SM_MEDIUM}>
+									<slot name="title"></slot>
+								</dfns-typography>
+							</div>
+						)}
 						<div class="content">
 							<dfns-typography typo={ITypo.TEXTE_SM_REGULAR}>
 								<slot name="content"></slot>

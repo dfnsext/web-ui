@@ -1,0 +1,33 @@
+:host {
+	display: block;
+}
+.textarea {
+	display: flex;
+	max-height: 180px;
+	padding: 16px 8px 16px 16px;
+	align-items: flex-start;
+	align-self: stretch;
+	border-radius: $spacing-2;
+	border: 1px solid var(--line-primary, #e6e7ea);
+	overflow: scroll;
+	.wrapper {
+		display: flex;
+		align-items: flex-start;
+		gap: 8px;
+		flex: 1 0 0;
+		align-self: stretch;
+		.content {
+			display: flex;
+			flex-direction: column;
+			gap: $spacing-2;
+			.sub-container {
+				display: flex;
+				flex-direction: column;
+				gap: $spacing-1;
+        a{
+          color: #0D0D0D;
+        }
+			}
+		}
+	}
+}

@@ -23,6 +23,7 @@ export namespace Components {
     interface DfnsAlert {
         "classCss"?: string;
         "errorIconSrc": string;
+        "hasTitle": boolean;
         "infoIconSrc": string;
         "variant": EAlertVariant;
         "warningIconSrc": string;
@@ -87,6 +88,13 @@ export namespace Components {
         "iconstyle"?: string;
         "steps": string[];
     }
+    interface DfnsTextarea {
+        "appName": string;
+        "nonceValue": string;
+        "privacyLink": string;
+        "tosLink": string;
+        "walletAddress": string;
+    }
     interface DfnsTypography {
         "classCss"?: string;
         "color"?: ITypoColor;
@@ -115,13 +123,13 @@ export interface DfnsCreateAccountCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLDfnsCreateAccountElement;
 }
-export interface DfnsSignMessageCustomEvent<T> extends CustomEvent<T> {
-    detail: T;
-    target: HTMLDfnsSignMessageElement;
-}
 export interface DfnsInputFieldCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLDfnsInputFieldElement;
+}
+export interface DfnsSignMessageCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLDfnsSignMessageElement;
 }
 export interface DfnsValidateWalletCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -192,6 +200,12 @@ declare global {
         prototype: HTMLDfnsStepperElement;
         new (): HTMLDfnsStepperElement;
     };
+    interface HTMLDfnsTextareaElement extends Components.DfnsTextarea, HTMLStencilElement {
+    }
+    var HTMLDfnsTextareaElement: {
+        prototype: HTMLDfnsTextareaElement;
+        new (): HTMLDfnsTextareaElement;
+    };
     interface HTMLDfnsTypographyElement extends Components.DfnsTypography, HTMLStencilElement {
     }
     var HTMLDfnsTypographyElement: {
@@ -221,6 +235,7 @@ declare global {
         "dfns-loader": HTMLDfnsLoaderElement;
         "dfns-sign-message": HTMLDfnsSignMessageElement;
         "dfns-stepper": HTMLDfnsStepperElement;
+        "dfns-textarea": HTMLDfnsTextareaElement;
         "dfns-typography": HTMLDfnsTypographyElement;
         "dfns-validate-wallet": HTMLDfnsValidateWalletElement;
         "dfns-wallet-validation": HTMLDfnsWalletValidationElement;
@@ -230,6 +245,7 @@ declare namespace LocalJSX {
     interface DfnsAlert {
         "classCss"?: string;
         "errorIconSrc"?: string;
+        "hasTitle"?: boolean;
         "infoIconSrc"?: string;
         "variant"?: EAlertVariant;
         "warningIconSrc"?: string;
@@ -298,6 +314,13 @@ declare namespace LocalJSX {
         "iconstyle"?: string;
         "steps"?: string[];
     }
+    interface DfnsTextarea {
+        "appName"?: string;
+        "nonceValue"?: string;
+        "privacyLink"?: string;
+        "tosLink"?: string;
+        "walletAddress"?: string;
+    }
     interface DfnsTypography {
         "classCss"?: string;
         "color"?: ITypoColor;
@@ -330,6 +353,7 @@ declare namespace LocalJSX {
         "dfns-loader": DfnsLoader;
         "dfns-sign-message": DfnsSignMessage;
         "dfns-stepper": DfnsStepper;
+        "dfns-textarea": DfnsTextarea;
         "dfns-typography": DfnsTypography;
         "dfns-validate-wallet": DfnsValidateWallet;
         "dfns-wallet-validation": DfnsWalletValidation;
@@ -349,6 +373,7 @@ declare module "@stencil/core" {
             "dfns-loader": LocalJSX.DfnsLoader & JSXBase.HTMLAttributes<HTMLDfnsLoaderElement>;
             "dfns-sign-message": LocalJSX.DfnsSignMessage & JSXBase.HTMLAttributes<HTMLDfnsSignMessageElement>;
             "dfns-stepper": LocalJSX.DfnsStepper & JSXBase.HTMLAttributes<HTMLDfnsStepperElement>;
+            "dfns-textarea": LocalJSX.DfnsTextarea & JSXBase.HTMLAttributes<HTMLDfnsTextareaElement>;
             "dfns-typography": LocalJSX.DfnsTypography & JSXBase.HTMLAttributes<HTMLDfnsTypographyElement>;
             "dfns-validate-wallet": LocalJSX.DfnsValidateWallet & JSXBase.HTMLAttributes<HTMLDfnsValidateWalletElement>;
             "dfns-wallet-validation": LocalJSX.DfnsWalletValidation & JSXBase.HTMLAttributes<HTMLDfnsWalletValidationElement>;
