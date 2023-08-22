@@ -22,7 +22,6 @@ export interface DfnsSDKOptions {
     rpId: string;
     appId: string;
     loginOptions: LoginOption[];
-    dfnsHost?: string;
     appName?: string;
     appLogoUrl?: string | null;
     darkMode?: boolean;

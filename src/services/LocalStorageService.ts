@@ -1,6 +1,4 @@
-
-import { Wallet } from "../components";
-
+import { Wallet } from '@dfns/sdk/codegen/datamodel/Wallets';
 
 export const DFNS_END_USER_TOKEN = 'dfnsEndUserToken'
 export const DFNS_ACTIVE_WALLET = 'dfnsActiveWallet'

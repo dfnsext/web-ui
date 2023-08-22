@@ -9,12 +9,16 @@ import { EAlertVariant } from "./utils/enums/alerts-enums";
 import { EButtonSize, EButtonVariant } from "./utils/enums/buttons-enums";
 import { JSX } from "@stencil/core";
 import { RegisterCompleteResponse } from "./components";
+import { GetSignatureResponse } from "@dfns/sdk/codegen/Wallets";
 import { ITypo, ITypoColor } from "./utils/enums/typography-enums";
+import { Wallet } from "@dfns/sdk/codegen/datamodel/Wallets";
 export { EAlertVariant } from "./utils/enums/alerts-enums";
 export { EButtonSize, EButtonVariant } from "./utils/enums/buttons-enums";
 export { JSX } from "@stencil/core";
 export { RegisterCompleteResponse } from "./components";
+export { GetSignatureResponse } from "@dfns/sdk/codegen/Wallets";
 export { ITypo, ITypoColor } from "./utils/enums/typography-enums";
+export { Wallet } from "@dfns/sdk/codegen/datamodel/Wallets";
 export namespace Components {
     interface DfnsAlert {
         "classCss"?: string;
