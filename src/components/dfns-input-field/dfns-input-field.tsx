@@ -48,13 +48,13 @@ export class DfnsInputField {
 		);
 	}
 
-	@Event() change: EventEmitter<string>;
+	@Event() inputChange: EventEmitter<string>;
 
 	@State() isFocused = false;
 
 	handleOnChange(event: Event) {
 		const input = event.target as HTMLInputElement;
-		this.change.emit(input.value);
+		this.inputChange.emit(input.value);
 	}
 
 	toggleFocus() {

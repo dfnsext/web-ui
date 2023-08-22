@@ -267,7 +267,7 @@ declare namespace LocalJSX {
         "errors"?: string[];
         "isReadOnly"?: boolean;
         "leftElement"?: any;
-        "onChange"?: (event: DfnsInputFieldCustomEvent<string>) => void;
+        "onInputChange"?: (event: DfnsInputFieldCustomEvent<string>) => void;
         "placeholder"?: string;
         "rightElement"?: any;
         "type"?: string;
