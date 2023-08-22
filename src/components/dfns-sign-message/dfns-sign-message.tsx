@@ -1,5 +1,5 @@
 import { GetSignatureResponse } from "@dfns/sdk/codegen/Wallets";
-import { Component, Event, EventEmitter, JSX, Prop, h } from "@stencil/core";
+import { Component, Event, EventEmitter, JSX, Prop, State, h } from "@stencil/core";
 import { LanguageService } from "../../services/language-services";
 import { EButtonSize, EButtonVariant } from "../../utils/enums/buttons-enums";
 import { EThemeModeType } from "../../utils/enums/themes-enums";
@@ -25,14 +25,44 @@ export class DfnsSignMessage {
 	@Prop() message: string;
 	@Prop({ mutable: true }) visible: string;
 	@Event() signedMessage: EventEmitter<GetSignatureResponse>;
+	@State() hasErrors: boolean = false;
+	@State() errorMessage: string = "";
+	@State() isLoading: boolean = false;
 
 	componentWillLoad() {
 		this.themeMode.switch(EThemeModeType.ACCOR);
 	}
 
 	async signMessage() {
-		const signedMessage = await signMessage(this.appId, this.rpId, this.dfnsUserToken, this.walletId, this.message);
-		this.signedMessage.emit(signedMessage);
+		try {
+			this.isLoading = true;
+			const signedMessage = await signMessage(this.appId, this.rpId, this.dfnsUserToken, this.walletId, this.message);
+			this.isLoading = false;
+
+			if (signedMessage.status !== "Signed") {
+				this.handleError(signedMessage.reason);
+				return;
+			}
+
+			this.hasErrors = false;
+			this.errorMessage = "";
+			this.signedMessage.emit(signedMessage);
+		} catch (error) {
+			this.handleError(error);
+		}
+	}
+
+	private handleError(error: any) {
+		this.isLoading = false;
+		this.hasErrors = true;
+
+		if (typeof error === "string") {
+			this.errorMessage = error;
+		} else if (error instanceof Error) {
+			this.errorMessage = error.message;
+		} else {
+			this.errorMessage = "An unknown error occurred.";
+		}
 	}
 
 	render() {
@@ -94,31 +124,33 @@ export class DfnsSignMessage {
 										</div>
 									</div>
 								</div>
+
 								<dfns-alert variant={EAlertVariant.WARNING}>
 									<div slot="content">{LanguageService.getContent("pages.signature_request.warning_content")}</div>
 								</dfns-alert>
-								<dfns-alert variant={EAlertVariant.ERROR} hasTitle={true}>
-									<div slot="title">{LanguageService.getContent("pages.signature_request.error_title")}</div>
-									<div slot="content">Reason for failure</div>
-								</dfns-alert>
+								{this.hasErrors && (
+									<dfns-alert variant={EAlertVariant.ERROR} hasTitle={true}>
+										<div slot="title">{LanguageService.getContent("pages.signature_request.error_title")}</div>
+										<div slot="content">{this.errorMessage}</div>
+									</dfns-alert>
+								)}
 							</div>
 						</div>
 					</div>
 					<div slot="bottomSection">
 						<dfns-button
-							content={LanguageService.getContent("pages.signature_request.button_signing")}
+							content={
+								this.hasErrors
+									? LanguageService.getContent("pages.signature_request.button_retry")
+									: LanguageService.getContent("pages.signature_request.button_signing")
+							}
 							variant={EButtonVariant.PRIMARY}
 							sizing={EButtonSize.MEDIUM}
 							fullwidth
-							onClick={this.signMessage.bind(this)}
-						/>
-						<dfns-button
-							content={LanguageService.getContent("pages.signature_request.button_retry")}
-							variant={EButtonVariant.PRIMARY}
-							sizing={EButtonSize.MEDIUM}
-							icon={iconRety}
-							fullwidth
+							icon={this.hasErrors ? iconRety : undefined}
 							iconposition="left"
+							onClick={this.signMessage.bind(this)}
+							isloading={this.isLoading}
 						/>
 						<dfns-button
 							content={LanguageService.getContent("pages.signature_request.button_reject")}
