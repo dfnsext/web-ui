@@ -5,30 +5,46 @@
 <!-- Auto Generated Below -->
 
 
+## Properties
+
+| Property        | Attribute         | Description | Type     | Default     |
+| --------------- | ----------------- | ----------- | -------- | ----------- |
+| `appId`         | `app-id`          |             | `string` | `undefined` |
+| `dfnsUserToken` | `dfns-user-token` |             | `string` | `undefined` |
+| `message`       | `message`         |             | `string` | `undefined` |
+| `rpId`          | `rp-id`           |             | `string` | `undefined` |
+| `visible`       | `visible`         |             | `string` | `undefined` |
+| `walletId`      | `wallet-id`       |             | `string` | `undefined` |
+
+
+## Events
+
+| Event           | Description | Type                                                                                                                                                                                                                                                                                                                                             |
+| --------------- | ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `signedMessage` |             | `CustomEvent<{ id: string; walletId: string; network: BlockchainNetwork; requester: RequesterIdentity; requestBody: GenerateSignatureBody; signature?: Signature; status: SignatureStatus; txHash?: string; fee?: string; dateRequested: string; datePolicyEvaluated?: string; dateSigned?: string; dateConfirmed?: string; reason?: string; }>` |
+
+
 ## Dependencies
 
 ### Depends on
 
 - [dfns-layout](../dfns-layout)
 - [dfns-typography](../dfns-typography)
-- [dfns-stepper](../dfns-stepper)
-- [dfns-alert](../dfns-alert)
 - [dfns-button](../dfns-button)
+- [dfns-alert](../dfns-alert)
 
 ### Graph
 ```mermaid
 graph TD;
-  dfns-create-account --> dfns-layout
-  dfns-create-account --> dfns-typography
-  dfns-create-account --> dfns-stepper
-  dfns-create-account --> dfns-alert
-  dfns-create-account --> dfns-button
+  dfns-sign-message --> dfns-layout
+  dfns-sign-message --> dfns-typography
+  dfns-sign-message --> dfns-button
+  dfns-sign-message --> dfns-alert
   dfns-layout --> dfns-typography
-  dfns-stepper --> dfns-typography
-  dfns-alert --> dfns-typography
   dfns-button --> dfns-typography
   dfns-button --> dfns-loader
-  style dfns-create-account fill:#f9f,stroke:#333,stroke-width:4px
+  dfns-alert --> dfns-typography
+  style dfns-sign-message fill:#f9f,stroke:#333,stroke-width:4px
 ```
 
 ----------------------------------------------

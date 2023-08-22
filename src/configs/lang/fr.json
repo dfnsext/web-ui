@@ -42,6 +42,14 @@
 			"alert_title": "Nous ne pourrons pas récupérer vos codes d'accès.",
 			"alert_description": "Veillez à créer votre mot de passe sur un appareil personnel."
 		},
+    "signature_request":{
+      "title": "Vous signez: ",
+      "warning_content": "Ne signez ce message que si vous en comprenez pleinement le contenu et si vous avez confiance dans le site demandeur.",
+      "error_title": "Signature échouée",
+      "button_signing": "Signer",
+      "button_retry": "Réessayer",
+      "button_reject": "Rejeter"
+    },
 		"profile": {
 			"title": "Profil",
 			"you": "Vous"

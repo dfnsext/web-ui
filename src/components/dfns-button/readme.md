@@ -37,6 +37,7 @@
  - [dfns-create-account](../dfns-create-account)
  - [dfns-create-passkey](../dfns-create-passkey)
  - [dfns-design-system](../dfns-design-system)
+ - [dfns-sign-message](../dfns-sign-message)
  - [dfns-validate-wallet](../dfns-validate-wallet)
  - [dfns-wallet-validation](../dfns-wallet-validation)
 
@@ -53,6 +54,7 @@ graph TD;
   dfns-create-account --> dfns-button
   dfns-create-passkey --> dfns-button
   dfns-design-system --> dfns-button
+  dfns-sign-message --> dfns-button
   dfns-validate-wallet --> dfns-button
   dfns-wallet-validation --> dfns-button
   style dfns-button fill:#f9f,stroke:#333,stroke-width:4px

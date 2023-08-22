@@ -23,6 +23,7 @@ export namespace Components {
     interface DfnsAlert {
         "classCss"?: string;
         "errorIconSrc": string;
+        "hasTitle": boolean;
         "infoIconSrc": string;
         "variant": EAlertVariant;
         "warningIconSrc": string;
@@ -115,13 +116,13 @@ export interface DfnsCreateAccountCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLDfnsCreateAccountElement;
 }
-export interface DfnsSignMessageCustomEvent<T> extends CustomEvent<T> {
-    detail: T;
-    target: HTMLDfnsSignMessageElement;
-}
 export interface DfnsInputFieldCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLDfnsInputFieldElement;
+}
+export interface DfnsSignMessageCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLDfnsSignMessageElement;
 }
 export interface DfnsValidateWalletCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -230,6 +231,7 @@ declare namespace LocalJSX {
     interface DfnsAlert {
         "classCss"?: string;
         "errorIconSrc"?: string;
+        "hasTitle"?: boolean;
         "infoIconSrc"?: string;
         "variant"?: EAlertVariant;
         "warningIconSrc"?: string;
