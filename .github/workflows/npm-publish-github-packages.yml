@@ -4,8 +4,9 @@
 name: Node Package
 
 on:
-  release:
-    types: [released]
+  push:
+    branches:
+      - 'dev'
 
 jobs:
   build:
