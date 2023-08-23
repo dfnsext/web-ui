@@ -34,7 +34,7 @@ export class DfnsCreateAccount {
 			this.passkeyCreated.emit(response);
 			return response;
 		} catch (error) {
-			console.error(error);
+			this.isLoading = false;
 		}
 	}
 

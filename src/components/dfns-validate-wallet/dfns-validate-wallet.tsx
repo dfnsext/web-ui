@@ -35,7 +35,7 @@ export class DfnsValidateWallet {
 			this.walletValidated.emit(response);
 			return response;
 		} catch (err) {
-			console.error(err);
+			this.isLoading = false;
 		}
 	}
 

@@ -127,11 +127,7 @@ export class DfnsSDK {
         this.listenToChanges();
     }
 
-    public connect(): Promise<any> {
-        return;
-    }
-
-    public async connectAccorSocial(oauthToken?: string): Promise<Wallet> {
+    public async connectWithOAuthToken(oauthToken: string): Promise<any> {
         let wallet: Wallet | null = null;
         try {
             LocalStorageService.getInstance().items[OAUTH_ACCESS_TOKEN].set(oauthToken);
@@ -156,6 +152,7 @@ export class DfnsSDK {
         LocalStorageService.getInstance().items[DFNS_ACTIVE_WALLET].set(wallet);
         return wallet;
     }
+
 
     public async isConnected() {
         const dfnsUserToken = LocalStorageService.getInstance().items[DFNS_END_USER_TOKEN].get();

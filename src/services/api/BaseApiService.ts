@@ -155,7 +155,6 @@ export default abstract class BaseApiService {
 		}
 
 		if (!response.ok) {
-			console.error(JSON.stringify(responseJson));
 			return Promise.reject(responseJson);
 		}
 
@@ -163,7 +162,6 @@ export default abstract class BaseApiService {
 	}
 
 	protected async onError(error: unknown) {
-		console.error(error);
 		return Promise.reject(error);
 	}
 }
