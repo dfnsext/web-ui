@@ -11,16 +11,6 @@ export const config: Config = {
       type: 'dist',
       esmLoaderPath: '../loader',
       isPrimaryPackageOutputTarget: true,
-    },
-    {
-      type: 'docs-readme',
-    },
-    {
-      type: 'www',
-      serviceWorker: null, // disable service workers
-    },
-    {
-      type: 'dist-custom-elements',
       copy: [
         {
           src: '**/*.{jpg,png,svg}',

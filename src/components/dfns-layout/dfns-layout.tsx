@@ -1,11 +1,12 @@
 import { Component, h, Prop, getAssetPath } from "@stencil/core";
 import { ITypo, ITypoColor } from "../../utils/enums/typography-enums";
 
+
 @Component({
 	tag: "dfns-layout",
 	styleUrl: "dfns-layout.scss",
 	shadow: true, // Enables Shadow DOM
-	assetsDirs: ["assets"],
+	assetsDirs: ["assets"], 
 })
 export class DfnsLayout {
 	// Prop is used to pass data from one component to another
