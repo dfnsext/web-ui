@@ -65,13 +65,16 @@ export namespace Components {
     interface DfnsLayout {
         "bloomLogoSrc": string;
         "closeBtn"?: boolean;
-        "closeBtnShouldDisconnect"?: boolean;
         "crossIconSrc": string;
         "molitorLogoSrc": string;
+        "onClickCloseBtn": () => void;
     }
     interface DfnsLoader {
         "LoaderIconSrc": string;
         "classCss"?: string;
+    }
+    interface DfnsMain {
+        "visible": string;
     }
     interface DfnsSignMessage {
         "appId": string;
@@ -181,6 +184,12 @@ declare global {
         prototype: HTMLDfnsLoaderElement;
         new (): HTMLDfnsLoaderElement;
     };
+    interface HTMLDfnsMainElement extends Components.DfnsMain, HTMLStencilElement {
+    }
+    var HTMLDfnsMainElement: {
+        prototype: HTMLDfnsMainElement;
+        new (): HTMLDfnsMainElement;
+    };
     interface HTMLDfnsSignMessageElement extends Components.DfnsSignMessage, HTMLStencilElement {
     }
     var HTMLDfnsSignMessageElement: {
@@ -220,6 +229,7 @@ declare global {
         "dfns-input-field": HTMLDfnsInputFieldElement;
         "dfns-layout": HTMLDfnsLayoutElement;
         "dfns-loader": HTMLDfnsLoaderElement;
+        "dfns-main": HTMLDfnsMainElement;
         "dfns-sign-message": HTMLDfnsSignMessageElement;
         "dfns-stepper": HTMLDfnsStepperElement;
         "dfns-typography": HTMLDfnsTypographyElement;
@@ -276,13 +286,16 @@ declare namespace LocalJSX {
     interface DfnsLayout {
         "bloomLogoSrc"?: string;
         "closeBtn"?: boolean;
-        "closeBtnShouldDisconnect"?: boolean;
         "crossIconSrc"?: string;
         "molitorLogoSrc"?: string;
+        "onClickCloseBtn"?: () => void;
     }
     interface DfnsLoader {
         "LoaderIconSrc"?: string;
         "classCss"?: string;
+    }
+    interface DfnsMain {
+        "visible"?: string;
     }
     interface DfnsSignMessage {
         "appId"?: string;
@@ -330,6 +343,7 @@ declare namespace LocalJSX {
         "dfns-input-field": DfnsInputField;
         "dfns-layout": DfnsLayout;
         "dfns-loader": DfnsLoader;
+        "dfns-main": DfnsMain;
         "dfns-sign-message": DfnsSignMessage;
         "dfns-stepper": DfnsStepper;
         "dfns-typography": DfnsTypography;
@@ -349,6 +363,7 @@ declare module "@stencil/core" {
             "dfns-input-field": LocalJSX.DfnsInputField & JSXBase.HTMLAttributes<HTMLDfnsInputFieldElement>;
             "dfns-layout": LocalJSX.DfnsLayout & JSXBase.HTMLAttributes<HTMLDfnsLayoutElement>;
             "dfns-loader": LocalJSX.DfnsLoader & JSXBase.HTMLAttributes<HTMLDfnsLoaderElement>;
+            "dfns-main": LocalJSX.DfnsMain & JSXBase.HTMLAttributes<HTMLDfnsMainElement>;
             "dfns-sign-message": LocalJSX.DfnsSignMessage & JSXBase.HTMLAttributes<HTMLDfnsSignMessageElement>;
             "dfns-stepper": LocalJSX.DfnsStepper & JSXBase.HTMLAttributes<HTMLDfnsStepperElement>;
             "dfns-typography": LocalJSX.DfnsTypography & JSXBase.HTMLAttributes<HTMLDfnsTypographyElement>;

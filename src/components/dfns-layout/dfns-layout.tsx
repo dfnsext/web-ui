@@ -11,7 +11,7 @@ import { ITypo, ITypoColor } from "../../utils/enums/typography-enums";
 export class DfnsLayout {
 	// Prop is used to pass data from one component to another
 	@Prop() closeBtn?: boolean;
-	@Prop() closeBtnShouldDisconnect?: boolean;
+	@Prop() onClickCloseBtn: () => void
 	@Prop() crossIconSrc = "icons/cross.svg";
 	@Prop() molitorLogoSrc = "images/molitor.svg";
 	@Prop() bloomLogoSrc = "images/bloom.svg";
@@ -23,7 +23,7 @@ export class DfnsLayout {
 				<div class="top-section">
 					<slot name="topSection" />
 					{this.closeBtn && (
-						<div class="cross" onClick={this.handleCrossClick.bind(this)}>
+						<div class="cross" onClick={this.onClickCloseBtn}>
 							<img alt="Unplugged" src={getAssetPath(`./assets/${this.crossIconSrc}`)} class="close-icon" />
 						</div>
 					)}
@@ -43,11 +43,5 @@ export class DfnsLayout {
 				</div>
 			</div>
 		);
-	}
-
-	handleCrossClick() {
-		if (this.closeBtnShouldDisconnect) {
-			window.location.pathname = "/";
-		}
 	}
 }

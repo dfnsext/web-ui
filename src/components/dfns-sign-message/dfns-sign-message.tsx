@@ -65,6 +65,10 @@ export class DfnsSignMessage {
 		}
 	}
 
+	async closeBtn() {
+		this.signedMessage.emit(null);
+	}
+
 	render() {
 		const iconBloom: JSX.Element = (
 			<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
@@ -94,8 +98,9 @@ export class DfnsSignMessage {
 		);
 
 		return (
+			
 			<div class={this.visible ? "container visible" : "container"}>
-				<dfns-layout closeBtn>
+				<dfns-layout closeBtn onClickCloseBtn={this.closeBtn.bind(this)}>
 					<div slot="topSection">
 						<dfns-typography typo={ITypo.H5_TITLE} color={ITypoColor.PRIMARY} class="custom-class">
 							Signature request
@@ -118,7 +123,11 @@ export class DfnsSignMessage {
 									{LanguageService.getContent("pages.signature_request.title")}
 								</dfns-typography>
 								<div class="textarea">
-									<div class="sub-container">{this.message}</div>
+									<div class="sub-container">
+										<dfns-typography typo={ITypo.TEXTE_SM_REGULAR} color={ITypoColor.PRIMARY} class="custom-class">
+											{this.message}
+										</dfns-typography>
+									</div>
 								</div>
 
 								<dfns-alert variant={EAlertVariant.WARNING}>

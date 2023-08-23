@@ -45,10 +45,14 @@ export class DfnsWalletValidation {
 		this.walletValidated.emit(this.wallet);
 	}
 
+	async closeBtn() {
+		this.walletValidated.emit(null);
+	}
+
 	render() {
 		return (
 			<div class={this.visible ? "container visible" : "container"}>
-				<dfns-layout closeBtn>
+				<dfns-layout closeBtn onClickCloseBtn={this.closeBtn.bind(this)}>
 					<div slot="topSection">
 						<dfns-typography typo={ITypo.H5_TITLE} color={ITypoColor.PRIMARY} class="custom-class">
 							Create account

@@ -1,6 +1,6 @@
 {
   "name": "@smart-chain-fr/dfns-sdk",
-  "version": "0.0.7",
+  "version": "0.0.5",
   "description": "Dfns SDK",
   "main": "dist/index.cjs.js",
   "module": "dist/index.js",
@@ -44,8 +44,7 @@
     "ethers": "^5.7.2",
     "js-cookie": "^3.0.5",
     "jwt-decode": "^3.1.2",
-    "prettier": "^3.0.1",
-    "rollup-plugin-copy": "^3.4.0"
+    "prettier": "^3.0.1"
   },
   "devDependencies": {
     "@stencil/sass": "^3.0.5",
@@ -58,6 +57,5 @@
     "rollup-plugin-dotenv": "^0.5.0",
     "rollup-plugin-node-polyfills": "^0.2.1"
   },
-  "license": "MIT",
-  "bin": "bin/copyAssets.js"
+  "license": "MIT"
 }

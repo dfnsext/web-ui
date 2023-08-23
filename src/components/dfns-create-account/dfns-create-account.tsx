@@ -38,43 +38,47 @@ export class DfnsCreateAccount {
 		}
 	}
 
+	async closeBtn() {
+		this.passkeyCreated.emit(null);
+	}
+
 	render() {
 		return (
-			<div class={this.visible ? "container visible" : "container"}>
-				<dfns-layout closeBtn>
-					<div slot="topSection">
-						<dfns-typography typo={ITypo.H5_TITLE} color={ITypoColor.PRIMARY} class="custom-class">
-							Create Account
-						</dfns-typography>
-					</div>
-					<div slot="contentSection">
-						<dfns-stepper steps={["Identification", "Create passkey", "Validate wallet"]} activeIndices={[0]} />
-						<div class="contentContainer">
-							<div class="title">
-								<dfns-typography typo={ITypo.TEXTE_SM_SEMIBOLD}>
-									{LanguageService.getContent("pages.create_account.title")}
-								</dfns-typography>
-							</div>
-							<div class="content">
-								<dfns-typography typo={ITypo.TEXTE_SM_REGULAR} color={ITypoColor.SECONDARY}>
-									{LanguageService.getContent("pages.create_account.description")}
-								</dfns-typography>
+				<div class={this.visible ? "container visible" : "container"}>
+					<dfns-layout closeBtn onClickCloseBtn={this.closeBtn.bind(this)}>
+						<div slot="topSection">
+							<dfns-typography typo={ITypo.H5_TITLE} color={ITypoColor.PRIMARY} class="custom-class">
+								Create Account
+							</dfns-typography>
+						</div>
+						<div slot="contentSection">
+							<dfns-stepper steps={["Identification", "Create passkey", "Validate wallet"]} activeIndices={[0]} />
+							<div class="contentContainer">
+								<div class="title">
+									<dfns-typography typo={ITypo.TEXTE_SM_SEMIBOLD}>
+										{LanguageService.getContent("pages.create_account.title")}
+									</dfns-typography>
+								</div>
+								<div class="content">
+									<dfns-typography typo={ITypo.TEXTE_SM_REGULAR} color={ITypoColor.SECONDARY}>
+										{LanguageService.getContent("pages.create_account.description")}
+									</dfns-typography>
+								</div>
 							</div>
 						</div>
-					</div>
-					<div slot="bottomSection">
-						<dfns-button
-							content={LanguageService.getContent("pages.create_account.button_create")}
-							variant={EButtonVariant.PRIMARY}
-							sizing={EButtonSize.MEDIUM}
-							fullwidth
-							iconposition="left"
-							onClick={this.createPasskey.bind(this)}
-							isloading={this.isLoading}
-						/>
-					</div>
-				</dfns-layout>
-			</div>
+						<div slot="bottomSection">
+							<dfns-button
+								content={LanguageService.getContent("pages.create_account.button_create")}
+								variant={EButtonVariant.PRIMARY}
+								sizing={EButtonSize.MEDIUM}
+								fullwidth
+								iconposition="left"
+								onClick={this.createPasskey.bind(this)}
+								isloading={this.isLoading}
+							/>
+						</div>
+					</dfns-layout>
+				</div>
 		);
 	}
 }

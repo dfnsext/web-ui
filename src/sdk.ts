@@ -78,7 +78,7 @@ export class DfnsSDK {
     }
 
     public init() {
-        this.dfnsContainer = document.createElement("div");
+        this.dfnsContainer = document.createElement("dfns-main");
         this.dfnsContainer.classList.add("dfns-container");
         this.dfnsContainer.title = "DFNS";
         applyOverlayStyles(this.dfnsContainer);
@@ -211,34 +211,50 @@ export class DfnsSDK {
     }
 
     public async createAccount() {
+        this.dfnsContainer.setAttribute("visible", "true")
         this.dfnsCreateAccountElement.setAttribute("visible", "true");
         const response = await this.waitForEvent<RegisterCompleteResponse>(this.dfnsCreateAccountElement, "passkeyCreated");
-        LocalStorageService.getInstance().items[DFNS_END_USER_TOKEN].set(response.userAuthToken);
         this.dfnsCreateAccountElement.removeAttribute("visible");
+        this.dfnsContainer.removeAttribute("visible")
+        if(!response) throw new Error("User cancelled connection")
+        LocalStorageService.getInstance().items[DFNS_END_USER_TOKEN].set(response.userAuthToken);
         return response;
     }
 
     public async validateWallet(): Promise<Wallet> {
+        this.dfnsContainer.setAttribute("visible", "true")
         this.dfnsValidateWalletElement.setAttribute("visible", "true");
         const response = await this.waitForEvent<Wallet>(this.dfnsValidateWalletElement, "walletValidated");
-        LocalStorageService.getInstance().items[DFNS_ACTIVE_WALLET].set(response);
+        
         this.dfnsValidateWalletElement.removeAttribute("visible");
+        this.dfnsContainer.removeAttribute("visible")
+        if(!response) throw new Error("User cancelled connection")
+        LocalStorageService.getInstance().items[DFNS_ACTIVE_WALLET].set(response);
+
         return response;
     }
 
     public async waitForWalletValidation(): Promise<any> {
+        this.dfnsContainer.setAttribute("visible", "true")
         this.dfnsWalletValidationElement.setAttribute("visible", "true");
         const response = await this.waitForEvent(this.dfnsWalletValidationElement, "walletValidated");
+        
         this.dfnsWalletValidationElement.removeAttribute("visible");
+        this.dfnsContainer.removeAttribute("visible")
+        if(!response) throw new Error("User cancelled connection")
         return response;
     }
 
     public async signMessage(message: string) {
         await this.autoConnect();
+        this.dfnsContainer.setAttribute("visible", "true")
         this.dfnsSignMessageElement.setAttribute("visible", "true");
         this.dfnsSignMessageElement.setAttribute("message", message);
         const response = await this.waitForEvent<GetSignatureResponse>(this.dfnsSignMessageElement, "signedMessage");
+        
         this.dfnsSignMessageElement.removeAttribute("visible");
+        this.dfnsContainer.removeAttribute("visible")
+        if(!response) throw new Error("User cancelled signature")
         return response;
     }
 
