@@ -136,6 +136,7 @@
 	"buttons": {
 		"back": "Back",
 		"next": "Next",
+		"done": "Done",
 		"view": "View",
 		"view_more": "View More",
 		"view_less": "View Less",

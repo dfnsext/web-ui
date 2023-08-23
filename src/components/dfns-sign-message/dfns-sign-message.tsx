@@ -118,11 +118,7 @@ export class DfnsSignMessage {
 									{LanguageService.getContent("pages.signature_request.title")}
 								</dfns-typography>
 								<div class="textarea">
-									<div class="wrapper">
-										<div class="content">
-											<div class="sub-container">{this.message}</div>
-										</div>
-									</div>
+									<div class="sub-container">{this.message}</div>
 								</div>
 
 								<dfns-alert variant={EAlertVariant.WARNING}>

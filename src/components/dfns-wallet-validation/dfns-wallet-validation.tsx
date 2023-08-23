@@ -86,7 +86,7 @@ export class DfnsWalletValidation {
 					</div>
 					<div slot="bottomSection">
 						<dfns-button
-							content={LanguageService.getContent("buttons.next")}
+							content={LanguageService.getContent("buttons.done")}
 							variant={EButtonVariant.PRIMARY}
 							sizing={EButtonSize.MEDIUM}
 							disabled={this.wallet?.status !== WalletStatus.Active}
