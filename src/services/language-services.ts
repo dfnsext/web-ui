@@ -7,7 +7,7 @@ const languages = {
 };
 
 export const LanguageService = {
-    activeLanguage: 'en', // Default language
+    activeLanguage: 'fr', // Default language
 
     setActiveLanguage(language: string) {
         this.activeLanguage = language;

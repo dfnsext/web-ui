@@ -7,10 +7,9 @@
 
 ## Properties
 
-| Property     | Attribute     | Description | Type     | Default     |
-| ------------ | ------------- | ----------- | -------- | ----------- |
-| `assetsPath` | `assets-path` |             | `string` | `undefined` |
-| `visible`    | `visible`     |             | `string` | `undefined` |
+| Property  | Attribute | Description | Type     | Default     |
+| --------- | --------- | ----------- | -------- | ----------- |
+| `visible` | `visible` |             | `string` | `undefined` |
 
 
 ----------------------------------------------

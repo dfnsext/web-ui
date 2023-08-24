@@ -7,14 +7,14 @@
 
 ## Properties
 
-| Property         | Attribute          | Description | Type                                                                                          | Default                            |
-| ---------------- | ------------------ | ----------- | --------------------------------------------------------------------------------------------- | ---------------------------------- |
-| `classCss`       | `class-css`        |             | `string`                                                                                      | `undefined`                        |
-| `errorIconSrc`   | `error-icon-src`   |             | `string`                                                                                      | `"icons/x-circle.svg"`             |
-| `hasTitle`       | `has-title`        |             | `boolean`                                                                                     | `false`                            |
-| `infoIconSrc`    | `info-icon-src`    |             | `string`                                                                                      | `"icons/exclamation-circle.svg"`   |
-| `variant`        | `variant`          |             | `EAlertVariant.ERROR \| EAlertVariant.INFO \| EAlertVariant.SUCCESS \| EAlertVariant.WARNING` | `EAlertVariant.INFO`               |
-| `warningIconSrc` | `warning-icon-src` |             | `string`                                                                                      | `"icons/exclamation-triangle.svg"` |
+| Property         | Attribute          | Description | Type                                                                                          | Default                                                                                 |
+| ---------------- | ------------------ | ----------- | --------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
+| `classCss`       | `class-css`        |             | `string`                                                                                      | `undefined`                                                                             |
+| `errorIconSrc`   | `error-icon-src`   |             | `string`                                                                                      | `"https://storage.googleapis.com/dfns-frame-stg/assets/icons/x-circle.svg"`             |
+| `hasTitle`       | `has-title`        |             | `boolean`                                                                                     | `false`                                                                                 |
+| `infoIconSrc`    | `info-icon-src`    |             | `string`                                                                                      | `"https://storage.googleapis.com/dfns-frame-stg/assets/icons/exclamation-circle.svg"`   |
+| `variant`        | `variant`          |             | `EAlertVariant.ERROR \| EAlertVariant.INFO \| EAlertVariant.SUCCESS \| EAlertVariant.WARNING` | `EAlertVariant.INFO`                                                                    |
+| `warningIconSrc` | `warning-icon-src` |             | `string`                                                                                      | `"https://storage.googleapis.com/dfns-frame-stg/assets/icons/exclamation-triangle.svg"` |
 
 
 ## Dependencies

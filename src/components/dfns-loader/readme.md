@@ -7,10 +7,10 @@
 
 ## Properties
 
-| Property        | Attribute         | Description | Type     | Default              |
-| --------------- | ----------------- | ----------- | -------- | -------------------- |
-| `LoaderIconSrc` | `loader-icon-src` |             | `string` | `"icons/loader.svg"` |
-| `classCss`      | `class-css`       |             | `string` | `undefined`          |
+| Property        | Attribute         | Description | Type     | Default                                                                   |
+| --------------- | ----------------- | ----------- | -------- | ------------------------------------------------------------------------- |
+| `LoaderIconSrc` | `loader-icon-src` |             | `string` | `"https://storage.googleapis.com/dfns-frame-stg/assets/icons/loader.svg"` |
+| `classCss`      | `class-css`       |             | `string` | `undefined`                                                               |
 
 
 ## Dependencies

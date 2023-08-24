@@ -35,10 +35,10 @@ export class DfnsLayout {
 				</div>
 				<div class="logos-section">
 					<img src={this.molitorLogoSrc} alt="Molitor logo" width={47} height={16} />
-					<dfns-typography typo={ITypo.TEXTE_XS_REGULAR} color={ITypoColor.BLACK}>
+					{/* <dfns-typography typo={ITypo.TEXTE_XS_REGULAR} color={ITypoColor.BLACK}>
 						powered by
 					</dfns-typography>
-					<img src={this.bloomLogoSrc} alt="bloom logo" width={43} height={14} />
+					<img src={this.bloomLogoSrc} alt="bloom logo" width={43} height={14} /> */}
 				</div>
 			</div>
 		);

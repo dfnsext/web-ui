@@ -27,6 +27,7 @@
 			position: relative;
 			text-align: center;
 			color: var(--color-neutral-500);
+			white-space: pre-wrap;
 		}
 
 		.stepper li:before {
@@ -56,7 +57,7 @@
 			width: 100%;
 			height: 2px;
 			background-color: var(--color-generic-black);
-			top: 26%;
+			top: 20%;
 			left: -50%;
 			z-index: 0;
 		}

@@ -33,23 +33,23 @@
 			"title": "Congratulations!",
 			"description": "Your account has been created",
 			"wallet_address": "Your wallet address is",
-      "loading_message": "Loading your wallet address"
+			"loading_message": "Loading your wallet address"
 		},
-    "create_passkey": {
+		"create_passkey": {
 			"title": "Create a passkey",
 			"description": "The passkey that you will create will be associated to the a device of your choice. Make sure you create your passkey on a personal device.",
 			"button_create": "Create a passkey",
-      "alert_title": "We will not be able to recover your passkeys",
-      "alert_description": "Make sure you create your passkey on a personal device."
+			"alert_title": "We will not be able to recover your passkeys",
+			"alert_description": "Make sure you create your passkey on a personal device."
 		},
-    "signature_request":{
-      "title": "You are signing:",
-      "warning_content": "Only sign this message if you fully understand the content and trust the requesting site.",
-      "error_title": "Signature failed",
-      "button_signing": "Sign",
-      "button_retry": "Retry",
-      "button_reject": "Reject"
-    },
+		"signature_request": {
+			"title": "You are signing:",
+			"warning_content": "Only sign this message if you fully understand the content and trust the requesting site.",
+			"error_title": "Signature failed",
+			"button_signing": "Sign",
+			"button_retry": "Retry",
+			"button_reject": "Reject"
+		},
 		"profile": {
 			"title": "Profile",
 			"you": "You"

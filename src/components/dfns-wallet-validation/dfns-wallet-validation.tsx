@@ -55,7 +55,7 @@ export class DfnsWalletValidation {
 				<dfns-layout closeBtn onClickCloseBtn={this.closeBtn.bind(this)}>
 					<div slot="topSection">
 						<dfns-typography typo={ITypo.H5_TITLE} color={ITypoColor.PRIMARY} class="custom-class">
-							Create account
+							{LanguageService.getContent("header.create_wallet")}
 						</dfns-typography>
 					</div>
 					<div slot="contentSection">

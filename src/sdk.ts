@@ -81,7 +81,6 @@ export class DfnsSDK {
     public init() {
         this.dfnsContainer = document.createElement("dfns-main");
         this.dfnsContainer.classList.add("dfns-container");
-        this.dfnsContainer.title = "DFNS";
         applyOverlayStyles(this.dfnsContainer);
 
         /** Init Create Account Element */
@@ -130,6 +129,7 @@ export class DfnsSDK {
     }
 
     public async connectWithOAuthToken(oauthToken: string): Promise<any> {
+    
         let wallet: Wallet | null = null;
         try {
             LocalStorageService.getInstance().items[OAUTH_ACCESS_TOKEN].set(oauthToken);
@@ -148,9 +148,11 @@ export class DfnsSDK {
                 await this.validateWallet();
                 wallet = await this.waitForWalletValidation();
             } else {
+                this.dfnsContainer.style.display = "none"
                 throw error;
             }
         }
+        this.dfnsContainer.style.display = "none"
         LocalStorageService.getInstance().items[DFNS_ACTIVE_WALLET].set(wallet);
         return wallet;
     }
@@ -213,23 +215,26 @@ export class DfnsSDK {
     }
 
     public async createAccount() {
+        this.dfnsContainer.style.display = "block"
         this.dfnsContainer.setAttribute("visible", "true")
         this.dfnsCreateAccountElement.setAttribute("visible", "true");
         const response = await this.waitForEvent<RegisterCompleteResponse>(this.dfnsCreateAccountElement, "passkeyCreated");
         this.dfnsCreateAccountElement.removeAttribute("visible");
         this.dfnsContainer.removeAttribute("visible")
+        this.dfnsContainer.style.display = "none"
         if(!response) throw new Error("User cancelled connection")
         LocalStorageService.getInstance().items[DFNS_END_USER_TOKEN].set(response.userAuthToken);
         return response;
     }
 
     public async validateWallet(): Promise<Wallet> {
+        this.dfnsContainer.style.display = "block"
         this.dfnsContainer.setAttribute("visible", "true")
         this.dfnsValidateWalletElement.setAttribute("visible", "true");
         const response = await this.waitForEvent<Wallet>(this.dfnsValidateWalletElement, "walletValidated");
-        
         this.dfnsValidateWalletElement.removeAttribute("visible");
         this.dfnsContainer.removeAttribute("visible")
+        this.dfnsContainer.style.display = "none"
         if(!response) throw new Error("User cancelled connection")
         LocalStorageService.getInstance().items[DFNS_ACTIVE_WALLET].set(response);
 
@@ -237,25 +242,27 @@ export class DfnsSDK {
     }
 
     public async waitForWalletValidation(): Promise<any> {
+        this.dfnsContainer.style.display = "block"
         this.dfnsContainer.setAttribute("visible", "true")
         this.dfnsWalletValidationElement.setAttribute("visible", "true");
         const response = await this.waitForEvent(this.dfnsWalletValidationElement, "walletValidated");
-        
         this.dfnsWalletValidationElement.removeAttribute("visible");
         this.dfnsContainer.removeAttribute("visible")
+        this.dfnsContainer.style.display = "none"
         if(!response) throw new Error("User cancelled connection")
         return response;
     }
 
     public async signMessage(message: string) {
         await this.autoConnect();
+        this.dfnsContainer.style.display = "block"
         this.dfnsContainer.setAttribute("visible", "true")
         this.dfnsSignMessageElement.setAttribute("visible", "true");
         this.dfnsSignMessageElement.setAttribute("message", message);
         const response = await this.waitForEvent<GetSignatureResponse>(this.dfnsSignMessageElement, "signedMessage");
-        
         this.dfnsSignMessageElement.removeAttribute("visible");
         this.dfnsContainer.removeAttribute("visible")
+        this.dfnsContainer.style.display = "none"
         if(!response) throw new Error("User cancelled signature")
         return response;
     }

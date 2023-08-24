@@ -4,7 +4,7 @@ import { DfnsError, UserActionChallengeResponse } from "@dfns/sdk";
 // import CookieStorageService, { DFNS_ACTIVE_WALLET_ID, DFNS_END_USER_TOKEN, OAUTH_TOKEN } from "../services/CookieStorageService";
 // import { ethereumRecIdOffset } from "../common/constant";
 
-import { WebAuthn } from "@dfns/sdk-webauthn";
+
 import { CreateWalletRequest, GenerateSignatureRequest } from "@dfns/sdk/codegen/Wallets";
 import { BlockchainNetwork, SignatureKind } from "@dfns/sdk/codegen/datamodel/Wallets";
 
@@ -12,6 +12,7 @@ import Login from "../services/api/Login";
 import Register from "../services/api/Register";
 import { getDfnsDelegatedClient, waitSignatureSigned } from "./dfns";
 import { ethers } from "ethers";
+import { WebAuthn } from "./webauthn";
 
 export async function loginWithOAuth(rpId: string, oauthAccessToken: string) {
 	let challenge: UserActionChallengeResponse;
