@@ -38,7 +38,6 @@ graph TD;
   dfns-validate-wallet --> dfns-typography
   dfns-validate-wallet --> dfns-stepper
   dfns-validate-wallet --> dfns-button
-  dfns-layout --> dfns-typography
   dfns-stepper --> dfns-typography
   dfns-button --> dfns-typography
   dfns-button --> dfns-loader

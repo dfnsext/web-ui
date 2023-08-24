@@ -23,7 +23,6 @@
  - [dfns-create-account](../dfns-create-account)
  - [dfns-create-passkey](../dfns-create-passkey)
  - [dfns-design-system](../dfns-design-system)
- - [dfns-layout](../dfns-layout)
  - [dfns-sign-message](../dfns-sign-message)
  - [dfns-stepper](../dfns-stepper)
  - [dfns-validate-wallet](../dfns-validate-wallet)
@@ -37,7 +36,6 @@ graph TD;
   dfns-create-account --> dfns-typography
   dfns-create-passkey --> dfns-typography
   dfns-design-system --> dfns-typography
-  dfns-layout --> dfns-typography
   dfns-sign-message --> dfns-typography
   dfns-stepper --> dfns-typography
   dfns-validate-wallet --> dfns-typography

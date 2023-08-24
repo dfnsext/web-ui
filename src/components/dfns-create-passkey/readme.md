@@ -30,7 +30,6 @@ graph TD;
   dfns-create-passkey --> dfns-input-field
   dfns-create-passkey --> dfns-alert
   dfns-create-passkey --> dfns-button
-  dfns-layout --> dfns-typography
   dfns-alert --> dfns-typography
   dfns-button --> dfns-typography
   dfns-button --> dfns-loader

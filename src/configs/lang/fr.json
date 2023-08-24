@@ -29,7 +29,7 @@
 			"button_create": "Continue"
 		},
 		"validate_wallet": {
-			"title": "Validation du portefeuille",
+			"title": "Validation du\nportefeuille",
 			"description": "Connectez-vous pour accéder à votre portefeuille",
 			"button_validate": "Accéder à mon portefeuille"
 		},

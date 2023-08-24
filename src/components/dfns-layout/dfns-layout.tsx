@@ -1,5 +1,4 @@
 import { Component, h, Prop } from "@stencil/core";
-import { ITypo, ITypoColor } from "../../utils/enums/typography-enums";
 
 
 @Component({

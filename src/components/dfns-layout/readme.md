@@ -27,14 +27,9 @@
  - [dfns-validate-wallet](../dfns-validate-wallet)
  - [dfns-wallet-validation](../dfns-wallet-validation)
 
-### Depends on
-
-- [dfns-typography](../dfns-typography)
-
 ### Graph
 ```mermaid
 graph TD;
-  dfns-layout --> dfns-typography
   dfns-create-account --> dfns-layout
   dfns-create-passkey --> dfns-layout
   dfns-design-system --> dfns-layout

@@ -6,6 +6,7 @@ import { EThemeModeType } from "../../utils/enums/themes-enums";
 import { ITypo, ITypoColor } from "../../utils/enums/typography-enums";
 import { createWallet } from "../../utils/helper";
 import { ThemeMode } from "../../utils/theme-modes";
+import { waitForWalletActive } from "../../utils/dfns";
 
 // ** Signup or sign in popup*/
 @Component({
@@ -31,8 +32,9 @@ export class DfnsValidateWallet {
 		try {
 			this.isLoading = true;
 			const response = await createWallet(this.appId, this.rpId, this.dfnsUserToken);
+			const wallet = await waitForWalletActive(this.appId, this.dfnsUserToken, response.id);
 			this.isLoading = false;
-			this.walletValidated.emit(response);
+			this.walletValidated.emit(wallet);
 			return response;
 		} catch (err) {
 			this.isLoading = false;

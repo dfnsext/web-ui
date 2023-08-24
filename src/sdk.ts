@@ -139,14 +139,14 @@ export class DfnsSDK {
             const wallets = await dfnsDelegated.wallets.listWallets({});
             wallet = wallets.items[0];
             if (!wallet) {
-                await this.validateWallet();
-                wallet = await this.waitForWalletValidation();
+                wallet = await this.validateWallet();
+                // wallet = await this.waitForWalletValidation();
             }
         } catch (error) {
             if (isDfnsError(error) && error.httpStatus === 401) {
                 await this.createAccount();
-                await this.validateWallet();
-                wallet = await this.waitForWalletValidation();
+                wallet = await this.validateWallet();
+                // wallet = await this.waitForWalletValidation();
             } else {
                 this.dfnsContainer.style.display = "none"
                 throw error;

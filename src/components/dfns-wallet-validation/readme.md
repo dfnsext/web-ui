@@ -40,7 +40,6 @@ graph TD;
   dfns-wallet-validation --> dfns-typography
   dfns-wallet-validation --> dfns-loader
   dfns-wallet-validation --> dfns-button
-  dfns-layout --> dfns-typography
   dfns-button --> dfns-typography
   dfns-button --> dfns-loader
   style dfns-wallet-validation fill:#f9f,stroke:#333,stroke-width:4px
