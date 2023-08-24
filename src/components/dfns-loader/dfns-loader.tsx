@@ -1,4 +1,4 @@
-import { Component, Prop, getAssetPath, h } from "@stencil/core";
+import { Component, Prop, h } from "@stencil/core";
 
 @Component({
 	tag: "dfns-loader",
@@ -8,8 +8,8 @@ import { Component, Prop, getAssetPath, h } from "@stencil/core";
 })
 export class DfnsLoader {
 	@Prop() classCss?: string;
-	@Prop() LoaderIconSrc = "icons/loader.svg";
+	@Prop() LoaderIconSrc = "https://storage.googleapis.com/dfns-frame-stg/assets/icons/loader.svg";
 	render() {
-		return <img src={getAssetPath(`./assets/${this.LoaderIconSrc}`)} class={["loader", this.classCss].filter(Boolean).join(" ")} alt="" />;
+		return <img src={this.LoaderIconSrc} class={["loader", this.classCss].filter(Boolean).join(" ")} alt="" />;
 	}
 }

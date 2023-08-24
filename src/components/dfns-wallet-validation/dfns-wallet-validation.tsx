@@ -1,5 +1,5 @@
 import { Wallet, WalletStatus } from "@dfns/sdk/codegen/datamodel/Wallets";
-import { Component, Event, EventEmitter, Prop, State, getAssetPath, h } from "@stencil/core";
+import { Component, Event, EventEmitter, Prop, State, h } from "@stencil/core";
 import { LanguageService } from "../../services/language-services";
 import { waitForWalletActive } from "../../utils/dfns";
 import { EButtonSize, EButtonVariant } from "../../utils/enums/buttons-enums";
@@ -24,7 +24,7 @@ export class DfnsWalletValidation {
 	@Prop({ mutable: true }) visible: string;
 	@Event() walletValidated: EventEmitter<Wallet>;
 	@State() wallet: Wallet;
-	@Prop() confirmationImgSrc = "icons/confirmation.svg";
+	@Prop() confirmationImgSrc = "https://storage.googleapis.com/dfns-frame-stg/assets/icons/confirmation.svg";
 	@State() isLoading = true;
 
 	componentWillLoad() {
@@ -60,7 +60,7 @@ export class DfnsWalletValidation {
 					</div>
 					<div slot="contentSection">
 						<div class="contentContainer">
-							<img alt="Confirmation" src={getAssetPath(`./assets/${this.confirmationImgSrc}`)} width={48} height={48} />
+							<img alt="Confirmation" src={this.confirmationImgSrc} width={48} height={48} />
 							<div class="title">
 								<dfns-typography typo={ITypo.H6_TITLE}>
 									{LanguageService.getContent("pages.validation_success.title")}

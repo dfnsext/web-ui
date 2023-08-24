@@ -4,15 +4,13 @@ import { Component, Prop, h } from "@stencil/core";
 	tag: "dfns-main",
 	styleUrl: "dfns-main.scss",
 	shadow: true, // Enables Shadow DOM
-	assetsDirs: ["assets"],
 })
 export class DfnsMain {
-
 	@Prop({ mutable: true }) visible: string;
 
 	render() {
 		return (
-			<div class={this.visible ? "root visible" : "root" } >
+			<div class={this.visible ? "root visible" : "root"}>
 				<div class="backdrop"></div>
 				<slot />
 			</div>

@@ -1,4 +1,4 @@
-import { Component, Prop, h, getAssetPath, JSX, Fragment } from "@stencil/core";
+import { Component, Prop, h, JSX, Fragment } from "@stencil/core";
 import classNames from "classnames";
 import { EAlertVariant } from "../../utils/enums/alerts-enums";
 import { ITypo } from "../../utils/enums/typography-enums";
@@ -12,19 +12,19 @@ import { ITypo } from "../../utils/enums/typography-enums";
 export class DfnsAlert {
 	@Prop({ mutable: true }) variant: EAlertVariant = EAlertVariant.INFO;
 	@Prop() classCss?: string;
-	@Prop() errorIconSrc = "icons/x-circle.svg";
-	@Prop() warningIconSrc = "icons/exclamation-triangle.svg";
-	@Prop() infoIconSrc = "icons/exclamation-circle.svg";
+	@Prop() errorIconSrc = "https://storage.googleapis.com/dfns-frame-stg/assets/icons/x-circle.svg";
+	@Prop() warningIconSrc = "https://storage.googleapis.com/dfns-frame-stg/assets/icons/exclamation-triangle.svg";
+	@Prop() infoIconSrc = "https://storage.googleapis.com/dfns-frame-stg/assets/icons/exclamation-circle.svg";
 	@Prop({ mutable: true }) hasTitle = false;
 
 	private getIconVariant(): JSX.Element | null {
 		switch (this.variant) {
 			case EAlertVariant.WARNING:
-				return <img alt="Warning" src={getAssetPath(`./assets/${this.warningIconSrc}`)} width={24} height={24} />;
+				return <img alt="Warning" src={this.warningIconSrc} width={24} height={24} />;
 			case EAlertVariant.ERROR:
-				return <img alt="Error" src={getAssetPath(`./assets/${this.errorIconSrc}`)} width={24} height={24} />;
+				return <img alt="Error" src={this.errorIconSrc} width={24} height={24} />;
 			case EAlertVariant.INFO:
-				return <img alt="Info" src={getAssetPath(`./assets/${this.infoIconSrc}`)} width={24} height={24} />;
+				return <img alt="Info" src={this.infoIconSrc} width={24} height={24} />;
 			default:
 				return null;
 		}

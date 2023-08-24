@@ -7,13 +7,13 @@
 
 ## Properties
 
-| Property                   | Attribute                     | Description | Type      | Default                |
-| -------------------------- | ----------------------------- | ----------- | --------- | ---------------------- |
-| `bloomLogoSrc`             | `bloom-logo-src`              |             | `string`  | `"images/bloom.svg"`   |
-| `closeBtn`                 | `close-btn`                   |             | `boolean` | `undefined`            |
-| `closeBtnShouldDisconnect` | `close-btn-should-disconnect` |             | `boolean` | `undefined`            |
-| `crossIconSrc`             | `cross-icon-src`              |             | `string`  | `"icons/cross.svg"`    |
-| `molitorLogoSrc`           | `molitor-logo-src`            |             | `string`  | `"images/molitor.svg"` |
+| Property          | Attribute          | Description | Type         | Default                                                                       |
+| ----------------- | ------------------ | ----------- | ------------ | ----------------------------------------------------------------------------- |
+| `bloomLogoSrc`    | `bloom-logo-src`   |             | `string`     | `"https://storage.cloud.google.com/dfns-frame-stg/assets/images/bloom.svg"`   |
+| `closeBtn`        | `close-btn`        |             | `boolean`    | `undefined`                                                                   |
+| `crossIconSrc`    | `cross-icon-src`   |             | `string`     | `"https://storage.cloud.google.com/dfns-frame-stg/assets/icons/cross.svg"`    |
+| `molitorLogoSrc`  | `molitor-logo-src` |             | `string`     | `"https://storage.cloud.google.com/dfns-frame-stg/assets/images/molitor.svg"` |
+| `onClickCloseBtn` | --                 |             | `() => void` | `undefined`                                                                   |
 
 
 ## Dependencies

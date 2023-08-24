@@ -21,10 +21,11 @@ export interface JwtPayload {
 export interface DfnsSDKOptions {
     rpId: string;
     appId: string;
-    loginOptions: LoginOption[];
+    loginOptions?: LoginOption[];
     appName?: string;
     appLogoUrl?: string | null;
     darkMode?: boolean;
+    assetsPath?: string;
 }
 
 export interface LoginOption {
@@ -85,6 +86,7 @@ export class DfnsSDK {
 
         /** Init Create Account Element */
         this.dfnsCreateAccountElement = document.createElement("dfns-create-account");
+        this.dfnsContainer.setAttribute("assets-path", this.options.assetsPath);
         this.dfnsCreateAccountElement.setAttribute("oauth-access-token", LocalStorageService.getInstance().items[OAUTH_ACCESS_TOKEN].get());
         this.dfnsCreateAccountElement.setAttribute("rp-id", this.options.rpId);
         this.dfnsContainer.appendChild(this.dfnsCreateAccountElement);

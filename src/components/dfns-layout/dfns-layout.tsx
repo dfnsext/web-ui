@@ -1,4 +1,4 @@
-import { Component, h, Prop, getAssetPath } from "@stencil/core";
+import { Component, h, Prop } from "@stencil/core";
 import { ITypo, ITypoColor } from "../../utils/enums/typography-enums";
 
 
@@ -6,15 +6,14 @@ import { ITypo, ITypoColor } from "../../utils/enums/typography-enums";
 	tag: "dfns-layout",
 	styleUrl: "dfns-layout.scss",
 	shadow: true, // Enables Shadow DOM
-	assetsDirs: ["assets"], 
 })
 export class DfnsLayout {
 	// Prop is used to pass data from one component to another
 	@Prop() closeBtn?: boolean;
 	@Prop() onClickCloseBtn: () => void
-	@Prop() crossIconSrc = "icons/cross.svg";
-	@Prop() molitorLogoSrc = "images/molitor.svg";
-	@Prop() bloomLogoSrc = "images/bloom.svg";
+	@Prop() crossIconSrc = "https://storage.googleapis.com/dfns-frame-stg/assets/icons/cross.svg";
+	@Prop() molitorLogoSrc = "https://storage.googleapis.com/dfns-frame-stg/assets/images/molitor.svg";
+	@Prop() bloomLogoSrc = "https://storage.googleapis.com/dfns-frame-stg/assets/images/bloom.svg";
 
 	render() {
 		const style = { display: "flex !important" };
@@ -24,7 +23,7 @@ export class DfnsLayout {
 					<slot name="topSection" />
 					{this.closeBtn && (
 						<div class="cross" onClick={this.onClickCloseBtn}>
-							<img alt="Unplugged" src={getAssetPath(`./assets/${this.crossIconSrc}`)} class="close-icon" />
+							<img alt="Unplugged" src={this.crossIconSrc} class="close-icon" />
 						</div>
 					)}
 				</div>
@@ -35,11 +34,11 @@ export class DfnsLayout {
 					<slot name="bottomSection"  />
 				</div>
 				<div class="logos-section">
-					<img src={getAssetPath(`./assets/${this.molitorLogoSrc}`)} alt="Molitor logo" width={47} height={16} />
+					<img src={this.molitorLogoSrc} alt="Molitor logo" width={47} height={16} />
 					<dfns-typography typo={ITypo.TEXTE_XS_REGULAR} color={ITypoColor.BLACK}>
 						powered by
 					</dfns-typography>
-					<img src={getAssetPath(`./assets/${this.bloomLogoSrc}`)} alt="bloom logo" width={43} height={14} />
+					<img src={this.bloomLogoSrc} alt="bloom logo" width={43} height={14} />
 				</div>
 			</div>
 		);
