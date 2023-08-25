@@ -17,10 +17,12 @@ import { waitForWalletActive } from "../../utils/dfns";
 export class DfnsValidateWallet {
 	private themeMode = ThemeMode.getInstance();
 
-	@Prop({ mutable: true }) appId: string;
-	@Prop({ mutable: true }) rpId: string;
-	@Prop({ mutable: true }) dfnsUserToken: string;
-	@Prop({ mutable: true }) visible: string;
+	@Prop() dfnsHost: string;
+	@Prop() apiUrl: string;
+	@Prop() appId: string;
+	@Prop() dfnsUserToken: string;
+	@Prop() rpId: string;
+	@Prop() visible: string;
 	@Event() walletValidated: EventEmitter<Wallet>;
 	@State() isLoading: boolean = false;
 
@@ -31,8 +33,8 @@ export class DfnsValidateWallet {
 	async validateWallet() {
 		try {
 			this.isLoading = true;
-			const response = await createWallet(this.appId, this.rpId, this.dfnsUserToken);
-			const wallet = await waitForWalletActive(this.appId, this.dfnsUserToken, response.id);
+			const response = await createWallet(this.dfnsHost, this.appId, this.rpId, this.dfnsUserToken);
+			const wallet = await waitForWalletActive(this.dfnsHost, this.appId, this.dfnsUserToken, response.id);
 			this.isLoading = false;
 			this.walletValidated.emit(wallet);
 			return response;

@@ -17,11 +17,12 @@ import { ThemeMode } from "../../utils/theme-modes";
 export class DfnsWalletValidation {
 	private themeMode = ThemeMode.getInstance();
 
-	@Prop({ mutable: true }) walletId: string;
-	@Prop({ mutable: true }) appId: string;
-	@Prop({ mutable: true }) rpId: string;
-	@Prop({ mutable: true }) dfnsUserToken: string;
-	@Prop({ mutable: true }) visible: string;
+	@Prop() dfnsHost: string;
+	@Prop() walletId: string;
+	@Prop() appId: string;
+	@Prop() rpId: string;
+	@Prop() dfnsUserToken: string;
+	@Prop() visible: string;
 	@Event() walletValidated: EventEmitter<Wallet>;
 	@State() wallet: Wallet;
 	@Prop() confirmationImgSrc = "https://storage.googleapis.com/dfns-frame-stg/assets/icons/confirmation.svg";
@@ -33,7 +34,7 @@ export class DfnsWalletValidation {
 
 	async componentDidUpdate() {
 		if (this.visible) {
-			const wallet = await waitForWalletActive(this.appId, this.dfnsUserToken, this.walletId);
+			const wallet = await waitForWalletActive(this.dfnsHost, this.appId, this.dfnsUserToken, this.walletId);
 			this.isLoading = false;
 			if (this.wallet !== wallet) {
 				this.wallet = wallet;

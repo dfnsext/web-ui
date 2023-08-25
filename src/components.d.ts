@@ -43,8 +43,9 @@ export namespace Components {
         "variant": EButtonVariant;
     }
     interface DfnsCreateAccount {
+        "apiUrl": string;
+        "appId": string;
         "oauthAccessToken": string;
-        "rpId": string;
         "visible": string;
     }
     interface DfnsCreatePasskey {
@@ -78,6 +79,7 @@ export namespace Components {
     }
     interface DfnsSignMessage {
         "appId": string;
+        "dfnsHost": string;
         "dfnsUserToken": string;
         "message": string;
         "rpId": string;
@@ -97,7 +99,9 @@ export namespace Components {
         "typo": ITypo;
     }
     interface DfnsValidateWallet {
+        "apiUrl": string;
         "appId": string;
+        "dfnsHost": string;
         "dfnsUserToken": string;
         "rpId": string;
         "visible": string;
@@ -105,6 +109,7 @@ export namespace Components {
     interface DfnsWalletValidation {
         "appId": string;
         "confirmationImgSrc": string;
+        "dfnsHost": string;
         "dfnsUserToken": string;
         "rpId": string;
         "visible": string;
@@ -262,9 +267,10 @@ declare namespace LocalJSX {
         "variant"?: EButtonVariant;
     }
     interface DfnsCreateAccount {
+        "apiUrl"?: string;
+        "appId"?: string;
         "oauthAccessToken"?: string;
         "onPasskeyCreated"?: (event: DfnsCreateAccountCustomEvent<RegisterCompleteResponse>) => void;
-        "rpId"?: string;
         "visible"?: string;
     }
     interface DfnsCreatePasskey {
@@ -299,6 +305,7 @@ declare namespace LocalJSX {
     }
     interface DfnsSignMessage {
         "appId"?: string;
+        "dfnsHost"?: string;
         "dfnsUserToken"?: string;
         "message"?: string;
         "onSignedMessage"?: (event: DfnsSignMessageCustomEvent<GetSignatureResponse>) => void;
@@ -319,7 +326,9 @@ declare namespace LocalJSX {
         "typo"?: ITypo;
     }
     interface DfnsValidateWallet {
+        "apiUrl"?: string;
         "appId"?: string;
+        "dfnsHost"?: string;
         "dfnsUserToken"?: string;
         "onWalletValidated"?: (event: DfnsValidateWalletCustomEvent<Wallet>) => void;
         "rpId"?: string;
@@ -328,6 +337,7 @@ declare namespace LocalJSX {
     interface DfnsWalletValidation {
         "appId"?: string;
         "confirmationImgSrc"?: string;
+        "dfnsHost"?: string;
         "dfnsUserToken"?: string;
         "onWalletValidated"?: (event: DfnsWalletValidationCustomEvent<Wallet>) => void;
         "rpId"?: string;

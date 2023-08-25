@@ -12,40 +12,40 @@ import Login from "../services/api/Login";
 import Register from "../services/api/Register";
 import { getDfnsDelegatedClient, waitSignatureSigned } from "./dfns";
 import { ethers } from "ethers";
-import { WebAuthn } from "./webauthn";
+import { create, sign } from "./webauthn";
 
-export async function loginWithOAuth(rpId: string, oauthAccessToken: string) {
+
+export async function loginWithOAuth(apiUrl: string, appId: string, rpId: string, oauthAccessToken: string) {
 	let challenge: UserActionChallengeResponse;
 	try {
-		challenge = await Login.getInstance().init(oauthAccessToken);
+		challenge = await Login.getInstance(apiUrl, appId).init(oauthAccessToken);
 	} catch (error: any) {
 		if (error.httpStatus === 401) {
 			throw new DfnsError(error.httpStatus, error.message, error.context);
 		}
 		throw error;
 	}
-	const dfnsWebAuthn = new WebAuthn({ rpId });
 
-	const assertion = await dfnsWebAuthn.sign(challenge!.challenge, challenge!.allowCredentials);
+	const assertion = await sign(rpId, challenge!.challenge, challenge!.allowCredentials);
 
-	return Login.getInstance().complete({
+	return Login.getInstance(apiUrl, appId).complete({
 		challengeIdentifier: challenge!.challengeIdentifier,
 		firstFactor: assertion,
 	});
 }
-export async function registerWithOAuth(rpId: string, oauthAccessToken: string) {
+export async function registerWithOAuth(apiUrl: string, appId: string, oauthAccessToken: string) {
 	let challenge;
 	try {
-		challenge = await Register.getInstance().init(oauthAccessToken);
+		challenge = await Register.getInstance(apiUrl, appId).init(oauthAccessToken);
 	} catch (error) {
 		if (error.httpStatus === 401 && error.context?.message === "User already exists.") {
-			challenge = await Register.getInstance().restart(oauthAccessToken);
+			challenge = await Register.getInstance(apiUrl, appId).restart(oauthAccessToken);
 		}
 	}
 	try {
-		const dfnsWebAuthn = new WebAuthn({ rpId });
-		const attestation = await dfnsWebAuthn.create(challenge);
-		return Register.getInstance().complete(challenge.temporaryAuthenticationToken, {
+
+		const attestation = await create(challenge);
+		return Register.getInstance(apiUrl, appId).complete(challenge.temporaryAuthenticationToken, {
 			firstFactorCredential: attestation,
 			// secondFactorCredential: {
 			// 	...secondAttestation,
@@ -69,17 +69,15 @@ export async function registerWithOAuth(rpId: string, oauthAccessToken: string) 
 	}
 }
 
-export async function createWallet(appId: string, rpId: string, dfnsUserToken: string) {
-	const dfnsDelegated = getDfnsDelegatedClient(appId, dfnsUserToken);
+export async function createWallet(dfnsHost: string, appId: string, rpId: string, dfnsUserToken: string) {
+	const dfnsDelegated = getDfnsDelegatedClient(dfnsHost, appId, dfnsUserToken);
 	const createWalletRequest: CreateWalletRequest = {
 		body: { network: BlockchainNetwork.PolygonMumbai },
 	};
 
 	const challenge = await dfnsDelegated.wallets.createWalletInit(createWalletRequest);
 
-	const dfnsWebAuthn = new WebAuthn({ rpId });
-
-	const assertion = await dfnsWebAuthn.sign(challenge.challenge, challenge.allowCredentials);
+	const assertion = await sign(rpId, challenge.challenge, challenge.allowCredentials);
 
 	const wallet = await dfnsDelegated.wallets.createWalletComplete(createWalletRequest, {
 		challengeIdentifier: challenge.challengeIdentifier,
@@ -89,8 +87,8 @@ export async function createWallet(appId: string, rpId: string, dfnsUserToken: s
 	return wallet;
 }
 
-export async function signMessage(appId: string, rpId: string, dfnsUserToken: string, walletId: string, message: string) {
-	const dfnsDelegated = getDfnsDelegatedClient(appId, dfnsUserToken);
+export async function signMessage(dfnsHost: string, appId: string, rpId: string, dfnsUserToken: string, walletId: string, message: string) {
+	const dfnsDelegated = getDfnsDelegatedClient(dfnsHost, appId, dfnsUserToken);
 	const hexMessage = ethers.utils.hashMessage(message)
 	const request: GenerateSignatureRequest = {
 		walletId: walletId,
@@ -99,16 +97,14 @@ export async function signMessage(appId: string, rpId: string, dfnsUserToken: st
 
 	const challenge = await dfnsDelegated.wallets.generateSignatureInit(request);
 
-	const dfnsWebAuthn = new WebAuthn({ rpId });
-
-	const assertion = await dfnsWebAuthn.sign(challenge.challenge, challenge.allowCredentials);
+	const assertion = await sign(rpId, challenge.challenge, challenge.allowCredentials);
 
 	const signatureInit = await dfnsDelegated.wallets.generateSignatureComplete(request, {
 		challengeIdentifier: challenge.challengeIdentifier,
 		firstFactor: assertion,
 	});
 
-	const signature = await waitSignatureSigned(appId, dfnsUserToken, walletId, signatureInit.id);
+	const signature = await waitSignatureSigned(dfnsHost, appId, dfnsUserToken, walletId, signatureInit.id);
 
 	return signature;
 }

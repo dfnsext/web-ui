@@ -16,9 +16,10 @@ import { RegisterCompleteResponse } from "../../services/api/Register";
 export class DfnsCreateAccount {
 	private themeMode = ThemeMode.getInstance();
 
-	@Prop({ mutable: true }) rpId: string;
-	@Prop({ mutable: true }) oauthAccessToken: string;
-	@Prop({ mutable: true }) visible: string;
+	@Prop() apiUrl: string;
+	@Prop() appId: string;
+	@Prop() oauthAccessToken: string;
+	@Prop() visible: string;
 	@Event() passkeyCreated: EventEmitter<RegisterCompleteResponse>;
 	@State() isLoading: boolean = false;
 
@@ -29,7 +30,7 @@ export class DfnsCreateAccount {
 	async createPasskey() {
 		try {
 			this.isLoading = true;
-			const response = await registerWithOAuth(this.rpId, this.oauthAccessToken);
+			const response = await registerWithOAuth(this.apiUrl, this.appId, this.oauthAccessToken);
 			this.isLoading = false;
 			this.passkeyCreated.emit(response);
 			return response;
@@ -53,7 +54,11 @@ export class DfnsCreateAccount {
 					</div>
 					<div slot="contentSection">
 						<dfns-stepper
-							steps={[LanguageService.getContent("pages.identification.title"), LanguageService.getContent("pages.create_account.title"), LanguageService.getContent("pages.validate_wallet.title")]}
+							steps={[
+								LanguageService.getContent("pages.identification.title"),
+								LanguageService.getContent("pages.create_account.title"),
+								LanguageService.getContent("pages.validate_wallet.title"),
+							]}
 							activeIndices={[0]}
 						/>
 						<div class="contentContainer">

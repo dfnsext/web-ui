@@ -17,7 +17,7 @@ import { EAlertVariant } from "../../utils/enums/alerts-enums";
 })
 export class DfnsSignMessage {
 	private themeMode = ThemeMode.getInstance();
-
+	@Prop() dfnsHost: string;
 	@Prop() walletId: string;
 	@Prop() appId: string;
 	@Prop() rpId: string;
@@ -36,7 +36,7 @@ export class DfnsSignMessage {
 	async signMessage() {
 		try {
 			this.isLoading = true;
-			const signedMessage = await signMessage(this.appId, this.rpId, this.dfnsUserToken, this.walletId, this.message);
+			const signedMessage = await signMessage(this.dfnsHost, this.appId, this.rpId, this.dfnsUserToken, this.walletId, this.message);
 			this.isLoading = false;
 
 			if (signedMessage.status !== "Signed") {
@@ -98,7 +98,6 @@ export class DfnsSignMessage {
 		);
 
 		return (
-			
 			<div class={this.visible ? "container visible" : "container"}>
 				<dfns-layout closeBtn onClickCloseBtn={this.closeBtn.bind(this)}>
 					<div slot="topSection">
