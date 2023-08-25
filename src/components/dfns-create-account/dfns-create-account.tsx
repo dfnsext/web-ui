@@ -1,11 +1,11 @@
 import { Component, Event, EventEmitter, Prop, State, h } from "@stencil/core";
-import { RegisterCompleteResponse } from "../../components";
 import { LanguageService } from "../../services/language-services";
 import { EButtonSize, EButtonVariant } from "../../utils/enums/buttons-enums";
 import { EThemeModeType } from "../../utils/enums/themes-enums";
 import { ITypo, ITypoColor } from "../../utils/enums/typography-enums";
 import { registerWithOAuth } from "../../utils/helper";
 import { ThemeMode } from "../../utils/theme-modes";
+import { RegisterCompleteResponse } from "../../services/api/Register";
 
 // ** Signup or sign in popup*/
 @Component({
