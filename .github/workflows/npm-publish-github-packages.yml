@@ -4,10 +4,9 @@
 name: Node Package
 
 on:
-  push:
-    branches:
-      - 'deploy/accor-ppd-testnet'
-
+  release:
+    types: [released]
+    
 jobs:
   build:
     runs-on: ubuntu-latest
