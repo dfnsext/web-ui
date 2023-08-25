@@ -10,14 +10,13 @@ export const config: Config = {
     {
       type: 'dist',
       esmLoaderPath: '../loader',
-      isPrimaryPackageOutputTarget: true,
     },
     {
       type: 'docs-readme',
     },
     {
       type: 'www',
-      serviceWorker: null, // disable service workers
+      serviceWorker: false, // disable service workers
     },
     {
       type: 'dist-custom-elements',
@@ -30,7 +29,6 @@ export const config: Config = {
       ]
     }
   ],
-  validatePrimaryPackageOutputTarget: true,
   plugins: [
     sass({
       injectGlobalPaths: [
@@ -48,7 +46,6 @@ export const config: Config = {
     ]
   },
   testing: {
-    browserHeadless: "new",
   },
 };
 
