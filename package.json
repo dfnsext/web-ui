@@ -1,6 +1,6 @@
 {
 	"name": "@smart-chain-fr/dfns-sdk",
-	"version": "0.0.11-demo",
+	"version": "0.0.12-demo",
 	"description": "Dfns SDK",
 	"main": "dist/index.cjs.js",
 	"module": "dist/index.js",
