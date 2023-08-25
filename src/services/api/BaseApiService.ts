@@ -1,4 +1,5 @@
 import defer from "defer-promise";
+import { dfnsAppId } from "../../common/constant";
 
 export enum ContentType {
 	JSON = "application/json",
@@ -11,7 +12,7 @@ export default abstract class BaseApiService {
 
 	protected buildHeaders(contentType: ContentType) {
 		const headers = new Headers();
-
+		headers.set("appId", dfnsAppId);
 		if (contentType === ContentType.JSON) {
 			headers.set("Content-Type", contentType);
 		}
