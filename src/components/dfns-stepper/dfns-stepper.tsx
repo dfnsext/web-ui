@@ -1,5 +1,4 @@
 import { Component, Host, Prop, h } from "@stencil/core";
-import { ITypo } from "../../utils/enums/typography-enums";
 
 @Component({
 	tag: "dfns-stepper",
