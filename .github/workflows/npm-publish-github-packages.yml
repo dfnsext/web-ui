@@ -6,7 +6,7 @@ name: Node Package
 on:
   push:
     branches:
-      - 'dev'
+      - 'deploy/accor-ppd-testnet'
 
 jobs:
   build:
