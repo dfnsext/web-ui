@@ -9,7 +9,9 @@
 
 | Property        | Attribute         | Description | Type     | Default     |
 | --------------- | ----------------- | ----------- | -------- | ----------- |
+| `apiUrl`        | `api-url`         |             | `string` | `undefined` |
 | `appId`         | `app-id`          |             | `string` | `undefined` |
+| `dfnsHost`      | `dfns-host`       |             | `string` | `undefined` |
 | `dfnsUserToken` | `dfns-user-token` |             | `string` | `undefined` |
 | `rpId`          | `rp-id`           |             | `string` | `undefined` |
 | `visible`       | `visible`         |             | `string` | `undefined` |
@@ -38,7 +40,6 @@ graph TD;
   dfns-validate-wallet --> dfns-typography
   dfns-validate-wallet --> dfns-stepper
   dfns-validate-wallet --> dfns-button
-  dfns-stepper --> dfns-typography
   dfns-button --> dfns-typography
   dfns-button --> dfns-loader
   style dfns-validate-wallet fill:#f9f,stroke:#333,stroke-width:4px

@@ -23,7 +23,6 @@ graph TD;
   dfns-design-system --> dfns-stepper
   dfns-design-system --> dfns-alert
   dfns-design-system --> dfns-button
-  dfns-stepper --> dfns-typography
   dfns-alert --> dfns-typography
   dfns-button --> dfns-typography
   dfns-button --> dfns-loader

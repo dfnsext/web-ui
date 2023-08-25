@@ -11,6 +11,7 @@
 | -------------------- | ---------------------- | ----------- | -------- | ------------------------------------------------------------------------------- |
 | `appId`              | `app-id`               |             | `string` | `undefined`                                                                     |
 | `confirmationImgSrc` | `confirmation-img-src` |             | `string` | `"https://storage.googleapis.com/dfns-frame-stg/assets/icons/confirmation.svg"` |
+| `dfnsHost`           | `dfns-host`            |             | `string` | `undefined`                                                                     |
 | `dfnsUserToken`      | `dfns-user-token`      |             | `string` | `undefined`                                                                     |
 | `rpId`               | `rp-id`                |             | `string` | `undefined`                                                                     |
 | `visible`            | `visible`              |             | `string` | `undefined`                                                                     |

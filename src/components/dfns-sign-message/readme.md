@@ -10,6 +10,7 @@
 | Property        | Attribute         | Description | Type     | Default     |
 | --------------- | ----------------- | ----------- | -------- | ----------- |
 | `appId`         | `app-id`          |             | `string` | `undefined` |
+| `dfnsHost`      | `dfns-host`       |             | `string` | `undefined` |
 | `dfnsUserToken` | `dfns-user-token` |             | `string` | `undefined` |
 | `message`       | `message`         |             | `string` | `undefined` |
 | `rpId`          | `rp-id`           |             | `string` | `undefined` |
