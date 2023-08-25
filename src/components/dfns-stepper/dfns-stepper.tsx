@@ -22,7 +22,7 @@ export class DfnsStepper {
 					<ul class={`stepper ${shouldRemoveClasses ? "remove-classes" : ""}`}>
 						{this.steps.map((step, index) => (
 							<li key={step} class={this.getActiveClass(index)}>
-								<dfns-typography typo={ITypo.TEXTE_SM_MEDIUM}>{step}</dfns-typography>
+								{step}
 							</li>
 						))}
 					</ul>
