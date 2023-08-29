@@ -7,12 +7,13 @@
 
 ## Properties
 
-| Property           | Attribute            | Description | Type     | Default     |
-| ------------------ | -------------------- | ----------- | -------- | ----------- |
-| `apiUrl`           | `api-url`            |             | `string` | `undefined` |
-| `appId`            | `app-id`             |             | `string` | `undefined` |
-| `oauthAccessToken` | `oauth-access-token` |             | `string` | `undefined` |
-| `visible`          | `visible`            |             | `string` | `undefined` |
+| Property                  | Attribute                  | Description | Type                             | Default     |
+| ------------------------- | -------------------------- | ----------- | -------------------------------- | ----------- |
+| `apiUrl`                  | `api-url`                  |             | `string`                         | `undefined` |
+| `appId`                   | `app-id`                   |             | `string`                         | `undefined` |
+| `authenticatorAttachment` | `authenticator-attachment` |             | `"cross-platform" \| "platform"` | `undefined` |
+| `oauthAccessToken`        | `oauth-access-token`       |             | `string`                         | `undefined` |
+| `visible`                 | `visible`                  |             | `string`                         | `undefined` |
 
 
 ## Events
