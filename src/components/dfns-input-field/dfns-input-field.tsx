@@ -32,17 +32,20 @@ export class DfnsInputField {
 
 	renderInput() {
 		return (
-			<input
-				class="input"
-				type={this.type}
-				value={this.value}
-				placeholder={this.placeholder}
-				onInput={this.handleOnChange.bind(this)}
-				onFocus={this.toggleFocus.bind(this)}
-				onBlur={this.toggleFocus.bind(this)}
-				// onChange={this.handleOnChange.bind(this)}
-				readOnly={this.isReadOnly}
-			/>
+			<div>
+				<slot />
+				<input
+					class="input"
+					type={this.type}
+					value={this.value}
+					placeholder={this.placeholder}
+					onInput={this.handleOnChange.bind(this)}
+					onFocus={this.toggleFocus.bind(this)}
+					onBlur={this.toggleFocus.bind(this)}
+					// onChange={this.handleOnChange.bind(this)}
+					readOnly={this.isReadOnly}
+				/>
+			</div>
 		);
 	}
 
@@ -55,7 +58,6 @@ export class DfnsInputField {
 			</div>
 		);
 	}
-
 
 	handleOnChange(event: Event) {
 		const input = event.target as HTMLInputElement;

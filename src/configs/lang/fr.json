@@ -51,7 +51,9 @@
 			"save_title": "Votre nouvelle clé d'accès n'a pas encore été enregistré !",
 			"save_description": "Pour enregistrer la clé d'accès, vous devez vous authentifier avec l'un de vos identifiants existants.",
 			"button_save": "Enregistrer la clé d'accès",
-			"input_placeholder": "Device 1"
+			"input_placeholder": "Device 1",
+			"passkey_name_label": "Nom de la clé d'accès"
+
 		},
 		"signature_request": {
 			"title": "Vous signez: ",
