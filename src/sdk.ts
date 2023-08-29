@@ -35,6 +35,7 @@ export interface DfnsSDKOptions {
 	darkMode?: boolean;
 	assetsPath?: string;
 	shouldShowWalletValidation?: boolean;
+	userCreationAuthenticatorAttachment?: AuthenticatorAttachment;
 	lang?: "fr" | "en";
 }
 
@@ -116,6 +117,7 @@ export class DfnsSDK {
 		this.dfnsCreateAccountElement.setAttribute("dfns-host", this.options.dfnsHost);
 		this.dfnsCreateAccountElement.setAttribute("app-id", this.options.appId);
 		this.dfnsCreateAccountElement.setAttribute("rp-id", this.options.rpId);
+		this.dfnsCreateAccountElement.setAttribute("authenticator-attachment", this.options.userCreationAuthenticatorAttachment);
 		this.dfnsContainer.appendChild(this.dfnsCreateAccountElement);
 
 		/** Init Vailidate Wallet Element */

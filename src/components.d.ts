@@ -47,6 +47,7 @@ export namespace Components {
     interface DfnsCreateAccount {
         "apiUrl": string;
         "appId": string;
+        "authenticatorAttachment": AuthenticatorAttachment;
         "oauthAccessToken": string;
         "visible": string;
     }
@@ -354,6 +355,7 @@ declare namespace LocalJSX {
     interface DfnsCreateAccount {
         "apiUrl"?: string;
         "appId"?: string;
+        "authenticatorAttachment"?: AuthenticatorAttachment;
         "oauthAccessToken"?: string;
         "onPasskeyCreated"?: (event: DfnsCreateAccountCustomEvent<RegisterCompleteResponse>) => void;
         "visible"?: string;

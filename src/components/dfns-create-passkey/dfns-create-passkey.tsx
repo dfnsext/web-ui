@@ -78,6 +78,7 @@ export class DfnsCreatePasskey {
 			this.action.emit(CreatePasskeyAction.BACK);
 			this.isLoading = false;
 			this.step = 1;
+			this.passkeyName = undefined;
 		} catch (err) {
 			this.isLoading = false;
 			console.error(err);

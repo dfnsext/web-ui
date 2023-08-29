@@ -18,6 +18,7 @@ export class DfnsCreateAccount {
 
 	@Prop() apiUrl: string;
 	@Prop() appId: string;
+	@Prop() authenticatorAttachment: AuthenticatorAttachment;
 	@Prop() oauthAccessToken: string;
 	@Prop() visible: string;
 	@Event() passkeyCreated: EventEmitter<RegisterCompleteResponse>;
@@ -30,7 +31,7 @@ export class DfnsCreateAccount {
 	async createPasskey() {
 		try {
 			this.isLoading = true;
-			const response = await registerWithOAuth(this.apiUrl, this.appId, this.oauthAccessToken);
+			const response = await registerWithOAuth(this.apiUrl, this.appId, this.oauthAccessToken, this.authenticatorAttachment);
 			this.isLoading = false;
 			this.passkeyCreated.emit(response);
 			return response;

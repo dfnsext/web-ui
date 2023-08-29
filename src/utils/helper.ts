@@ -33,7 +33,7 @@ export async function loginWithOAuth(apiUrl: string, appId: string, rpId: string
 		firstFactor: assertion,
 	});
 }
-export async function registerWithOAuth(apiUrl: string, appId: string, oauthAccessToken: string) {
+export async function registerWithOAuth(apiUrl: string, appId: string, oauthAccessToken: string, authenticatorAttachment?: AuthenticatorAttachment) {
 	let challenge;
 	try {
 		challenge = await Register.getInstance(apiUrl, appId).init(oauthAccessToken);
@@ -43,7 +43,7 @@ export async function registerWithOAuth(apiUrl: string, appId: string, oauthAcce
 		}
 	}
 	try {
-		const attestation = await create(challenge);
+		const attestation = await create(challenge, authenticatorAttachment);
 		return Register.getInstance(apiUrl, appId).complete(challenge.temporaryAuthenticationToken, {
 			firstFactorCredential: attestation,
 			// secondFactorCredential: {
