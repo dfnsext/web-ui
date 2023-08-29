@@ -9,6 +9,7 @@ import { EAlertVariant } from "./utils/enums/alerts-enums";
 import { EButtonSize, EButtonVariant } from "./utils/enums/buttons-enums";
 import { JSX } from "@stencil/core";
 import { RegisterCompleteResponse } from "./services/api/Register";
+import { CreatePasskeyAction, SettingsAction, WalletOverviewAction } from "./utils/enums/actions-enum";
 import { GetSignatureResponse } from "@dfns/sdk/codegen/Wallets";
 import { ITypo, ITypoColor } from "./utils/enums/typography-enums";
 import { Wallet } from "@dfns/sdk/codegen/datamodel/Wallets";
@@ -16,6 +17,7 @@ export { EAlertVariant } from "./utils/enums/alerts-enums";
 export { EButtonSize, EButtonVariant } from "./utils/enums/buttons-enums";
 export { JSX } from "@stencil/core";
 export { RegisterCompleteResponse } from "./services/api/Register";
+export { CreatePasskeyAction, SettingsAction, WalletOverviewAction } from "./utils/enums/actions-enum";
 export { GetSignatureResponse } from "@dfns/sdk/codegen/Wallets";
 export { ITypo, ITypoColor } from "./utils/enums/typography-enums";
 export { Wallet } from "@dfns/sdk/codegen/datamodel/Wallets";
@@ -49,15 +51,23 @@ export namespace Components {
         "visible": string;
     }
     interface DfnsCreatePasskey {
+        "appId": string;
+        "dfnsHost": string;
+        "dfnsUserToken": string;
+        "rpId": string;
         "visible": string;
+        "walletId": string;
     }
     interface DfnsDesignSystem {
     }
     interface DfnsInputField {
         "disableErrors": boolean;
         "errors": string[];
+        "fullWidth": boolean;
         "isReadOnly": boolean;
+        "label": string;
         "leftElement": any;
+        "onChange": (input: string) => void;
         "placeholder": string;
         "rightElement": any;
         "type": string;
@@ -76,6 +86,15 @@ export namespace Components {
     }
     interface DfnsMain {
         "visible": string;
+    }
+    interface DfnsSettings {
+        "appId": string;
+        "confirmationImgSrc": string;
+        "dfnsHost": string;
+        "dfnsUserToken": string;
+        "rpId": string;
+        "visible": string;
+        "walletId": string;
     }
     interface DfnsSignMessage {
         "appId": string;
@@ -106,6 +125,14 @@ export namespace Components {
         "rpId": string;
         "visible": string;
     }
+    interface DfnsWalletOverview {
+        "appId": string;
+        "dfnsHost": string;
+        "dfnsUserToken": string;
+        "rpId": string;
+        "visible": string;
+        "walletAddress": string;
+    }
     interface DfnsWalletValidation {
         "appId": string;
         "confirmationImgSrc": string;
@@ -114,6 +141,17 @@ export namespace Components {
         "rpId": string;
         "visible": string;
         "walletId": string;
+    }
+    interface DropDown {
+        "closeAction"?: (close: () => void) => void;
+        "onOpen"?: (open: boolean) => void;
+    }
+    interface DropDownContainer {
+        "dropdownContent": { children: JSX.Element; title: string; content: JSX.Element }[];
+    }
+    interface ToggleSwitch {
+        "checked": boolean;
+        "label": string;
     }
 }
 export interface DfnsButtonCustomEvent<T> extends CustomEvent<T> {
@@ -124,9 +162,17 @@ export interface DfnsCreateAccountCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLDfnsCreateAccountElement;
 }
+export interface DfnsCreatePasskeyCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLDfnsCreatePasskeyElement;
+}
 export interface DfnsInputFieldCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLDfnsInputFieldElement;
+}
+export interface DfnsSettingsCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLDfnsSettingsElement;
 }
 export interface DfnsSignMessageCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -135,6 +181,10 @@ export interface DfnsSignMessageCustomEvent<T> extends CustomEvent<T> {
 export interface DfnsValidateWalletCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLDfnsValidateWalletElement;
+}
+export interface DfnsWalletOverviewCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLDfnsWalletOverviewElement;
 }
 export interface DfnsWalletValidationCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -195,6 +245,12 @@ declare global {
         prototype: HTMLDfnsMainElement;
         new (): HTMLDfnsMainElement;
     };
+    interface HTMLDfnsSettingsElement extends Components.DfnsSettings, HTMLStencilElement {
+    }
+    var HTMLDfnsSettingsElement: {
+        prototype: HTMLDfnsSettingsElement;
+        new (): HTMLDfnsSettingsElement;
+    };
     interface HTMLDfnsSignMessageElement extends Components.DfnsSignMessage, HTMLStencilElement {
     }
     var HTMLDfnsSignMessageElement: {
@@ -219,11 +275,35 @@ declare global {
         prototype: HTMLDfnsValidateWalletElement;
         new (): HTMLDfnsValidateWalletElement;
     };
+    interface HTMLDfnsWalletOverviewElement extends Components.DfnsWalletOverview, HTMLStencilElement {
+    }
+    var HTMLDfnsWalletOverviewElement: {
+        prototype: HTMLDfnsWalletOverviewElement;
+        new (): HTMLDfnsWalletOverviewElement;
+    };
     interface HTMLDfnsWalletValidationElement extends Components.DfnsWalletValidation, HTMLStencilElement {
     }
     var HTMLDfnsWalletValidationElement: {
         prototype: HTMLDfnsWalletValidationElement;
         new (): HTMLDfnsWalletValidationElement;
+    };
+    interface HTMLDropDownElement extends Components.DropDown, HTMLStencilElement {
+    }
+    var HTMLDropDownElement: {
+        prototype: HTMLDropDownElement;
+        new (): HTMLDropDownElement;
+    };
+    interface HTMLDropDownContainerElement extends Components.DropDownContainer, HTMLStencilElement {
+    }
+    var HTMLDropDownContainerElement: {
+        prototype: HTMLDropDownContainerElement;
+        new (): HTMLDropDownContainerElement;
+    };
+    interface HTMLToggleSwitchElement extends Components.ToggleSwitch, HTMLStencilElement {
+    }
+    var HTMLToggleSwitchElement: {
+        prototype: HTMLToggleSwitchElement;
+        new (): HTMLToggleSwitchElement;
     };
     interface HTMLElementTagNameMap {
         "dfns-alert": HTMLDfnsAlertElement;
@@ -235,11 +315,16 @@ declare global {
         "dfns-layout": HTMLDfnsLayoutElement;
         "dfns-loader": HTMLDfnsLoaderElement;
         "dfns-main": HTMLDfnsMainElement;
+        "dfns-settings": HTMLDfnsSettingsElement;
         "dfns-sign-message": HTMLDfnsSignMessageElement;
         "dfns-stepper": HTMLDfnsStepperElement;
         "dfns-typography": HTMLDfnsTypographyElement;
         "dfns-validate-wallet": HTMLDfnsValidateWalletElement;
+        "dfns-wallet-overview": HTMLDfnsWalletOverviewElement;
         "dfns-wallet-validation": HTMLDfnsWalletValidationElement;
+        "drop-down": HTMLDropDownElement;
+        "drop-down-container": HTMLDropDownContainerElement;
+        "toggle-switch": HTMLToggleSwitchElement;
     }
 }
 declare namespace LocalJSX {
@@ -274,15 +359,24 @@ declare namespace LocalJSX {
         "visible"?: string;
     }
     interface DfnsCreatePasskey {
+        "appId"?: string;
+        "dfnsHost"?: string;
+        "dfnsUserToken"?: string;
+        "onAction"?: (event: DfnsCreatePasskeyCustomEvent<CreatePasskeyAction>) => void;
+        "rpId"?: string;
         "visible"?: string;
+        "walletId"?: string;
     }
     interface DfnsDesignSystem {
     }
     interface DfnsInputField {
         "disableErrors"?: boolean;
         "errors"?: string[];
+        "fullWidth"?: boolean;
         "isReadOnly"?: boolean;
+        "label"?: string;
         "leftElement"?: any;
+        "onChange"?: (input: string) => void;
         "onInputChange"?: (event: DfnsInputFieldCustomEvent<string>) => void;
         "placeholder"?: string;
         "rightElement"?: any;
@@ -302,6 +396,16 @@ declare namespace LocalJSX {
     }
     interface DfnsMain {
         "visible"?: string;
+    }
+    interface DfnsSettings {
+        "appId"?: string;
+        "confirmationImgSrc"?: string;
+        "dfnsHost"?: string;
+        "dfnsUserToken"?: string;
+        "onAction"?: (event: DfnsSettingsCustomEvent<SettingsAction>) => void;
+        "rpId"?: string;
+        "visible"?: string;
+        "walletId"?: string;
     }
     interface DfnsSignMessage {
         "appId"?: string;
@@ -334,6 +438,15 @@ declare namespace LocalJSX {
         "rpId"?: string;
         "visible"?: string;
     }
+    interface DfnsWalletOverview {
+        "appId"?: string;
+        "dfnsHost"?: string;
+        "dfnsUserToken"?: string;
+        "onAction"?: (event: DfnsWalletOverviewCustomEvent<WalletOverviewAction>) => void;
+        "rpId"?: string;
+        "visible"?: string;
+        "walletAddress"?: string;
+    }
     interface DfnsWalletValidation {
         "appId"?: string;
         "confirmationImgSrc"?: string;
@@ -343,6 +456,17 @@ declare namespace LocalJSX {
         "rpId"?: string;
         "visible"?: string;
         "walletId"?: string;
+    }
+    interface DropDown {
+        "closeAction"?: (close: () => void) => void;
+        "onOpen"?: (open: boolean) => void;
+    }
+    interface DropDownContainer {
+        "dropdownContent"?: { children: JSX.Element; title: string; content: JSX.Element }[];
+    }
+    interface ToggleSwitch {
+        "checked"?: boolean;
+        "label"?: string;
     }
     interface IntrinsicElements {
         "dfns-alert": DfnsAlert;
@@ -354,11 +478,16 @@ declare namespace LocalJSX {
         "dfns-layout": DfnsLayout;
         "dfns-loader": DfnsLoader;
         "dfns-main": DfnsMain;
+        "dfns-settings": DfnsSettings;
         "dfns-sign-message": DfnsSignMessage;
         "dfns-stepper": DfnsStepper;
         "dfns-typography": DfnsTypography;
         "dfns-validate-wallet": DfnsValidateWallet;
+        "dfns-wallet-overview": DfnsWalletOverview;
         "dfns-wallet-validation": DfnsWalletValidation;
+        "drop-down": DropDown;
+        "drop-down-container": DropDownContainer;
+        "toggle-switch": ToggleSwitch;
     }
 }
 export { LocalJSX as JSX };
@@ -374,11 +503,16 @@ declare module "@stencil/core" {
             "dfns-layout": LocalJSX.DfnsLayout & JSXBase.HTMLAttributes<HTMLDfnsLayoutElement>;
             "dfns-loader": LocalJSX.DfnsLoader & JSXBase.HTMLAttributes<HTMLDfnsLoaderElement>;
             "dfns-main": LocalJSX.DfnsMain & JSXBase.HTMLAttributes<HTMLDfnsMainElement>;
+            "dfns-settings": LocalJSX.DfnsSettings & JSXBase.HTMLAttributes<HTMLDfnsSettingsElement>;
             "dfns-sign-message": LocalJSX.DfnsSignMessage & JSXBase.HTMLAttributes<HTMLDfnsSignMessageElement>;
             "dfns-stepper": LocalJSX.DfnsStepper & JSXBase.HTMLAttributes<HTMLDfnsStepperElement>;
             "dfns-typography": LocalJSX.DfnsTypography & JSXBase.HTMLAttributes<HTMLDfnsTypographyElement>;
             "dfns-validate-wallet": LocalJSX.DfnsValidateWallet & JSXBase.HTMLAttributes<HTMLDfnsValidateWalletElement>;
+            "dfns-wallet-overview": LocalJSX.DfnsWalletOverview & JSXBase.HTMLAttributes<HTMLDfnsWalletOverviewElement>;
             "dfns-wallet-validation": LocalJSX.DfnsWalletValidation & JSXBase.HTMLAttributes<HTMLDfnsWalletValidationElement>;
+            "drop-down": LocalJSX.DropDown & JSXBase.HTMLAttributes<HTMLDropDownElement>;
+            "drop-down-container": LocalJSX.DropDownContainer & JSXBase.HTMLAttributes<HTMLDropDownContainerElement>;
+            "toggle-switch": LocalJSX.ToggleSwitch & JSXBase.HTMLAttributes<HTMLToggleSwitchElement>;
         }
     }
 }

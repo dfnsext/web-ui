@@ -1,14 +1,14 @@
 import { GetSignatureResponse } from "@dfns/sdk/codegen/Wallets";
 import { Component, Event, EventEmitter, JSX, Prop, State, h } from "@stencil/core";
-import { LanguageService } from "../../services/language-services";
+
 import { EButtonSize, EButtonVariant } from "../../utils/enums/buttons-enums";
 import { EThemeModeType } from "../../utils/enums/themes-enums";
 import { ITypo, ITypoColor } from "../../utils/enums/typography-enums";
 import { signMessage } from "../../utils/helper";
 import { ThemeMode } from "../../utils/theme-modes";
 import { EAlertVariant } from "../../utils/enums/alerts-enums";
+import langState from "../../services/store/language-store";
 
-// ** Signup or sign in popup*/
 @Component({
 	tag: "dfns-sign-message",
 	styleUrl: "dfns-sign-message.scss",
@@ -119,7 +119,7 @@ export class DfnsSignMessage {
 							</div>
 							<div class="content">
 								<dfns-typography typo={ITypo.TEXTE_SM_SEMIBOLD}>
-									{LanguageService.getContent("pages.signature_request.title")}
+									{langState.values.pages.signature_request.title}
 								</dfns-typography>
 								<div class="textarea">
 									<div class="sub-container">
@@ -130,11 +130,11 @@ export class DfnsSignMessage {
 								</div>
 
 								<dfns-alert variant={EAlertVariant.WARNING}>
-									<div slot="content">{LanguageService.getContent("pages.signature_request.warning_content")}</div>
+									<div slot="content">{langState.values.pages.signature_request.warning_content}</div>
 								</dfns-alert>
 								{this.hasErrors && (
 									<dfns-alert variant={EAlertVariant.ERROR} hasTitle={true}>
-										<div slot="title">{LanguageService.getContent("pages.signature_request.error_title")}</div>
+										<div slot="title">{langState.values.pages.signature_request.error_title}</div>
 										<div slot="content">{this.errorMessage}</div>
 									</dfns-alert>
 								)}
@@ -145,8 +145,8 @@ export class DfnsSignMessage {
 						<dfns-button
 							content={
 								this.hasErrors
-									? LanguageService.getContent("pages.signature_request.button_retry")
-									: LanguageService.getContent("pages.signature_request.button_signing")
+									? langState.values.pages.signature_request.button_retry
+									: langState.values.pages.signature_request.button_signing
 							}
 							variant={EButtonVariant.PRIMARY}
 							sizing={EButtonSize.MEDIUM}
@@ -157,10 +157,11 @@ export class DfnsSignMessage {
 							isloading={this.isLoading}
 						/>
 						<dfns-button
-							content={LanguageService.getContent("pages.signature_request.button_reject")}
+							content={langState.values.pages.signature_request.button_reject}
 							variant={EButtonVariant.SECONDARY}
 							sizing={EButtonSize.MEDIUM}
 							fullwidth
+							onClick={this.closeBtn.bind(this)}
 						/>
 					</div>
 				</dfns-layout>

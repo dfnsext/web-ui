@@ -5,6 +5,7 @@
 
 	.root {
 		display: flex;
+		flex-direction: row;
 		justify-content: center;
 		align-items: center;
 		width: 100%;
@@ -12,7 +13,6 @@
 		gap: var(--spacing-15, 12px);
 		box-sizing: border-box;
 		height: fit-content;
-		align-items: center;
 		background: transparent;
 		white-space: nowrap;
 		user-select: none;
@@ -25,6 +25,7 @@
 
 		svg {
 			display: flex;
+			align-items: center;
 			width: 18px;
 			height: 18px;
 		}
@@ -112,6 +113,29 @@
 
 			&:focus {
 				color: var(--button-text-neutral-pressed-contrast);
+			}
+
+			&:disabled {
+				opacity: 0.3;
+				pointer-events: none;
+			}
+		}
+
+		&[variant="warning"] {
+			border-radius: $radius-3xl;
+			border: 1px solid var(--button-secondary-error-default-border);
+			background-color: var(--button-secondary-error-default-background);
+			color: var(--button-secondary-error-default-contrast);
+			box-shadow: $shadow-brand;
+
+			&:hover {
+				border: 1px solid var(--button-secondary-error-hovered-border);
+				background: var(--button-secondary-error-hovered-background);
+			}
+
+			&:focus {
+				border: 1px solid var(--button-secondary-error-pressed-border);
+				background: var(--button-secondary-error-pressed-background);
 			}
 
 			&:disabled {

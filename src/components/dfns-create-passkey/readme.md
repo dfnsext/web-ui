@@ -7,9 +7,21 @@
 
 ## Properties
 
-| Property  | Attribute | Description | Type     | Default     |
-| --------- | --------- | ----------- | -------- | ----------- |
-| `visible` | `visible` |             | `string` | `undefined` |
+| Property        | Attribute         | Description | Type     | Default     |
+| --------------- | ----------------- | ----------- | -------- | ----------- |
+| `appId`         | `app-id`          |             | `string` | `undefined` |
+| `dfnsHost`      | `dfns-host`       |             | `string` | `undefined` |
+| `dfnsUserToken` | `dfns-user-token` |             | `string` | `undefined` |
+| `rpId`          | `rp-id`           |             | `string` | `undefined` |
+| `visible`       | `visible`         |             | `string` | `undefined` |
+| `walletId`      | `wallet-id`       |             | `string` | `undefined` |
+
+
+## Events
+
+| Event    | Description | Type                                                                 |
+| -------- | ----------- | -------------------------------------------------------------------- |
+| `action` |             | `CustomEvent<CreatePasskeyAction.BACK \| CreatePasskeyAction.CLOSE>` |
 
 
 ## Dependencies
@@ -30,6 +42,7 @@ graph TD;
   dfns-create-passkey --> dfns-input-field
   dfns-create-passkey --> dfns-alert
   dfns-create-passkey --> dfns-button
+  dfns-input-field --> dfns-typography
   dfns-alert --> dfns-typography
   dfns-button --> dfns-typography
   dfns-button --> dfns-loader

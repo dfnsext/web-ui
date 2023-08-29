@@ -3,6 +3,7 @@ export enum EButtonVariant {
 	SECONDARY = "secondary",
 	NEUTRAL = "neutral",
 	TEXT = "text",
+	WARNING = "warning",
 }
 
 export enum EButtonSize {

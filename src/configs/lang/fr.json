@@ -14,6 +14,9 @@
 	},
 	"header": {
 		"create_wallet": "Créez votre portefeuille",
+		"my_wallet": "Mon portefeuille",
+		"settings": "Paramètres",
+		"create_passkey": "Créer une clé d'accès",
 		"nav_links": {}
 	},
 	"pages": {
@@ -40,19 +43,40 @@
 			"loading_message": "Chargement de l'adresse de votre portefeuille"
 		},
 		"create_passkey": {
-			"title": "Créer une clé de passe",
-			"description": "Une clé de passe est un mot de passe qui vous permet de vous connecter à votre compte sans avoir à saisir votre clé privée. Vous pouvez créer une clé de passe en cliquant sur le bouton ci-dessous. Vous pouvez également vous connecter avec votre clé privée en cliquant sur le bouton ci-dessus.",
-			"button_create": "Créer une clé de passe",
-			"alert_title": "Nous ne pourrons pas récupérer vos codes d'accès.",
-			"alert_description": "Veillez à créer votre mot de passe sur un appareil personnel."
+			"title": "Créer une clé d'accès",
+			"description": "Une clé d'accès vous permet de vous connecter à votre wallet de façon très sécurisée (sans avoir à saisir votre clé privée). Vous pouvez gérer plusieurs clés d'accès afin de pouvoir vous connecter depuis différents appareils.",
+			"button_create": "Créer une clé d'accès",
+			"alert_title": "Nous ne pourrons pas récupérer vos clés d'accès.",
+			"alert_description": "Veillez à créer votre clé d'accès sur un appareil personnel.",
+			"save_title": "Votre nouvelle clé d'accès n'a pas encore été enregistré !",
+			"save_description": "Pour enregistrer la clé d'accès, vous devez vous authentifier avec l'un de vos identifiants existants.",
+			"button_save": "Enregistrer la clé d'accès",
+			"input_placeholder": "Device 1"
 		},
 		"signature_request": {
 			"title": "Vous signez: ",
-			"warning_content": "Ne signez ce message que si vous en comprenez pleinement le contenu et si vous avez confiance dans le site demandeur.",
+			"warning_content": "Ne signez ce message que si vous en comprenez pleinement le contenu et si vous avez confiance en ce site.",
 			"error_title": "Signature échouée",
 			"button_signing": "Signer",
 			"button_retry": "Réessayer",
 			"button_reject": "Rejeter"
+		},
+		"wallet_overview": {
+			"title_alert": "Créer une clé d'accès",
+			"content_alert": "Nous vous recommandons vivement de créer une clé d'accès à partir d'autres appareils. C'est le seul moyen de récupérer votre wallet si vous perdez votre clé d'accès actuelle.",
+			"button_create_passkey": "Créer une clé de sauvegarde",
+			"button_settings": "Paramètres",
+			"button_logout": "Déconnexion"
+		},
+		"settings": {
+			"passkeys": "Clé(s) de sauvegarde",
+			"button_create_passkey": "Créer une clé de sauvegarde",
+			"type_credentials": "Type de clé:",
+			"credentials_id": "ID de la clé:",
+			"origin": "Origine:",
+			"public_key": "Clé publique:",
+			"button_delete": "Supprimer",
+			"content_alert": "Générer une nouvelle clé d'accès pour accéder à votre wallet à partir d'un autre appareil."
 		},
 		"profile": {
 			"title": "Profil",
@@ -66,7 +90,7 @@
 				"title": "Général",
 				"form": {
 					"email": "E-mail",
-					"email_description": "Cet e-mail sera utilisé pour les notifications. Il peut être différent de votre e-mail d'authentification. Vous pourrez le changer quand vous le souhaitez.",
+					"email_description": "Cet e-mail sera utilisé pour les notifications. Il peut être différent de votre e-mail d'authentification. Vous pouvez le changer quand vous le souhaitez.",
 					"user_name": "Nom d'utilisateur",
 					"first_name": "Prénom",
 					"last_name": "Nom de famille",
@@ -148,7 +172,7 @@
 		"place_bid": "Placer une enchère",
 		"approve_payment": "Approuver le paiement",
 		"approve_listing": "Approuver la liste",
-		"buy_now": "Acheter maintenant",
+		"buy_now": "Acheter",
 		"close": "Fermer"
 	},
 	"inputs": {

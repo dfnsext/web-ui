@@ -43,7 +43,6 @@ export async function registerWithOAuth(apiUrl: string, appId: string, oauthAcce
 		}
 	}
 	try {
-
 		const attestation = await create(challenge);
 		return Register.getInstance(apiUrl, appId).complete(challenge.temporaryAuthenticationToken, {
 			firstFactorCredential: attestation,

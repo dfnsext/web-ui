@@ -1,4 +1,5 @@
 import { Fido2Attestation, UserRegistrationChallenge } from "@dfns/sdk";
+import { Fido2Options } from "@dfns/sdk/codegen/datamodel/Auth";
 import { AllowCredential, Fido2Assertion } from "@dfns/sdk/signer";
 import { fromBase64Url, toBase64Url } from "@dfns/sdk/utils/base64";
 import { Buffer } from "buffer";
@@ -44,10 +45,11 @@ export async function sign(
 	};
 }
 
-export async function create(challenge: UserRegistrationChallenge, timeout: number = DEFAULT_WAIT_TIMEOUT): Promise<Fido2Attestation> {
+export async function create(challenge: UserRegistrationChallenge | Fido2Options, timeout: number = DEFAULT_WAIT_TIMEOUT, authenticatorAttachment? : AuthenticatorAttachment): Promise<Fido2Attestation> {
 	const options: CredentialCreationOptions = {
 		publicKey: {
 			challenge: Buffer.from(challenge.challenge),
+			//@ts-ignore
 			pubKeyCredParams: challenge.pubKeyCredParams,
 			rp: challenge.rp,
 			user: {
@@ -60,7 +62,8 @@ export async function create(challenge: UserRegistrationChallenge, timeout: numb
 				id: fromBase64Url(cred.id),
 				type: cred.type,
 			})),
-			authenticatorSelection: { ...challenge.authenticatorSelection, authenticatorAttachment: "platform" },
+			//@ts-ignore
+			authenticatorSelection: { ...challenge.authenticatorSelection, authenticatorAttachment },
 			timeout,
 		},
 	};

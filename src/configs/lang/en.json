@@ -13,34 +13,45 @@
 		"remove": "Remove"
 	},
 	"header": {
+		"create_wallet": "Create wallet",
+		"my_wallet": "My wallet",
+		"settings": "Settings",
+		"create_passkey": "Create a passkey",
 		"nav_links": {}
 	},
 	"pages": {
+		"identification": {
+			"title": "Authentication"
+		},
 		"home": {
 			"title": "Home"
 		},
 		"create_account": {
-			"title": "Create a passkey",
-			"description": "The passkey that you will create will be associated to the a device of your choice. Make sure you create your passkey on a personal device.",
-			"button_create": "Create a passkey"
+			"title": "Create your wallet",
+			"description": "Use fingerprint or face recognition to log in | Molitor",
+			"button_create": "Continue"
 		},
 		"validate_wallet": {
 			"title": "Validate your wallet",
-			"description": "Validate your wallet by verifying your identity with your passkey.",
-			"button_validate": "Validate wallet"
+			"description": "Validate and access your wallet by verifying your identity.",
+			"button_validate": "Access my wallet"
 		},
 		"validation_success": {
 			"title": "Congratulations!",
-			"description": "Your account has been created",
+			"description": "Your wallet has been created",
 			"wallet_address": "Your wallet address is",
 			"loading_message": "Loading your wallet address"
 		},
 		"create_passkey": {
 			"title": "Create a passkey",
-			"description": "The passkey that you will create will be associated to the a device of your choice. Make sure you create your passkey on a personal device.",
+			"description": "A passkey allows you to connect to your wallet in a very secure way (without having to enter your private key). You can manage several passkeys so you can connect from different devices.",
 			"button_create": "Create a passkey",
-			"alert_title": "We will not be able to recover your passkeys",
-			"alert_description": "Make sure you create your passkey on a personal device."
+			"alert_title": "We won't be able to recover your passkeys",
+			"alert_description": "Make sure you create your passkey on a personal device.",
+			"save_title": "Your new passkey has not been saved yet!",
+			"save_description": "To save the passkey, you need to authenticate with one of your existing credentials.",
+			"button_save": "Save passkey",
+			"input_placeholder": "Device 1"
 		},
 		"signature_request": {
 			"title": "You are signing:",
@@ -49,6 +60,23 @@
 			"button_signing": "Sign",
 			"button_retry": "Retry",
 			"button_reject": "Reject"
+		},
+		"wallet_overview": {
+			"title_alert": "Create a backup passkey",
+			"content_alert": "We strongly recommend to create a passkey from other devices, as this is the only way to recover your wallet if you lose your current passkey.",
+			"button_create_passkey": "Create a passkey",
+			"button_settings": "Settings",
+			"button_logout": "Logout"
+		},
+		"settings": {
+			"passkeys": "passkeys",
+			"button_create_passkey": "Create a passkey",
+			"type_credentials": "Type of credentials:",
+			"credentials_id": "Credentials ID:",
+			"origin": "Origin:",
+			"public_key": "Public key ID:",
+			"button_delete": "Delete",
+			"content_alert": "Generate a new passkey to access your wallet from another device."
 		},
 		"profile": {
 			"title": "Profile",

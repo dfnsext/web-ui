@@ -23,7 +23,9 @@
 
  - [dfns-create-passkey](../dfns-create-passkey)
  - [dfns-design-system](../dfns-design-system)
+ - [dfns-settings](../dfns-settings)
  - [dfns-sign-message](../dfns-sign-message)
+ - [dfns-wallet-overview](../dfns-wallet-overview)
 
 ### Depends on
 
@@ -35,7 +37,9 @@ graph TD;
   dfns-alert --> dfns-typography
   dfns-create-passkey --> dfns-alert
   dfns-design-system --> dfns-alert
+  dfns-settings --> dfns-alert
   dfns-sign-message --> dfns-alert
+  dfns-wallet-overview --> dfns-alert
   style dfns-alert fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

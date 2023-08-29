@@ -1,0 +1,22 @@
+:host {
+	display: block;
+	.container {
+		display: none;
+		&.visible {
+			display: block;
+		}
+		.first-section {
+			display: flex;
+			flex-direction: row;
+			align-items: center;
+			justify-content: space-between;
+			padding: 0px $spacing-2;
+			margin-bottom:  $spacing-2;
+		}
+		.credentials-container{
+			padding: 0 $spacing-1-5 ;
+			max-height: 360px;
+			overflow: auto;
+		}
+	}
+}

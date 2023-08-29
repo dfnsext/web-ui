@@ -1,7 +1,7 @@
 import { Component, Prop, h, JSX, Fragment } from "@stencil/core";
 import classNames from "classnames";
 import { EAlertVariant } from "../../utils/enums/alerts-enums";
-import { ITypo } from "../../utils/enums/typography-enums";
+import { ITypo, ITypoColor } from "../../utils/enums/typography-enums";
 
 @Component({
 	tag: "dfns-alert",
@@ -48,7 +48,7 @@ export class DfnsAlert {
 							</div>
 						)}
 						<div class="content">
-							<dfns-typography typo={ITypo.TEXTE_SM_REGULAR}>
+							<dfns-typography typo={ITypo.TEXTE_SM_REGULAR} color={ITypoColor.SECONDARY}>
 								<slot name="content"></slot>
 							</dfns-typography>
 						</div>

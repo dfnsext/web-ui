@@ -1,14 +1,17 @@
 import { Wallet } from "@dfns/sdk/codegen/datamodel/Wallets";
 
+import { GetSignatureResponse } from "@dfns/sdk/codegen/Wallets";
+import jwt_decode from "jwt-decode";
 import LocalStorageService, { DFNS_ACTIVE_WALLET, DFNS_END_USER_TOKEN, OAUTH_ACCESS_TOKEN } from "./services/LocalStorageService";
 import { RegisterCompleteResponse } from "./services/api/Register";
 import { getDfnsDelegatedClient, isDfnsError } from "./utils/dfns";
+import { CreatePasskeyAction, SettingsAction, WalletOverviewAction } from "./utils/enums/actions-enum";
 import { loginWithOAuth } from "./utils/helper";
-import jwt_decode from "jwt-decode";
-import { GetSignatureResponse } from "@dfns/sdk/codegen/Wallets";
+import { setActiveLanguage } from "./services/store/language-store";
 
 export const DEFAULT_API_URL = "https://app.stg.dfns-frame.smart-chain.fr/";
 export const DEFAULT_DFNS_HOST = "https://api.dfns.ninja";
+export const DEFAULT_LANG = "en";
 
 export interface JwtPayload {
 	[key: string]: any;
@@ -31,6 +34,8 @@ export interface DfnsSDKOptions {
 	appLogoUrl?: string | null;
 	darkMode?: boolean;
 	assetsPath?: string;
+	shouldShowWalletValidation?: boolean;
+	lang?: "fr" | "en";
 }
 
 type Options = NonNullable<DfnsSDKOptions>;
@@ -53,7 +58,7 @@ const overlayStyles: Partial<CSSStyleDeclaration> = {
 	height: "100%",
 	borderRadius: "0",
 	border: "none",
-	zIndex: "2147483647",
+	zIndex: "214",
 };
 
 function applyOverlayStyles(elem: HTMLElement) {
@@ -68,6 +73,9 @@ export class DfnsSDK {
 	public dfnsValidateWalletElement: HTMLElement | null = null;
 	public dfnsWalletValidationElement: HTMLElement | null = null;
 	public dfnsSignMessageElement: HTMLElement | null = null;
+	public dfnsSettingsElement: HTMLElement | null = null;
+	public dfnsCreatePasskeyElement: HTMLElement | null = null;
+	public dfnsWalletOverviewElement: HTMLElement | null = null;
 	public dfnsContainer: HTMLElement | null = null;
 	private removeOnLocalStorageChanged: () => void = () => {};
 	private options: Options;
@@ -88,10 +96,14 @@ export class DfnsSDK {
 		if (!this.options.apiUrl) {
 			this.options.apiUrl = DEFAULT_API_URL;
 		}
+		if (!this.options.lang) {
+			this.options.lang = DEFAULT_LANG;
+		}
 		DfnsSDK.instance = this;
 	}
 
 	public init() {
+		setActiveLanguage(this.options.lang);
 		this.dfnsContainer = document.createElement("dfns-main");
 		this.dfnsContainer.classList.add("dfns-container");
 		applyOverlayStyles(this.dfnsContainer);
@@ -100,28 +112,28 @@ export class DfnsSDK {
 		this.dfnsCreateAccountElement = document.createElement("dfns-create-account");
 		this.dfnsContainer.setAttribute("assets-path", this.options.assetsPath);
 		this.dfnsCreateAccountElement.setAttribute("oauth-access-token", LocalStorageService.getInstance().items[OAUTH_ACCESS_TOKEN].get());
-		this.dfnsCreateAccountElement.setAttribute("api-url", this.options.apiUrl)
-		this.dfnsCreateAccountElement.setAttribute("dfns-host", this.options.dfnsHost)
-        this.dfnsCreateAccountElement.setAttribute("app-id", this.options.appId);
-        this.dfnsCreateAccountElement.setAttribute("rp-id", this.options.rpId);
+		this.dfnsCreateAccountElement.setAttribute("api-url", this.options.apiUrl);
+		this.dfnsCreateAccountElement.setAttribute("dfns-host", this.options.dfnsHost);
+		this.dfnsCreateAccountElement.setAttribute("app-id", this.options.appId);
+		this.dfnsCreateAccountElement.setAttribute("rp-id", this.options.rpId);
 		this.dfnsContainer.appendChild(this.dfnsCreateAccountElement);
 
 		/** Init Vailidate Wallet Element */
 		this.dfnsValidateWalletElement = document.createElement("dfns-validate-wallet");
 		this.dfnsValidateWalletElement.setAttribute("dfns-user-token", LocalStorageService.getInstance().items[DFNS_END_USER_TOKEN].get());
-		this.dfnsValidateWalletElement.setAttribute("api-url", this.options.apiUrl)
-		this.dfnsValidateWalletElement.setAttribute("dfns-host", this.options.dfnsHost)
-        this.dfnsValidateWalletElement.setAttribute("app-id", this.options.appId);
-        this.dfnsValidateWalletElement.setAttribute("rp-id", this.options.rpId);
+		this.dfnsValidateWalletElement.setAttribute("api-url", this.options.apiUrl);
+		this.dfnsValidateWalletElement.setAttribute("dfns-host", this.options.dfnsHost);
+		this.dfnsValidateWalletElement.setAttribute("app-id", this.options.appId);
+		this.dfnsValidateWalletElement.setAttribute("rp-id", this.options.rpId);
 		this.dfnsContainer.appendChild(this.dfnsValidateWalletElement);
 
 		/** Init Wallet Validation Element */
 		this.dfnsWalletValidationElement = document.createElement("dfns-wallet-validation");
-        this.dfnsWalletValidationElement.setAttribute("api-url", this.options.apiUrl)
-		this.dfnsWalletValidationElement.setAttribute("dfns-host", this.options.dfnsHost)
-        this.dfnsWalletValidationElement.setAttribute("app-id", this.options.appId);
+		this.dfnsWalletValidationElement.setAttribute("api-url", this.options.apiUrl);
+		this.dfnsWalletValidationElement.setAttribute("dfns-host", this.options.dfnsHost);
+		this.dfnsWalletValidationElement.setAttribute("app-id", this.options.appId);
 		this.dfnsWalletValidationElement.setAttribute("rp-id", this.options.rpId);
-		
+
 		this.dfnsWalletValidationElement.setAttribute(
 			"dfns-user-token",
 			LocalStorageService.getInstance().items[DFNS_END_USER_TOKEN].get(),
@@ -132,16 +144,45 @@ export class DfnsSDK {
 
 		/** Init Sign Message Element */
 		this.dfnsSignMessageElement = document.createElement("dfns-sign-message");
-		this.dfnsSignMessageElement.setAttribute("api-url", this.options.apiUrl)
-		this.dfnsSignMessageElement.setAttribute("dfns-host", this.options.dfnsHost)
-        this.dfnsSignMessageElement.setAttribute("app-id", this.options.appId);
+		this.dfnsSignMessageElement.setAttribute("api-url", this.options.apiUrl);
+		this.dfnsSignMessageElement.setAttribute("dfns-host", this.options.dfnsHost);
+		this.dfnsSignMessageElement.setAttribute("app-id", this.options.appId);
 		this.dfnsSignMessageElement.setAttribute("rp-id", this.options.rpId);
 		this.dfnsSignMessageElement.setAttribute("dfns-user-token", LocalStorageService.getInstance().items[DFNS_END_USER_TOKEN].get());
 		this.dfnsSignMessageElement.setAttribute("wallet-id", LocalStorageService.getInstance().items[DFNS_ACTIVE_WALLET].get()?.id);
 
 		this.dfnsContainer.appendChild(this.dfnsSignMessageElement);
 
-		/** Init Sign Message Element */
+		/** Init Settings Element */
+		this.dfnsSettingsElement = document.createElement("dfns-settings");
+		this.dfnsSettingsElement.setAttribute("dfns-user-token", LocalStorageService.getInstance().items[DFNS_END_USER_TOKEN].get());
+		this.dfnsSettingsElement.setAttribute("api-url", this.options.apiUrl);
+		this.dfnsSettingsElement.setAttribute("dfns-host", this.options.dfnsHost);
+		this.dfnsSettingsElement.setAttribute("app-id", this.options.appId);
+		this.dfnsSettingsElement.setAttribute("rp-id", this.options.rpId);
+		this.dfnsContainer.appendChild(this.dfnsSettingsElement);
+
+		/** Init Create passkey Element */
+		this.dfnsCreatePasskeyElement = document.createElement("dfns-create-passkey");
+		this.dfnsCreatePasskeyElement.setAttribute("dfns-user-token", LocalStorageService.getInstance().items[DFNS_END_USER_TOKEN].get());
+		this.dfnsCreatePasskeyElement.setAttribute("api-url", this.options.apiUrl);
+		this.dfnsCreatePasskeyElement.setAttribute("dfns-host", this.options.dfnsHost);
+		this.dfnsCreatePasskeyElement.setAttribute("app-id", this.options.appId);
+		this.dfnsCreatePasskeyElement.setAttribute("rp-id", this.options.rpId);
+		this.dfnsContainer.appendChild(this.dfnsCreatePasskeyElement);
+
+		/** Init Wallet Overview Element */
+		this.dfnsWalletOverviewElement = document.createElement("dfns-wallet-overview");
+		this.dfnsWalletOverviewElement.setAttribute("dfns-user-token", LocalStorageService.getInstance().items[DFNS_END_USER_TOKEN].get());
+		this.dfnsWalletOverviewElement.setAttribute("api-url", this.options.apiUrl);
+		this.dfnsWalletOverviewElement.setAttribute("dfns-host", this.options.dfnsHost);
+		this.dfnsWalletOverviewElement.setAttribute("app-id", this.options.appId);
+		this.dfnsWalletOverviewElement.setAttribute("rp-id", this.options.rpId);
+		this.dfnsWalletOverviewElement.setAttribute(
+			"wallet-address",
+			LocalStorageService.getInstance().items[DFNS_ACTIVE_WALLET].get()?.address,
+		);
+		this.dfnsContainer.appendChild(this.dfnsWalletOverviewElement);
 
 		document.body.appendChild(this.dfnsContainer);
 
@@ -159,13 +200,17 @@ export class DfnsSDK {
 			wallet = wallets.items[0];
 			if (!wallet) {
 				wallet = await this.validateWallet();
-				// wallet = await this.waitForWalletValidation();
+				if (this.options.shouldShowWalletValidation) {
+					wallet = await this.waitForWalletValidation();
+				}
 			}
 		} catch (error) {
 			if (isDfnsError(error) && error.httpStatus === 401) {
 				await this.createAccount();
 				wallet = await this.validateWallet();
-				// wallet = await this.waitForWalletValidation();
+				if (this.options.shouldShowWalletValidation) {
+					wallet = await this.waitForWalletValidation();
+				}
 			} else {
 				this.dfnsContainer.style.display = "none";
 				throw error;
@@ -221,7 +266,9 @@ export class DfnsSDK {
 				LocalStorageService.getInstance().items[DFNS_END_USER_TOKEN].set(response.userAuthToken);
 				if (!wallet) {
 					await this.validateWallet();
-					wallet = await this.waitForWalletValidation();
+					if (this.options.shouldShowWalletValidation) {
+						wallet = await this.waitForWalletValidation();
+					}
 				}
 				return wallet;
 			} catch (err) {
@@ -272,7 +319,7 @@ export class DfnsSDK {
 	}
 
 	public async signMessage(message: string) {
-		await this.autoConnect();
+		// await this.autoConnect();
 		this.dfnsContainer.style.display = "block";
 		this.dfnsContainer.setAttribute("visible", "true");
 		this.dfnsSignMessageElement.setAttribute("visible", "true");
@@ -283,6 +330,75 @@ export class DfnsSDK {
 		this.dfnsContainer.style.display = "none";
 		if (!response) throw new Error("User cancelled signature");
 		return response;
+	}
+
+	public async showMenu() {
+		this.dfnsContainer.style.display = "block";
+		this.dfnsContainer.setAttribute("visible", "true");
+		this.dfnsWalletOverviewElement.setAttribute("visible", "true");
+		const action = await this.waitForEvent<WalletOverviewAction>(this.dfnsWalletOverviewElement, "action");
+
+		switch (action) {
+			case WalletOverviewAction.CREATE_PASSKEY:
+				this.dfnsWalletOverviewElement.removeAttribute("visible");
+				await this.showCreatePasskey();
+				break;
+			case WalletOverviewAction.SETTINGS:
+				this.dfnsWalletOverviewElement.removeAttribute("visible");
+				await this.showSettings();
+				break;
+			case WalletOverviewAction.CLOSE:
+				this.dfnsWalletOverviewElement.removeAttribute("visible");
+				this.dfnsContainer.removeAttribute("visible");
+				this.dfnsContainer.style.display = "none";
+				break;
+		}
+	}
+
+	public async showSettings() {
+		this.dfnsContainer.style.display = "block";
+		this.dfnsContainer.setAttribute("visible", "true");
+		this.dfnsSettingsElement.setAttribute("visible", "true");
+		const action = await this.waitForEvent<SettingsAction>(this.dfnsSettingsElement, "action");
+
+		switch (action) {
+			case SettingsAction.CREATE_PASSKEY:
+				this.dfnsSettingsElement.removeAttribute("visible");
+				await this.showCreatePasskey();
+				break;
+
+			case SettingsAction.BACK:
+				this.dfnsSettingsElement.removeAttribute("visible");
+				await this.showMenu();
+				break;
+			case SettingsAction.CLOSE:
+				this.dfnsSettingsElement.removeAttribute("visible");
+				this.dfnsContainer.removeAttribute("visible");
+				this.dfnsContainer.style.display = "none";
+		}
+	}
+
+	public async showCreatePasskey() {
+		this.dfnsContainer.style.display = "block";
+		this.dfnsContainer.setAttribute("visible", "true");
+		this.dfnsCreatePasskeyElement.setAttribute("visible", "true");
+		const action = await this.waitForEvent<CreatePasskeyAction>(this.dfnsCreatePasskeyElement, "action");
+
+		switch (action) {
+			case CreatePasskeyAction.BACK:
+				this.dfnsCreatePasskeyElement.removeAttribute("visible");
+				await this.showSettings();
+				break;
+			case CreatePasskeyAction.CLOSE:
+				this.dfnsCreatePasskeyElement.removeAttribute("visible");
+				this.dfnsContainer.removeAttribute("visible");
+				this.dfnsContainer.style.display = "none";
+				break;
+		}
+	}
+
+	public setLanguage(lang: "fr" | "en") {
+		setActiveLanguage(lang);
 	}
 
 	public disconnect() {
@@ -297,10 +413,6 @@ export class DfnsSDK {
 				resolve(event.detail as T);
 			});
 		});
-	}
-
-	public testLocalStorage() {
-		LocalStorageService.getInstance().items[DFNS_END_USER_TOKEN].set("test");
 	}
 
 	private listenToChanges() {
@@ -320,6 +432,25 @@ export class DfnsSDK {
 			this.dfnsWalletValidationElement.setAttribute(
 				"wallet-id",
 				LocalStorageService.getInstance().items[DFNS_ACTIVE_WALLET].get()?.id,
+			);
+
+			this.dfnsCreatePasskeyElement.setAttribute(
+				"dfns-user-token",
+				LocalStorageService.getInstance().items[DFNS_END_USER_TOKEN].get(),
+			);
+
+			this.dfnsSignMessageElement.setAttribute("dfns-user-token", LocalStorageService.getInstance().items[DFNS_END_USER_TOKEN].get());
+
+			this.dfnsSettingsElement.setAttribute("dfns-user-token", LocalStorageService.getInstance().items[DFNS_END_USER_TOKEN].get());
+
+			this.dfnsWalletOverviewElement.setAttribute(
+				"dfns-user-token",
+				LocalStorageService.getInstance().items[DFNS_END_USER_TOKEN].get(),
+			);
+
+			this.dfnsWalletOverviewElement.setAttribute(
+				"wallet-address",
+				LocalStorageService.getInstance().items[DFNS_ACTIVE_WALLET].get()?.address,
 			);
 		};
 		window.addEventListener("localStorageChanged", this.removeOnLocalStorageChanged);

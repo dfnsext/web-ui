@@ -7,20 +7,20 @@
 
 ## Properties
 
-| Property       | Attribute      | Description | Type                                                                                                  | Default                  |
-| -------------- | -------------- | ----------- | ----------------------------------------------------------------------------------------------------- | ------------------------ |
-| `classCss`     | `class-css`    |             | `string`                                                                                              | `undefined`              |
-| `content`      | `content`      |             | `string`                                                                                              | `undefined`              |
-| `disabled`     | `disabled`     |             | `boolean`                                                                                             | `false`                  |
-| `fullwidth`    | `fullwidth`    |             | `boolean`                                                                                             | `false`                  |
-| `icon`         | --             |             | `Element`                                                                                             | `undefined`              |
-| `iconposition` | `iconposition` |             | `"left" \| "right"`                                                                                   | `"right"`                |
-| `iconstyle`    | `iconstyle`    |             | `any`                                                                                                 | `undefined`              |
-| `isloading`    | `isloading`    |             | `boolean`                                                                                             | `false`                  |
-| `onClick`      | --             |             | `() => any`                                                                                           | `undefined`              |
-| `sizing`       | `sizing`       |             | `EButtonSize.LARGE \| EButtonSize.MEDIUM \| EButtonSize.SMALL`                                        | `EButtonSize.LARGE`      |
-| `type`         | `type`         |             | `"button" \| "submit"`                                                                                | `"button"`               |
-| `variant`      | `variant`      |             | `EButtonVariant.NEUTRAL \| EButtonVariant.PRIMARY \| EButtonVariant.SECONDARY \| EButtonVariant.TEXT` | `EButtonVariant.PRIMARY` |
+| Property       | Attribute      | Description | Type                                                                                                                            | Default                  |
+| -------------- | -------------- | ----------- | ------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `classCss`     | `class-css`    |             | `string`                                                                                                                        | `undefined`              |
+| `content`      | `content`      |             | `string`                                                                                                                        | `undefined`              |
+| `disabled`     | `disabled`     |             | `boolean`                                                                                                                       | `false`                  |
+| `fullwidth`    | `fullwidth`    |             | `boolean`                                                                                                                       | `false`                  |
+| `icon`         | --             |             | `Element`                                                                                                                       | `undefined`              |
+| `iconposition` | `iconposition` |             | `"left" \| "right"`                                                                                                             | `"right"`                |
+| `iconstyle`    | `iconstyle`    |             | `any`                                                                                                                           | `undefined`              |
+| `isloading`    | `isloading`    |             | `boolean`                                                                                                                       | `false`                  |
+| `onClick`      | --             |             | `() => any`                                                                                                                     | `undefined`              |
+| `sizing`       | `sizing`       |             | `EButtonSize.LARGE \| EButtonSize.MEDIUM \| EButtonSize.SMALL`                                                                  | `EButtonSize.LARGE`      |
+| `type`         | `type`         |             | `"button" \| "submit"`                                                                                                          | `"button"`               |
+| `variant`      | `variant`      |             | `EButtonVariant.NEUTRAL \| EButtonVariant.PRIMARY \| EButtonVariant.SECONDARY \| EButtonVariant.TEXT \| EButtonVariant.WARNING` | `EButtonVariant.PRIMARY` |
 
 
 ## Events
@@ -37,8 +37,10 @@
  - [dfns-create-account](../dfns-create-account)
  - [dfns-create-passkey](../dfns-create-passkey)
  - [dfns-design-system](../dfns-design-system)
+ - [dfns-settings](../dfns-settings)
  - [dfns-sign-message](../dfns-sign-message)
  - [dfns-validate-wallet](../dfns-validate-wallet)
+ - [dfns-wallet-overview](../dfns-wallet-overview)
  - [dfns-wallet-validation](../dfns-wallet-validation)
 
 ### Depends on
@@ -54,8 +56,10 @@ graph TD;
   dfns-create-account --> dfns-button
   dfns-create-passkey --> dfns-button
   dfns-design-system --> dfns-button
+  dfns-settings --> dfns-button
   dfns-sign-message --> dfns-button
   dfns-validate-wallet --> dfns-button
+  dfns-wallet-overview --> dfns-button
   dfns-wallet-validation --> dfns-button
   style dfns-button fill:#f9f,stroke:#333,stroke-width:4px
 ```

@@ -4,7 +4,8 @@ import { EAlertVariant } from "../../utils/enums/alerts-enums";
 import { EButtonSize, EButtonVariant } from "../../utils/enums/buttons-enums";
 import { EThemeModeType } from "../../utils/enums/themes-enums";
 import { ThemeMode } from "../../utils/theme-modes";
-import { LanguageService } from "../../services/language-services";
+import langState from "../../services/store/language-store";
+
 
 @Component({
 	tag: "dfns-design-system",
@@ -49,7 +50,7 @@ export class DfnsDesignSystem {
 					</div>
 					<div slot="bottomSection">
 						<dfns-button
-							content={LanguageService.getContent('common.connect_wallet')}
+							content={langState.values.common.connect_wallet}
 							variant={EButtonVariant.PRIMARY}
 							sizing={EButtonSize.LARGE}
 							fullwidth
