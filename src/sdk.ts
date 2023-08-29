@@ -434,6 +434,11 @@ export class DfnsSDK {
 				LocalStorageService.getInstance().items[DFNS_ACTIVE_WALLET].get()?.id,
 			);
 
+			this.dfnsSignMessageElement.setAttribute(
+				"wallet-id",
+				LocalStorageService.getInstance().items[DFNS_ACTIVE_WALLET].get()?.id,
+			);
+
 			this.dfnsCreatePasskeyElement.setAttribute(
 				"dfns-user-token",
 				LocalStorageService.getInstance().items[DFNS_END_USER_TOKEN].get(),

@@ -51,7 +51,8 @@
 			"save_title": "Your new passkey has not been saved yet!",
 			"save_description": "To save the passkey, you need to authenticate with one of your existing credentials.",
 			"button_save": "Save passkey",
-			"input_placeholder": "Device 1"
+			"input_placeholder": "Device 1",
+			"passkey_name_label": "Passkey name"
 		},
 		"signature_request": {
 			"title": "You are signing:",

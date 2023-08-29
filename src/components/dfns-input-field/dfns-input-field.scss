@@ -3,21 +3,22 @@
 }
 .root {
 	position: relative;
-  width: 100%;
+	width: 100%;
 	.wrapper {
-    display: flex;
-    flex-direction: column;
-    gap: $spacing-0-5;
-    width: 100%;
-    
+		display: flex;
+		flex-direction: column;
+		gap: $spacing-0-5;
+		width: 100%;
+
 		.input {
-      display: flex;
+			margin-top: $spacing-1;
+			display: flex;
 			padding: 0 12px;
-      font-family: $font-primary; 
-      box-sizing: border-box;
+			font-family: $font-primary;
+			box-sizing: border-box;
 			height: 38px;
 			font-weight: 400;
-      width: 100% !important;
+			width: 100% !important;
 			outline: none;
 			background-color: var(--color-generic-white);
 			color: var(--color-neutral-800);

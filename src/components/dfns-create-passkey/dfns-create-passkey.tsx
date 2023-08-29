@@ -100,7 +100,11 @@ export class DfnsCreatePasskey {
 									<dfns-input-field
 										placeholder={langState.values.pages.create_passkey.input_placeholder}
 										value={this.passkeyName}
-										onChange={(value) => (this.passkeyName = value)}></dfns-input-field>
+										onChange={(value) => (this.passkeyName = value)}>
+										<dfns-typography typo={ITypo.TEXTE_SM_MEDIUM} color={ITypoColor.PRIMARY}>
+											{langState.values.pages.create_passkey.passkey_name_label}
+										</dfns-typography>
+									</dfns-input-field>
 									<dfns-alert variant={EAlertVariant.WARNING} hasTitle>
 										<div slot="title">{langState.values.pages.create_passkey.alert_title}</div>
 										<div slot="content">{langState.values.pages.create_passkey.alert_description}</div>
