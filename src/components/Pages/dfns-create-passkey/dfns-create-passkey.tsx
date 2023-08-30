@@ -11,12 +11,16 @@ import { ThemeMode } from "../../../utils/theme-modes";
 import { create, sign } from "../../../utils/webauthn";
 import langState from "../../../stores/LanguageStore";
 import dfnsState from "../../../stores/DfnsStore";
+import  { goBack } from "../../../stores/RouteStore"; "../../../stores/RouteStore";
 
 @Component({
 	tag: "dfns-create-passkey",
 	styleUrl: "dfns-create-passkey.scss",
 	shadow: true,
 })
+
+
+
 export class DfnsCreatePasskey {
 	private themeMode = ThemeMode.getInstance();
 
@@ -80,6 +84,10 @@ export class DfnsCreatePasskey {
 		}
 	}
 
+	handleBackClick() {
+		goBack();
+	}
+
 	render() {
 		return (
 			<dfns-layout closeBtn onClickCloseBtn={() => this.action.emit(CreatePasskeyAction.CLOSE)}>
@@ -140,7 +148,8 @@ export class DfnsCreatePasskey {
 								sizing={EButtonSize.MEDIUM}
 								fullwidth
 								iconposition="left"
-								onClick={() => this.action.emit(CreatePasskeyAction.BACK)}
+								//onClick={() => this.action.emit(CreatePasskeyAction.BACK)}
+								onClick={() => this.handleBackClick()}
 							/>
 						</Fragment>
 					)}

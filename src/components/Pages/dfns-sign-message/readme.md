@@ -33,7 +33,7 @@
 
 ### Depends on
 
-- [dfns-layout](../../ Materials/Templates/dfns-layout)
+- [dfns-layout](../../Materials/Templates/dfns-layout)
 - [dfns-typography](../../Elements/Typography/dfns-typography)
 - [dfns-button](../../Elements/Buttons/dfns-button)
 - [dfns-alert](../../Elements/Alerts/dfns-alert)

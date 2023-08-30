@@ -27,7 +27,7 @@
 
 ### Depends on
 
-- [dfns-layout](../../ Materials/Templates/dfns-layout)
+- [dfns-layout](../../Materials/Templates/dfns-layout)
 - [dfns-typography](../../Elements/Typography/dfns-typography)
 - [dfns-input-field](../../Elements/Forms/InputField/dfns-input-field)
 - [dfns-alert](../../Elements/Alerts/dfns-alert)

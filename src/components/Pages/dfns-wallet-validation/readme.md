@@ -27,9 +27,9 @@
 
 ### Depends on
 
-- [dfns-layout](../../ Materials/Templates/dfns-layout)
+- [dfns-layout](../../Materials/Templates/dfns-layout)
 - [dfns-typography](../../Elements/Typography/dfns-typography)
-- [dfns-loader](../../Elements/Loader/dfns-loader)
+- [dfns-loader](../../Elements/LoaderDfns/dfns-loader)
 - [dfns-button](../../Elements/Buttons/dfns-button)
 
 ### Graph
