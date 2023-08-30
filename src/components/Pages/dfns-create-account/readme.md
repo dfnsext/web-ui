@@ -40,6 +40,7 @@ graph TD;
   dfns-create-account --> dfns-stepper
   dfns-create-account --> dfns-button
   dfns-button --> dfns-typography
+  dfns-button --> dfns-loader
   dfns-main --> dfns-create-account
   style dfns-create-account fill:#f9f,stroke:#333,stroke-width:4px
 ```

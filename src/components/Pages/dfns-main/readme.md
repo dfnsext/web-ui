@@ -40,12 +40,14 @@ graph TD;
   dfns-create-account --> dfns-stepper
   dfns-create-account --> dfns-button
   dfns-button --> dfns-typography
+  dfns-button --> dfns-loader
   dfns-validate-wallet --> dfns-layout
   dfns-validate-wallet --> dfns-typography
   dfns-validate-wallet --> dfns-stepper
   dfns-validate-wallet --> dfns-button
   dfns-wallet-validation --> dfns-layout
   dfns-wallet-validation --> dfns-typography
+  dfns-wallet-validation --> dfns-loader
   dfns-wallet-validation --> dfns-button
   dfns-sign-message --> dfns-layout
   dfns-sign-message --> dfns-typography

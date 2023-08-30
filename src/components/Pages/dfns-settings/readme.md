@@ -44,6 +44,7 @@ graph TD;
   dfns-settings --> toggle-switch
   dfns-settings --> dfns-alert
   dfns-button --> dfns-typography
+  dfns-button --> dfns-loader
   drop-down-container --> drop-down
   drop-down-container --> dfns-typography
   dfns-alert --> dfns-typography

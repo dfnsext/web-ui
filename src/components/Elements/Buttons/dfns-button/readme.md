@@ -45,11 +45,13 @@
 ### Depends on
 
 - [dfns-typography](../../Typography/dfns-typography)
+- [dfns-loader](../../Loader/dfns-loader)
 
 ### Graph
 ```mermaid
 graph TD;
   dfns-button --> dfns-typography
+  dfns-button --> dfns-loader
   dfns-create-account --> dfns-button
   dfns-create-passkey --> dfns-button
   dfns-settings --> dfns-button

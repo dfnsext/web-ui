@@ -25,6 +25,7 @@ export class DfnsWalletValidation {
 	async componentWillLoad() {
 		this.themeMode.switch(EThemeModeType.ACCOR);
 		dfnsState.wallet = await waitForWalletActive(dfnsState.dfnsHost, dfnsState.appId, dfnsState.dfnsUserToken, dfnsState.wallet.id);
+		this.isLoading = false;
 	}
 
 

@@ -33,6 +33,7 @@ graph TD;
   dfns-wallet-overview --> dfns-button
   dfns-wallet-overview --> dfns-alert
   dfns-button --> dfns-typography
+  dfns-button --> dfns-loader
   dfns-alert --> dfns-typography
   dfns-main --> dfns-wallet-overview
   style dfns-wallet-overview fill:#f9f,stroke:#333,stroke-width:4px

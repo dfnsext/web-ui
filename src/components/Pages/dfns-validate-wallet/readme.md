@@ -33,6 +33,7 @@ graph TD;
   dfns-validate-wallet --> dfns-stepper
   dfns-validate-wallet --> dfns-button
   dfns-button --> dfns-typography
+  dfns-button --> dfns-loader
   dfns-main --> dfns-validate-wallet
   style dfns-validate-wallet fill:#f9f,stroke:#333,stroke-width:4px
 ```

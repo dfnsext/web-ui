@@ -29,6 +29,7 @@
 
 - [dfns-layout](../../ Materials/Templates/dfns-layout)
 - [dfns-typography](../../Elements/Typography/dfns-typography)
+- [dfns-loader](../../Elements/Loader/dfns-loader)
 - [dfns-button](../../Elements/Buttons/dfns-button)
 
 ### Graph
@@ -36,8 +37,10 @@
 graph TD;
   dfns-wallet-validation --> dfns-layout
   dfns-wallet-validation --> dfns-typography
+  dfns-wallet-validation --> dfns-loader
   dfns-wallet-validation --> dfns-button
   dfns-button --> dfns-typography
+  dfns-button --> dfns-loader
   dfns-main --> dfns-wallet-validation
   style dfns-wallet-validation fill:#f9f,stroke:#333,stroke-width:4px
 ```

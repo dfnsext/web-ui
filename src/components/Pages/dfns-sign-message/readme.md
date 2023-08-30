@@ -46,6 +46,7 @@ graph TD;
   dfns-sign-message --> dfns-button
   dfns-sign-message --> dfns-alert
   dfns-button --> dfns-typography
+  dfns-button --> dfns-loader
   dfns-alert --> dfns-typography
   dfns-main --> dfns-sign-message
   style dfns-sign-message fill:#f9f,stroke:#333,stroke-width:4px

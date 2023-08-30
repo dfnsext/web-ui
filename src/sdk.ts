@@ -55,9 +55,9 @@ export enum ESocialLogin {
 
 export class DfnsSDK {
 	public static instance: DfnsSDK | null = null;
-	
+
 	public dfnsContainer: HTMLElement | null = null;
-	private removeOnLocalStorageChanged: () => void = () => {};
+	private removeOnLocalStorageChanged: () => void = () => { };
 	private options: Options;
 
 	constructor(sdkOptions: DfnsSDKOptions, reset?: boolean) {
@@ -102,9 +102,11 @@ export class DfnsSDK {
 	public async connectWithOAuthToken(oauthToken: string): Promise<any> {
 		let wallet: Wallet | null = null;
 		try {
-			LocalStorageService.getInstance().items[OAUTH_ACCESS_TOKEN].set(oauthToken);
+			dfnsState.oauthAccessToken = oauthToken;
+			//LocalStorageService.getInstance().items[OAUTH_ACCESS_TOKEN].set(oauthToken);
 			const response = await loginWithOAuth(this.options.apiUrl, this.options.appId, this.options.rpId, oauthToken);
-			LocalStorageService.getInstance().items[DFNS_END_USER_TOKEN].set(response.userAuthToken);
+			dfnsState.dfnsUserToken = response.userAuthToken;
+			//LocalStorageService.getInstance().items[DFNS_END_USER_TOKEN].set(response.userAuthToken);
 			const dfnsDelegated = getDfnsDelegatedClient(this.options.dfnsHost, this.options.appId, response.userAuthToken);
 			const wallets = await dfnsDelegated.wallets.listWallets({});
 			wallet = wallets.items[0];
@@ -127,14 +129,15 @@ export class DfnsSDK {
 			}
 		}
 		this.dfnsContainer.style.display = "none";
-		LocalStorageService.getInstance().items[DFNS_ACTIVE_WALLET].set(wallet);
+		dfnsState.wallet = wallet;
+		//LocalStorageService.getInstance().items[DFNS_ACTIVE_WALLET].set(wallet);
 		return wallet;
 	}
 
 	public async isConnected() {
-		const dfnsUserToken = LocalStorageService.getInstance().items[DFNS_END_USER_TOKEN].get();
-		let wallet = LocalStorageService.getInstance().items[DFNS_ACTIVE_WALLET].get();
-		const oauthToken = LocalStorageService.getInstance().items[OAUTH_ACCESS_TOKEN].get();
+		const dfnsUserToken = dfnsState.dfnsUserToken //LocalStorageService.getInstance().items[DFNS_END_USER_TOKEN].get();
+		let wallet = dfnsState.wallet; //LocalStorageService.getInstance().items[DFNS_ACTIVE_WALLET].get();
+		const oauthToken = dfnsState.oauthAccessToken //LocalStorageService.getInstance().items[OAUTH_ACCESS_TOKEN].get();
 
 		if (!dfnsUserToken || !oauthToken || !wallet) {
 			return false;
@@ -153,8 +156,8 @@ export class DfnsSDK {
 	}
 
 	public async autoConnect() {
-		let wallet = LocalStorageService.getInstance().items[DFNS_ACTIVE_WALLET].get();
-		const oauthToken = LocalStorageService.getInstance().items[OAUTH_ACCESS_TOKEN].get();
+		let wallet = dfnsState.wallet; //LocalStorageService.getInstance().items[DFNS_ACTIVE_WALLET].get();
+		const oauthToken = dfnsState.oauthAccessToken;//LocalStorageService.getInstance().items[OAUTH_ACCESS_TOKEN].get();
 		const now = new Date();
 
 		const isConnected = await this.isConnected();
@@ -173,7 +176,7 @@ export class DfnsSDK {
 		if (oauthIssuedAt < now && now < oauthExpiresAt) {
 			try {
 				const response = await loginWithOAuth(this.options.apiUrl, this.options.appId, this.options.rpId, oauthToken);
-				LocalStorageService.getInstance().items[DFNS_END_USER_TOKEN].set(response.userAuthToken);
+				dfnsState.dfnsUserToken = response.userAuthToken; //LocalStorageService.getInstance().items[DFNS_END_USER_TOKEN].set(response.userAuthToken);
 				if (!wallet) {
 					await this.validateWallet();
 					if (this.options.shouldShowWalletValidation) {
@@ -195,7 +198,8 @@ export class DfnsSDK {
 		const response = await this.waitForEvent<RegisterCompleteResponse>(this.dfnsContainer, "passkeyCreated");
 		setRoute(null);
 		if (!response) throw new Error("User cancelled connection");
-		LocalStorageService.getInstance().items[DFNS_END_USER_TOKEN].set(response.userAuthToken);
+		dfnsState.dfnsUserToken = response.userAuthToken;
+		//LocalStorageService.getInstance().items[DFNS_END_USER_TOKEN].set(response.userAuthToken);
 		return response;
 	}
 
@@ -204,7 +208,8 @@ export class DfnsSDK {
 		const response = await this.waitForEvent<Wallet>(this.dfnsContainer, "walletValidated");
 		setRoute(null);
 		if (!response) throw new Error("User cancelled connection");
-		LocalStorageService.getInstance().items[DFNS_ACTIVE_WALLET].set(response);
+		dfnsState.wallet = response;
+		//LocalStorageService.getInstance().items[DFNS_ACTIVE_WALLET].set(response);
 
 		return response;
 	}
@@ -246,9 +251,12 @@ export class DfnsSDK {
 	}
 
 	public disconnect() {
-		LocalStorageService.getInstance().items[DFNS_END_USER_TOKEN].delete();
-		LocalStorageService.getInstance().items[DFNS_ACTIVE_WALLET].delete();
-		LocalStorageService.getInstance().items[OAUTH_ACCESS_TOKEN].delete();
+		dfnsState.dfnsUserToken = null;
+		dfnsState.wallet = null;
+		dfnsState.oauthAccessToken = null;
+		/* 	LocalStorageService.getInstance().items[DFNS_END_USER_TOKEN].delete();
+			LocalStorageService.getInstance().items[DFNS_ACTIVE_WALLET].delete();
+			LocalStorageService.getInstance().items[OAUTH_ACCESS_TOKEN].delete(); */
 	}
 
 	protected waitForEvent<T>(element: HTMLElement, eventName: string): Promise<T> {

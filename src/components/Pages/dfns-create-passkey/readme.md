@@ -44,6 +44,7 @@ graph TD;
   dfns-input-field --> dfns-typography
   dfns-alert --> dfns-typography
   dfns-button --> dfns-typography
+  dfns-button --> dfns-loader
   dfns-main --> dfns-create-passkey
   style dfns-create-passkey fill:#f9f,stroke:#333,stroke-width:4px
 ```
