@@ -12,7 +12,6 @@ import { ITypo, ITypoColor } from "../../../utils/enums/typography-enums";
 import { ThemeMode } from "../../../utils/theme-modes";
 import { sign } from "../../../utils/webauthn";
 
-
 @Component({
 	tag: "dfns-settings",
 	styleUrl: "dfns-settings.scss",
@@ -22,7 +21,6 @@ import { sign } from "../../../utils/webauthn";
 export class DfnsSettings {
 	private themeMode = ThemeMode.getInstance();
 
-	
 	@Event() action: EventEmitter<SettingsAction>;
 	@Prop() confirmationImgSrc = "https://storage.googleapis.com/dfns-frame-stg/assets/icons/confirmation.svg";
 
@@ -120,91 +118,91 @@ export class DfnsSettings {
 		);
 		return (
 			<dfns-layout closeBtn onClickCloseBtn={this.closeBtn.bind(this)}>
-					<div slot="topSection">
-						<dfns-typography typo={ITypo.H5_TITLE} color={ITypoColor.PRIMARY} class="custom-class">
-							{langState.values.header.settings}
+				<div slot="topSection">
+					<dfns-typography typo={ITypo.H5_TITLE} color={ITypoColor.PRIMARY} class="custom-class">
+						{langState.values.header.settings}
+					</dfns-typography>
+				</div>
+				<div slot="contentSection">
+					<div class="first-section">
+						<dfns-typography typo={ITypo.TEXTE_SM_SEMIBOLD} color={ITypoColor.PRIMARY}>
+							{dfnsState.credentials.length} {langState.values.pages.settings.passkeys}
 						</dfns-typography>
+						<dfns-button
+							content={langState.values.pages.settings.button_create_passkey}
+							variant={EButtonVariant.SECONDARY}
+							sizing={EButtonSize.SMALL}
+							iconposition="left"
+							icon={iconAdd}
+							onClick={() => this.action.emit(SettingsAction.CREATE_PASSKEY)}
+						/>
 					</div>
-					<div slot="contentSection">
-						<div class="first-section">
-							<dfns-typography typo={ITypo.TEXTE_SM_SEMIBOLD} color={ITypoColor.PRIMARY}>
-								{dfnsState.credentials.length} {langState.values.pages.settings.passkeys}
-							</dfns-typography>
-							<dfns-button
-								content={langState.values.pages.settings.button_create_passkey}
-								variant={EButtonVariant.SECONDARY}
-								sizing={EButtonSize.SMALL}
-								iconposition="left"
-								icon={iconAdd}
-								onClick={() => this.action.emit(SettingsAction.CREATE_PASSKEY)}
-							/>
-						</div>
-						<div class="credentials-container">
-							<drop-down-container
-								dropdownContent={dfnsState.credentials.map((passkey) => {
-									return {
-										children:
-											dfnsState.credentials.length === 1 ? (
-												key
-											) : (
-												<toggle-switch
-													checked={passkey.isActive}
-													onClick={() => dfnsState.credentials.length > 1 && this.onClickToggle(passkey)}
-												/>
-											),
-										title: passkey.name,
-										content: (
-											<div class="content-dropdown">
-												{/* CSS class <content-dropdown> applied within the children  */}
-												<div class="flexbox-row">
-													<div class="flexbox-column">
-														<dfns-typography typo={ITypo.TEXTE_SM_SEMIBOLD} color={ITypoColor.SECONDARY}>
-															{langState.values.pages.settings.type_credentials}
-														</dfns-typography>
-													</div>
-													<div class="flexbox-column-2">
-														<dfns-typography typo={ITypo.TEXTE_SM_REGULAR} color={ITypoColor.SECONDARY}>
-															{passkey.kind}
-														</dfns-typography>
-													</div>
+					<div class="credentials-container">
+						<drop-down-container
+							dropdownContent={dfnsState.credentials.map((passkey) => {
+								return {
+									children:
+										dfnsState.credentials.length === 1 ? (
+											key
+										) : (
+											<toggle-switch
+												checked={passkey.isActive}
+												onClick={() => dfnsState.credentials.length > 1 && this.onClickToggle(passkey)}
+											/>
+										),
+									title: passkey.name,
+									content: (
+										<div class="content-dropdown">
+											{/* CSS class <content-dropdown> applied within the children  */}
+											<div class="flexbox-row">
+												<div class="flexbox-column">
+													<dfns-typography typo={ITypo.TEXTE_SM_SEMIBOLD} color={ITypoColor.SECONDARY}>
+														{langState.values.pages.settings.type_credentials}
+													</dfns-typography>
 												</div>
-												<div class="flexbox-row">
-													<div class="flexbox-column">
-														<dfns-typography typo={ITypo.TEXTE_SM_SEMIBOLD} color={ITypoColor.SECONDARY}>
-															{langState.values.pages.settings.credentials_id}
-														</dfns-typography>
-													</div>
-													<div class="flexbox-column-2">
-														<dfns-typography typo={ITypo.TEXTE_SM_REGULAR} color={ITypoColor.SECONDARY}>
-															{passkey.credentialUuid}
-														</dfns-typography>
-													</div>
+												<div class="flexbox-column-2">
+													<dfns-typography typo={ITypo.TEXTE_SM_REGULAR} color={ITypoColor.SECONDARY}>
+														{passkey.kind}
+													</dfns-typography>
 												</div>
-												<div class="flexbox-row">
-													<div class="flexbox-column">
-														<dfns-typography typo={ITypo.TEXTE_SM_SEMIBOLD} color={ITypoColor.SECONDARY}>
-															{langState.values.pages.settings.origin}
-														</dfns-typography>
-													</div>
-													<div class="flexbox-column-2">
-														<dfns-typography typo={ITypo.TEXTE_SM_REGULAR} color={ITypoColor.SECONDARY}>
-															{passkey.origin}
-														</dfns-typography>
-													</div>
+											</div>
+											<div class="flexbox-row">
+												<div class="flexbox-column">
+													<dfns-typography typo={ITypo.TEXTE_SM_SEMIBOLD} color={ITypoColor.SECONDARY}>
+														{langState.values.pages.settings.credentials_id}
+													</dfns-typography>
 												</div>
-												<div class="flexbox-row">
-													<div class="flexbox-column">
-														<dfns-typography typo={ITypo.TEXTE_SM_SEMIBOLD} color={ITypoColor.SECONDARY}>
-															{langState.values.pages.settings.public_key}
-														</dfns-typography>
-													</div>
-													<div class="flexbox-column-2">
-														<dfns-typography typo={ITypo.TEXTE_SM_REGULAR} color={ITypoColor.SECONDARY}>
-															{passkey.publicKey}
-														</dfns-typography>
-													</div>
+												<div class="flexbox-column-2">
+													<dfns-typography typo={ITypo.TEXTE_SM_REGULAR} color={ITypoColor.SECONDARY}>
+														{passkey.credentialUuid}
+													</dfns-typography>
 												</div>
-												{/* <div class="flexbox-row">
+											</div>
+											<div class="flexbox-row">
+												<div class="flexbox-column">
+													<dfns-typography typo={ITypo.TEXTE_SM_SEMIBOLD} color={ITypoColor.SECONDARY}>
+														{langState.values.pages.settings.origin}
+													</dfns-typography>
+												</div>
+												<div class="flexbox-column-2">
+													<dfns-typography typo={ITypo.TEXTE_SM_REGULAR} color={ITypoColor.SECONDARY}>
+														{passkey.origin}
+													</dfns-typography>
+												</div>
+											</div>
+											<div class="flexbox-row">
+												<div class="flexbox-column">
+													<dfns-typography typo={ITypo.TEXTE_SM_SEMIBOLD} color={ITypoColor.SECONDARY}>
+														{langState.values.pages.settings.public_key}
+													</dfns-typography>
+												</div>
+												<div class="flexbox-column-2">
+													<dfns-typography typo={ITypo.TEXTE_SM_REGULAR} color={ITypoColor.SECONDARY}>
+														{passkey.publicKey}
+													</dfns-typography>
+												</div>
+											</div>
+											{/* <div class="flexbox-row">
 												<div class="flexbox-column">
 													<dfns-button
 														content={langState.values.pages.settings.button_delete}
@@ -216,26 +214,26 @@ export class DfnsSettings {
 													/>
 												</div>
 											</div> */}
-											</div>
-										),
-									};
-								})}></drop-down-container>
-						</div>
-						<dfns-alert variant={EAlertVariant.INFO}>
-							<div slot="content">{langState.values.pages.settings.content_alert}</div>
-						</dfns-alert>
+										</div>
+									),
+								};
+							})}></drop-down-container>
 					</div>
-					<div slot="bottomSection">
-						<dfns-button
-							content={langState.values.buttons.back}
-							variant={EButtonVariant.SECONDARY}
-							sizing={EButtonSize.MEDIUM}
-							fullwidth
-							iconposition="left"
-							onClick={() => this.action.emit(SettingsAction.BACK)}
-						/>
-					</div>
-				</dfns-layout>
+					<dfns-alert variant={EAlertVariant.INFO}>
+						<div slot="content">{langState.values.pages.settings.content_alert}</div>
+					</dfns-alert>
+				</div>
+				<div slot="bottomSection">
+					<dfns-button
+						content={langState.values.buttons.back}
+						variant={EButtonVariant.SECONDARY}
+						sizing={EButtonSize.MEDIUM}
+						fullwidth
+						iconposition="left"
+						onClick={() => this.action.emit(SettingsAction.BACK)}
+					/>
+				</div>
+			</dfns-layout>
 		);
 	}
 }

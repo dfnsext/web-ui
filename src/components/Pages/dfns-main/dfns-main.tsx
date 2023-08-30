@@ -9,7 +9,7 @@ import routeState from "../../../stores/RouteStore";
 export class DfnsMain {
 	@Prop() userCreationAuthenticatorAttachment: AuthenticatorAttachment;
 	@Prop() messageToSign: string;
-	
+
 	render() {
 		return (
 			<div class="root" data-visible={routeState.route ? "visible" : "hidden"}>

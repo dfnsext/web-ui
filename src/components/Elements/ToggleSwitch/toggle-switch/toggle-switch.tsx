@@ -8,7 +8,6 @@ import { Component, Host, Prop, State, Watch, h } from "@stencil/core";
 export class ToggleSwitch {
 	@Prop() label: string;
 	@State() active: boolean = false;
-
 	@Prop() checked: boolean = false;
 	@State() className: string = "";
 

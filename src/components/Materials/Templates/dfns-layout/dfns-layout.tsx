@@ -1,6 +1,5 @@
 import { Component, h, Prop } from "@stencil/core";
 
-
 @Component({
 	tag: "dfns-layout",
 	styleUrl: "dfns-layout.scss",
@@ -9,7 +8,7 @@ import { Component, h, Prop } from "@stencil/core";
 export class DfnsLayout {
 	// Prop is used to pass data from one component to another
 	@Prop() closeBtn?: boolean;
-	@Prop() onClickCloseBtn: () => void
+	@Prop() onClickCloseBtn: () => void;
 	@Prop() crossIconSrc = "https://storage.googleapis.com/dfns-frame-stg/assets/icons/cross.svg";
 	@Prop() molitorLogoSrc = "https://storage.googleapis.com/dfns-frame-stg/assets/images/molitor.svg";
 	@Prop() bloomLogoSrc = "https://storage.googleapis.com/dfns-frame-stg/assets/images/bloom.svg";
@@ -30,7 +29,7 @@ export class DfnsLayout {
 					<slot name="contentSection" />
 				</div>
 				<div class="bottom-section">
-					<slot name="bottomSection"  />
+					<slot name="bottomSection" />
 				</div>
 				<div class="logos-section">
 					<img src={this.molitorLogoSrc} alt="Molitor logo" width={47} height={16} />

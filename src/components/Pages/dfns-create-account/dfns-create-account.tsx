@@ -9,7 +9,6 @@ import { RegisterCompleteResponse } from "../../../services/api/Register";
 import langState from "../../../stores/LanguageStore";
 import dfnsState from "../../../stores/DfnsStore";
 
-
 @Component({
 	tag: "dfns-create-account",
 	styleUrl: "dfns-create-account.scss",
@@ -17,7 +16,6 @@ import dfnsState from "../../../stores/DfnsStore";
 })
 export class DfnsCreateAccount {
 	private themeMode = ThemeMode.getInstance();
-
 
 	@Prop() authenticatorAttachment: AuthenticatorAttachment;
 
@@ -31,7 +29,12 @@ export class DfnsCreateAccount {
 	async createPasskey() {
 		try {
 			this.isLoading = true;
-			const response = await registerWithOAuth(dfnsState.apiUrl, dfnsState.appId, dfnsState.oauthAccessToken, this.authenticatorAttachment);
+			const response = await registerWithOAuth(
+				dfnsState.apiUrl,
+				dfnsState.appId,
+				dfnsState.oauthAccessToken,
+				this.authenticatorAttachment,
+			);
 			this.isLoading = false;
 			this.passkeyCreated.emit(response);
 			return response;

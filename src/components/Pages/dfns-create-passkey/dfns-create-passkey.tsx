@@ -20,7 +20,6 @@ import dfnsState from "../../../stores/DfnsStore";
 export class DfnsCreatePasskey {
 	private themeMode = ThemeMode.getInstance();
 
-	
 	@Prop({ mutable: true }) visible: string;
 	@State() isLoading: boolean = false;
 	@State() step = 1;
