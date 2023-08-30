@@ -1,11 +1,13 @@
 import { Wallet, WalletStatus } from "@dfns/sdk/codegen/datamodel/Wallets";
-import { Component, Event, EventEmitter, Prop, State, Watch, h } from "@stencil/core";
+import { Component, Event, EventEmitter, Prop, State, h } from "@stencil/core";
+import dfnsState from "../../../stores/DfnsStore";
+import langState from "../../../stores/LanguageStore";
 import { waitForWalletActive } from "../../../utils/dfns";
 import { EButtonSize, EButtonVariant } from "../../../utils/enums/buttons-enums";
 import { EThemeModeType } from "../../../utils/enums/themes-enums";
 import { ITypo, ITypoColor } from "../../../utils/enums/typography-enums";
 import { ThemeMode } from "../../../utils/theme-modes";
-import langState from "../../../services/store/language-store";
+
 
 @Component({
 	tag: "dfns-wallet-validation",
@@ -16,35 +18,18 @@ import langState from "../../../services/store/language-store";
 export class DfnsWalletValidation {
 	private themeMode = ThemeMode.getInstance();
 
-	@Prop() dfnsHost: string;
-	@Prop() walletId: string;
-	@Prop() appId: string;
-	@Prop() rpId: string;
-	@Prop() dfnsUserToken: string;
-	@Prop() visible: string;
-	@Event() walletValidated: EventEmitter<Wallet>;
-	@State() wallet: Wallet;
+	@Event() walletValidated: EventEmitter<Wallet>
 	@Prop() confirmationImgSrc = "https://storage.googleapis.com/dfns-frame-stg/assets/icons/confirmation.svg";
 	@State() isLoading = true;
 
 	async componentWillLoad() {
 		this.themeMode.switch(EThemeModeType.ACCOR);
-		if (this.visible) {
-			this.wallet = await waitForWalletActive(this.dfnsHost, this.appId, this.dfnsUserToken, this.walletId);
-		}
+		dfnsState.wallet = await waitForWalletActive(dfnsState.dfnsHost, dfnsState.appId, dfnsState.dfnsUserToken, dfnsState.wallet.id);
 	}
 
-	@Watch("visible")
-	async watchVisibleHandler() {
-		if (this.visible) {
-			this.isLoading = true;
-			this.wallet = await waitForWalletActive(this.dfnsHost, this.appId, this.dfnsUserToken, this.walletId);
-			this.isLoading = false;
-		}
-	}
 
 	async validateWallet() {
-		this.walletValidated.emit(this.wallet);
+		this.walletValidated.emit(dfnsState.wallet);
 	}
 
 	async closeBtn() {
@@ -53,8 +38,7 @@ export class DfnsWalletValidation {
 
 	render() {
 		return (
-			<div class={this.visible ? "container visible" : "container"}>
-				<dfns-layout closeBtn onClickCloseBtn={this.closeBtn.bind(this)}>
+			<dfns-layout closeBtn onClickCloseBtn={this.closeBtn.bind(this)}>
 					<div slot="topSection">
 						<dfns-typography typo={ITypo.H5_TITLE} color={ITypoColor.PRIMARY} class="custom-class">
 							{langState.values.header.create_wallet}
@@ -85,7 +69,7 @@ export class DfnsWalletValidation {
 									<dfns-typography typo={ITypo.TEXTE_SM_REGULAR} color={ITypoColor.SECONDARY}>
 										{langState.values.pages.validation_success.wallet_address}
 									</dfns-typography>
-									<dfns-typography typo={ITypo.TEXTE_SM_MEDIUM}>{this.wallet && this.wallet.address}</dfns-typography>
+									<dfns-typography typo={ITypo.TEXTE_SM_MEDIUM}>{dfnsState.wallet && dfnsState.wallet.address}</dfns-typography>
 								</div>
 							)}
 						</div>
@@ -95,14 +79,13 @@ export class DfnsWalletValidation {
 							content={langState.values.buttons.done}
 							variant={EButtonVariant.PRIMARY}
 							sizing={EButtonSize.MEDIUM}
-							disabled={this.wallet?.status !== WalletStatus.Active}
+							disabled={dfnsState.wallet?.status !== WalletStatus.Active}
 							fullwidth
 							iconposition="left"
 							onClick={this.validateWallet.bind(this)}
 						/>
 					</div>
 				</dfns-layout>
-			</div>
 		);
 	}
 }

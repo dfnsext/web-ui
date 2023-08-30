@@ -9,13 +9,7 @@
 
 | Property             | Attribute              | Description | Type     | Default                                                                         |
 | -------------------- | ---------------------- | ----------- | -------- | ------------------------------------------------------------------------------- |
-| `appId`              | `app-id`               |             | `string` | `undefined`                                                                     |
 | `confirmationImgSrc` | `confirmation-img-src` |             | `string` | `"https://storage.googleapis.com/dfns-frame-stg/assets/icons/confirmation.svg"` |
-| `dfnsHost`           | `dfns-host`            |             | `string` | `undefined`                                                                     |
-| `dfnsUserToken`      | `dfns-user-token`      |             | `string` | `undefined`                                                                     |
-| `rpId`               | `rp-id`                |             | `string` | `undefined`                                                                     |
-| `visible`            | `visible`              |             | `string` | `undefined`                                                                     |
-| `walletId`           | `wallet-id`            |             | `string` | `undefined`                                                                     |
 
 
 ## Events
@@ -26,6 +20,10 @@
 
 
 ## Dependencies
+
+### Used by
+
+ - [dfns-main](../dfns-main)
 
 ### Depends on
 
@@ -46,10 +44,10 @@ graph TD;
   dfns-settings --> toggle-switch
   dfns-settings --> dfns-alert
   dfns-button --> dfns-typography
-  dfns-button --> dfns-loader
   drop-down-container --> drop-down
   drop-down-container --> dfns-typography
   dfns-alert --> dfns-typography
+  dfns-main --> dfns-settings
   style dfns-settings fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

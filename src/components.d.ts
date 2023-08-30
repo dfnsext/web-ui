@@ -45,19 +45,10 @@ export namespace Components {
         "variant": EButtonVariant;
     }
     interface DfnsCreateAccount {
-        "apiUrl": string;
-        "appId": string;
         "authenticatorAttachment": AuthenticatorAttachment;
-        "oauthAccessToken": string;
-        "visible": string;
     }
     interface DfnsCreatePasskey {
-        "appId": string;
-        "dfnsHost": string;
-        "dfnsUserToken": string;
-        "rpId": string;
         "visible": string;
-        "walletId": string;
     }
     interface DfnsInputField {
         "disableErrors": boolean;
@@ -79,21 +70,12 @@ export namespace Components {
         "molitorLogoSrc": string;
         "onClickCloseBtn": () => void;
     }
-    interface DfnsLoader {
-        "LoaderIconSrc": string;
-        "classCss"?: string;
-    }
     interface DfnsMain {
-        "visible": string;
+        "messageToSign": string;
+        "userCreationAuthenticatorAttachment": AuthenticatorAttachment;
     }
     interface DfnsSettings {
-        "appId": string;
         "confirmationImgSrc": string;
-        "dfnsHost": string;
-        "dfnsUserToken": string;
-        "rpId": string;
-        "visible": string;
-        "walletId": string;
     }
     interface DfnsSignMessage {
         "appId": string;
@@ -117,29 +99,11 @@ export namespace Components {
         "typo": ITypo;
     }
     interface DfnsValidateWallet {
-        "apiUrl": string;
-        "appId": string;
-        "dfnsHost": string;
-        "dfnsUserToken": string;
-        "rpId": string;
-        "visible": string;
     }
     interface DfnsWalletOverview {
-        "appId": string;
-        "dfnsHost": string;
-        "dfnsUserToken": string;
-        "rpId": string;
-        "visible": string;
-        "walletAddress": string;
     }
     interface DfnsWalletValidation {
-        "appId": string;
         "confirmationImgSrc": string;
-        "dfnsHost": string;
-        "dfnsUserToken": string;
-        "rpId": string;
-        "visible": string;
-        "walletId": string;
     }
     interface DropDown {
         "closeAction"?: (close: () => void) => void;
@@ -226,12 +190,6 @@ declare global {
         prototype: HTMLDfnsLayoutElement;
         new (): HTMLDfnsLayoutElement;
     };
-    interface HTMLDfnsLoaderElement extends Components.DfnsLoader, HTMLStencilElement {
-    }
-    var HTMLDfnsLoaderElement: {
-        prototype: HTMLDfnsLoaderElement;
-        new (): HTMLDfnsLoaderElement;
-    };
     interface HTMLDfnsMainElement extends Components.DfnsMain, HTMLStencilElement {
     }
     var HTMLDfnsMainElement: {
@@ -305,7 +263,6 @@ declare global {
         "dfns-create-passkey": HTMLDfnsCreatePasskeyElement;
         "dfns-input-field": HTMLDfnsInputFieldElement;
         "dfns-layout": HTMLDfnsLayoutElement;
-        "dfns-loader": HTMLDfnsLoaderElement;
         "dfns-main": HTMLDfnsMainElement;
         "dfns-settings": HTMLDfnsSettingsElement;
         "dfns-sign-message": HTMLDfnsSignMessageElement;
@@ -344,21 +301,12 @@ declare namespace LocalJSX {
         "variant"?: EButtonVariant;
     }
     interface DfnsCreateAccount {
-        "apiUrl"?: string;
-        "appId"?: string;
         "authenticatorAttachment"?: AuthenticatorAttachment;
-        "oauthAccessToken"?: string;
         "onPasskeyCreated"?: (event: DfnsCreateAccountCustomEvent<RegisterCompleteResponse>) => void;
-        "visible"?: string;
     }
     interface DfnsCreatePasskey {
-        "appId"?: string;
-        "dfnsHost"?: string;
-        "dfnsUserToken"?: string;
         "onAction"?: (event: DfnsCreatePasskeyCustomEvent<CreatePasskeyAction>) => void;
-        "rpId"?: string;
         "visible"?: string;
-        "walletId"?: string;
     }
     interface DfnsInputField {
         "disableErrors"?: boolean;
@@ -381,22 +329,13 @@ declare namespace LocalJSX {
         "molitorLogoSrc"?: string;
         "onClickCloseBtn"?: () => void;
     }
-    interface DfnsLoader {
-        "LoaderIconSrc"?: string;
-        "classCss"?: string;
-    }
     interface DfnsMain {
-        "visible"?: string;
+        "messageToSign"?: string;
+        "userCreationAuthenticatorAttachment"?: AuthenticatorAttachment;
     }
     interface DfnsSettings {
-        "appId"?: string;
         "confirmationImgSrc"?: string;
-        "dfnsHost"?: string;
-        "dfnsUserToken"?: string;
         "onAction"?: (event: DfnsSettingsCustomEvent<SettingsAction>) => void;
-        "rpId"?: string;
-        "visible"?: string;
-        "walletId"?: string;
     }
     interface DfnsSignMessage {
         "appId"?: string;
@@ -421,32 +360,14 @@ declare namespace LocalJSX {
         "typo"?: ITypo;
     }
     interface DfnsValidateWallet {
-        "apiUrl"?: string;
-        "appId"?: string;
-        "dfnsHost"?: string;
-        "dfnsUserToken"?: string;
         "onWalletValidated"?: (event: DfnsValidateWalletCustomEvent<Wallet>) => void;
-        "rpId"?: string;
-        "visible"?: string;
     }
     interface DfnsWalletOverview {
-        "appId"?: string;
-        "dfnsHost"?: string;
-        "dfnsUserToken"?: string;
         "onAction"?: (event: DfnsWalletOverviewCustomEvent<WalletOverviewAction>) => void;
-        "rpId"?: string;
-        "visible"?: string;
-        "walletAddress"?: string;
     }
     interface DfnsWalletValidation {
-        "appId"?: string;
         "confirmationImgSrc"?: string;
-        "dfnsHost"?: string;
-        "dfnsUserToken"?: string;
         "onWalletValidated"?: (event: DfnsWalletValidationCustomEvent<Wallet>) => void;
-        "rpId"?: string;
-        "visible"?: string;
-        "walletId"?: string;
     }
     interface DropDown {
         "closeAction"?: (close: () => void) => void;
@@ -466,7 +387,6 @@ declare namespace LocalJSX {
         "dfns-create-passkey": DfnsCreatePasskey;
         "dfns-input-field": DfnsInputField;
         "dfns-layout": DfnsLayout;
-        "dfns-loader": DfnsLoader;
         "dfns-main": DfnsMain;
         "dfns-settings": DfnsSettings;
         "dfns-sign-message": DfnsSignMessage;
@@ -490,7 +410,6 @@ declare module "@stencil/core" {
             "dfns-create-passkey": LocalJSX.DfnsCreatePasskey & JSXBase.HTMLAttributes<HTMLDfnsCreatePasskeyElement>;
             "dfns-input-field": LocalJSX.DfnsInputField & JSXBase.HTMLAttributes<HTMLDfnsInputFieldElement>;
             "dfns-layout": LocalJSX.DfnsLayout & JSXBase.HTMLAttributes<HTMLDfnsLayoutElement>;
-            "dfns-loader": LocalJSX.DfnsLoader & JSXBase.HTMLAttributes<HTMLDfnsLoaderElement>;
             "dfns-main": LocalJSX.DfnsMain & JSXBase.HTMLAttributes<HTMLDfnsMainElement>;
             "dfns-settings": LocalJSX.DfnsSettings & JSXBase.HTMLAttributes<HTMLDfnsSettingsElement>;
             "dfns-sign-message": LocalJSX.DfnsSignMessage & JSXBase.HTMLAttributes<HTMLDfnsSignMessageElement>;

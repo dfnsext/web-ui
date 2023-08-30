@@ -9,11 +9,7 @@
 
 | Property                  | Attribute                  | Description | Type                             | Default     |
 | ------------------------- | -------------------------- | ----------- | -------------------------------- | ----------- |
-| `apiUrl`                  | `api-url`                  |             | `string`                         | `undefined` |
-| `appId`                   | `app-id`                   |             | `string`                         | `undefined` |
 | `authenticatorAttachment` | `authenticator-attachment` |             | `"cross-platform" \| "platform"` | `undefined` |
-| `oauthAccessToken`        | `oauth-access-token`       |             | `string`                         | `undefined` |
-| `visible`                 | `visible`                  |             | `string`                         | `undefined` |
 
 
 ## Events
@@ -24,6 +20,10 @@
 
 
 ## Dependencies
+
+### Used by
+
+ - [dfns-main](../dfns-main)
 
 ### Depends on
 
@@ -40,7 +40,7 @@ graph TD;
   dfns-create-account --> dfns-stepper
   dfns-create-account --> dfns-button
   dfns-button --> dfns-typography
-  dfns-button --> dfns-loader
+  dfns-main --> dfns-create-account
   style dfns-create-account fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

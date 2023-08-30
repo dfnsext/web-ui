@@ -7,14 +7,9 @@
 
 ## Properties
 
-| Property        | Attribute         | Description | Type     | Default     |
-| --------------- | ----------------- | ----------- | -------- | ----------- |
-| `appId`         | `app-id`          |             | `string` | `undefined` |
-| `dfnsHost`      | `dfns-host`       |             | `string` | `undefined` |
-| `dfnsUserToken` | `dfns-user-token` |             | `string` | `undefined` |
-| `rpId`          | `rp-id`           |             | `string` | `undefined` |
-| `visible`       | `visible`         |             | `string` | `undefined` |
-| `walletId`      | `wallet-id`       |             | `string` | `undefined` |
+| Property  | Attribute | Description | Type     | Default     |
+| --------- | --------- | ----------- | -------- | ----------- |
+| `visible` | `visible` |             | `string` | `undefined` |
 
 
 ## Events
@@ -25,6 +20,10 @@
 
 
 ## Dependencies
+
+### Used by
+
+ - [dfns-main](../dfns-main)
 
 ### Depends on
 
@@ -45,7 +44,7 @@ graph TD;
   dfns-input-field --> dfns-typography
   dfns-alert --> dfns-typography
   dfns-button --> dfns-typography
-  dfns-button --> dfns-loader
+  dfns-main --> dfns-create-passkey
   style dfns-create-passkey fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

@@ -1,14 +1,15 @@
-import { Component, Event, EventEmitter, JSX, Prop, State, Watch, h } from "@stencil/core";
-import { ThemeMode } from "../../../utils/theme-modes";
-import { EThemeModeType } from "../../../utils/enums/themes-enums";
-import { ITypo, ITypoColor } from "../../../utils/enums/typography-enums";
-import { EButtonSize, EButtonVariant } from "../../../utils/enums/buttons-enums";
-import { EAlertVariant } from "../../../utils/enums/alerts-enums";
-import { CopyClipboard } from "../../Elements/CopyClipboard";
-import { CredentialInfo } from "@dfns/sdk/codegen/datamodel/Auth";
+import { Component, Event, EventEmitter, JSX, State, h } from "@stencil/core";
+import dfnsState from "../../../stores/DfnsStore";
+import langState from "../../../stores/LanguageStore";
 import { getDfnsDelegatedClient } from "../../../utils/dfns";
 import { WalletOverviewAction } from "../../../utils/enums/actions-enum";
-import langState from "../../../services/store/language-store";
+import { EAlertVariant } from "../../../utils/enums/alerts-enums";
+import { EButtonSize, EButtonVariant } from "../../../utils/enums/buttons-enums";
+import { EThemeModeType } from "../../../utils/enums/themes-enums";
+import { ITypo, ITypoColor } from "../../../utils/enums/typography-enums";
+import { ThemeMode } from "../../../utils/theme-modes";
+import { CopyClipboard } from "../../Elements/CopyClipboard";
+
 
 @Component({
 	tag: "dfns-wallet-overview",
@@ -18,37 +19,20 @@ import langState from "../../../services/store/language-store";
 export class DfnsWalletOverview {
 	private themeMode = ThemeMode.getInstance();
 
-	@Prop() dfnsHost: string;
-	@Prop() appId: string;
-	@Prop() rpId: string;
-	@Prop() dfnsUserToken: string;
-	@Prop() visible: string;
-	@Prop() walletAddress: string = "";
+	
 	@State() isLoading: boolean = false;
-	@State() passkeys: CredentialInfo[] = [];
+	
 	@Event() action: EventEmitter<WalletOverviewAction>;
 
 	async componentWillLoad() {
 		this.themeMode.switch(EThemeModeType.ACCOR);
-		if (this.dfnsUserToken) {
-			this.fetchPasskeys();
-		}
-	}
-
-	@Watch("dfnsUserToken")
-	watchUserTokenHandler() {
 		this.fetchPasskeys();
-	}
-
-	@Watch("visible")
-	watchVisibleHandler() {
-		this.visible && this.fetchPasskeys();
 	}
 
 	async fetchPasskeys() {
 		try {
-			const dfnsDelegated = getDfnsDelegatedClient(this.dfnsHost, this.appId, this.dfnsUserToken);
-			this.passkeys = (await dfnsDelegated.auth.listUserCredentials()).items;
+			const dfnsDelegated = getDfnsDelegatedClient(dfnsState.dfnsHost, dfnsState.appId, dfnsState.dfnsUserToken);
+			dfnsState.credentials = (await dfnsDelegated.auth.listUserCredentials()).items;
 		} catch (error) {
 			console.error(error);
 		}
@@ -115,10 +99,9 @@ export class DfnsWalletOverview {
 			</svg>
 		);
 
-		const formattedWalletAddress = this.formatWalletAddress(this.walletAddress, 5, 4); // Adjust startChars and endChars as needed
+		const formattedWalletAddress = this.formatWalletAddress(dfnsState.wallet.address, 5, 4); // Adjust startChars and endChars as needed
 		return (
-			<div class={this.visible ? "container visible" : "container"}>
-				<dfns-layout closeBtn onClickCloseBtn={this.closeBtn.bind(this)}>
+			<dfns-layout closeBtn onClickCloseBtn={this.closeBtn.bind(this)}>
 					<div slot="topSection">
 						<dfns-typography typo={ITypo.H5_TITLE} color={ITypoColor.PRIMARY} class="custom-class">
 							{langState.values.header.my_wallet}
@@ -127,7 +110,7 @@ export class DfnsWalletOverview {
 					<div slot="contentSection">
 						<div class="content-container">
 							<div class="title">
-								<CopyClipboard value={this.walletAddress} openToaster={true}>
+								<CopyClipboard value={dfnsState.wallet.address} openToaster={true}>
 									<dfns-button
 										content={formattedWalletAddress}
 										variant={EButtonVariant.SECONDARY}
@@ -138,7 +121,7 @@ export class DfnsWalletOverview {
 									/>
 								</CopyClipboard>
 							</div>
-							{this.passkeys.length < 2 && (
+							{dfnsState.credentials.length < 2 && (
 								<div class="content">
 									<dfns-alert variant={EAlertVariant.INFO} hasTitle>
 										<div slot="title">{langState.values.pages.wallet_overview.title_alert}</div>
@@ -181,7 +164,6 @@ export class DfnsWalletOverview {
 						/>
 					</div>
 				</dfns-layout>
-			</div>
 		);
 	}
 }
