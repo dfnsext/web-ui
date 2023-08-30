@@ -101,13 +101,16 @@ export class DfnsWalletOverview {
 		return (
 			<dfns-layout closeBtn onClickCloseBtn={this.closeBtn.bind(this)}>
 				<div slot="topSection">
-					<dfns-typography typo={ITypo.H5_TITLE} color={ITypoColor.PRIMARY} class="custom-class">
+					<dfns-typography typo={ITypo.H5_TITLE} color={ITypoColor.PRIMARY}>
 						{langState.values.header.my_wallet}
 					</dfns-typography>
 				</div>
 				<div slot="contentSection">
 					<div class="content-container">
 						<div class="title">
+							<dfns-typography typo={ITypo.TEXTE_SM_SEMIBOLD} color={ITypoColor.PRIMARY}>
+								{langState.values.pages.wallet_overview.wallet_address}
+							</dfns-typography>
 							<CopyClipboard value={dfnsState.wallet.address} openToaster={true}>
 								<dfns-button
 									content={formattedWalletAddress}
