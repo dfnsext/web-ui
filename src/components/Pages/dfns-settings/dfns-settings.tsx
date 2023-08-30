@@ -11,6 +11,7 @@ import { EThemeModeType } from "../../../utils/enums/themes-enums";
 import { ITypo, ITypoColor } from "../../../utils/enums/typography-enums";
 import { ThemeMode } from "../../../utils/theme-modes";
 import { sign } from "../../../utils/webauthn";
+import  { goBack } from "../../../stores/RouteStore";
 
 @Component({
 	tag: "dfns-settings",
@@ -79,6 +80,10 @@ export class DfnsSettings {
 
 	async closeBtn() {
 		this.action.emit(SettingsAction.CLOSE);
+	}
+
+	handleBackClick() {
+		goBack();
 	}
 
 	render() {
@@ -230,7 +235,8 @@ export class DfnsSettings {
 						sizing={EButtonSize.MEDIUM}
 						fullwidth
 						iconposition="left"
-						onClick={() => this.action.emit(SettingsAction.BACK)}
+						//onClick={() => this.action.emit(SettingsAction.BACK)}
+						onClick={() => this.handleBackClick()}
 					/>
 				</div>
 			</dfns-layout>

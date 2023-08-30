@@ -11,7 +11,7 @@ import { ThemeMode } from "../../../utils/theme-modes";
 import { create, sign } from "../../../utils/webauthn";
 import langState from "../../../stores/LanguageStore";
 import dfnsState from "../../../stores/DfnsStore";
-import  { goBack } from "../../../stores/RouteStore"; "../../../stores/RouteStore";
+import  { goBack } from "../../../stores/RouteStore";
 
 @Component({
 	tag: "dfns-create-passkey",
