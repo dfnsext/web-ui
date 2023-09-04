@@ -78,7 +78,8 @@
 			"origin": "Origine:",
 			"public_key": "Clé publique:",
 			"button_delete": "Supprimer",
-			"content_alert": "Générer une nouvelle clé d'accès pour accéder à votre wallet à partir d'un autre appareil."
+			"content_alert": "Générer une nouvelle clé d'accès pour accéder à votre wallet à partir d'un autre appareil.",
+			"button_recovery_kit":"Kit de récupération"
 		},
 		"profile": {
 			"title": "Profil",

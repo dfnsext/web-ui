@@ -77,7 +77,8 @@
 			"origin": "Origin:",
 			"public_key": "Public key ID:",
 			"button_delete": "Delete",
-			"content_alert": "Generate a new passkey to access your wallet from another device."
+			"content_alert": "Generate a new passkey to access your wallet from another device.",
+			"button_recovery_kit":"Set up recovery kit"
 		},
 		"profile": {
 			"title": "Profile",

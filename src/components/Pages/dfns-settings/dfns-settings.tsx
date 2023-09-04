@@ -108,21 +108,16 @@ export class DfnsSettings {
 				/>
 			</svg>
 		);
-		/* const iconError: JSX.Element = (
-			<svg
-				xmlns="http://www.w3.org/2000/svg"
-				fill="none"
-				viewBox="0 0 24 24"
-				stroke-width="1.5"
-				stroke="currentColor"
-				class="w-6 h-6">
+		const iconDelete: JSX.Element = (
+			<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
 				<path
-					stroke-linecap="round"
-					stroke-linejoin="round"
-					d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"
+					fill-rule="evenodd"
+					clip-rule="evenodd"
+					d="M8.75 1C7.23122 1 6 2.23122 6 3.75V4.1927C5.20472 4.26972 4.41602 4.36947 3.63458 4.49129C3.22531 4.5551 2.94525 4.9386 3.00906 5.34787C3.07286 5.75714 3.45637 6.0372 3.86564 5.97339L4.01355 5.95062L4.85504 16.4693C4.96938 17.8985 6.16254 19 7.59629 19H12.4035C13.8372 19 15.0304 17.8985 15.1447 16.4693L15.9862 5.95055L16.1346 5.97339C16.5438 6.0372 16.9274 5.75714 16.9912 5.34787C17.055 4.9386 16.7749 4.5551 16.3656 4.49129C15.5841 4.36946 14.7954 4.2697 14 4.19268V3.75C14 2.23122 12.7688 1 11.25 1H8.75ZM10.0001 4C10.8395 4 11.673 4.02523 12.5 4.07499V3.75C12.5 3.05964 11.9404 2.5 11.25 2.5H8.75C8.05964 2.5 7.5 3.05964 7.5 3.75V4.075C8.32707 4.02524 9.16068 4 10.0001 4ZM8.57948 7.72002C8.56292 7.30614 8.21398 6.98404 7.8001 7.0006C7.38622 7.01716 7.06412 7.36609 7.08068 7.77998L7.38069 15.28C7.39725 15.6939 7.74619 16.016 8.16007 15.9994C8.57395 15.9828 8.89605 15.6339 8.87949 15.22L8.57948 7.72002ZM12.9195 7.77998C12.936 7.36609 12.614 7.01715 12.2001 7.0006C11.7862 6.98404 11.4372 7.30614 11.4207 7.72002L11.1207 15.22C11.1041 15.6339 11.4262 15.9828 11.8401 15.9994C12.254 16.016 12.6029 15.6939 12.6195 15.28L12.9195 7.77998Z"
+					fill="#111827"
 				/>
 			</svg>
-		); */
+		);
 
 		const key = (
 			<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -134,6 +129,17 @@ export class DfnsSettings {
 				/>
 			</svg>
 		);
+		const arrowRight = (
+			<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+				<path
+					fill-rule="evenodd"
+					clip-rule="evenodd"
+					d="M5 10C5 9.58579 5.33579 9.25 5.75 9.25H12.3879L10.2302 7.29063C9.93159 7.00353 9.92228 6.52875 10.2094 6.23017C10.4965 5.93159 10.9713 5.92228 11.2698 6.20938L14.7698 9.45938C14.9169 9.60078 15 9.79599 15 10C15 10.204 14.9169 10.3992 14.7698 10.5406L11.2698 13.7906C10.9713 14.0777 10.4965 14.0684 10.2094 13.7698C9.92228 13.4713 9.93159 12.9965 10.2302 12.7094L12.3879 10.75H5.75C5.33579 10.75 5 10.4142 5 10Z"
+					fill="#4B5563"
+				/>
+			</svg>
+		);
+
 		return (
 			<div class={this.visible ? "container visible" : "container"}>
 				<dfns-layout closeBtn onClickCloseBtn={this.closeBtn.bind(this)}>
@@ -157,87 +163,44 @@ export class DfnsSettings {
 							/>
 						</div>
 						<div class="credentials-container">
-							<drop-down-container
-								dropdownContent={this.passkeys.map((passkey) => {
-									return {
-										children:
-											this.passkeys.length === 1 ? (
-												key
-											) : (
-												<toggle-switch
-													checked={passkey.isActive}
-													onClick={() => this.passkeys.length > 1 && this.onClickToggle(passkey)}
-												/>
-											),
-										title: passkey.name,
-										content: (
-											<div class="content-dropdown">
-												{/* CSS class <content-dropdown> applied within the children  */}
-												<div class="flexbox-row">
-													<div class="flexbox-column">
-														<dfns-typography typo={ITypo.TEXTE_SM_SEMIBOLD} color={ITypoColor.SECONDARY}>
-															{langState.values.pages.settings.type_credentials}
-														</dfns-typography>
-													</div>
-													<div class="flexbox-column-2">
-														<dfns-typography typo={ITypo.TEXTE_SM_REGULAR} color={ITypoColor.SECONDARY}>
-															{passkey.kind}
-														</dfns-typography>
-													</div>
-												</div>
-												<div class="flexbox-row">
-													<div class="flexbox-column">
-														<dfns-typography typo={ITypo.TEXTE_SM_SEMIBOLD} color={ITypoColor.SECONDARY}>
-															{langState.values.pages.settings.credentials_id}
-														</dfns-typography>
-													</div>
-													<div class="flexbox-column-2">
-														<dfns-typography typo={ITypo.TEXTE_SM_REGULAR} color={ITypoColor.SECONDARY}>
-															{passkey.credentialUuid}
-														</dfns-typography>
-													</div>
-												</div>
-												<div class="flexbox-row">
-													<div class="flexbox-column">
-														<dfns-typography typo={ITypo.TEXTE_SM_SEMIBOLD} color={ITypoColor.SECONDARY}>
-															{langState.values.pages.settings.origin}
-														</dfns-typography>
-													</div>
-													<div class="flexbox-column-2">
-														<dfns-typography typo={ITypo.TEXTE_SM_REGULAR} color={ITypoColor.SECONDARY}>
-															{passkey.origin}
-														</dfns-typography>
-													</div>
-												</div>
-												<div class="flexbox-row">
-													<div class="flexbox-column">
-														<dfns-typography typo={ITypo.TEXTE_SM_SEMIBOLD} color={ITypoColor.SECONDARY}>
-															{langState.values.pages.settings.public_key}
-														</dfns-typography>
-													</div>
-													<div class="flexbox-column-2">
-														<dfns-typography typo={ITypo.TEXTE_SM_REGULAR} color={ITypoColor.SECONDARY}>
-															{passkey.publicKey}
-														</dfns-typography>
-													</div>
-												</div>
-												{/* <div class="flexbox-row">
-												<div class="flexbox-column">
-													<dfns-button
-														content={langState.values.pages.settings.button_delete}
-														variant={EButtonVariant.WARNING}
-														sizing={EButtonSize.SMALL}
-														icon={iconError}
-														iconposition="left"
-														onClick={() => {}}
+							{this.passkeys.map((passkey) => {
+								return (
+									<div key={passkey.credentialUuid} class="tab-container">
+										<div class="row">
+											<div class="toggle">
+												{this.passkeys.length === 1 ? (
+													key
+												) : (
+													<toggle-switch
+														checked={passkey.isActive}
+														onClick={() => this.passkeys.length > 1 && this.onClickToggle(passkey)}
 													/>
-												</div>
-											</div> */}
+												)}
 											</div>
-										),
-									};
-								})}></drop-down-container>
+											<div class="title">
+												<dfns-typography typo={ITypo.TEXTE_MD_SEMIBOLD} color={ITypoColor.PRIMARY}>
+													{passkey.name}
+												</dfns-typography>
+											</div>
+											<div class="icon-delete" onClick={() => {}}>
+												{iconDelete}
+											</div>
+										</div>
+									</div>
+								);
+							})}
 						</div>
+						<div class="recovery-kit">
+							<dfns-button
+								content={langState.values.pages.settings.button_recovery_kit}
+								variant={EButtonVariant.SECONDARY}
+								sizing={EButtonSize.SMALL}
+								iconposition="right"
+								icon={arrowRight}
+								onClick={() => {}}
+							/>
+						</div>
+
 						<dfns-alert variant={EAlertVariant.INFO}>
 							<div slot="content">{langState.values.pages.settings.content_alert}</div>
 						</dfns-alert>
