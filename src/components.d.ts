@@ -10,17 +10,17 @@ import { EButtonSize, EButtonVariant } from "./utils/enums/buttons-enums";
 import { JSX } from "@stencil/core";
 import { RegisterCompleteResponse } from "./services/api/Register";
 import { CreatePasskeyAction, SettingsAction, WalletOverviewAction } from "./utils/enums/actions-enum";
+import { BlockchainNetwork, Wallet } from "@dfns/sdk/codegen/datamodel/Wallets";
 import { GetSignatureResponse } from "@dfns/sdk/codegen/Wallets";
 import { ITypo, ITypoColor } from "./utils/enums/typography-enums";
-import { Wallet } from "@dfns/sdk/codegen/datamodel/Wallets";
 export { EAlertVariant } from "./utils/enums/alerts-enums";
 export { EButtonSize, EButtonVariant } from "./utils/enums/buttons-enums";
 export { JSX } from "@stencil/core";
 export { RegisterCompleteResponse } from "./services/api/Register";
 export { CreatePasskeyAction, SettingsAction, WalletOverviewAction } from "./utils/enums/actions-enum";
+export { BlockchainNetwork, Wallet } from "@dfns/sdk/codegen/datamodel/Wallets";
 export { GetSignatureResponse } from "@dfns/sdk/codegen/Wallets";
 export { ITypo, ITypoColor } from "./utils/enums/typography-enums";
-export { Wallet } from "@dfns/sdk/codegen/datamodel/Wallets";
 export namespace Components {
     interface DfnsAlert {
         "classCss"?: string;
@@ -76,6 +76,7 @@ export namespace Components {
     }
     interface DfnsMain {
         "messageToSign": string;
+        "network": BlockchainNetwork;
         "userCreationAuthenticatorAttachment": AuthenticatorAttachment;
     }
     interface DfnsSettings {
@@ -103,6 +104,7 @@ export namespace Components {
         "typo": ITypo;
     }
     interface DfnsValidateWallet {
+        "network": BlockchainNetwork;
     }
     interface DfnsWalletOverview {
     }
@@ -346,6 +348,7 @@ declare namespace LocalJSX {
     }
     interface DfnsMain {
         "messageToSign"?: string;
+        "network"?: BlockchainNetwork;
         "userCreationAuthenticatorAttachment"?: AuthenticatorAttachment;
     }
     interface DfnsSettings {
@@ -375,6 +378,7 @@ declare namespace LocalJSX {
         "typo"?: ITypo;
     }
     interface DfnsValidateWallet {
+        "network"?: BlockchainNetwork;
         "onWalletValidated"?: (event: DfnsValidateWalletCustomEvent<Wallet>) => void;
     }
     interface DfnsWalletOverview {

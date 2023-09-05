@@ -31,14 +31,19 @@ export type Route =
 	| "wallet-overview"
 	| null;
 
-const routeStack: Route[] = [];
+let routeStack: Route[] = [];
 const { state: routeState } = createStore({
 	route: null as Route,
 });
 
 export function setRoute(route: Route) {
-	routeStack.push(routeState.route); 
+	if (routeState.route === route) return;
 	routeState.route = route;
+	if (route === null) {
+		routeStack = [];
+		return;
+	}
+	routeStack.push(routeState.route);
 }
 
 export function goBack() {
@@ -49,4 +54,3 @@ export function goBack() {
 }
 
 export default routeState;
-

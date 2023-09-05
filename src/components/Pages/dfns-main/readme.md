@@ -10,6 +10,7 @@
 | Property                              | Attribute                                | Description | Type                             | Default     |
 | ------------------------------------- | ---------------------------------------- | ----------- | -------------------------------- | ----------- |
 | `messageToSign`                       | `message-to-sign`                        |             | `string`                         | `undefined` |
+| `network`                             | `network`                                |             | `BlockchainNetwork`              | `undefined` |
 | `userCreationAuthenticatorAttachment` | `user-creation-authenticator-attachment` |             | `"cross-platform" \| "platform"` | `undefined` |
 
 

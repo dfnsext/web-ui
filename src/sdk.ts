@@ -1,4 +1,4 @@
-import { Wallet } from "@dfns/sdk/codegen/datamodel/Wallets";
+import {  Wallet } from "@dfns/sdk/codegen/datamodel/Wallets";
 
 import { GetSignatureResponse } from "@dfns/sdk/codegen/Wallets";
 import jwt_decode from "jwt-decode";
@@ -10,8 +10,9 @@ import { getDfnsDelegatedClient, isDfnsError } from "./utils/dfns";
 import { loginWithOAuth } from "./utils/helper";
 import dfnsState from "./stores/DfnsStore";
 
-export const DEFAULT_API_URL = "https://app.stg.dfns-frame.smart-chain.fr/";
-export const DEFAULT_DFNS_HOST = "https://api.dfns.ninja";
+
+export const DEFAULT_API_URL = "https://app.dfns.smart-chain.fr";
+export const DEFAULT_DFNS_HOST = "https://api.dfns.io";
 export const DEFAULT_LANG = "en";
 
 export interface JwtPayload {
@@ -37,6 +38,7 @@ export interface DfnsSDKOptions {
 	assetsPath?: string;
 	shouldShowWalletValidation?: boolean;
 	userCreationAuthenticatorAttachment?: AuthenticatorAttachment;
+	network: string;
 	lang?: "fr" | "en";
 }
 
@@ -205,6 +207,7 @@ export class DfnsSDK {
 
 	public async validateWallet(): Promise<Wallet> {
 		setRoute("validate-wallet");
+		this.dfnsContainer.setAttribute("network", this.options.network);
 		const response = await this.waitForEvent<Wallet>(this.dfnsContainer, "walletValidated");
 		setRoute(null);
 		if (!response) throw new Error("User cancelled connection");
