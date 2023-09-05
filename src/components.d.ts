@@ -59,8 +59,6 @@ export namespace Components {
         "visible": string;
         "walletId": string;
     }
-    interface DfnsDesignSystem {
-    }
     interface DfnsInputField {
         "disableErrors": boolean;
         "errors": string[];
@@ -212,12 +210,6 @@ declare global {
         prototype: HTMLDfnsCreatePasskeyElement;
         new (): HTMLDfnsCreatePasskeyElement;
     };
-    interface HTMLDfnsDesignSystemElement extends Components.DfnsDesignSystem, HTMLStencilElement {
-    }
-    var HTMLDfnsDesignSystemElement: {
-        prototype: HTMLDfnsDesignSystemElement;
-        new (): HTMLDfnsDesignSystemElement;
-    };
     interface HTMLDfnsInputFieldElement extends Components.DfnsInputField, HTMLStencilElement {
     }
     var HTMLDfnsInputFieldElement: {
@@ -301,7 +293,6 @@ declare global {
         "dfns-button": HTMLDfnsButtonElement;
         "dfns-create-account": HTMLDfnsCreateAccountElement;
         "dfns-create-passkey": HTMLDfnsCreatePasskeyElement;
-        "dfns-design-system": HTMLDfnsDesignSystemElement;
         "dfns-input-field": HTMLDfnsInputFieldElement;
         "dfns-layout": HTMLDfnsLayoutElement;
         "dfns-main": HTMLDfnsMainElement;
@@ -357,8 +348,6 @@ declare namespace LocalJSX {
         "rpId"?: string;
         "visible"?: string;
         "walletId"?: string;
-    }
-    interface DfnsDesignSystem {
     }
     interface DfnsInputField {
         "disableErrors"?: boolean;
@@ -460,7 +449,6 @@ declare namespace LocalJSX {
         "dfns-button": DfnsButton;
         "dfns-create-account": DfnsCreateAccount;
         "dfns-create-passkey": DfnsCreatePasskey;
-        "dfns-design-system": DfnsDesignSystem;
         "dfns-input-field": DfnsInputField;
         "dfns-layout": DfnsLayout;
         "dfns-main": DfnsMain;
@@ -484,7 +472,6 @@ declare module "@stencil/core" {
             "dfns-button": LocalJSX.DfnsButton & JSXBase.HTMLAttributes<HTMLDfnsButtonElement>;
             "dfns-create-account": LocalJSX.DfnsCreateAccount & JSXBase.HTMLAttributes<HTMLDfnsCreateAccountElement>;
             "dfns-create-passkey": LocalJSX.DfnsCreatePasskey & JSXBase.HTMLAttributes<HTMLDfnsCreatePasskeyElement>;
-            "dfns-design-system": LocalJSX.DfnsDesignSystem & JSXBase.HTMLAttributes<HTMLDfnsDesignSystemElement>;
             "dfns-input-field": LocalJSX.DfnsInputField & JSXBase.HTMLAttributes<HTMLDfnsInputFieldElement>;
             "dfns-layout": LocalJSX.DfnsLayout & JSXBase.HTMLAttributes<HTMLDfnsLayoutElement>;
             "dfns-main": LocalJSX.DfnsMain & JSXBase.HTMLAttributes<HTMLDfnsMainElement>;
