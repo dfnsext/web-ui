@@ -1,6 +1,5 @@
 import { EThemeModeType } from "./enums/themes-enums";
 
-
 class EventEmitter<T = any> {
 	events: Record<string, Array<(data: T) => void>> = {};
 
