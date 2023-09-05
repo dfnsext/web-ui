@@ -11,7 +11,7 @@ import { EThemeModeType } from "../../../utils/enums/themes-enums";
 import { ITypo, ITypoColor } from "../../../utils/enums/typography-enums";
 import { ThemeMode } from "../../../utils/theme-modes";
 import { sign } from "../../../utils/webauthn";
-import  { goBack } from "../../../stores/RouteStore";
+import { goBack } from "../../../stores/RouteStore";
 
 @Component({
 	tag: "dfns-settings",
@@ -95,7 +95,7 @@ export class DfnsSettings {
 				/>
 			</svg>
 		);
-		const iconDelete: JSX.Element = (
+		/* const iconDelete: JSX.Element = (
 			<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
 				<path
 					fill-rule="evenodd"
@@ -104,7 +104,7 @@ export class DfnsSettings {
 					fill="#111827"
 				/>
 			</svg>
-		);
+		); */
 
 		const key = (
 			<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -130,7 +130,7 @@ export class DfnsSettings {
 		return (
 			<dfns-layout closeBtn onClickCloseBtn={this.closeBtn.bind(this)}>
 				<div slot="topSection">
-					<dfns-typography typo={ITypo.H5_TITLE} color={ITypoColor.PRIMARY} class="custom-class">
+					<dfns-typography typo={ITypo.H5_TITLE} color={ITypoColor.PRIMARY}>
 						{langState.values.header.settings}
 					</dfns-typography>
 				</div>
@@ -148,63 +148,46 @@ export class DfnsSettings {
 							onClick={() => this.action.emit(SettingsAction.CREATE_PASSKEY)}
 						/>
 					</div>
-					<div slot="contentSection">
-						<div class="first-section">
-							<dfns-typography typo={ITypo.TEXTE_SM_SEMIBOLD} color={ITypoColor.PRIMARY}>
-								{dfnsState.credentials.length} {langState.values.pages.settings.passkeys}
-							</dfns-typography>
-							<dfns-button
-								content={langState.values.pages.settings.button_create_passkey}
-								variant={EButtonVariant.SECONDARY}
-								sizing={EButtonSize.SMALL}
-								iconposition="left"
-								icon={iconAdd}
-								onClick={() => this.action.emit(SettingsAction.CREATE_PASSKEY)}
-							/>
-						</div>
-						<div class="credentials-container">
-							{dfnsState.credentials.map((passkey) => {
-								return (
-									<div key={passkey.credentialUuid} class="tab-container">
-										<div class="row">
-											<div class="toggle">
-												{dfnsState.credentials.length === 1 ? (
-													key
-												) : (
-													<toggle-switch
-														checked={passkey.isActive}
-														onClick={() => dfnsState.credentials.length > 1 && this.onClickToggle(passkey)}
-													/>
-												)}
-											</div>
-											<div class="title">
-												<dfns-typography typo={ITypo.TEXTE_MD_SEMIBOLD} color={ITypoColor.PRIMARY}>
-													{passkey.name}
-												</dfns-typography>
-											</div>
-											<div class="icon-delete" onClick={() => {}}>
-												{iconDelete}
-											</div>
+					<div class="credentials-container">
+						{dfnsState.credentials.map((passkey) => {
+							return (
+								<div key={passkey.credentialUuid} class="tab-container">
+									<div class="row">
+										<div class="toggle">
+											{key}
+											{/* {dfnsState.credentials.length === 1 ? (
+												key
+											) : (
+												<toggle-switch
+													checked={passkey.isActive}
+													onClick={() => dfnsState.credentials.length > 1 && this.onClickToggle(passkey)}
+												/>
+											)} */}
 										</div>
+										<div class="title">
+											<dfns-typography typo={ITypo.TEXTE_MD_SEMIBOLD} color={ITypoColor.PRIMARY}>
+												{passkey.name}
+											</dfns-typography>
+										</div>
+										{/* <div class="icon-delete" onClick={() => {}}>
+											{iconDelete}
+										</div> */}
 									</div>
-								);
-							})}
-						</div>
-						<div class="recovery-kit">
-							<dfns-button
-								content={langState.values.pages.settings.button_recovery_kit}
-								variant={EButtonVariant.SECONDARY}
-								sizing={EButtonSize.SMALL}
-								iconposition="right"
-								icon={arrowRight}
-								onClick={() => {}}
-							/>
-						</div>
-
-						<dfns-alert variant={EAlertVariant.INFO}>
-							<div slot="content">{langState.values.pages.settings.content_alert}</div>
-						</dfns-alert>
+								</div>
+							);
+						})}
 					</div>
+					<div class="recovery-kit">
+						<dfns-button
+							content={langState.values.pages.settings.button_recovery_kit}
+							variant={EButtonVariant.SECONDARY}
+							sizing={EButtonSize.SMALL}
+							iconposition="right"
+							icon={arrowRight}
+							onClick={() => {}}
+						/>
+					</div>
+
 					<dfns-alert variant={EAlertVariant.INFO}>
 						<div slot="content">{langState.values.pages.settings.content_alert}</div>
 					</dfns-alert>

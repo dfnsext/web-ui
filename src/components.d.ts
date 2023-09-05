@@ -70,6 +70,10 @@ export namespace Components {
         "molitorLogoSrc": string;
         "onClickCloseBtn": () => void;
     }
+    interface DfnsLoader {
+        "LoaderIconSrc": string;
+        "classCss"?: string;
+    }
     interface DfnsMain {
         "messageToSign": string;
         "network": BlockchainNetwork;
@@ -192,6 +196,12 @@ declare global {
         prototype: HTMLDfnsLayoutElement;
         new (): HTMLDfnsLayoutElement;
     };
+    interface HTMLDfnsLoaderElement extends Components.DfnsLoader, HTMLStencilElement {
+    }
+    var HTMLDfnsLoaderElement: {
+        prototype: HTMLDfnsLoaderElement;
+        new (): HTMLDfnsLoaderElement;
+    };
     interface HTMLDfnsMainElement extends Components.DfnsMain, HTMLStencilElement {
     }
     var HTMLDfnsMainElement: {
@@ -265,6 +275,7 @@ declare global {
         "dfns-create-passkey": HTMLDfnsCreatePasskeyElement;
         "dfns-input-field": HTMLDfnsInputFieldElement;
         "dfns-layout": HTMLDfnsLayoutElement;
+        "dfns-loader": HTMLDfnsLoaderElement;
         "dfns-main": HTMLDfnsMainElement;
         "dfns-settings": HTMLDfnsSettingsElement;
         "dfns-sign-message": HTMLDfnsSignMessageElement;
@@ -331,6 +342,10 @@ declare namespace LocalJSX {
         "molitorLogoSrc"?: string;
         "onClickCloseBtn"?: () => void;
     }
+    interface DfnsLoader {
+        "LoaderIconSrc"?: string;
+        "classCss"?: string;
+    }
     interface DfnsMain {
         "messageToSign"?: string;
         "network"?: BlockchainNetwork;
@@ -391,6 +406,7 @@ declare namespace LocalJSX {
         "dfns-create-passkey": DfnsCreatePasskey;
         "dfns-input-field": DfnsInputField;
         "dfns-layout": DfnsLayout;
+        "dfns-loader": DfnsLoader;
         "dfns-main": DfnsMain;
         "dfns-settings": DfnsSettings;
         "dfns-sign-message": DfnsSignMessage;
@@ -414,6 +430,7 @@ declare module "@stencil/core" {
             "dfns-create-passkey": LocalJSX.DfnsCreatePasskey & JSXBase.HTMLAttributes<HTMLDfnsCreatePasskeyElement>;
             "dfns-input-field": LocalJSX.DfnsInputField & JSXBase.HTMLAttributes<HTMLDfnsInputFieldElement>;
             "dfns-layout": LocalJSX.DfnsLayout & JSXBase.HTMLAttributes<HTMLDfnsLayoutElement>;
+            "dfns-loader": LocalJSX.DfnsLoader & JSXBase.HTMLAttributes<HTMLDfnsLoaderElement>;
             "dfns-main": LocalJSX.DfnsMain & JSXBase.HTMLAttributes<HTMLDfnsMainElement>;
             "dfns-settings": LocalJSX.DfnsSettings & JSXBase.HTMLAttributes<HTMLDfnsSettingsElement>;
             "dfns-sign-message": LocalJSX.DfnsSignMessage & JSXBase.HTMLAttributes<HTMLDfnsSignMessageElement>;
