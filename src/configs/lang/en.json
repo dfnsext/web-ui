@@ -67,7 +67,8 @@
 			"content_alert": "We strongly recommend to create a passkey from other devices, as this is the only way to recover your wallet if you lose your current passkey.",
 			"button_create_passkey": "Create a passkey",
 			"button_settings": "Settings",
-			"button_logout": "Logout"
+			"button_logout": "Logout",
+			"wallet_address": "Wallet address:"
 		},
 		"settings": {
 			"passkeys": "passkeys",

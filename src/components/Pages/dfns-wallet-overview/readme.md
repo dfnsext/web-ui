@@ -5,18 +5,6 @@
 <!-- Auto Generated Below -->
 
 
-## Properties
-
-| Property        | Attribute         | Description | Type     | Default     |
-| --------------- | ----------------- | ----------- | -------- | ----------- |
-| `appId`         | `app-id`          |             | `string` | `undefined` |
-| `dfnsHost`      | `dfns-host`       |             | `string` | `undefined` |
-| `dfnsUserToken` | `dfns-user-token` |             | `string` | `undefined` |
-| `rpId`          | `rp-id`           |             | `string` | `undefined` |
-| `visible`       | `visible`         |             | `string` | `undefined` |
-| `walletAddress` | `wallet-address`  |             | `string` | `""`        |
-
-
 ## Events
 
 | Event    | Description | Type                                                                                                              |
@@ -26,9 +14,13 @@
 
 ## Dependencies
 
+### Used by
+
+ - [dfns-main](../dfns-main)
+
 ### Depends on
 
-- [dfns-layout](../../ Materials/Templates/dfns-layout)
+- [dfns-layout](../../Materials/Templates/dfns-layout)
 - [dfns-typography](../../Elements/Typography/dfns-typography)
 - [dfns-button](../../Elements/Buttons/dfns-button)
 - [dfns-alert](../../Elements/Alerts/dfns-alert)
@@ -43,6 +35,7 @@ graph TD;
   dfns-button --> dfns-typography
   dfns-button --> dfns-loader
   dfns-alert --> dfns-typography
+  dfns-main --> dfns-wallet-overview
   style dfns-wallet-overview fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

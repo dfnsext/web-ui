@@ -7,7 +7,7 @@ import { ITypo, ITypoColor } from "../../../utils/enums/typography-enums";
 import { signMessage } from "../../../utils/helper";
 import { ThemeMode } from "../../../utils/theme-modes";
 import { EAlertVariant } from "../../../utils/enums/alerts-enums";
-import langState from "../../../services/store/language-store";
+import langState from "../../../stores/LanguageStore";
 
 @Component({
 	tag: "dfns-sign-message",

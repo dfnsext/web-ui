@@ -33,6 +33,7 @@ export async function loginWithOAuth(apiUrl: string, appId: string, rpId: string
 		firstFactor: assertion,
 	});
 }
+
 export async function registerWithOAuth(apiUrl: string, appId: string, oauthAccessToken: string, authenticatorAttachment?: AuthenticatorAttachment) {
 	let challenge;
 	try {
@@ -68,10 +69,10 @@ export async function registerWithOAuth(apiUrl: string, appId: string, oauthAcce
 	}
 }
 
-export async function createWallet(dfnsHost: string, appId: string, rpId: string, dfnsUserToken: string) {
+export async function createWallet(dfnsHost: string, appId: string, rpId: string, dfnsUserToken: string, network: BlockchainNetwork) {
 	const dfnsDelegated = getDfnsDelegatedClient(dfnsHost, appId, dfnsUserToken);
 	const createWalletRequest: CreateWalletRequest = {
-		body: { network: BlockchainNetwork.PolygonMumbai },
+		body: { network },
 	};
 
 	const challenge = await dfnsDelegated.wallets.createWalletInit(createWalletRequest);

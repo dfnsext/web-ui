@@ -45,7 +45,7 @@
 ### Depends on
 
 - [dfns-typography](../../Typography/dfns-typography)
-- [dfns-loader](../../Loader/dfns-loader)
+- [dfns-loader](../../LoaderDfns/dfns-loader)
 
 ### Graph
 ```mermaid

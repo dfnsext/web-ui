@@ -7,14 +7,9 @@
 
 ## Properties
 
-| Property        | Attribute         | Description | Type     | Default     |
-| --------------- | ----------------- | ----------- | -------- | ----------- |
-| `apiUrl`        | `api-url`         |             | `string` | `undefined` |
-| `appId`         | `app-id`          |             | `string` | `undefined` |
-| `dfnsHost`      | `dfns-host`       |             | `string` | `undefined` |
-| `dfnsUserToken` | `dfns-user-token` |             | `string` | `undefined` |
-| `rpId`          | `rp-id`           |             | `string` | `undefined` |
-| `visible`       | `visible`         |             | `string` | `undefined` |
+| Property  | Attribute | Description | Type                | Default     |
+| --------- | --------- | ----------- | ------------------- | ----------- |
+| `network` | `network` |             | `BlockchainNetwork` | `undefined` |
 
 
 ## Events
@@ -26,9 +21,13 @@
 
 ## Dependencies
 
+### Used by
+
+ - [dfns-main](../dfns-main)
+
 ### Depends on
 
-- [dfns-layout](../../ Materials/Templates/dfns-layout)
+- [dfns-layout](../../Materials/Templates/dfns-layout)
 - [dfns-typography](../../Elements/Typography/dfns-typography)
 - [dfns-stepper](../../Elements/Stepper/dfns-stepper)
 - [dfns-button](../../Elements/Buttons/dfns-button)
@@ -42,6 +41,7 @@ graph TD;
   dfns-validate-wallet --> dfns-button
   dfns-button --> dfns-typography
   dfns-button --> dfns-loader
+  dfns-main --> dfns-validate-wallet
   style dfns-validate-wallet fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

@@ -1,14 +1,14 @@
-import { Component, Event, EventEmitter, JSX, Prop, State, Watch, h } from "@stencil/core";
-import { ThemeMode } from "../../../utils/theme-modes";
-import { EThemeModeType } from "../../../utils/enums/themes-enums";
-import { ITypo, ITypoColor } from "../../../utils/enums/typography-enums";
-import { EButtonSize, EButtonVariant } from "../../../utils/enums/buttons-enums";
-import { EAlertVariant } from "../../../utils/enums/alerts-enums";
-import { CopyClipboard } from "../../Elements/CopyClipboard";
-import { CredentialInfo } from "@dfns/sdk/codegen/datamodel/Auth";
+import { Component, Event, EventEmitter, JSX, State, h } from "@stencil/core";
+import dfnsState from "../../../stores/DfnsStore";
+import langState from "../../../stores/LanguageStore";
 import { getDfnsDelegatedClient } from "../../../utils/dfns";
 import { WalletOverviewAction } from "../../../utils/enums/actions-enum";
-import langState from "../../../services/store/language-store";
+import { EAlertVariant } from "../../../utils/enums/alerts-enums";
+import { EButtonSize, EButtonVariant } from "../../../utils/enums/buttons-enums";
+import { EThemeModeType } from "../../../utils/enums/themes-enums";
+import { ITypo, ITypoColor } from "../../../utils/enums/typography-enums";
+import { ThemeMode } from "../../../utils/theme-modes";
+import { CopyClipboard } from "../../Elements/CopyClipboard";
 
 @Component({
 	tag: "dfns-wallet-overview",
@@ -18,37 +18,19 @@ import langState from "../../../services/store/language-store";
 export class DfnsWalletOverview {
 	private themeMode = ThemeMode.getInstance();
 
-	@Prop() dfnsHost: string;
-	@Prop() appId: string;
-	@Prop() rpId: string;
-	@Prop() dfnsUserToken: string;
-	@Prop() visible: string;
-	@Prop() walletAddress: string = "";
 	@State() isLoading: boolean = false;
-	@State() passkeys: CredentialInfo[] = [];
+
 	@Event() action: EventEmitter<WalletOverviewAction>;
 
 	async componentWillLoad() {
 		this.themeMode.switch(EThemeModeType.ACCOR);
-		if (this.dfnsUserToken) {
-			this.fetchPasskeys();
-		}
-	}
-
-	@Watch("dfnsUserToken")
-	watchUserTokenHandler() {
 		this.fetchPasskeys();
-	}
-
-	@Watch("visible")
-	watchVisibleHandler() {
-		this.visible && this.fetchPasskeys();
 	}
 
 	async fetchPasskeys() {
 		try {
-			const dfnsDelegated = getDfnsDelegatedClient(this.dfnsHost, this.appId, this.dfnsUserToken);
-			this.passkeys = (await dfnsDelegated.auth.listUserCredentials()).items;
+			const dfnsDelegated = getDfnsDelegatedClient(dfnsState.dfnsHost, dfnsState.appId, dfnsState.dfnsUserToken);
+			dfnsState.credentials = (await dfnsDelegated.auth.listUserCredentials()).items;
 		} catch (error) {
 			console.error(error);
 		}
@@ -115,73 +97,74 @@ export class DfnsWalletOverview {
 			</svg>
 		);
 
-		const formattedWalletAddress = this.formatWalletAddress(this.walletAddress, 5, 4); // Adjust startChars and endChars as needed
+		const formattedWalletAddress = this.formatWalletAddress(dfnsState.wallet.address, 5, 4); // Adjust startChars and endChars as needed
 		return (
-			<div class={this.visible ? "container visible" : "container"}>
-				<dfns-layout closeBtn onClickCloseBtn={this.closeBtn.bind(this)}>
-					<div slot="topSection">
-						<dfns-typography typo={ITypo.H5_TITLE} color={ITypoColor.PRIMARY} class="custom-class">
-							{langState.values.header.my_wallet}
-						</dfns-typography>
-					</div>
-					<div slot="contentSection">
-						<div class="content-container">
-							<div class="title">
-								<CopyClipboard value={this.walletAddress} openToaster={true}>
-									<dfns-button
-										content={formattedWalletAddress}
-										variant={EButtonVariant.SECONDARY}
-										sizing={EButtonSize.SMALL}
-										fullwidth
-										icon={iconCopy}
-										iconposition="right"
-									/>
-								</CopyClipboard>
-							</div>
-							{this.passkeys.length < 2 && (
-								<div class="content">
-									<dfns-alert variant={EAlertVariant.INFO} hasTitle>
-										<div slot="title">{langState.values.pages.wallet_overview.title_alert}</div>
-										<div slot="content">
-											<p> {langState.values.pages.wallet_overview.content_alert}</p>
-											<div class="button_container">
-												<dfns-button
-													content={langState.values.pages.wallet_overview.button_create_passkey}
-													variant={EButtonVariant.SECONDARY}
-													sizing={EButtonSize.SMALL}
-													icon={iconArrowLeft}
-													iconposition="right"
-													onClick={() => this.action.emit(WalletOverviewAction.CREATE_PASSKEY)}
-												/>
-											</div>
-										</div>
-									</dfns-alert>
-								</div>
-							)}
+			<dfns-layout closeBtn onClickCloseBtn={this.closeBtn.bind(this)}>
+				<div slot="topSection">
+					<dfns-typography typo={ITypo.H5_TITLE} color={ITypoColor.PRIMARY}>
+						{langState.values.header.my_wallet}
+					</dfns-typography>
+				</div>
+				<div slot="contentSection">
+					<div class="content-container">
+						<div class="title">
+							<dfns-typography typo={ITypo.TEXTE_SM_SEMIBOLD} color={ITypoColor.PRIMARY}>
+								{langState.values.pages.wallet_overview.wallet_address}
+							</dfns-typography>
+							<CopyClipboard value={dfnsState.wallet.address} openToaster={true}>
+								<dfns-button
+									content={formattedWalletAddress}
+									variant={EButtonVariant.SECONDARY}
+									sizing={EButtonSize.SMALL}
+									fullwidth
+									icon={iconCopy}
+									iconposition="right"
+								/>
+							</CopyClipboard>
 						</div>
+						{dfnsState.credentials.length < 2 && (
+							<div class="content">
+								<dfns-alert variant={EAlertVariant.INFO} hasTitle>
+									<div slot="title">{langState.values.pages.wallet_overview.title_alert}</div>
+									<div slot="content">
+										<p> {langState.values.pages.wallet_overview.content_alert}</p>
+										<div class="button_container">
+											<dfns-button
+												content={langState.values.pages.wallet_overview.button_create_passkey}
+												variant={EButtonVariant.SECONDARY}
+												sizing={EButtonSize.SMALL}
+												icon={iconArrowLeft}
+												iconposition="right"
+												onClick={() => this.action.emit(WalletOverviewAction.CREATE_PASSKEY)}
+											/>
+										</div>
+									</div>
+								</dfns-alert>
+							</div>
+						)}
 					</div>
-					<div slot="bottomSection">
-						<dfns-button
-							content={langState.values.pages.wallet_overview.button_settings}
-							variant={EButtonVariant.SECONDARY}
-							sizing={EButtonSize.MEDIUM}
-							fullwidth
-							icon={iconSettings}
-							iconposition="left"
-							onClick={() => this.action.emit(WalletOverviewAction.SETTINGS)}
-						/>
-						<dfns-button
-							content={langState.values.pages.wallet_overview.button_logout}
-							variant={EButtonVariant.SECONDARY}
-							sizing={EButtonSize.MEDIUM}
-							fullwidth
-							icon={iconLogout}
-							iconposition="left"
-							onClick={this.closeBtn.bind(this)}
-						/>
-					</div>
-				</dfns-layout>
-			</div>
+				</div>
+				<div slot="bottomSection">
+					<dfns-button
+						content={langState.values.pages.wallet_overview.button_settings}
+						variant={EButtonVariant.SECONDARY}
+						sizing={EButtonSize.MEDIUM}
+						fullwidth
+						icon={iconSettings}
+						iconposition="left"
+						onClick={() => this.action.emit(WalletOverviewAction.SETTINGS)}
+					/>
+					<dfns-button
+						content={langState.values.pages.wallet_overview.button_logout}
+						variant={EButtonVariant.SECONDARY}
+						sizing={EButtonSize.MEDIUM}
+						fullwidth
+						icon={iconLogout}
+						iconposition="left"
+						onClick={this.closeBtn.bind(this)}
+					/>
+				</div>
+			</dfns-layout>
 		);
 	}
 }

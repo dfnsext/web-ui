@@ -10,17 +10,17 @@ import { EButtonSize, EButtonVariant } from "./utils/enums/buttons-enums";
 import { JSX } from "@stencil/core";
 import { RegisterCompleteResponse } from "./services/api/Register";
 import { CreatePasskeyAction, SettingsAction, WalletOverviewAction } from "./utils/enums/actions-enum";
+import { BlockchainNetwork, Wallet } from "@dfns/sdk/codegen/datamodel/Wallets";
 import { GetSignatureResponse } from "@dfns/sdk/codegen/Wallets";
 import { ITypo, ITypoColor } from "./utils/enums/typography-enums";
-import { Wallet } from "@dfns/sdk/codegen/datamodel/Wallets";
 export { EAlertVariant } from "./utils/enums/alerts-enums";
 export { EButtonSize, EButtonVariant } from "./utils/enums/buttons-enums";
 export { JSX } from "@stencil/core";
 export { RegisterCompleteResponse } from "./services/api/Register";
 export { CreatePasskeyAction, SettingsAction, WalletOverviewAction } from "./utils/enums/actions-enum";
+export { BlockchainNetwork, Wallet } from "@dfns/sdk/codegen/datamodel/Wallets";
 export { GetSignatureResponse } from "@dfns/sdk/codegen/Wallets";
 export { ITypo, ITypoColor } from "./utils/enums/typography-enums";
-export { Wallet } from "@dfns/sdk/codegen/datamodel/Wallets";
 export namespace Components {
     interface DfnsAlert {
         "classCss"?: string;
@@ -45,19 +45,10 @@ export namespace Components {
         "variant": EButtonVariant;
     }
     interface DfnsCreateAccount {
-        "apiUrl": string;
-        "appId": string;
         "authenticatorAttachment": AuthenticatorAttachment;
-        "oauthAccessToken": string;
-        "visible": string;
     }
     interface DfnsCreatePasskey {
-        "appId": string;
-        "dfnsHost": string;
-        "dfnsUserToken": string;
-        "rpId": string;
         "visible": string;
-        "walletId": string;
     }
     interface DfnsInputField {
         "disableErrors": boolean;
@@ -80,16 +71,12 @@ export namespace Components {
         "onClickCloseBtn": () => void;
     }
     interface DfnsMain {
-        "visible": string;
+        "messageToSign": string;
+        "network": BlockchainNetwork;
+        "userCreationAuthenticatorAttachment": AuthenticatorAttachment;
     }
     interface DfnsSettings {
-        "appId": string;
         "confirmationImgSrc": string;
-        "dfnsHost": string;
-        "dfnsUserToken": string;
-        "rpId": string;
-        "visible": string;
-        "walletId": string;
     }
     interface DfnsSignMessage {
         "appId": string;
@@ -113,29 +100,12 @@ export namespace Components {
         "typo": ITypo;
     }
     interface DfnsValidateWallet {
-        "apiUrl": string;
-        "appId": string;
-        "dfnsHost": string;
-        "dfnsUserToken": string;
-        "rpId": string;
-        "visible": string;
+        "network": BlockchainNetwork;
     }
     interface DfnsWalletOverview {
-        "appId": string;
-        "dfnsHost": string;
-        "dfnsUserToken": string;
-        "rpId": string;
-        "visible": string;
-        "walletAddress": string;
     }
     interface DfnsWalletValidation {
-        "appId": string;
         "confirmationImgSrc": string;
-        "dfnsHost": string;
-        "dfnsUserToken": string;
-        "rpId": string;
-        "visible": string;
-        "walletId": string;
     }
     interface DropDown {
         "closeAction"?: (close: () => void) => void;
@@ -333,21 +303,12 @@ declare namespace LocalJSX {
         "variant"?: EButtonVariant;
     }
     interface DfnsCreateAccount {
-        "apiUrl"?: string;
-        "appId"?: string;
         "authenticatorAttachment"?: AuthenticatorAttachment;
-        "oauthAccessToken"?: string;
         "onPasskeyCreated"?: (event: DfnsCreateAccountCustomEvent<RegisterCompleteResponse>) => void;
-        "visible"?: string;
     }
     interface DfnsCreatePasskey {
-        "appId"?: string;
-        "dfnsHost"?: string;
-        "dfnsUserToken"?: string;
         "onAction"?: (event: DfnsCreatePasskeyCustomEvent<CreatePasskeyAction>) => void;
-        "rpId"?: string;
         "visible"?: string;
-        "walletId"?: string;
     }
     interface DfnsInputField {
         "disableErrors"?: boolean;
@@ -371,17 +332,13 @@ declare namespace LocalJSX {
         "onClickCloseBtn"?: () => void;
     }
     interface DfnsMain {
-        "visible"?: string;
+        "messageToSign"?: string;
+        "network"?: BlockchainNetwork;
+        "userCreationAuthenticatorAttachment"?: AuthenticatorAttachment;
     }
     interface DfnsSettings {
-        "appId"?: string;
         "confirmationImgSrc"?: string;
-        "dfnsHost"?: string;
-        "dfnsUserToken"?: string;
         "onAction"?: (event: DfnsSettingsCustomEvent<SettingsAction>) => void;
-        "rpId"?: string;
-        "visible"?: string;
-        "walletId"?: string;
     }
     interface DfnsSignMessage {
         "appId"?: string;
@@ -406,32 +363,15 @@ declare namespace LocalJSX {
         "typo"?: ITypo;
     }
     interface DfnsValidateWallet {
-        "apiUrl"?: string;
-        "appId"?: string;
-        "dfnsHost"?: string;
-        "dfnsUserToken"?: string;
+        "network"?: BlockchainNetwork;
         "onWalletValidated"?: (event: DfnsValidateWalletCustomEvent<Wallet>) => void;
-        "rpId"?: string;
-        "visible"?: string;
     }
     interface DfnsWalletOverview {
-        "appId"?: string;
-        "dfnsHost"?: string;
-        "dfnsUserToken"?: string;
         "onAction"?: (event: DfnsWalletOverviewCustomEvent<WalletOverviewAction>) => void;
-        "rpId"?: string;
-        "visible"?: string;
-        "walletAddress"?: string;
     }
     interface DfnsWalletValidation {
-        "appId"?: string;
         "confirmationImgSrc"?: string;
-        "dfnsHost"?: string;
-        "dfnsUserToken"?: string;
         "onWalletValidated"?: (event: DfnsWalletValidationCustomEvent<Wallet>) => void;
-        "rpId"?: string;
-        "visible"?: string;
-        "walletId"?: string;
     }
     interface DropDown {
         "closeAction"?: (close: () => void) => void;

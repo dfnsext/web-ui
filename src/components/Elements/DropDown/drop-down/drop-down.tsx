@@ -67,7 +67,7 @@ export class DropDown {
 			<div class="root">
 				<div class="container">
 					<slot name="toggle"></slot>
-					<div class="wrapper"  onClick={() => this.toogle()}>
+					<div class="wrapper" onClick={() => this.toogle()}>
 						<slot name="title"></slot>
 						<span class="arrow" data-open={this.open}>
 							<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">

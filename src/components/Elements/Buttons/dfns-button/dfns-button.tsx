@@ -11,7 +11,7 @@ import { ITypo } from "../../../../utils/enums/typography-enums";
 export class DfnsButton {
 	@Prop({ mutable: true }) variant: EButtonVariant = EButtonVariant.PRIMARY;
 	@Prop({ mutable: true }) sizing: EButtonSize = EButtonSize.LARGE;
-  	@Prop({ mutable: true }) content: string;
+	@Prop({ mutable: true }) content: string;
 	@Prop() disabled = false;
 	@Prop() type: "button" | "submit" = "button";
 	@Prop() isloading = false;
@@ -38,51 +38,38 @@ export class DfnsButton {
 		}
 	}
 
-
 	private formatWithTypo(): JSX.Element | null {
 		switch (this.sizing) {
 			case EButtonSize.SMALL:
-				return (
-					<dfns-typography typo={ITypo.TEXTE_SM_REGULAR}>
-						{this.content}
-					</dfns-typography>
-				);
+				return <dfns-typography typo={ITypo.TEXTE_SM_REGULAR}>{this.content}</dfns-typography>;
 			case EButtonSize.MEDIUM:
-				return (
-					<dfns-typography typo={ITypo.TEXTE_MD_REGULAR}>
-						{this.content}
-					</dfns-typography>
-				);
+				return <dfns-typography typo={ITypo.TEXTE_MD_REGULAR}>{this.content}</dfns-typography>;
 			case EButtonSize.LARGE:
-				return (
-					<dfns-typography typo={ITypo.TEXTE_LG_REGULAR}>
-						{this.content}
-					</dfns-typography>
-				);
+				return <dfns-typography typo={ITypo.TEXTE_LG_REGULAR}>{this.content}</dfns-typography>;
 			default:
 				return null;
 		}
 	}
 
 	render() {
-    const attributes = {
-      variant: this.variant,
-      sizing: this.sizing,
-      disabled: this.disabled,
-      type: this.type,
-      fullwidthattr: this.fullwidthattr,
-      class: classNames("root", this.classCss),
-    };
-  
-    return (
-      <button onClick={this.onClick} {...attributes} class={classNames("root", this.classCss)} type={this.type}>
-        <Fragment>
-          {this.isloading ? <dfns-loader /> : null}
-          {!this.isloading && this.icon && this.iconposition === "left" ? <div class="icon">{this.icon}</div> : null}
-          {!this.isloading ? this.formatWithTypo() : null}
-          {!this.isloading && this.icon && this.iconposition === "right" ? <div class="icon">{this.icon}</div> : null}
-        </Fragment>
-      </button>
-    );
-  }
+		const attributes = {
+			variant: this.variant,
+			sizing: this.sizing,
+			disabled: this.disabled,
+			type: this.type,
+			fullwidthattr: this.fullwidthattr,
+			class: classNames("root", this.classCss),
+		};
+
+		return (
+			<button onClick={this.onClick} {...attributes} class={classNames("root", this.classCss)} type={this.type}>
+				<Fragment>
+					{this.isloading ? <dfns-loader /> : null}
+					{!this.isloading && this.icon && this.iconposition === "left" ? <div class="icon">{this.icon}</div> : null}
+					{!this.isloading ? this.formatWithTypo() : null}
+					{!this.isloading && this.icon && this.iconposition === "right" ? <div class="icon">{this.icon}</div> : null}
+				</Fragment>
+			</button>
+		);
+	}
 }
