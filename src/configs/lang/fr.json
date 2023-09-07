@@ -1,6 +1,6 @@
 {
 	"common": {
-		"connect_wallet": "Connecter le portefeuille",
+		"connect_wallet": "Connecter le wallet",
 		"settings": "Paramètres",
 		"search": "Rechercher",
 		"cancel": "Annuler",
@@ -13,8 +13,8 @@
 		"remove": "Supprimer"
 	},
 	"header": {
-		"create_wallet": "Créez votre portefeuille",
-		"my_wallet": "Mon portefeuille",
+		"create_wallet": "Créez votre wallet",
+		"my_wallet": "Mon wallet",
 		"settings": "Paramètres",
 		"create_passkey": "Créer une clé d'accès",
 		"nav_links": {}
@@ -27,27 +27,27 @@
 			"title": "Accueil"
 		},
 		"create_account": {
-			"title": "Création de\nportefeuille",
-			"description": "Utilisez la reconnaissance d'empreinte digitale ou de visage pour vous connecter | Molitor",
+			"title": "Création du\nwallet",
+			"description": "Utilisez la reconnaissance d'empreinte digitale ou de visage pour vous connecter | ",
 			"button_create": "Continue"
 		},
 		"validate_wallet": {
-			"title": "Validation du\nportefeuille",
-			"description": "Connectez-vous pour accéder à votre portefeuille",
-			"button_validate": "Accéder à mon portefeuille"
+			"title": "Validation du\nwallet",
+			"description": "Connectez-vous pour accéder à votre wallet",
+			"button_validate": "Accéder à mon wallet"
 		},
 		"validation_success": {
 			"title": "Félicitation!",
-			"description": "Votre portefeuille a été créé",
-			"wallet_address": "Votre adresse du portefeuille :",
-			"loading_message": "Chargement de l'adresse de votre portefeuille"
+			"description": "Votre wallet a été créé",
+			"wallet_address": "Votre adresse du wallet :",
+			"loading_message": "Chargement de l'adresse de votre wallet"
 		},
 		"create_passkey": {
 			"title": "Créer une clé d'accès",
 			"description": "Une clé d'accès vous permet de vous connecter à votre wallet de façon très sécurisée (sans avoir à saisir votre clé privée). Vous pouvez gérer plusieurs clés d'accès afin de pouvoir vous connecter depuis différents appareils.",
 			"button_create": "Créer une clé d'accès",
-			"alert_title": "Nous ne pourrons pas récupérer vos clés d'accès.",
-			"alert_description": "Veillez à créer votre clé d'accès sur un appareil personnel.",
+			"alert_title": "Vous êtes sur le point de créer une clé d'accès.",
+			"alert_description": "Attention : Nous ne pourrons pas récupérer vos clés d'accès. Veillez à créez votre clé d'accès sur un appareil personnel.",
 			"save_title": "Votre nouvelle clé d'accès n'a pas encore été enregistré !",
 			"save_description": "Pour enregistrer la clé d'accès, vous devez vous authentifier avec l'un de vos identifiants existants.",
 			"button_save": "Enregistrer la clé d'accès",
@@ -66,19 +66,21 @@
 		"wallet_overview": {
 			"title_alert": "Créer une clé d'accès",
 			"content_alert": "Nous vous recommandons vivement de créer une clé d'accès à partir d'autres appareils. C'est le seul moyen de récupérer votre wallet si vous perdez votre clé d'accès actuelle.",
-			"button_create_passkey": "Créer une clé de sauvegarde",
+			"button_create_passkey": "Créer une nouvelle clé d'accès",
 			"button_settings": "Paramètres",
-			"button_logout": "Déconnexion"
+			"button_logout": "Déconnexion",
+			"wallet_address": "Adresse de mon wallet:"
 		},
 		"settings": {
 			"passkeys": "Clé(s) de sauvegarde",
-			"button_create_passkey": "Créer une clé de sauvegarde",
+			"button_create_passkey": "Créer une nouvelle clé d'accès",
 			"type_credentials": "Type de clé:",
 			"credentials_id": "ID de la clé:",
 			"origin": "Origine:",
 			"public_key": "Clé publique:",
 			"button_delete": "Supprimer",
-			"content_alert": "Générer une nouvelle clé d'accès pour accéder à votre wallet à partir d'un autre appareil."
+			"content_alert": "Générer une nouvelle clé d'accès pour accéder à votre wallet à partir d'un autre appareil.",
+			"button_recovery_kit":"Kit de récupération"
 		},
 		"profile": {
 			"title": "Profil",
@@ -179,7 +181,7 @@
 	},
 	"inputs": {
 		"placeholder": {
-			"wallet": "Adresse du portefeuille"
+			"wallet": "Adresse du wallet"
 		},
 		"tips": {
 			"available": "disponible"

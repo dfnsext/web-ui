@@ -1,0 +1,71 @@
+:host {
+	display: block;
+
+	.first-section {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		justify-content: space-between;
+		padding: 0px $spacing-2;
+		margin-bottom: $spacing-2;
+	}
+	.credentials-container {
+		display: flex;
+		flex-direction: column;
+		align-items: flex-start;
+		align-self: stretch;
+		.tab-container {
+			display: flex;
+			flex-direction: column;
+			align-items: flex-start;
+			align-self: stretch;
+			&:last-child {
+				border-bottom: 1px solid var(--color-neutral-200);
+			}
+			.row {
+				display: flex;
+				padding: $spacing-2 0px;
+				align-items: center;
+				gap: $spacing-1-5;
+				align-self: stretch;
+				border-radius: 0px;
+				border-top: 1px solid var(--color-neutral-200);
+
+				.toggle {
+					display: flex;
+					min-width: 48px;
+					max-width: 48px;
+					min-height: 24px;
+					max-height: 24px;
+					justify-content: center;
+					padding: $spacing-0-25;
+					align-items: center;
+				}
+				.title {
+					display: -webkit-box;
+					-webkit-box-orient: vertical;
+					-webkit-line-clamp: 1;
+					flex: 1 0 0;
+				}
+				.icon-delete {
+					display: flex;
+					min-width: 32px;
+					max-width: 32px;
+					min-height: 32px;
+					max-height: 32px;
+					padding: $spacing-0-75;
+					justify-content: center;
+					align-items: center;
+					cursor: pointer;
+				}
+			}
+		}
+	}
+	.recovery-kit {
+		display: flex;
+		flex-direction: column;
+		align-items: flex-start;
+		width: 50%;
+		padding: $spacing-3 0px;
+	}
+}

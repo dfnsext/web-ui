@@ -9,7 +9,7 @@ export default abstract class BaseApiService {
 	private static queueAllRequests: boolean = false;
 	private static queuedRequests: DeferPromise.Deferred<void> | null = null;
 
-	protected buildHeaders(contentType: ContentType, props : Record<string, string>= {}) {
+	protected buildHeaders(contentType: ContentType, props: Record<string, string> = {}) {
 		const headers = new Headers();
 		if (contentType === ContentType.JSON) {
 			headers.set("Content-Type", contentType);
