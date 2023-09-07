@@ -79,6 +79,9 @@ export namespace Components {
         "network": BlockchainNetwork;
         "userCreationAuthenticatorAttachment": AuthenticatorAttachment;
     }
+    interface DfnsRecoverySetup {
+        "visible": string;
+    }
     interface DfnsSettings {
         "confirmationImgSrc": string;
     }
@@ -138,6 +141,10 @@ export interface DfnsCreatePasskeyCustomEvent<T> extends CustomEvent<T> {
 export interface DfnsInputFieldCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLDfnsInputFieldElement;
+}
+export interface DfnsRecoverySetupCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLDfnsRecoverySetupElement;
 }
 export interface DfnsSettingsCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -208,6 +215,12 @@ declare global {
         prototype: HTMLDfnsMainElement;
         new (): HTMLDfnsMainElement;
     };
+    interface HTMLDfnsRecoverySetupElement extends Components.DfnsRecoverySetup, HTMLStencilElement {
+    }
+    var HTMLDfnsRecoverySetupElement: {
+        prototype: HTMLDfnsRecoverySetupElement;
+        new (): HTMLDfnsRecoverySetupElement;
+    };
     interface HTMLDfnsSettingsElement extends Components.DfnsSettings, HTMLStencilElement {
     }
     var HTMLDfnsSettingsElement: {
@@ -277,6 +290,7 @@ declare global {
         "dfns-layout": HTMLDfnsLayoutElement;
         "dfns-loader": HTMLDfnsLoaderElement;
         "dfns-main": HTMLDfnsMainElement;
+        "dfns-recovery-setup": HTMLDfnsRecoverySetupElement;
         "dfns-settings": HTMLDfnsSettingsElement;
         "dfns-sign-message": HTMLDfnsSignMessageElement;
         "dfns-stepper": HTMLDfnsStepperElement;
@@ -351,6 +365,10 @@ declare namespace LocalJSX {
         "network"?: BlockchainNetwork;
         "userCreationAuthenticatorAttachment"?: AuthenticatorAttachment;
     }
+    interface DfnsRecoverySetup {
+        "onAction"?: (event: DfnsRecoverySetupCustomEvent<CreatePasskeyAction>) => void;
+        "visible"?: string;
+    }
     interface DfnsSettings {
         "confirmationImgSrc"?: string;
         "onAction"?: (event: DfnsSettingsCustomEvent<SettingsAction>) => void;
@@ -408,6 +426,7 @@ declare namespace LocalJSX {
         "dfns-layout": DfnsLayout;
         "dfns-loader": DfnsLoader;
         "dfns-main": DfnsMain;
+        "dfns-recovery-setup": DfnsRecoverySetup;
         "dfns-settings": DfnsSettings;
         "dfns-sign-message": DfnsSignMessage;
         "dfns-stepper": DfnsStepper;
@@ -432,6 +451,7 @@ declare module "@stencil/core" {
             "dfns-layout": LocalJSX.DfnsLayout & JSXBase.HTMLAttributes<HTMLDfnsLayoutElement>;
             "dfns-loader": LocalJSX.DfnsLoader & JSXBase.HTMLAttributes<HTMLDfnsLoaderElement>;
             "dfns-main": LocalJSX.DfnsMain & JSXBase.HTMLAttributes<HTMLDfnsMainElement>;
+            "dfns-recovery-setup": LocalJSX.DfnsRecoverySetup & JSXBase.HTMLAttributes<HTMLDfnsRecoverySetupElement>;
             "dfns-settings": LocalJSX.DfnsSettings & JSXBase.HTMLAttributes<HTMLDfnsSettingsElement>;
             "dfns-sign-message": LocalJSX.DfnsSignMessage & JSXBase.HTMLAttributes<HTMLDfnsSignMessageElement>;
             "dfns-stepper": LocalJSX.DfnsStepper & JSXBase.HTMLAttributes<HTMLDfnsStepperElement>;

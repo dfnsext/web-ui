@@ -1,6 +1,6 @@
 import { Wallet, WalletStatus } from "@dfns/sdk/codegen/datamodel/Wallets";
 import { Component, Event, EventEmitter, Prop, State, h } from "@stencil/core";
-import dfnsState from "../../../stores/DfnsStore";
+import dfnsStore from "../../../stores/DfnsStore";
 import langState from "../../../stores/LanguageStore";
 import { waitForWalletActive } from "../../../utils/dfns";
 import { EButtonSize, EButtonVariant } from "../../../utils/enums/buttons-enums";
@@ -23,12 +23,12 @@ export class DfnsWalletValidation {
 
 	async componentWillLoad() {
 		this.themeMode.switch(EThemeModeType.ACCOR);
-		dfnsState.wallet = await waitForWalletActive(dfnsState.dfnsHost, dfnsState.appId, dfnsState.dfnsUserToken, dfnsState.wallet.id);
+		dfnsStore.setValue("wallet", await waitForWalletActive(dfnsStore.state.dfnsHost, dfnsStore.state.appId, dfnsStore.state.dfnsUserToken, dfnsStore.state.wallet.id));
 		this.isLoading = false;
 	}
 
 	async validateWallet() {
-		this.walletValidated.emit(dfnsState.wallet);
+		this.walletValidated.emit(dfnsStore.state.wallet);
 	}
 
 	async closeBtn() {
@@ -67,7 +67,7 @@ export class DfnsWalletValidation {
 									{langState.values.pages.validation_success.wallet_address}
 								</dfns-typography>
 								<dfns-typography typo={ITypo.TEXTE_SM_MEDIUM}>
-									{dfnsState.wallet && dfnsState.wallet.address}
+									{dfnsStore.state.wallet?.address}
 								</dfns-typography>
 							</div>
 						)}
@@ -78,7 +78,7 @@ export class DfnsWalletValidation {
 						content={langState.values.buttons.done}
 						variant={EButtonVariant.PRIMARY}
 						sizing={EButtonSize.MEDIUM}
-						disabled={dfnsState.wallet?.status !== WalletStatus.Active}
+						disabled={dfnsStore.state.wallet?.status !== WalletStatus.Active}
 						fullwidth
 						iconposition="left"
 						onClick={this.validateWallet.bind(this)}

@@ -17,22 +17,23 @@
     const dfnsSdkOptions = {
       apiUrl: "http://localhost:3000",
 	    rpId: "localhost",
-      appId: "ap-568na-4vi7v-93q8kq4pokmik1ql",
+      appId: "ap-5i7r1-sndgk-9gc9isroh4h9epk4",
       lang: "en",
       shouldShowWalletValidation: true,
       userCreationAuthenticatorAttachment: "platform",
-      network: "Polygon",
-      dfnsHost: "https://api.dfns.io"
-    } 
+      network: "PolygonMumbai",
+      dfnsHost: "https://api.dfns.ninja"
+    }
     const dfnsSDK = new DfnsSDK(dfnsSdkOptions);
     dfnsSDK.init()
 
     // const message = `Welcome to balbla!\r\n\r\nClick to sign in and accept the blabla Terms of Service\r\n\r\nThis request will not trigger a blockchain transaction or cost any gas fees.\r\n\r\nYour authentication status will reset after 24 hours.\r\n\r\nWallet address:\r\nblabla\r\n\r\nNonce:\r\nblabla`;
 
-    dfnsSDK.connectWithOAuthToken("eyJhbGciOiJSUzI1NiIsImtpZCI6ImZRMkhFTXR4TjJqRnhZYkJXNWRKa0xjREhQbyJ9.eyJzdWIiOiI0NjMxNzM2QiIsImF1ZCI6ImNvbS5tb2xpdG9yTkZUIiwianRpIjoiQmMyYjRENFR5QzBJam5YM0w3Z0dNaSIsImlzcyI6Imh0dHBzOi8vcmVjLWxvZ2luLmFjY29yLmNvbSIsImlhdCI6MTY5MzI1MDY2MSwiZXhwIjoxNjkzMjUwOTYxLCJhdXRoX3RpbWUiOjE2OTMyNTA2NjEsInBpLnNyaSI6IlF3MzR6dWtXWlVWTW9TOXlmMml6T3ZPd2dXVS5aWFV0WTJWdWRISmhiQzB4LjdQUlQuazhuVXFtcEZwY2FHWlVWMDJPMGFRZ1NnMyJ9.SZ09ygcm_1f7IPaly79i5fhBQ0h8oIttu_-AQ_r5_q7jy8VcXjPKml61aCxL3pkI3LKrgdJ7Wv7m1fam3pc8fHqUrobuIkCH8_niKX_wJ34EmUDEna7QE7uR3PwXUlx6zXS72Mac9YiXld4Caa7XESm2r9GBu3xPFWFtwkSKqRZLHGsFwRHJ9skAYsZ9LA0mL8wdEk99CICo_a28r8gvLJgXyMb0gUoF8A11RqxoiE-DuUyPnnMKEjTM9rqWGRPGPX-gyKRDPIuvYDQhdMy7kdkzT4ZF82IN4VmMpHf-Qsdsu95LDUWLPCqTncsEliwYTTim1WI_W2VXdL0qPp_TSA")
+    // dfnsSDK.connectWithOAuthToken("eyJhbGciOiJSUzI1NiIsImtpZCI6ImZRMkhFTXR4TjJqRnhZYkJXNWRKa0xjREhQbyJ9.eyJzdWIiOiI0NjMxNzM2QiIsImF1ZCI6ImNvbS5tb2xpdG9yTkZUIiwianRpIjoiQmMyYjRENFR5QzBJam5YM0w3Z0dNaSIsImlzcyI6Imh0dHBzOi8vcmVjLWxvZ2luLmFjY29yLmNvbSIsImlhdCI6MTY5MzI1MDY2MSwiZXhwIjoxNjkzMjUwOTYxLCJhdXRoX3RpbWUiOjE2OTMyNTA2NjEsInBpLnNyaSI6IlF3MzR6dWtXWlVWTW9TOXlmMml6T3ZPd2dXVS5aWFV0WTJWdWRISmhiQzB4LjdQUlQuazhuVXFtcEZwY2FHWlVWMDJPMGFRZ1NnMyJ9.SZ09ygcm_1f7IPaly79i5fhBQ0h8oIttu_-AQ_r5_q7jy8VcXjPKml61aCxL3pkI3LKrgdJ7Wv7m1fam3pc8fHqUrobuIkCH8_niKX_wJ34EmUDEna7QE7uR3PwXUlx6zXS72Mac9YiXld4Caa7XESm2r9GBu3xPFWFtwkSKqRZLHGsFwRHJ9skAYsZ9LA0mL8wdEk99CICo_a28r8gvLJgXyMb0gUoF8A11RqxoiE-DuUyPnnMKEjTM9rqWGRPGPX-gyKRDPIuvYDQhdMy7kdkzT4ZF82IN4VmMpHf-Qsdsu95LDUWLPCqTncsEliwYTTim1WI_W2VXdL0qPp_TSA")
     // dfnsSDK.showSettings()
-    // dfnsSDK.showMenu()
+    dfnsSDK.showWalletOverview()
     // dfnsSDK.showCreatePasskey();
+    // dfnsSDK.showRecoverySetup();
 
 
   </script>

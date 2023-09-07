@@ -1,6 +1,6 @@
 import { BlockchainNetwork, Wallet } from "@dfns/sdk/codegen/datamodel/Wallets";
 import { Component, Event, EventEmitter, Prop, State, h } from "@stencil/core";
-import dfnsState from "../../../stores/DfnsStore";
+import dfnsStore from "../../../stores/DfnsStore";
 import langState from "../../../stores/LanguageStore";
 import { waitForWalletActive } from "../../../utils/dfns";
 import { EButtonSize, EButtonVariant } from "../../../utils/enums/buttons-enums";
@@ -28,8 +28,8 @@ export class DfnsValidateWallet {
 	async validateWallet() {
 		try {
 			this.isLoading = true;
-			const response = await createWallet(dfnsState.dfnsHost, dfnsState.appId, dfnsState.rpId, dfnsState.dfnsUserToken, this.network);
-			const wallet = await waitForWalletActive(dfnsState.dfnsHost, dfnsState.appId, dfnsState.dfnsUserToken, response.id);
+			const response = await createWallet(dfnsStore.state.dfnsHost, dfnsStore.state.appId, dfnsStore.state.rpId, dfnsStore.state.dfnsUserToken, this.network);
+			const wallet = await waitForWalletActive(dfnsStore.state.dfnsHost, dfnsStore.state.appId, dfnsStore.state.dfnsUserToken, response.id);
 			this.isLoading = false;
 			this.walletValidated.emit(wallet);
 			return response;

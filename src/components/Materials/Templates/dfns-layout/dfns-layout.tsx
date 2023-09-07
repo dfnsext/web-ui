@@ -1,4 +1,5 @@
 import { Component, h, Prop } from "@stencil/core";
+import router from "../../../../stores/RouterStore";
 
 @Component({
 	tag: "dfns-layout",
@@ -20,7 +21,14 @@ export class DfnsLayout {
 				<div class="top-section">
 					<slot name="topSection" />
 					{this.closeBtn && (
-						<div class="cross" onClick={this.onClickCloseBtn}>
+						<div
+							class="cross"
+							onClick={() => {
+								router.goBack();
+								if (this.onClickCloseBtn) {
+									this.onClickCloseBtn();
+								}
+							}}>
 							<img alt="Unplugged" src={this.crossIconSrc} class="close-icon" />
 						</div>
 					)}

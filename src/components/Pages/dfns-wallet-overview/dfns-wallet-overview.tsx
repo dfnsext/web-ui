@@ -1,5 +1,5 @@
 import { Component, Event, EventEmitter, JSX, State, h } from "@stencil/core";
-import dfnsState from "../../../stores/DfnsStore";
+import dfnsStore from "../../../stores/DfnsStore";
 import langState from "../../../stores/LanguageStore";
 import { getDfnsDelegatedClient } from "../../../utils/dfns";
 import { WalletOverviewAction } from "../../../utils/enums/actions-enum";
@@ -9,6 +9,7 @@ import { EThemeModeType } from "../../../utils/enums/themes-enums";
 import { ITypo, ITypoColor } from "../../../utils/enums/typography-enums";
 import { ThemeMode } from "../../../utils/theme-modes";
 import { CopyClipboard } from "../../Elements/CopyClipboard";
+import router, { RouteType } from "../../../stores/RouterStore";
 
 @Component({
 	tag: "dfns-wallet-overview",
@@ -29,8 +30,9 @@ export class DfnsWalletOverview {
 
 	async fetchPasskeys() {
 		try {
-			const dfnsDelegated = getDfnsDelegatedClient(dfnsState.dfnsHost, dfnsState.appId, dfnsState.dfnsUserToken);
-			dfnsState.credentials = (await dfnsDelegated.auth.listUserCredentials()).items;
+			const dfnsDelegated = getDfnsDelegatedClient(dfnsStore.state.dfnsHost, dfnsStore.state.appId, dfnsStore.state.dfnsUserToken);
+			const credentials = (await dfnsDelegated.auth.listUserCredentials()).items;
+			dfnsStore.setValue("credentials", credentials)
 		} catch (error) {
 			console.error(error);
 		}
@@ -41,10 +43,6 @@ export class DfnsWalletOverview {
 		const truncatedStart = address.substring(0, startChars);
 		const truncatedEnd = address.substring(length - endChars, length);
 		return `${truncatedStart}...${truncatedEnd}`;
-	}
-
-	async closeBtn() {
-		this.action.emit(WalletOverviewAction.CLOSE);
 	}
 
 	render() {
@@ -97,9 +95,9 @@ export class DfnsWalletOverview {
 			</svg>
 		);
 
-		const formattedWalletAddress = this.formatWalletAddress(dfnsState.wallet.address, 5, 4); // Adjust startChars and endChars as needed
+		const formattedWalletAddress = this.formatWalletAddress(dfnsStore.state.wallet.address, 5, 4); // Adjust startChars and endChars as needed
 		return (
-			<dfns-layout closeBtn onClickCloseBtn={this.closeBtn.bind(this)}>
+			<dfns-layout closeBtn>
 				<div slot="topSection">
 					<dfns-typography typo={ITypo.H5_TITLE} color={ITypoColor.PRIMARY}>
 						{langState.values.header.my_wallet}
@@ -111,7 +109,7 @@ export class DfnsWalletOverview {
 							<dfns-typography typo={ITypo.TEXTE_SM_SEMIBOLD} color={ITypoColor.PRIMARY}>
 								{langState.values.pages.wallet_overview.wallet_address}
 							</dfns-typography>
-							<CopyClipboard value={dfnsState.wallet.address} openToaster={true}>
+							<CopyClipboard value={dfnsStore.state.wallet.address} openToaster={true}>
 								<dfns-button
 									content={formattedWalletAddress}
 									variant={EButtonVariant.SECONDARY}
@@ -122,7 +120,7 @@ export class DfnsWalletOverview {
 								/>
 							</CopyClipboard>
 						</div>
-						{dfnsState.credentials.length < 2 && (
+						{dfnsStore.state.credentials.length < 2 && (
 							<div class="content">
 								<dfns-alert variant={EAlertVariant.INFO} hasTitle>
 									<div slot="title">{langState.values.pages.wallet_overview.title_alert}</div>
@@ -135,7 +133,7 @@ export class DfnsWalletOverview {
 												sizing={EButtonSize.SMALL}
 												icon={iconArrowLeft}
 												iconposition="right"
-												onClick={() => this.action.emit(WalletOverviewAction.CREATE_PASSKEY)}
+												onClick={() => router.navigate(RouteType.CREATE_PASSKEY)}
 											/>
 										</div>
 									</div>
@@ -152,7 +150,7 @@ export class DfnsWalletOverview {
 						fullwidth
 						icon={iconSettings}
 						iconposition="left"
-						onClick={() => this.action.emit(WalletOverviewAction.SETTINGS)}
+						onClick={() => router.navigate(RouteType.SETTINGS)}
 					/>
 					<dfns-button
 						content={langState.values.pages.wallet_overview.button_logout}
@@ -161,7 +159,10 @@ export class DfnsWalletOverview {
 						fullwidth
 						icon={iconLogout}
 						iconposition="left"
-						onClick={this.closeBtn.bind(this)}
+						onClick={() => {
+							dfnsStore.disconnect();
+							router.close();
+						}}
 					/>
 				</div>
 			</dfns-layout>

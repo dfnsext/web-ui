@@ -1,7 +1,7 @@
 import { DeactivateCredentialRequest } from "@dfns/sdk/codegen/Auth";
 import { CredentialInfo } from "@dfns/sdk/codegen/datamodel/Auth";
 import { Component, Event, EventEmitter, JSX, Prop, h } from "@stencil/core";
-import dfnsState from "../../../stores/DfnsStore";
+import dfnsStore from "../../../stores/DfnsStore";
 import langState from "../../../stores/LanguageStore";
 import { getDfnsDelegatedClient } from "../../../utils/dfns";
 import { SettingsAction } from "../../../utils/enums/actions-enum";
@@ -11,7 +11,8 @@ import { EThemeModeType } from "../../../utils/enums/themes-enums";
 import { ITypo, ITypoColor } from "../../../utils/enums/typography-enums";
 import { ThemeMode } from "../../../utils/theme-modes";
 import { sign } from "../../../utils/webauthn";
-import { goBack } from "../../../stores/RouteStore";
+import router, { RouteType } from "../../../stores/RouterStore";
+
 
 @Component({
 	tag: "dfns-settings",
@@ -32,8 +33,9 @@ export class DfnsSettings {
 
 	async fetchPasskeys() {
 		try {
-			const dfnsDelegated = getDfnsDelegatedClient(dfnsState.dfnsHost, dfnsState.appId, dfnsState.dfnsUserToken);
-			dfnsState.credentials = (await dfnsDelegated.auth.listUserCredentials()).items;
+			const dfnsDelegated = getDfnsDelegatedClient(dfnsStore.state.dfnsHost, dfnsStore.state.appId, dfnsStore.state.dfnsUserToken);
+			const credentials = (await dfnsDelegated.auth.listUserCredentials()).items;
+			dfnsStore.setValue("credentials", credentials)
 		} catch (error) {
 			console.error(error);
 		}
@@ -41,10 +43,10 @@ export class DfnsSettings {
 
 	async desactivatePasskey(passkey: CredentialInfo) {
 		try {
-			const dfnsDelegated = getDfnsDelegatedClient(dfnsState.dfnsHost, dfnsState.appId, dfnsState.dfnsUserToken);
+			const dfnsDelegated = getDfnsDelegatedClient(dfnsStore.state.dfnsHost, dfnsStore.state.appId, dfnsStore.state.dfnsUserToken);
 			const request: DeactivateCredentialRequest = { body: { credentialUuid: passkey.credentialUuid } };
 			const challenge = await dfnsDelegated.auth.deactivateCredentialInit(request);
-			const signedChallenge = await sign(dfnsState.rpId, challenge.challenge, challenge.allowCredentials);
+			const signedChallenge = await sign(dfnsStore.state.rpId, challenge.challenge, challenge.allowCredentials);
 			await dfnsDelegated.auth.deactivateCredentialComplete(request, {
 				challengeIdentifier: challenge.challengeIdentifier,
 				firstFactor: signedChallenge,
@@ -56,10 +58,10 @@ export class DfnsSettings {
 
 	async activatePasskey(passkey: CredentialInfo) {
 		try {
-			const dfnsDelegated = getDfnsDelegatedClient(dfnsState.dfnsHost, dfnsState.appId, dfnsState.dfnsUserToken);
+			const dfnsDelegated = getDfnsDelegatedClient(dfnsStore.state.dfnsHost, dfnsStore.state.appId, dfnsStore.state.dfnsUserToken);
 			const request: DeactivateCredentialRequest = { body: { credentialUuid: passkey.credentialUuid } };
 			const challenge = await dfnsDelegated.auth.activateCredentialInit(request);
-			const signedChallenge = await sign(dfnsState.rpId, challenge.challenge, challenge.allowCredentials);
+			const signedChallenge = await sign(dfnsStore.state.rpId, challenge.challenge, challenge.allowCredentials);
 			await dfnsDelegated.auth.activateCredentialComplete(request, {
 				challengeIdentifier: challenge.challengeIdentifier,
 				firstFactor: signedChallenge,
@@ -78,13 +80,6 @@ export class DfnsSettings {
 		this.fetchPasskeys();
 	}
 
-	async closeBtn() {
-		this.action.emit(SettingsAction.CLOSE);
-	}
-
-	handleBackClick() {
-		goBack();
-	}
 
 	render() {
 		const iconAdd: JSX.Element = (
@@ -128,7 +123,7 @@ export class DfnsSettings {
 		);
 
 		return (
-			<dfns-layout closeBtn onClickCloseBtn={this.closeBtn.bind(this)}>
+			<dfns-layout closeBtn>
 				<div slot="topSection">
 					<dfns-typography typo={ITypo.H5_TITLE} color={ITypoColor.PRIMARY}>
 						{langState.values.header.settings}
@@ -137,7 +132,7 @@ export class DfnsSettings {
 				<div slot="contentSection">
 					<div class="first-section">
 						<dfns-typography typo={ITypo.TEXTE_SM_SEMIBOLD} color={ITypoColor.PRIMARY}>
-							{dfnsState.credentials.length} {langState.values.pages.settings.passkeys}
+							{dfnsStore.state.credentials.length} {langState.values.pages.settings.passkeys}
 						</dfns-typography>
 						<dfns-button
 							content={langState.values.pages.settings.button_create_passkey}
@@ -145,24 +140,23 @@ export class DfnsSettings {
 							sizing={EButtonSize.SMALL}
 							iconposition="left"
 							icon={iconAdd}
-							onClick={() => this.action.emit(SettingsAction.CREATE_PASSKEY)}
+							onClick={() => router.navigate(RouteType.CREATE_PASSKEY)}
 						/>
 					</div>
 					<div class="credentials-container">
-						{dfnsState.credentials.map((passkey) => {
+						{dfnsStore.state.credentials.map((passkey) => {
 							return (
 								<div key={passkey.credentialUuid} class="tab-container">
 									<div class="row">
 										<div class="toggle">
-											{key}
-											{/* {dfnsState.credentials.length === 1 ? (
+											{passkey.isActive && dfnsStore.state.credentials.filter((crendential) => crendential.isActive).length === 1 ? (
 												key
 											) : (
 												<toggle-switch
 													checked={passkey.isActive}
-													onClick={() => dfnsState.credentials.length > 1 && this.onClickToggle(passkey)}
+													onClick={() => dfnsStore.state.credentials.length > 1 && this.onClickToggle(passkey)}
 												/>
-											)} */}
+											)}
 										</div>
 										<div class="title">
 											<dfns-typography typo={ITypo.TEXTE_MD_SEMIBOLD} color={ITypoColor.PRIMARY}>
@@ -199,8 +193,7 @@ export class DfnsSettings {
 						sizing={EButtonSize.MEDIUM}
 						fullwidth
 						iconposition="left"
-						//onClick={() => this.action.emit(SettingsAction.BACK)}
-						onClick={() => this.handleBackClick()}
+						onClick={() => router.goBack()}
 					/>
 				</div>
 			</dfns-layout>

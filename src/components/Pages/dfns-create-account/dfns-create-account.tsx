@@ -7,7 +7,7 @@ import { registerWithOAuth } from "../../../utils/helper";
 import { ThemeMode } from "../../../utils/theme-modes";
 import { RegisterCompleteResponse } from "../../../services/api/Register";
 import langState from "../../../stores/LanguageStore";
-import dfnsState from "../../../stores/DfnsStore";
+import dfnsStore from "../../../stores/DfnsStore";
 
 @Component({
 	tag: "dfns-create-account",
@@ -30,9 +30,9 @@ export class DfnsCreateAccount {
 		try {
 			this.isLoading = true;
 			const response = await registerWithOAuth(
-				dfnsState.apiUrl,
-				dfnsState.appId,
-				dfnsState.oauthAccessToken,
+				dfnsStore.state.apiUrl,
+				dfnsStore.state.appId,
+				dfnsStore.state.oauthAccessToken,
 				this.authenticatorAttachment,
 			);
 			this.isLoading = false;

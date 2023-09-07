@@ -1,8 +1,10 @@
+import { CredentialInfo } from "@dfns/sdk/codegen/datamodel/Auth";
 import { Wallet } from '@dfns/sdk/codegen/datamodel/Wallets';
 
 export const DFNS_END_USER_TOKEN = 'dfnsEndUserToken'
 export const DFNS_ACTIVE_WALLET = 'dfnsActiveWallet'
 export const OAUTH_ACCESS_TOKEN = 'oauthAccessToken'
+export const DFNS_CREDENTIALS = 'dfnsCredentials'
 
 export default class LocalStorageService {
 	private static instance: LocalStorageService;
@@ -31,6 +33,11 @@ export default class LocalStorageService {
 			get: () => this.getValue<string>(OAUTH_ACCESS_TOKEN),
 			set: (item: string) => this.setValue(OAUTH_ACCESS_TOKEN, item),
 			delete: () => this.delete(OAUTH_ACCESS_TOKEN),
+		},
+		[DFNS_CREDENTIALS]: {
+			get: () => this.getValue<CredentialInfo[]>(DFNS_CREDENTIALS),
+			set: (item: CredentialInfo[]) => this.setValue(DFNS_CREDENTIALS, item),
+			delete: () => this.delete(DFNS_CREDENTIALS),
 		},
 	};
 

@@ -1,6 +1,8 @@
-import { Fido2Attestation } from "@dfns/sdk";
-import { CredentialKind, Fido2Options } from "@dfns/sdk/codegen/datamodel/Auth";
+import { RecoveryKeyAttestation } from "@dfns/sdk";
+import { CredentialKind, PublicKeyOptions } from "@dfns/sdk/codegen/datamodel/Auth";
 import { Component, Event, EventEmitter, Fragment, Prop, State, h } from "@stencil/core";
+import dfnsStore from "../../../stores/DfnsStore";
+import langState from "../../../stores/LanguageStore";
 import { getDfnsDelegatedClient } from "../../../utils/dfns";
 import { CreatePasskeyAction } from "../../../utils/enums/actions-enum";
 import { EAlertVariant } from "../../../utils/enums/alerts-enums";
@@ -8,29 +10,26 @@ import { EButtonSize, EButtonVariant } from "../../../utils/enums/buttons-enums"
 import { EThemeModeType } from "../../../utils/enums/themes-enums";
 import { ITypo, ITypoColor } from "../../../utils/enums/typography-enums";
 import { ThemeMode } from "../../../utils/theme-modes";
-import { create, sign } from "../../../utils/webauthn";
-import langState from "../../../stores/LanguageStore";
-import dfnsStore from "../../../stores/DfnsStore";
+import { generateRsaKey } from "../../../utils/crypto";
 import router from "../../../stores/RouterStore";
 
-
 @Component({
-	tag: "dfns-create-passkey",
-	styleUrl: "dfns-create-passkey.scss",
+	tag: "dfns-recovery-setup",
+	styleUrl: "dfns-recovery-setup.scss",
 	shadow: true,
 })
 
 
 
-export class DfnsCreatePasskey {
+export class DfnsRecoverySetup {
 	private themeMode = ThemeMode.getInstance();
 
 	@Prop({ mutable: true }) visible: string;
 	@State() isLoading: boolean = false;
 	@State() step = 1;
 	@State() passkeyName?: string;
-	@State() newPasskeyAttestation: Fido2Attestation;
-	@State() newPasskeyChallenge: Fido2Options;
+	@State() newPasskeyAttestation: RecoveryKeyAttestation;
+	@State() newPasskeyChallenge: PublicKeyOptions;
 	@Event() action: EventEmitter<CreatePasskeyAction>;
 
 	componentWillLoad() {
@@ -42,10 +41,14 @@ export class DfnsCreatePasskey {
 		try {
 			const dfnsDelegated = getDfnsDelegatedClient(dfnsStore.state.dfnsHost, dfnsStore.state.appId, dfnsStore.state.dfnsUserToken);
 			this.newPasskeyChallenge = (await dfnsDelegated.auth.createUserCredentialChallenge({
-				body: { kind: CredentialKind.Fido2 },
-			})) as Fido2Options;
-			this.newPasskeyAttestation = await create(this.newPasskeyChallenge);
-			this.step = 2;
+				body: { kind: CredentialKind.RecoveryKey },
+			})) as PublicKeyOptions;
+
+
+			const privateKey = await generateRsaKey();
+			console.log(privateKey);
+			// this.newPasskeyAttestation = await create(this.newPasskeyChallenge);
+			// this.step = 2;
 		} catch (err) {
 			console.error(err);
 			this.isLoading = false;
@@ -54,40 +57,44 @@ export class DfnsCreatePasskey {
 		this.isLoading = false;
 	}
 
-	async completePasskeyCreation() {
-		this.isLoading = true;
-		try {
-			const dfnsDelegated = getDfnsDelegatedClient(dfnsStore.state.dfnsHost, dfnsStore.state.appId, dfnsStore.state.dfnsUserToken);
-			const request = {
-				body: {
-					...this.newPasskeyAttestation,
-					credentialName: this.passkeyName,
-					//@ts-ignore
-					challengeIdentifier: this.newPasskeyChallenge.temporaryAuthenticationToken,
-				},
-			};
-			//@ts-ignore
-			const addCredentialInitChallenge = await dfnsDelegated.auth.createUserCredentialInit(request);
-			const assertion = await sign(dfnsStore.state.rpId, addCredentialInitChallenge.challenge, addCredentialInitChallenge.allowCredentials);
+	// async completePasskeyCreation() {
+	// 	this.isLoading = true;
+	// 	try {
+	// 		const dfnsDelegated = getDfnsDelegatedClient(dfnsStore.state.dfnsHost, dfnsStore.state.appId, dfnsStore.state.dfnsUserToken);
+	// 		const request = {
+	// 			body: {
+	// 				...this.newPasskeyAttestation,
+	// 				credentialName: this.passkeyName,
+	// 				//@ts-ignore
+	// 				challengeIdentifier: this.newPasskeyChallenge.temporaryAuthenticationToken,
+	// 			},
+	// 		};
+	// 		//@ts-ignore
+	// 		const addCredentialInitChallenge = await dfnsDelegated.auth.createUserCredentialInit(request);
+	// 		const assertion = await sign(dfnsStore.state.rpId, addCredentialInitChallenge.challenge, addCredentialInitChallenge.allowCredentials);
 
-			//@ts-ignore
-			await dfnsDelegated.auth.createUserCredentialComplete(request, {
-				challengeIdentifier: addCredentialInitChallenge.challengeIdentifier,
-				firstFactor: assertion,
-			});
-			router.goBack();
-			this.isLoading = false;
-			this.step = 1;
-			this.passkeyName = undefined;
-		} catch (err) {
-			this.isLoading = false;
-			console.error(err);
-		}
+	// 		//@ts-ignore
+	// 		await dfnsDelegated.auth.createUserCredentialComplete(request, {
+	// 			challengeIdentifier: addCredentialInitChallenge.challengeIdentifier,
+	// 			firstFactor: assertion,
+	// 		});
+	// 		this.action.emit(CreatePasskeyAction.BACK);
+	// 		this.isLoading = false;
+	// 		this.step = 1;
+	// 		this.passkeyName = undefined;
+	// 	} catch (err) {
+	// 		this.isLoading = false;
+	// 		console.error(err);
+	// 	}
+	// }
+
+	handleBackClick() {
+		router.goBack();
 	}
 
 	render() {
 		return (
-			<dfns-layout closeBtn>
+			<dfns-layout closeBtn onClickCloseBtn={() => this.action.emit(CreatePasskeyAction.CLOSE)}>
 				<div slot="topSection">
 					<dfns-typography typo={ITypo.H5_TITLE} color={ITypoColor.PRIMARY} class="custom-class">
 						{langState.values.header.create_passkey}
@@ -145,7 +152,7 @@ export class DfnsCreatePasskey {
 								sizing={EButtonSize.MEDIUM}
 								fullwidth
 								iconposition="left"
-								onClick={() => router.goBack()}
+								onClick={() => this.handleBackClick()}
 							/>
 						</Fragment>
 					)}
@@ -158,7 +165,7 @@ export class DfnsCreatePasskey {
 								fullwidth
 								iconposition="left"
 								disabled={!this.passkeyName}
-								onClick={() => this.completePasskeyCreation()}
+								onClick={() => {}}
 								isloading={this.isLoading}
 							/>
 						</Fragment>
