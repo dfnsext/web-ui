@@ -52,6 +52,23 @@ export enum ESocialLogin {
 	ACCOR = "accor",
 }
 
+const overlayStyles: Partial<CSSStyleDeclaration> = {
+    position: "fixed",
+    top: "0",
+    right: "0",
+    width: "100%",
+    height: "100%",
+    borderRadius: "0",
+    border: "none",
+    zIndex: "2147483647",
+};
+
+function applyOverlayStyles(elem: HTMLElement) {
+    for (const [cssProperty, value] of Object.entries(overlayStyles)) {
+        (elem.style as any)[cssProperty as any] = value;
+    }
+}
+
 export class DfnsSDK {
 	public static instance: DfnsSDK | null = null;
 
@@ -83,6 +100,7 @@ export class DfnsSDK {
 		setActiveLanguage(this.options.lang);
 		this.dfnsContainer = document.createElement("dfns-main");
 		this.dfnsContainer.classList.add("dfns-container");
+		applyOverlayStyles(this.dfnsContainer);
 		document.body.appendChild(this.dfnsContainer);
 
 		dfnsStore.setValue("apiUrl", this.options.apiUrl);
