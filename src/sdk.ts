@@ -139,11 +139,9 @@ export class DfnsSDK {
 					wallet = await this.waitForWalletValidation();
 				}
 			} else {
-				this.dfnsContainer.style.display = "none";
 				throw error;
 			}
 		}
-		this.dfnsContainer.style.display = "none";
 		dfnsStore.setValue("wallet", wallet);
 		return wallet;
 	}
