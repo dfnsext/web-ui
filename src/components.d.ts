@@ -67,7 +67,6 @@ export namespace Components {
         "bloomLogoSrc": string;
         "closeBtn"?: boolean;
         "crossIconSrc": string;
-        "molitorLogoSrc": string;
         "onClickCloseBtn": () => void;
     }
     interface DfnsLoader {
@@ -353,7 +352,6 @@ declare namespace LocalJSX {
         "bloomLogoSrc"?: string;
         "closeBtn"?: boolean;
         "crossIconSrc"?: string;
-        "molitorLogoSrc"?: string;
         "onClickCloseBtn"?: () => void;
     }
     interface DfnsLoader {

@@ -4,10 +4,8 @@ import dfnsStore from "../../../stores/DfnsStore";
 import langState from "../../../stores/LanguageStore";
 import { waitForWalletActive } from "../../../utils/dfns";
 import { EButtonSize, EButtonVariant } from "../../../utils/enums/buttons-enums";
-import { EThemeModeType } from "../../../utils/enums/themes-enums";
 import { ITypo, ITypoColor } from "../../../utils/enums/typography-enums";
 import { createWallet } from "../../../utils/helper";
-import { ThemeMode } from "../../../utils/theme-modes";
 
 @Component({
 	tag: "dfns-validate-wallet",
@@ -15,15 +13,10 @@ import { ThemeMode } from "../../../utils/theme-modes";
 	shadow: true,
 })
 export class DfnsValidateWallet {
-	private themeMode = ThemeMode.getInstance();
 
 	@Prop() network: BlockchainNetwork;
 	@Event() walletValidated: EventEmitter<Wallet>;
 	@State() isLoading: boolean = false;
-
-	componentWillLoad() {
-		this.themeMode.switch(EThemeModeType.ACCOR);
-	}
 
 	async validateWallet() {
 		try {

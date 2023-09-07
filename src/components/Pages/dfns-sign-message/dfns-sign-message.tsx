@@ -1,13 +1,11 @@
 import { GetSignatureResponse } from "@dfns/sdk/codegen/Wallets";
 import { Component, Event, EventEmitter, JSX, Prop, State, h } from "@stencil/core";
 
+import langState from "../../../stores/LanguageStore";
+import { EAlertVariant } from "../../../utils/enums/alerts-enums";
 import { EButtonSize, EButtonVariant } from "../../../utils/enums/buttons-enums";
-import { EThemeModeType } from "../../../utils/enums/themes-enums";
 import { ITypo, ITypoColor } from "../../../utils/enums/typography-enums";
 import { signMessage } from "../../../utils/helper";
-import { ThemeMode } from "../../../utils/theme-modes";
-import { EAlertVariant } from "../../../utils/enums/alerts-enums";
-import langState from "../../../stores/LanguageStore";
 
 @Component({
 	tag: "dfns-sign-message",
@@ -16,7 +14,6 @@ import langState from "../../../stores/LanguageStore";
 	shadow: true,
 })
 export class DfnsSignMessage {
-	private themeMode = ThemeMode.getInstance();
 	@Prop() dfnsHost: string;
 	@Prop() walletId: string;
 	@Prop() appId: string;
@@ -28,10 +25,6 @@ export class DfnsSignMessage {
 	@State() hasErrors: boolean = false;
 	@State() errorMessage: string = "";
 	@State() isLoading: boolean = false;
-
-	componentWillLoad() {
-		this.themeMode.switch(EThemeModeType.ACCOR);
-	}
 
 	async signMessage() {
 		try {

@@ -28,7 +28,7 @@
 		},
 		"create_account": {
 			"title": "Création du\nwallet",
-			"description": "Utilisez la reconnaissance d'empreinte digitale ou de visage pour vous connecter | Molitor",
+			"description": "Utilisez la reconnaissance d'empreinte digitale ou de visage pour vous connecter | ",
 			"button_create": "Continue"
 		},
 		"validate_wallet": {

@@ -1,15 +1,13 @@
 import { Component, Event, EventEmitter, JSX, State, h } from "@stencil/core";
 import dfnsStore from "../../../stores/DfnsStore";
 import langState from "../../../stores/LanguageStore";
+import router, { RouteType } from "../../../stores/RouterStore";
 import { getDfnsDelegatedClient } from "../../../utils/dfns";
 import { WalletOverviewAction } from "../../../utils/enums/actions-enum";
 import { EAlertVariant } from "../../../utils/enums/alerts-enums";
 import { EButtonSize, EButtonVariant } from "../../../utils/enums/buttons-enums";
-import { EThemeModeType } from "../../../utils/enums/themes-enums";
 import { ITypo, ITypoColor } from "../../../utils/enums/typography-enums";
-import { ThemeMode } from "../../../utils/theme-modes";
 import { CopyClipboard } from "../../Elements/CopyClipboard";
-import router, { RouteType } from "../../../stores/RouterStore";
 
 @Component({
 	tag: "dfns-wallet-overview",
@@ -17,14 +15,13 @@ import router, { RouteType } from "../../../stores/RouterStore";
 	shadow: true,
 })
 export class DfnsWalletOverview {
-	private themeMode = ThemeMode.getInstance();
+	
 
 	@State() isLoading: boolean = false;
 
 	@Event() action: EventEmitter<WalletOverviewAction>;
 
 	async componentWillLoad() {
-		this.themeMode.switch(EThemeModeType.ACCOR);
 		this.fetchPasskeys();
 	}
 

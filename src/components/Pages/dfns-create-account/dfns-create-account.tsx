@@ -1,13 +1,11 @@
 import { Component, Event, EventEmitter, Prop, State, h } from "@stencil/core";
 
+import { RegisterCompleteResponse } from "../../../services/api/Register";
+import dfnsStore from "../../../stores/DfnsStore";
+import langState from "../../../stores/LanguageStore";
 import { EButtonSize, EButtonVariant } from "../../../utils/enums/buttons-enums";
-import { EThemeModeType } from "../../../utils/enums/themes-enums";
 import { ITypo, ITypoColor } from "../../../utils/enums/typography-enums";
 import { registerWithOAuth } from "../../../utils/helper";
-import { ThemeMode } from "../../../utils/theme-modes";
-import { RegisterCompleteResponse } from "../../../services/api/Register";
-import langState from "../../../stores/LanguageStore";
-import dfnsStore from "../../../stores/DfnsStore";
 
 @Component({
 	tag: "dfns-create-account",
@@ -15,16 +13,11 @@ import dfnsStore from "../../../stores/DfnsStore";
 	shadow: true,
 })
 export class DfnsCreateAccount {
-	private themeMode = ThemeMode.getInstance();
 
 	@Prop() authenticatorAttachment: AuthenticatorAttachment;
 
 	@Event() passkeyCreated: EventEmitter<RegisterCompleteResponse>;
 	@State() isLoading: boolean = false;
-
-	componentWillLoad() {
-		this.themeMode.switch(EThemeModeType.ACCOR);
-	}
 
 	async createPasskey() {
 		try {
@@ -67,14 +60,9 @@ export class DfnsCreateAccount {
 					<div class="contentContainer">
 						<div class="title">
 							<dfns-typography typo={ITypo.TEXTE_LG_SEMIBOLD}>
-								{langState.values.pages.create_account.description}
+								{langState.values.pages.create_account.description} {dfnsStore.state.appName}
 							</dfns-typography>
 						</div>
-						{/* <div class="content">
-									<dfns-typography typo={ITypo.TEXTE_SM_REGULAR} color={ITypoColor.SECONDARY}>
-										{langState.values.pages.create_account.description}
-									</dfns-typography>
-								</div> */}
 					</div>
 				</div>
 				<div slot="bottomSection">

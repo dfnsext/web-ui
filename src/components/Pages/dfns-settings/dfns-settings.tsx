@@ -3,15 +3,13 @@ import { CredentialInfo } from "@dfns/sdk/codegen/datamodel/Auth";
 import { Component, Event, EventEmitter, JSX, Prop, h } from "@stencil/core";
 import dfnsStore from "../../../stores/DfnsStore";
 import langState from "../../../stores/LanguageStore";
+import router, { RouteType } from "../../../stores/RouterStore";
 import { getDfnsDelegatedClient } from "../../../utils/dfns";
 import { SettingsAction } from "../../../utils/enums/actions-enum";
 import { EAlertVariant } from "../../../utils/enums/alerts-enums";
 import { EButtonSize, EButtonVariant } from "../../../utils/enums/buttons-enums";
-import { EThemeModeType } from "../../../utils/enums/themes-enums";
 import { ITypo, ITypoColor } from "../../../utils/enums/typography-enums";
-import { ThemeMode } from "../../../utils/theme-modes";
 import { sign } from "../../../utils/webauthn";
-import router, { RouteType } from "../../../stores/RouterStore";
 
 
 @Component({
@@ -21,13 +19,11 @@ import router, { RouteType } from "../../../stores/RouterStore";
 	shadow: true,
 })
 export class DfnsSettings {
-	private themeMode = ThemeMode.getInstance();
 
 	@Event() action: EventEmitter<SettingsAction>;
 	@Prop() confirmationImgSrc = "https://storage.googleapis.com/dfns-frame-stg/assets/icons/confirmation.svg";
 
 	async componentWillLoad() {
-		this.themeMode.switch(EThemeModeType.ACCOR);
 		this.fetchPasskeys();
 	}
 

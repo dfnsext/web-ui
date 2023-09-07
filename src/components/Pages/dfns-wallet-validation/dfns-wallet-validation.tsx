@@ -4,9 +4,7 @@ import dfnsStore from "../../../stores/DfnsStore";
 import langState from "../../../stores/LanguageStore";
 import { waitForWalletActive } from "../../../utils/dfns";
 import { EButtonSize, EButtonVariant } from "../../../utils/enums/buttons-enums";
-import { EThemeModeType } from "../../../utils/enums/themes-enums";
 import { ITypo, ITypoColor } from "../../../utils/enums/typography-enums";
-import { ThemeMode } from "../../../utils/theme-modes";
 
 @Component({
 	tag: "dfns-wallet-validation",
@@ -15,14 +13,13 @@ import { ThemeMode } from "../../../utils/theme-modes";
 	shadow: true,
 })
 export class DfnsWalletValidation {
-	private themeMode = ThemeMode.getInstance();
+	
 
 	@Event() walletValidated: EventEmitter<Wallet>;
 	@Prop() confirmationImgSrc = "https://storage.googleapis.com/dfns-frame-stg/assets/icons/confirmation.svg";
 	@State() isLoading = true;
 
 	async componentWillLoad() {
-		this.themeMode.switch(EThemeModeType.ACCOR);
 		dfnsStore.setValue("wallet", await waitForWalletActive(dfnsStore.state.dfnsHost, dfnsStore.state.appId, dfnsStore.state.dfnsUserToken, dfnsStore.state.wallet.id));
 		this.isLoading = false;
 	}

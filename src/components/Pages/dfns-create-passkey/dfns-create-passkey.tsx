@@ -1,17 +1,15 @@
 import { Fido2Attestation } from "@dfns/sdk";
 import { CredentialKind, Fido2Options } from "@dfns/sdk/codegen/datamodel/Auth";
 import { Component, Event, EventEmitter, Fragment, Prop, State, h } from "@stencil/core";
+import dfnsStore from "../../../stores/DfnsStore";
+import langState from "../../../stores/LanguageStore";
+import router from "../../../stores/RouterStore";
 import { getDfnsDelegatedClient } from "../../../utils/dfns";
 import { CreatePasskeyAction } from "../../../utils/enums/actions-enum";
 import { EAlertVariant } from "../../../utils/enums/alerts-enums";
 import { EButtonSize, EButtonVariant } from "../../../utils/enums/buttons-enums";
-import { EThemeModeType } from "../../../utils/enums/themes-enums";
 import { ITypo, ITypoColor } from "../../../utils/enums/typography-enums";
-import { ThemeMode } from "../../../utils/theme-modes";
 import { create, sign } from "../../../utils/webauthn";
-import langState from "../../../stores/LanguageStore";
-import dfnsStore from "../../../stores/DfnsStore";
-import router from "../../../stores/RouterStore";
 
 
 @Component({
@@ -23,7 +21,6 @@ import router from "../../../stores/RouterStore";
 
 
 export class DfnsCreatePasskey {
-	private themeMode = ThemeMode.getInstance();
 
 	@Prop({ mutable: true }) visible: string;
 	@State() isLoading: boolean = false;
@@ -32,10 +29,6 @@ export class DfnsCreatePasskey {
 	@State() newPasskeyAttestation: Fido2Attestation;
 	@State() newPasskeyChallenge: Fido2Options;
 	@Event() action: EventEmitter<CreatePasskeyAction>;
-
-	componentWillLoad() {
-		this.themeMode.switch(EThemeModeType.ACCOR);
-	}
 
 	async initPasskeyCreation() {
 		this.isLoading = true;

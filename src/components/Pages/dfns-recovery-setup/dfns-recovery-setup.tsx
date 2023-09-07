@@ -3,15 +3,13 @@ import { CredentialKind, PublicKeyOptions } from "@dfns/sdk/codegen/datamodel/Au
 import { Component, Event, EventEmitter, Fragment, Prop, State, h } from "@stencil/core";
 import dfnsStore from "../../../stores/DfnsStore";
 import langState from "../../../stores/LanguageStore";
+import router from "../../../stores/RouterStore";
+import { generateRsaKey } from "../../../utils/crypto";
 import { getDfnsDelegatedClient } from "../../../utils/dfns";
 import { CreatePasskeyAction } from "../../../utils/enums/actions-enum";
 import { EAlertVariant } from "../../../utils/enums/alerts-enums";
 import { EButtonSize, EButtonVariant } from "../../../utils/enums/buttons-enums";
-import { EThemeModeType } from "../../../utils/enums/themes-enums";
 import { ITypo, ITypoColor } from "../../../utils/enums/typography-enums";
-import { ThemeMode } from "../../../utils/theme-modes";
-import { generateRsaKey } from "../../../utils/crypto";
-import router from "../../../stores/RouterStore";
 
 @Component({
 	tag: "dfns-recovery-setup",
@@ -22,7 +20,6 @@ import router from "../../../stores/RouterStore";
 
 
 export class DfnsRecoverySetup {
-	private themeMode = ThemeMode.getInstance();
 
 	@Prop({ mutable: true }) visible: string;
 	@State() isLoading: boolean = false;
@@ -32,9 +29,6 @@ export class DfnsRecoverySetup {
 	@State() newPasskeyChallenge: PublicKeyOptions;
 	@Event() action: EventEmitter<CreatePasskeyAction>;
 
-	componentWillLoad() {
-		this.themeMode.switch(EThemeModeType.ACCOR);
-	}
 
 	async initPasskeyCreation() {
 		this.isLoading = true;
