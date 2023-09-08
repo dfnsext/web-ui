@@ -15,7 +15,7 @@ export class DfnsMain {
 
 	render() {
 		return (
-			<div class="root" data-visible={router.state.route ? "visible" : "hidden"}>
+			<div class="root">
 				<div class="backdrop" />
 				{router.state.route === RouteType.CREATE_ACCOUNT && (
 					<dfns-create-account authenticatorAttachment={this.userCreationAuthenticatorAttachment}></dfns-create-account>
