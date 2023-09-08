@@ -167,7 +167,7 @@ export class DfnsSettings {
 							);
 						})}
 					</div>
-					<div class="recovery-kit">
+					{/* <div class="recovery-kit">
 						<dfns-button
 							content={langState.values.pages.settings.button_recovery_kit}
 							variant={EButtonVariant.SECONDARY}
@@ -176,7 +176,7 @@ export class DfnsSettings {
 							icon={arrowRight}
 							onClick={() => {}}
 						/>
-					</div>
+					</div> */}
 
 					<dfns-alert variant={EAlertVariant.INFO}>
 						<div slot="content">{langState.values.pages.settings.content_alert}</div>

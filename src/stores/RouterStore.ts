@@ -1,4 +1,5 @@
 import { createStore } from "@stencil/store";
+import { EventEmitter } from "../services/EventEmitter";
 
 export enum RouteType {
 	"CREATE_ACCOUNT" = "create-account",
@@ -11,6 +12,8 @@ export enum RouteType {
 	"RECOVERY_SETUP" = "recovery-setup",
 }
 
+const routerEvent = new EventEmitter<RouteType>();
+
 const { state } = createStore<{
 	route: RouteType | null;
 	history: RouteType[];
@@ -22,6 +25,7 @@ function navigate(route: RouteType) {
 	if (state.route === route) return;
 	state.route = route;
 	state.history.push(state.route);
+	routerEvent.emit("changed", state.route);
 }
 
 function goBack() {
@@ -31,11 +35,14 @@ function goBack() {
 		state.route = null;
 	}
 	state.route = previousRoute;
+	routerEvent.emit("changed", state.route);
+
 }
 
 export function close() {
 	state.history = [];
 	state.route = null;
+	routerEvent.emit("changed", state.route);
 }
 
 const router = {
@@ -43,6 +50,7 @@ const router = {
 	navigate,
 	goBack,
 	close,
+	routerEvent
 };
 
 export default router;
