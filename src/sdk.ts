@@ -1,7 +1,12 @@
 import { Wallet } from "@dfns/sdk/codegen/datamodel/Wallets";
 
 import { GetSignatureResponse } from "@dfns/sdk/codegen/Wallets";
-import LocalStorageService, { DFNS_ACTIVE_WALLET, DFNS_CREDENTIALS, DFNS_END_USER_TOKEN, OAUTH_ACCESS_TOKEN } from "./services/LocalStorageService";
+import LocalStorageService, {
+	DFNS_ACTIVE_WALLET,
+	DFNS_CREDENTIALS,
+	DFNS_END_USER_TOKEN,
+	OAUTH_ACCESS_TOKEN,
+} from "./services/LocalStorageService";
 import { RegisterCompleteResponse } from "./services/api/Register";
 import dfnsStore from "./stores/DfnsStore";
 import { setActiveLanguage } from "./stores/LanguageStore";
@@ -52,22 +57,22 @@ export enum ESocialLogin {
 	ACCOR = "accor",
 }
 
-const overlayStyles: Partial<CSSStyleDeclaration> = {
-    position: "fixed",
-    top: "0",
-    right: "0",
-    width: "100%",
-    height: "100%",
-    borderRadius: "0",
-    border: "none",
-    zIndex: "2147483647",
-};
+// const overlayStyles: Partial<CSSStyleDeclaration> = {
+//     position: "fixed",
+//     top: "0",
+//     right: "0",
+//     width: "100%",
+//     height: "100%",
+//     borderRadius: "0",
+//     border: "none",
+//     zIndex: "2147483647",
+// };
 
-function applyOverlayStyles(elem: HTMLElement) {
-    for (const [cssProperty, value] of Object.entries(overlayStyles)) {
-        (elem.style as any)[cssProperty as any] = value;
-    }
-}
+// function applyOverlayStyles(elem: HTMLElement) {
+//     for (const [cssProperty, value] of Object.entries(overlayStyles)) {
+//         (elem.style as any)[cssProperty as any] = value;
+//     }
+// }
 
 export class DfnsSDK {
 	public static instance: DfnsSDK | null = null;
@@ -100,7 +105,7 @@ export class DfnsSDK {
 		setActiveLanguage(this.options.lang);
 		this.dfnsContainer = document.createElement("dfns-main");
 		this.dfnsContainer.classList.add("dfns-container");
-		applyOverlayStyles(this.dfnsContainer);
+		// applyOverlayStyles(this.dfnsContainer);
 		document.body.appendChild(this.dfnsContainer);
 
 		dfnsStore.setValue("apiUrl", this.options.apiUrl);
@@ -114,6 +119,8 @@ export class DfnsSDK {
 		dfnsStore.setValue("oauthAccessToken", LocalStorageService.getInstance().items[OAUTH_ACCESS_TOKEN].get() ?? null);
 		dfnsStore.setValue("wallet", LocalStorageService.getInstance().items[DFNS_ACTIVE_WALLET].get() ?? null);
 		dfnsStore.setValue("credentials", LocalStorageService.getInstance().items[DFNS_CREDENTIALS].get() ?? []);
+
+		this.onRouteChanged();
 	}
 
 	public async connectWithOAuthToken(oauthToken: string): Promise<any> {
@@ -213,5 +220,35 @@ export class DfnsSDK {
 				resolve(event.detail as T);
 			});
 		});
+	}
+
+	protected onRouteChanged() {
+		const callback = (route: RouteType) => {
+			if (!route) {
+				this.dfnsContainer.setAttribute("data-visible", "hidden");
+				return;
+			}
+			this.dfnsContainer.setAttribute("data-visible", "visible");
+		};
+		router.routerEvent.on("changed", callback);
+		return () => {
+			router.routerEvent.off("changed", callback);
+		};
+	}
+
+	protected onStateChange() {
+		const callback = () => {};
+		dfnsStore.dfnsStoreEvent.on("changed", callback);
+		return () => {
+			dfnsStore.dfnsStoreEvent.off("changed", callback);
+		};
+	}
+
+	protected onDisconnect() {
+		const callback = () => {};
+		dfnsStore.dfnsStoreEvent.on("changed", callback);
+		return () => {
+			dfnsStore.dfnsStoreEvent.off("changed", callback);
+		};
 	}
 }

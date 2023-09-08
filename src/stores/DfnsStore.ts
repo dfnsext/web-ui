@@ -7,6 +7,7 @@ import LocalStorageService, {
 	DFNS_END_USER_TOKEN,
 	OAUTH_ACCESS_TOKEN,
 } from "../services/LocalStorageService";
+import { EventEmitter } from "../services/EventEmitter";
 
 interface DfnsState {
 	appName: string | null;
@@ -20,6 +21,9 @@ interface DfnsState {
 	appLogoUrl: string | null;
 	credentials: CredentialInfo[];
 }
+
+const dfnsStoreEvent = new EventEmitter<DfnsState>();
+
 const { state } = createStore<DfnsState>({
 	appName: null,
 	apiUrl: null,
@@ -47,6 +51,7 @@ function setValue<T extends keyof DfnsState>(key: T, value: DfnsState[T]) {
 		LocalStorageService.getInstance().items[DFNS_CREDENTIALS].set(value as CredentialInfo[]);
 	}
 	state[key] = value;
+	dfnsStoreEvent.emit("changed", state);
 }
 
 function disconnect() {
@@ -58,16 +63,20 @@ function disconnect() {
 	LocalStorageService.getInstance().items[OAUTH_ACCESS_TOKEN].delete();
 	LocalStorageService.getInstance().items[DFNS_ACTIVE_WALLET].delete();
 	LocalStorageService.getInstance().items[DFNS_CREDENTIALS].delete();
+	dfnsStoreEvent.emit("changed", state);
+	dfnsStoreEvent.emit("disconnected", state);
 }
 
 const dfnsStore: {
 	state: Readonly<DfnsState>;
 	setValue: <T extends keyof DfnsState>(key: T, value: DfnsState[T]) => void;
 	disconnect: () => void;
+	dfnsStoreEvent: EventEmitter<DfnsState>;
 } = {
 	state,
 	setValue,
 	disconnect,
+	dfnsStoreEvent
 };
 
 export default dfnsStore;
