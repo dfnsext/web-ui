@@ -36,6 +36,7 @@
 
  - [dfns-create-account](../../../Pages/dfns-create-account)
  - [dfns-create-passkey](../../../Pages/dfns-create-passkey)
+ - [dfns-recovery-setup](../../../Pages/dfns-recovery-setup)
  - [dfns-settings](../../../Pages/dfns-settings)
  - [dfns-sign-message](../../../Pages/dfns-sign-message)
  - [dfns-validate-wallet](../../../Pages/dfns-validate-wallet)
@@ -54,6 +55,7 @@ graph TD;
   dfns-button --> dfns-loader
   dfns-create-account --> dfns-button
   dfns-create-passkey --> dfns-button
+  dfns-recovery-setup --> dfns-button
   dfns-settings --> dfns-button
   dfns-sign-message --> dfns-button
   dfns-validate-wallet --> dfns-button

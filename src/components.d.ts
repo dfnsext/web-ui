@@ -73,6 +73,9 @@ export namespace Components {
         "LoaderIconSrc": string;
         "classCss"?: string;
     }
+    interface DfnsLogin {
+        "authenticatorAttachment": AuthenticatorAttachment;
+    }
     interface DfnsMain {
         "messageToSign": string;
         "network": BlockchainNetwork;
@@ -107,6 +110,7 @@ export namespace Components {
     }
     interface DfnsValidateWallet {
         "network": BlockchainNetwork;
+        "shouldShowWalletValidation": boolean;
     }
     interface DfnsWalletOverview {
     }
@@ -140,6 +144,10 @@ export interface DfnsCreatePasskeyCustomEvent<T> extends CustomEvent<T> {
 export interface DfnsInputFieldCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLDfnsInputFieldElement;
+}
+export interface DfnsLoginCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLDfnsLoginElement;
 }
 export interface DfnsRecoverySetupCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -207,6 +215,12 @@ declare global {
     var HTMLDfnsLoaderElement: {
         prototype: HTMLDfnsLoaderElement;
         new (): HTMLDfnsLoaderElement;
+    };
+    interface HTMLDfnsLoginElement extends Components.DfnsLogin, HTMLStencilElement {
+    }
+    var HTMLDfnsLoginElement: {
+        prototype: HTMLDfnsLoginElement;
+        new (): HTMLDfnsLoginElement;
     };
     interface HTMLDfnsMainElement extends Components.DfnsMain, HTMLStencilElement {
     }
@@ -288,6 +302,7 @@ declare global {
         "dfns-input-field": HTMLDfnsInputFieldElement;
         "dfns-layout": HTMLDfnsLayoutElement;
         "dfns-loader": HTMLDfnsLoaderElement;
+        "dfns-login": HTMLDfnsLoginElement;
         "dfns-main": HTMLDfnsMainElement;
         "dfns-recovery-setup": HTMLDfnsRecoverySetupElement;
         "dfns-settings": HTMLDfnsSettingsElement;
@@ -358,6 +373,10 @@ declare namespace LocalJSX {
         "LoaderIconSrc"?: string;
         "classCss"?: string;
     }
+    interface DfnsLogin {
+        "authenticatorAttachment"?: AuthenticatorAttachment;
+        "onPasskeyCreated"?: (event: DfnsLoginCustomEvent<RegisterCompleteResponse>) => void;
+    }
     interface DfnsMain {
         "messageToSign"?: string;
         "network"?: BlockchainNetwork;
@@ -396,6 +415,7 @@ declare namespace LocalJSX {
     interface DfnsValidateWallet {
         "network"?: BlockchainNetwork;
         "onWalletValidated"?: (event: DfnsValidateWalletCustomEvent<Wallet>) => void;
+        "shouldShowWalletValidation"?: boolean;
     }
     interface DfnsWalletOverview {
         "onAction"?: (event: DfnsWalletOverviewCustomEvent<WalletOverviewAction>) => void;
@@ -423,6 +443,7 @@ declare namespace LocalJSX {
         "dfns-input-field": DfnsInputField;
         "dfns-layout": DfnsLayout;
         "dfns-loader": DfnsLoader;
+        "dfns-login": DfnsLogin;
         "dfns-main": DfnsMain;
         "dfns-recovery-setup": DfnsRecoverySetup;
         "dfns-settings": DfnsSettings;
@@ -448,6 +469,7 @@ declare module "@stencil/core" {
             "dfns-input-field": LocalJSX.DfnsInputField & JSXBase.HTMLAttributes<HTMLDfnsInputFieldElement>;
             "dfns-layout": LocalJSX.DfnsLayout & JSXBase.HTMLAttributes<HTMLDfnsLayoutElement>;
             "dfns-loader": LocalJSX.DfnsLoader & JSXBase.HTMLAttributes<HTMLDfnsLoaderElement>;
+            "dfns-login": LocalJSX.DfnsLogin & JSXBase.HTMLAttributes<HTMLDfnsLoginElement>;
             "dfns-main": LocalJSX.DfnsMain & JSXBase.HTMLAttributes<HTMLDfnsMainElement>;
             "dfns-recovery-setup": LocalJSX.DfnsRecoverySetup & JSXBase.HTMLAttributes<HTMLDfnsRecoverySetupElement>;
             "dfns-settings": LocalJSX.DfnsSettings & JSXBase.HTMLAttributes<HTMLDfnsSettingsElement>;

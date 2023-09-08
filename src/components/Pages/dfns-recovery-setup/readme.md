@@ -36,17 +36,17 @@
 ### Graph
 ```mermaid
 graph TD;
-  dfns-create-passkey --> dfns-layout
-  dfns-create-passkey --> dfns-typography
-  dfns-create-passkey --> dfns-input-field
-  dfns-create-passkey --> dfns-alert
-  dfns-create-passkey --> dfns-button
+  dfns-recovery-setup --> dfns-layout
+  dfns-recovery-setup --> dfns-typography
+  dfns-recovery-setup --> dfns-input-field
+  dfns-recovery-setup --> dfns-alert
+  dfns-recovery-setup --> dfns-button
   dfns-input-field --> dfns-typography
   dfns-alert --> dfns-typography
   dfns-button --> dfns-typography
   dfns-button --> dfns-loader
-  dfns-main --> dfns-create-passkey
-  style dfns-create-passkey fill:#f9f,stroke:#333,stroke-width:4px
+  dfns-main --> dfns-recovery-setup
+  style dfns-recovery-setup fill:#f9f,stroke:#333,stroke-width:4px
 ```
 
 ----------------------------------------------
