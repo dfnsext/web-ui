@@ -23,6 +23,8 @@
  - [dfns-create-account](../../../Pages/dfns-create-account)
  - [dfns-create-passkey](../../../Pages/dfns-create-passkey)
  - [dfns-input-field](../../Forms/InputField/dfns-input-field)
+ - [dfns-login](../../../Pages/dfns-login)
+ - [dfns-recovery-setup](../../../Pages/dfns-recovery-setup)
  - [dfns-settings](../../../Pages/dfns-settings)
  - [dfns-sign-message](../../../Pages/dfns-sign-message)
  - [dfns-validate-wallet](../../../Pages/dfns-validate-wallet)
@@ -38,6 +40,8 @@ graph TD;
   dfns-create-account --> dfns-typography
   dfns-create-passkey --> dfns-typography
   dfns-input-field --> dfns-typography
+  dfns-login --> dfns-typography
+  dfns-recovery-setup --> dfns-typography
   dfns-settings --> dfns-typography
   dfns-sign-message --> dfns-typography
   dfns-validate-wallet --> dfns-typography

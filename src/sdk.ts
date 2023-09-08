@@ -13,6 +13,7 @@ import { setActiveLanguage } from "./stores/LanguageStore";
 import router, { RouteType } from "./stores/RouterStore";
 import { getDfnsDelegatedClient, isDfnsError } from "./utils/dfns";
 import { loginWithOAuth } from "./utils/helper";
+import { EventEmitter } from "./services/EventEmitter";
 
 export const DEFAULT_API_URL = "https://app.dfns.smart-chain.fr";
 export const DEFAULT_DFNS_HOST = "https://api.dfns.io";
@@ -57,28 +58,19 @@ export enum ESocialLogin {
 	ACCOR = "accor",
 }
 
-// const overlayStyles: Partial<CSSStyleDeclaration> = {
-//     position: "fixed",
-//     top: "0",
-//     right: "0",
-//     width: "100%",
-//     height: "100%",
-//     borderRadius: "0",
-//     border: "none",
-//     zIndex: "2147483647",
-// };
-
-// function applyOverlayStyles(elem: HTMLElement) {
-//     for (const [cssProperty, value] of Object.entries(overlayStyles)) {
-//         (elem.style as any)[cssProperty as any] = value;
-//     }
-// }
+export enum DfnsEvents {
+	CONNECTED = "connected",
+	DISCONNECTED = "disconnected",
+	ROUTE_CHANGED = "routeChanged",
+	STATE_CHANGED = "stateChanged",
+}
 
 export class DfnsSDK {
 	public static instance: DfnsSDK | null = null;
 
-	public dfnsContainer: HTMLElement | null = null;
+	private dfnsContainer: HTMLElement | null = null;
 	private options: Options;
+	public events: EventEmitter<any> = new EventEmitter();
 
 	constructor(sdkOptions: DfnsSDKOptions, reset?: boolean) {
 		if (reset) {
@@ -105,7 +97,7 @@ export class DfnsSDK {
 		setActiveLanguage(this.options.lang);
 		this.dfnsContainer = document.createElement("dfns-main");
 		this.dfnsContainer.classList.add("dfns-container");
-		// applyOverlayStyles(this.dfnsContainer);
+		this.dfnsContainer.setAttribute("data-visible", "hidden");
 		document.body.appendChild(this.dfnsContainer);
 
 		dfnsStore.setValue("apiUrl", this.options.apiUrl);
@@ -121,6 +113,10 @@ export class DfnsSDK {
 		dfnsStore.setValue("credentials", LocalStorageService.getInstance().items[DFNS_CREDENTIALS].get() ?? []);
 
 		this.onRouteChanged();
+	}
+
+	public async connect(){
+		router.navigate(RouteType.LOGIN);
 	}
 
 	public async connectWithOAuthToken(oauthToken: string): Promise<any> {
@@ -150,6 +146,7 @@ export class DfnsSDK {
 			}
 		}
 		dfnsStore.setValue("wallet", wallet);
+		this.events.emit(DfnsEvents.CONNECTED, dfnsStore.state);
 		return wallet;
 	}
 
@@ -166,6 +163,7 @@ export class DfnsSDK {
 	public async validateWallet(): Promise<Wallet> {
 		router.navigate(RouteType.VALIDATE_WALLET);
 		this.dfnsContainer.setAttribute("network", this.options.network);
+		this.dfnsContainer.setAttribute("should-show-wallet-validation", this.options.shouldShowWalletValidation ? "true" : undefined);
 		const response = await this.waitForEvent<Wallet>(this.dfnsContainer, "walletValidated");
 		router.close();
 		if (!response) throw new Error("User cancelled connection");
@@ -224,6 +222,7 @@ export class DfnsSDK {
 
 	protected onRouteChanged() {
 		const callback = (route: RouteType) => {
+			this.events.emit(DfnsEvents.ROUTE_CHANGED, route);
 			if (!route) {
 				this.dfnsContainer.setAttribute("data-visible", "hidden");
 				return;
@@ -237,7 +236,9 @@ export class DfnsSDK {
 	}
 
 	protected onStateChange() {
-		const callback = () => {};
+		const callback = () => {
+			this.events.emit(DfnsEvents.STATE_CHANGED, dfnsStore.state);
+		};
 		dfnsStore.dfnsStoreEvent.on("changed", callback);
 		return () => {
 			dfnsStore.dfnsStoreEvent.off("changed", callback);
@@ -245,7 +246,9 @@ export class DfnsSDK {
 	}
 
 	protected onDisconnect() {
-		const callback = () => {};
+		const callback = () => {
+			this.events.emit(DfnsEvents.DISCONNECTED, dfnsStore.state);
+		};
 		dfnsStore.dfnsStoreEvent.on("changed", callback);
 		return () => {
 			dfnsStore.dfnsStoreEvent.off("changed", callback);

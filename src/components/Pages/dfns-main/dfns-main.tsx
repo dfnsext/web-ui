@@ -16,7 +16,7 @@ export class DfnsMain {
 	render() {
 		return (
 			<div class="root">
-				<div class="backdrop" />
+				
 				{router.state.route === RouteType.CREATE_ACCOUNT && (
 					<dfns-create-account authenticatorAttachment={this.userCreationAuthenticatorAttachment}></dfns-create-account>
 				)}
@@ -29,6 +29,7 @@ export class DfnsMain {
 				{router.state.route === RouteType.SETTINGS && <dfns-settings></dfns-settings>}
 				{router.state.route === RouteType.CREATE_PASSKEY && <dfns-create-passkey></dfns-create-passkey>}
 				{router.state.route === RouteType.WALLET_OVERVIEW && <dfns-wallet-overview></dfns-wallet-overview>}
+				{router.state.route === RouteType.LOGIN && <dfns-login></dfns-login>}
 			</div>
 		);
 	}

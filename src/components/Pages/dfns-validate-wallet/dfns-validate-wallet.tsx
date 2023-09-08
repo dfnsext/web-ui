@@ -13,19 +13,32 @@ import { createWallet } from "../../../utils/helper";
 	shadow: true,
 })
 export class DfnsValidateWallet {
-
 	@Prop() network: BlockchainNetwork;
+	@Prop() shouldShowWalletValidation: boolean;
 	@Event() walletValidated: EventEmitter<Wallet>;
 	@State() isLoading: boolean = false;
 
 	async validateWallet() {
 		try {
 			this.isLoading = true;
-			const response = await createWallet(dfnsStore.state.dfnsHost, dfnsStore.state.appId, dfnsStore.state.rpId, dfnsStore.state.dfnsUserToken, this.network);
-			const wallet = await waitForWalletActive(dfnsStore.state.dfnsHost, dfnsStore.state.appId, dfnsStore.state.dfnsUserToken, response.id);
+			let wallet = await createWallet(
+				dfnsStore.state.dfnsHost,
+				dfnsStore.state.appId,
+				dfnsStore.state.rpId,
+				dfnsStore.state.dfnsUserToken,
+				this.network,
+			);
+			if (this.shouldShowWalletValidation) {
+				wallet = await waitForWalletActive(
+					dfnsStore.state.dfnsHost,
+					dfnsStore.state.appId,
+					dfnsStore.state.dfnsUserToken,
+					wallet.id,
+				);
+			}
 			this.isLoading = false;
 			this.walletValidated.emit(wallet);
-			return response;
+			return wallet;
 		} catch (err) {
 			this.isLoading = false;
 		}

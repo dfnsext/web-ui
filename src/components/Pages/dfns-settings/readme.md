@@ -30,7 +30,6 @@
 - [dfns-layout](../../Materials/Templates/dfns-layout)
 - [dfns-typography](../../Elements/Typography/dfns-typography)
 - [dfns-button](../../Elements/Buttons/dfns-button)
-- [drop-down-container](../../Elements/DropDown/drop-down-container)
 - [toggle-switch](../../Elements/ToggleSwitch/toggle-switch)
 - [dfns-alert](../../Elements/Alerts/dfns-alert)
 
@@ -40,13 +39,10 @@ graph TD;
   dfns-settings --> dfns-layout
   dfns-settings --> dfns-typography
   dfns-settings --> dfns-button
-  dfns-settings --> drop-down-container
   dfns-settings --> toggle-switch
   dfns-settings --> dfns-alert
   dfns-button --> dfns-typography
   dfns-button --> dfns-loader
-  drop-down-container --> drop-down
-  drop-down-container --> dfns-typography
   dfns-alert --> dfns-typography
   dfns-main --> dfns-settings
   style dfns-settings fill:#f9f,stroke:#333,stroke-width:4px

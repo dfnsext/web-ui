@@ -16,7 +16,6 @@ import { CopyClipboard } from "../../Elements/CopyClipboard";
 })
 export class DfnsWalletOverview {
 	
-
 	@State() isLoading: boolean = false;
 
 	@Event() action: EventEmitter<WalletOverviewAction>;
@@ -29,7 +28,7 @@ export class DfnsWalletOverview {
 		try {
 			const dfnsDelegated = getDfnsDelegatedClient(dfnsStore.state.dfnsHost, dfnsStore.state.appId, dfnsStore.state.dfnsUserToken);
 			const credentials = (await dfnsDelegated.auth.listUserCredentials()).items;
-			dfnsStore.setValue("credentials", credentials)
+			dfnsStore.setValue("credentials", credentials);
 		} catch (error) {
 			console.error(error);
 		}
@@ -99,7 +98,10 @@ export class DfnsWalletOverview {
 					<dfns-typography typo={ITypo.H5_TITLE} color={ITypoColor.PRIMARY}>
 						{langState.values.header.my_wallet}
 					</dfns-typography>
+					
+
 				</div>
+				
 				<div slot="contentSection">
 					<div class="content-container">
 						<div class="title">

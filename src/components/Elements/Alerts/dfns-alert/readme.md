@@ -22,6 +22,7 @@
 ### Used by
 
  - [dfns-create-passkey](../../../Pages/dfns-create-passkey)
+ - [dfns-recovery-setup](../../../Pages/dfns-recovery-setup)
  - [dfns-settings](../../../Pages/dfns-settings)
  - [dfns-sign-message](../../../Pages/dfns-sign-message)
  - [dfns-wallet-overview](../../../Pages/dfns-wallet-overview)
@@ -35,6 +36,7 @@
 graph TD;
   dfns-alert --> dfns-typography
   dfns-create-passkey --> dfns-alert
+  dfns-recovery-setup --> dfns-alert
   dfns-settings --> dfns-alert
   dfns-sign-message --> dfns-alert
   dfns-wallet-overview --> dfns-alert

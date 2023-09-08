@@ -14,10 +14,6 @@
 
 ## Dependencies
 
-### Used by
-
- - [dfns-settings](../../../Pages/dfns-settings)
-
 ### Depends on
 
 - [drop-down](../drop-down)
@@ -28,7 +24,6 @@
 graph TD;
   drop-down-container --> drop-down
   drop-down-container --> dfns-typography
-  dfns-settings --> drop-down-container
   style drop-down-container fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

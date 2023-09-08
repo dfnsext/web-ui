@@ -10,6 +10,7 @@ export enum RouteType {
 	"CREATE_PASSKEY" = "create-passkey",
 	"WALLET_OVERVIEW" = "wallet-overview",
 	"RECOVERY_SETUP" = "recovery-setup",
+	"LOGIN" = "login",
 }
 
 const routerEvent = new EventEmitter<RouteType>();
