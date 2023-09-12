@@ -15,7 +15,6 @@ import { CopyClipboard } from "../../Elements/CopyClipboard";
 	shadow: true,
 })
 export class DfnsWalletOverview {
-	
 	@State() isLoading: boolean = false;
 
 	@Event() action: EventEmitter<WalletOverviewAction>;
@@ -91,24 +90,24 @@ export class DfnsWalletOverview {
 			</svg>
 		);
 
-		const formattedWalletAddress = this.formatWalletAddress(dfnsStore.state.wallet.address, 5, 4); // Adjust startChars and endChars as needed
+		const formattedWalletAddress = dfnsStore.state.wallet?.address
+			? this.formatWalletAddress(dfnsStore.state.wallet.address, 5, 4)
+			: "..."; // Adjust startChars and endChars as needed
 		return (
 			<dfns-layout closeBtn>
 				<div slot="topSection">
 					<dfns-typography typo={ITypo.H5_TITLE} color={ITypoColor.PRIMARY}>
 						{langState.values.header.my_wallet}
 					</dfns-typography>
-					
-
 				</div>
-				
+
 				<div slot="contentSection">
 					<div class="content-container">
 						<div class="title">
 							<dfns-typography typo={ITypo.TEXTE_SM_SEMIBOLD} color={ITypoColor.PRIMARY}>
 								{langState.values.pages.wallet_overview.wallet_address}
 							</dfns-typography>
-							<CopyClipboard value={dfnsStore.state.wallet.address} openToaster={true}>
+							<CopyClipboard value={dfnsStore.state.wallet?.address} openToaster={true}>
 								<dfns-button
 									content={formattedWalletAddress}
 									variant={EButtonVariant.SECONDARY}
@@ -159,8 +158,8 @@ export class DfnsWalletOverview {
 						icon={iconLogout}
 						iconposition="left"
 						onClick={() => {
-							dfnsStore.disconnect();
 							router.close();
+							dfnsStore.disconnect();
 						}}
 					/>
 				</div>
