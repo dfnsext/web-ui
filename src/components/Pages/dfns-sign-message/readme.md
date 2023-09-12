@@ -14,7 +14,6 @@
 | `dfnsUserToken` | `dfns-user-token` |             | `string` | `undefined` |
 | `message`       | `message`         |             | `string` | `undefined` |
 | `rpId`          | `rp-id`           |             | `string` | `undefined` |
-| `visible`       | `visible`         |             | `string` | `undefined` |
 | `walletId`      | `wallet-id`       |             | `string` | `undefined` |
 
 

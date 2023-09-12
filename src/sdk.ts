@@ -97,7 +97,6 @@ export class DfnsSDK {
 		setActiveLanguage(this.options.lang);
 		this.dfnsContainer = document.createElement("dfns-main");
 		this.dfnsContainer.classList.add("dfns-container");
-		this.dfnsContainer.setAttribute("data-visible", "hidden");
 		document.body.appendChild(this.dfnsContainer);
 
 		dfnsStore.setValue("apiUrl", this.options.apiUrl);
@@ -223,11 +222,6 @@ export class DfnsSDK {
 	protected onRouteChanged() {
 		const callback = (route: RouteType) => {
 			this.events.emit(DfnsEvents.ROUTE_CHANGED, route);
-			if (!route) {
-				this.dfnsContainer.setAttribute("data-visible", "hidden");
-				return;
-			}
-			this.dfnsContainer.setAttribute("data-visible", "visible");
 		};
 		router.routerEvent.on("changed", callback);
 		return () => {

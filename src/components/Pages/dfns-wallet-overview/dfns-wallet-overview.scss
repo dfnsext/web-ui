@@ -1,12 +1,6 @@
 :host {
 	display: block;
 
-	.container {
-		display: none;
-		&.visible {
-			display: block;
-		}
-	}
 	.content-container {
 		display: flex;
 		flex-direction: column;
