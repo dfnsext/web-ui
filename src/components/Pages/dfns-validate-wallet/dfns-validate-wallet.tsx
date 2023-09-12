@@ -28,7 +28,7 @@ export class DfnsValidateWallet {
 				dfnsStore.state.dfnsUserToken,
 				this.network,
 			);
-			if (this.shouldShowWalletValidation) {
+			if (!this.shouldShowWalletValidation) {
 				wallet = await waitForWalletActive(
 					dfnsStore.state.dfnsHost,
 					dfnsStore.state.appId,

@@ -1,6 +1,6 @@
 import { Fido2Attestation } from "@dfns/sdk";
 import { CredentialKind, Fido2Options } from "@dfns/sdk/codegen/datamodel/Auth";
-import { Component, Event, EventEmitter, Fragment, Prop, State, h } from "@stencil/core";
+import { Component, Event, EventEmitter, Fragment, State, h } from "@stencil/core";
 import dfnsStore from "../../../stores/DfnsStore";
 import langState from "../../../stores/LanguageStore";
 import router from "../../../stores/RouterStore";
@@ -22,7 +22,6 @@ import { create, sign } from "../../../utils/webauthn";
 
 export class DfnsCreatePasskey {
 
-	@Prop({ mutable: true }) visible: string;
 	@State() isLoading: boolean = false;
 	@State() step = 1;
 	@State() passkeyName?: string;

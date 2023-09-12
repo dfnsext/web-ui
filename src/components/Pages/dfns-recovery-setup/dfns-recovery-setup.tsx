@@ -1,6 +1,6 @@
 import { RecoveryKeyAttestation } from "@dfns/sdk";
 import { CredentialKind, PublicKeyOptions } from "@dfns/sdk/codegen/datamodel/Auth";
-import { Component, Event, EventEmitter, Fragment, Prop, State, h } from "@stencil/core";
+import { Component, Event, EventEmitter, Fragment, State, h } from "@stencil/core";
 import dfnsStore from "../../../stores/DfnsStore";
 import langState from "../../../stores/LanguageStore";
 import router from "../../../stores/RouterStore";
@@ -21,7 +21,6 @@ import { ITypo, ITypoColor } from "../../../utils/enums/typography-enums";
 
 export class DfnsRecoverySetup {
 
-	@Prop({ mutable: true }) visible: string;
 	@State() isLoading: boolean = false;
 	@State() step = 1;
 	@State() passkeyName?: string;

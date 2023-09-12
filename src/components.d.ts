@@ -48,7 +48,6 @@ export namespace Components {
         "authenticatorAttachment": AuthenticatorAttachment;
     }
     interface DfnsCreatePasskey {
-        "visible": string;
     }
     interface DfnsInputField {
         "disableErrors": boolean;
@@ -82,7 +81,6 @@ export namespace Components {
         "userCreationAuthenticatorAttachment": AuthenticatorAttachment;
     }
     interface DfnsRecoverySetup {
-        "visible": string;
     }
     interface DfnsSettings {
         "confirmationImgSrc": string;
@@ -93,7 +91,6 @@ export namespace Components {
         "dfnsUserToken": string;
         "message": string;
         "rpId": string;
-        "visible": string;
         "walletId": string;
     }
     interface DfnsStepper {
@@ -347,7 +344,6 @@ declare namespace LocalJSX {
     }
     interface DfnsCreatePasskey {
         "onAction"?: (event: DfnsCreatePasskeyCustomEvent<CreatePasskeyAction>) => void;
-        "visible"?: string;
     }
     interface DfnsInputField {
         "disableErrors"?: boolean;
@@ -384,7 +380,6 @@ declare namespace LocalJSX {
     }
     interface DfnsRecoverySetup {
         "onAction"?: (event: DfnsRecoverySetupCustomEvent<CreatePasskeyAction>) => void;
-        "visible"?: string;
     }
     interface DfnsSettings {
         "confirmationImgSrc"?: string;
@@ -397,7 +392,6 @@ declare namespace LocalJSX {
         "message"?: string;
         "onSignedMessage"?: (event: DfnsSignMessageCustomEvent<GetSignatureResponse>) => void;
         "rpId"?: string;
-        "visible"?: string;
         "walletId"?: string;
     }
     interface DfnsStepper {

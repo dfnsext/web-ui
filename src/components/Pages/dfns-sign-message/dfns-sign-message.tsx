@@ -20,7 +20,6 @@ export class DfnsSignMessage {
 	@Prop() rpId: string;
 	@Prop() dfnsUserToken: string;
 	@Prop() message: string;
-	@Prop({ mutable: true }) visible: string;
 	@Event() signedMessage: EventEmitter<GetSignatureResponse>;
 	@State() hasErrors: boolean = false;
 	@State() errorMessage: string = "";
@@ -91,74 +90,72 @@ export class DfnsSignMessage {
 		);
 
 		return (
-			<div class={this.visible ? "container visible" : "container"}>
-				<dfns-layout closeBtn onClickCloseBtn={this.closeBtn.bind(this)}>
-					<div slot="topSection">
-						<dfns-typography typo={ITypo.H5_TITLE} color={ITypoColor.PRIMARY} class="custom-class">
-							Signature request
-						</dfns-typography>
-					</div>
-					<div slot="contentSection">
-						<div class="contentContainer">
-							<div class="title">
-								<dfns-button
-									content={this.rpId}
-									variant={EButtonVariant.SECONDARY}
-									sizing={EButtonSize.SMALL}
-									fullwidth
-									icon={iconBloom}
-									iconposition="left"
-								/>
-							</div>
-							<div class="content">
-								<dfns-typography typo={ITypo.TEXTE_SM_SEMIBOLD}>
-									{langState.values.pages.signature_request.title}
-								</dfns-typography>
-								<div class="textarea">
-									<div class="sub-container">
-										<dfns-typography typo={ITypo.TEXTE_SM_REGULAR} color={ITypoColor.PRIMARY} class="custom-class">
-											{this.message}
-										</dfns-typography>
-									</div>
+			<dfns-layout closeBtn onClickCloseBtn={this.closeBtn.bind(this)}>
+				<div slot="topSection">
+					<dfns-typography typo={ITypo.H5_TITLE} color={ITypoColor.PRIMARY} class="custom-class">
+						Signature request
+					</dfns-typography>
+				</div>
+				<div slot="contentSection">
+					<div class="contentContainer">
+						<div class="title">
+							<dfns-button
+								content={this.rpId}
+								variant={EButtonVariant.SECONDARY}
+								sizing={EButtonSize.SMALL}
+								fullwidth
+								icon={iconBloom}
+								iconposition="left"
+							/>
+						</div>
+						<div class="content">
+							<dfns-typography typo={ITypo.TEXTE_SM_SEMIBOLD}>
+								{langState.values.pages.signature_request.title}
+							</dfns-typography>
+							<div class="textarea">
+								<div class="sub-container">
+									<dfns-typography typo={ITypo.TEXTE_SM_REGULAR} color={ITypoColor.PRIMARY} class="custom-class">
+										{this.message}
+									</dfns-typography>
 								</div>
-
-								<dfns-alert variant={EAlertVariant.WARNING}>
-									<div slot="content">{langState.values.pages.signature_request.warning_content}</div>
-								</dfns-alert>
-								{this.hasErrors && (
-									<dfns-alert variant={EAlertVariant.ERROR} hasTitle={true}>
-										<div slot="title">{langState.values.pages.signature_request.error_title}</div>
-										<div slot="content">{this.errorMessage}</div>
-									</dfns-alert>
-								)}
 							</div>
+
+							<dfns-alert variant={EAlertVariant.WARNING}>
+								<div slot="content">{langState.values.pages.signature_request.warning_content}</div>
+							</dfns-alert>
+							{this.hasErrors && (
+								<dfns-alert variant={EAlertVariant.ERROR} hasTitle={true}>
+									<div slot="title">{langState.values.pages.signature_request.error_title}</div>
+									<div slot="content">{this.errorMessage}</div>
+								</dfns-alert>
+							)}
 						</div>
 					</div>
-					<div slot="bottomSection">
-						<dfns-button
-							content={
-								this.hasErrors
-									? langState.values.pages.signature_request.button_retry
-									: langState.values.pages.signature_request.button_signing
-							}
-							variant={EButtonVariant.PRIMARY}
-							sizing={EButtonSize.MEDIUM}
-							fullwidth
-							icon={this.hasErrors ? iconRety : undefined}
-							iconposition="left"
-							onClick={this.signMessage.bind(this)}
-							isloading={this.isLoading}
-						/>
-						<dfns-button
-							content={langState.values.pages.signature_request.button_reject}
-							variant={EButtonVariant.SECONDARY}
-							sizing={EButtonSize.MEDIUM}
-							fullwidth
-							onClick={this.closeBtn.bind(this)}
-						/>
-					</div>
-				</dfns-layout>
-			</div>
+				</div>
+				<div slot="bottomSection">
+					<dfns-button
+						content={
+							this.hasErrors
+								? langState.values.pages.signature_request.button_retry
+								: langState.values.pages.signature_request.button_signing
+						}
+						variant={EButtonVariant.PRIMARY}
+						sizing={EButtonSize.MEDIUM}
+						fullwidth
+						icon={this.hasErrors ? iconRety : undefined}
+						iconposition="left"
+						onClick={this.signMessage.bind(this)}
+						isloading={this.isLoading}
+					/>
+					<dfns-button
+						content={langState.values.pages.signature_request.button_reject}
+						variant={EButtonVariant.SECONDARY}
+						sizing={EButtonSize.MEDIUM}
+						fullwidth
+						onClick={this.closeBtn.bind(this)}
+					/>
+				</div>
+			</dfns-layout>
 		);
 	}
 }
