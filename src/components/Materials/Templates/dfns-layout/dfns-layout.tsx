@@ -40,7 +40,10 @@ export class DfnsLayout {
 					<slot name="bottomSection" />
 				</div>
 				<div class="logos-section">
-					<img src={dfnsStore.state.appLogoUrl} alt={`${dfnsStore.state.appName} logo`} width={47} height={16} />
+					{dfnsStore.state.appLogoUrl && (
+						<img src={dfnsStore.state.appLogoUrl} alt={`${dfnsStore.state.appName} logo`} width={47} height={16} />
+					)}
+
 					{/* <dfns-typography typo={ITypo.TEXTE_XS_REGULAR} color={ITypoColor.BLACK}>
 						powered by
 					</dfns-typography>
