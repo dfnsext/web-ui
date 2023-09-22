@@ -31,7 +31,7 @@ export interface JwtPayload {
 }
 
 export interface DfnsSDKOptions {
-	appName: string;
+	appName?: string;
 	rpId: string;
 	appId: string;
 	dfnsHost?: string;
