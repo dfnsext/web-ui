@@ -60,7 +60,7 @@ export class DfnsCreateAccount {
 					<div class="contentContainer">
 						<div class="title">
 							<dfns-typography typo={ITypo.TEXTE_LG_SEMIBOLD}>
-								{langState.values.pages.create_account.description} {dfnsStore.state.appName}
+								{langState.values.pages.create_account.description} {dfnsStore.state.appName && `| ${dfnsStore.state.appName}`}
 							</dfns-typography>
 						</div>
 					</div>

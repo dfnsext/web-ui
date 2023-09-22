@@ -28,7 +28,7 @@
 		},
 		"create_account": {
 			"title": "Create your wallet",
-			"description": "Use your personal mobile phone to create your wallet | ",
+			"description": "Use your personal mobile phone to create your wallet",
 			"button_create": "Continue"
 		},
 		"validate_wallet": {
