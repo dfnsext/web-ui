@@ -53,7 +53,7 @@ export class DfnsWalletOverview {
 			dfnsStore.state.dfnsUserToken,
 			dfnsStore.state.wallet.id,
 			dfnsStore.state.lang,
-			dfnsStore.state.network.toLowerCase(),
+			dfnsStore.state.network,
 		)) as ITokenInfo[];
 	}
 

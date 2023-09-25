@@ -150,18 +150,21 @@ export async function fetchAssets(dfnsHost: string, appId: string, dfnsUserToken
 		const dfnsDelegated = getDfnsDelegatedClient(dfnsHost, appId, dfnsUserToken);
 		const assets = (await dfnsDelegated.wallets.getWalletAssets({ walletId })).assets;
 		dfnsStore.setValue("assets", assets);
-		for (const asset of assets) {
+		for (let i = 0; i < assets.length; i++) {
+			const asset = assets[i];
+			let symbol = i == 0 ? networkMapping[chain].nativeCurrency.symbol : asset.symbol;
 			const balance = formatUnits(asset.balance, asset.decimals);
-			const token = await getTokenIcon(asset.contract, chain);
+			const token = await getTokenIcon(asset.contract, chain.toLowerCase());
 			tokenList.push({
 				balance: balance,
-				symbol: asset.symbol,
+				symbol,
 				icon: token,
-				fiatValue: await convertCryptoToFiat(balance, lang, asset.symbol),
+				fiatValue: await convertCryptoToFiat(balance, lang, symbol),
 				contract: asset.contract,
 				decimals: asset.decimals,
 			});
 		}
+		
 		return tokenList;
 	} catch (error) {
 		console.error(error);
