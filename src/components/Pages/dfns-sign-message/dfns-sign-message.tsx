@@ -1,11 +1,12 @@
-import { GetSignatureResponse } from "@dfns/sdk/codegen/Wallets";
 import { Component, Event, EventEmitter, JSX, Prop, State, h } from "@stencil/core";
 
+import dfnsStore from "../../../stores/DfnsStore";
 import langState from "../../../stores/LanguageStore";
-import { EAlertVariant } from "../../../utils/enums/alerts-enums";
-import { EButtonSize, EButtonVariant } from "../../../utils/enums/buttons-enums";
-import { ITypo, ITypoColor } from "../../../utils/enums/typography-enums";
+
 import { signMessage } from "../../../utils/helper";
+import { ITypo, ITypoColor } from "../../../common/enums/typography-enums";
+import { EButtonSize, EButtonVariant } from "../../../common/enums/buttons-enums";
+import { EAlertVariant } from "../../../common/enums/alerts-enums";
 
 @Component({
 	tag: "dfns-sign-message",
@@ -14,13 +15,8 @@ import { signMessage } from "../../../utils/helper";
 	shadow: true,
 })
 export class DfnsSignMessage {
-	@Prop() dfnsHost: string;
-	@Prop() walletId: string;
-	@Prop() appId: string;
-	@Prop() rpId: string;
-	@Prop() dfnsUserToken: string;
 	@Prop() message: string;
-	@Event() signedMessage: EventEmitter<GetSignatureResponse>;
+	@Event() signedMessage: EventEmitter<string>;
 	@State() hasErrors: boolean = false;
 	@State() errorMessage: string = "";
 	@State() isLoading: boolean = false;
@@ -28,7 +24,14 @@ export class DfnsSignMessage {
 	async signMessage() {
 		try {
 			this.isLoading = true;
-			const signedMessage = await signMessage(this.dfnsHost, this.appId, this.rpId, this.dfnsUserToken, this.walletId, this.message);
+			const signedMessage = await signMessage(
+				dfnsStore.state.dfnsHost,
+				dfnsStore.state.appId,
+				dfnsStore.state.rpId,
+				dfnsStore.state.dfnsUserToken,
+				dfnsStore.state.wallet.id,
+				this.message,
+			);
 			this.isLoading = false;
 
 			if (signedMessage.status !== "Signed") {
@@ -38,7 +41,7 @@ export class DfnsSignMessage {
 
 			this.hasErrors = false;
 			this.errorMessage = "";
-			this.signedMessage.emit(signedMessage);
+			this.signedMessage.emit(signedMessage.signature.encoded);
 		} catch (error) {
 			this.handleError(error);
 		}
@@ -100,7 +103,7 @@ export class DfnsSignMessage {
 					<div class="contentContainer">
 						<div class="title">
 							<dfns-button
-								content={this.rpId}
+								content={dfnsStore.state.rpId}
 								variant={EButtonVariant.SECONDARY}
 								sizing={EButtonSize.SMALL}
 								fullwidth

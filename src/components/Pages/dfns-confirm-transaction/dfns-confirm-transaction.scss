@@ -1,0 +1,130 @@
+:host {
+	display: block;
+
+	.content-container {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		gap: $spacing-1;
+		width: 100%;
+		height: 100%;
+		min-height: 128px;
+		.tab-container {
+			display: flex;
+			flex-direction: column;
+			align-items: flex-start;
+			align-self: stretch;
+
+			.row {
+				display: flex;
+				flex-direction: row;
+				padding: $spacing-1;
+				align-items: center;
+				text-align: left;
+				word-wrap: break-word;
+				gap: $spacing-3;
+				align-self: stretch;
+				border-radius: 0px;
+
+				.key {
+					display: flex;
+					width: 64px;
+					justify-content: start;
+					align-items: center;
+				}
+				.value {
+					display: flex;
+					-ms-word-break: break-all;
+					word-break: break-all;
+					word-break: break-word;
+				}
+				.sub-value {
+					display: flex;
+					justify-content: center;
+					align-items: center;
+				}
+			}
+		}
+		.total-container {
+			display: flex;
+			flex-direction: column;
+			align-items: flex-start;
+			align-self: stretch;
+			padding-top: $spacing-2-5;
+			.total-row {
+				display: flex;
+				flex-direction: row;
+				padding: $spacing-2 $spacing-1;
+				align-items: center;
+				text-align: left;
+				word-wrap: break-word;
+				gap: $spacing-3;
+				align-self: stretch;
+				border-radius: 0px;
+				border-top: 1px solid var(--color-neutral-200);
+				border-bottom: 1px solid var(--color-neutral-200);
+
+				.key {
+					display: flex;
+					width: 64px;
+					justify-content: start;
+					align-items: center;
+				}
+				.value {
+					display: flex;
+					-ms-word-break: break-all;
+					word-break: break-all;
+					word-break: break-word;
+				}
+				.sub-value {
+					display: flex;
+					justify-content: center;
+					align-items: center;
+				}
+			}
+		}
+		.confirmation-container {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			gap: $spacing-1;
+			width: 100%;
+			height: 100%;
+			padding: $spacing-4 0px;
+			.pending-title {
+				display: flex;
+				flex-direction: column;
+				text-align: center;
+				gap: $spacing-2;
+				&:last-child {
+					gap: $spacing-1-5;
+				}
+			}
+			.confirmation-title {
+				display: flex;
+				flex-direction: row;
+				text-align: center;
+				justify-content: center;
+				align-items: center;
+				gap: $spacing-1;
+				.link {
+					display: flex;
+					justify-content: center;
+					align-content: center;
+					cursor: pointer;
+				}
+			}
+
+			.loading-transaction {
+				display: flex;
+				flex-direction: row;
+				align-items: center;
+				justify-content: center;
+				width: 100%;
+				height: 100%;
+			}
+		}
+	}
+}

@@ -1,11 +1,11 @@
-import { BlockchainNetwork, Wallet } from "@dfns/sdk/codegen/datamodel/Wallets";
+import { Wallet } from "@dfns/sdk/codegen/datamodel/Wallets";
 import { Component, Event, EventEmitter, Prop, State, h } from "@stencil/core";
 import dfnsStore from "../../../stores/DfnsStore";
 import langState from "../../../stores/LanguageStore";
 import { waitForWalletActive } from "../../../utils/dfns";
-import { EButtonSize, EButtonVariant } from "../../../utils/enums/buttons-enums";
-import { ITypo, ITypoColor } from "../../../utils/enums/typography-enums";
 import { createWallet } from "../../../utils/helper";
+import { EButtonSize, EButtonVariant } from "../../../common/enums/buttons-enums";
+import { ITypo, ITypoColor } from "../../../common/enums/typography-enums";
 
 @Component({
 	tag: "dfns-validate-wallet",
@@ -13,7 +13,6 @@ import { createWallet } from "../../../utils/helper";
 	shadow: true,
 })
 export class DfnsValidateWallet {
-	@Prop() network: BlockchainNetwork;
 	@Prop() shouldShowWalletValidation: boolean;
 	@Event() walletValidated: EventEmitter<Wallet>;
 	@State() isLoading: boolean = false;
@@ -26,7 +25,7 @@ export class DfnsValidateWallet {
 				dfnsStore.state.appId,
 				dfnsStore.state.rpId,
 				dfnsStore.state.dfnsUserToken,
-				this.network,
+				dfnsStore.state.network,
 			);
 			if (!this.shouldShowWalletValidation) {
 				wallet = await waitForWalletActive(
@@ -67,7 +66,7 @@ export class DfnsValidateWallet {
 					/>
 					<div class="contentContainer">
 						<div class="title">
-							<dfns-typography typo={ITypo.TEXTE_LG_SEMIBOLD}>
+							<dfns-typography typo={ITypo.TEXTE_LG_SEMIBOLD} color={ITypoColor.PRIMARY}>
 								{langState.values.pages.validate_wallet.description}
 							</dfns-typography>
 						</div>

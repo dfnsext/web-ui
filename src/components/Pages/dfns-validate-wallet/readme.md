@@ -7,10 +7,9 @@
 
 ## Properties
 
-| Property                     | Attribute                       | Description | Type                | Default     |
-| ---------------------------- | ------------------------------- | ----------- | ------------------- | ----------- |
-| `network`                    | `network`                       |             | `BlockchainNetwork` | `undefined` |
-| `shouldShowWalletValidation` | `should-show-wallet-validation` |             | `boolean`           | `undefined` |
+| Property                     | Attribute                       | Description | Type      | Default     |
+| ---------------------------- | ------------------------------- | ----------- | --------- | ----------- |
+| `shouldShowWalletValidation` | `should-show-wallet-validation` |             | `boolean` | `undefined` |
 
 
 ## Events

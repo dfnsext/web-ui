@@ -17,10 +17,9 @@
 		align-items: center;
 		justify-content: center;
 		gap: $spacing-3;
-		background-color: var(--color-generic-white);
 		border-radius: $radius-lg;
 		box-shadow: $shadow-md;
-		background-color: white;
+		background-color: var(--background-primary);
 		z-index: 0;
 
 		@media screen and (max-width: $screen-s) {

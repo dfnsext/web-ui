@@ -5,12 +5,12 @@ import dfnsStore from "../../../stores/DfnsStore";
 import langState from "../../../stores/LanguageStore";
 import router, { RouteType } from "../../../stores/RouterStore";
 import { getDfnsDelegatedClient } from "../../../utils/dfns";
-import { SettingsAction } from "../../../utils/enums/actions-enum";
-import { EAlertVariant } from "../../../utils/enums/alerts-enums";
-import { EButtonSize, EButtonVariant } from "../../../utils/enums/buttons-enums";
-import { ITypo, ITypoColor } from "../../../utils/enums/typography-enums";
-import { sign } from "../../../utils/webauthn";
 
+import { sign } from "../../../utils/webauthn";
+import { SettingsAction } from "../../../common/enums/actions-enum";
+import { ITypo, ITypoColor } from "../../../common/enums/typography-enums";
+import { EButtonSize, EButtonVariant } from "../../../common/enums/buttons-enums";
+import { EAlertVariant } from "../../../common/enums/alerts-enums";
 
 @Component({
 	tag: "dfns-settings",
@@ -19,7 +19,6 @@ import { sign } from "../../../utils/webauthn";
 	shadow: true,
 })
 export class DfnsSettings {
-
 	@Event() action: EventEmitter<SettingsAction>;
 	@Prop() confirmationImgSrc = "https://storage.googleapis.com/dfns-frame-stg/assets/icons/confirmation.svg";
 
@@ -31,7 +30,7 @@ export class DfnsSettings {
 		try {
 			const dfnsDelegated = getDfnsDelegatedClient(dfnsStore.state.dfnsHost, dfnsStore.state.appId, dfnsStore.state.dfnsUserToken);
 			const credentials = (await dfnsDelegated.auth.listUserCredentials()).items;
-			dfnsStore.setValue("credentials", credentials)
+			dfnsStore.setValue("credentials", credentials);
 		} catch (error) {
 			console.error(error);
 		}
@@ -76,13 +75,12 @@ export class DfnsSettings {
 		this.fetchPasskeys();
 	}
 
-
 	render() {
 		const iconAdd: JSX.Element = (
 			<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
 				<path
 					d="M10.75 4.75C10.75 4.33579 10.4142 4 10 4C9.58579 4 9.25 4.33579 9.25 4.75V9.25H4.75C4.33579 9.25 4 9.58579 4 10C4 10.4142 4.33579 10.75 4.75 10.75L9.25 10.75V15.25C9.25 15.6642 9.58579 16 10 16C10.4142 16 10.75 15.6642 10.75 15.25V10.75L15.25 10.75C15.6642 10.75 16 10.4142 16 10C16 9.58579 15.6642 9.25 15.25 9.25H10.75V4.75Z"
-					fill="#0D0D0D"
+					fill={dfnsStore.state.colors.primary_400}
 				/>
 			</svg>
 		);
@@ -103,7 +101,7 @@ export class DfnsSettings {
 					fill-rule="evenodd"
 					clip-rule="evenodd"
 					d="M15.75 1.5C12.0221 1.5 9 4.52208 9 8.25C9 8.64372 9.03379 9.03016 9.0988 9.40639C9.16599 9.79527 9.06678 10.1226 8.87767 10.3117L2.37868 16.8107C1.81607 17.3733 1.5 18.1363 1.5 18.932V21.75C1.5 22.1642 1.83579 22.5 2.25 22.5H6C6.41421 22.5 6.75 22.1642 6.75 21.75V20.25H8.25C8.66421 20.25 9 19.9142 9 19.5V18H10.5C10.6989 18 10.8897 17.921 11.0303 17.7803L13.6883 15.1223C13.8774 14.9332 14.2047 14.834 14.5936 14.9012C14.9698 14.9662 15.3563 15 15.75 15C19.4779 15 22.5 11.9779 22.5 8.25C22.5 4.52208 19.4779 1.5 15.75 1.5ZM15.75 4.5C15.3358 4.5 15 4.83579 15 5.25C15 5.66421 15.3358 6 15.75 6C16.9926 6 18 7.00736 18 8.25C18 8.66421 18.3358 9 18.75 9C19.1642 9 19.5 8.66421 19.5 8.25C19.5 6.17893 17.8211 4.5 15.75 4.5Z"
-					fill="#0D0D0D"
+					fill={dfnsStore.state.theme.includes("dark") ? "#D1D5DB" : "#50565E"}
 				/>
 			</svg>
 		);
@@ -113,7 +111,7 @@ export class DfnsSettings {
 		// 			fill-rule="evenodd"
 		// 			clip-rule="evenodd"
 		// 			d="M5 10C5 9.58579 5.33579 9.25 5.75 9.25H12.3879L10.2302 7.29063C9.93159 7.00353 9.92228 6.52875 10.2094 6.23017C10.4965 5.93159 10.9713 5.92228 11.2698 6.20938L14.7698 9.45938C14.9169 9.60078 15 9.79599 15 10C15 10.204 14.9169 10.3992 14.7698 10.5406L11.2698 13.7906C10.9713 14.0777 10.4965 14.0684 10.2094 13.7698C9.92228 13.4713 9.93159 12.9965 10.2302 12.7094L12.3879 10.75H5.75C5.33579 10.75 5 10.4142 5 10Z"
-		// 			fill="#4B5563"
+		// 			fill={dfnsStore.state.theme.includes("dark") ? "#D1D5DB" : "#50565E"}
 		// 		/>
 		// 	</svg>
 		// );
@@ -145,7 +143,8 @@ export class DfnsSettings {
 								<div key={passkey.credentialUuid} class="tab-container">
 									<div class="row">
 										<div class="toggle">
-											{passkey.isActive && dfnsStore.state.credentials.filter((crendential) => crendential.isActive).length === 1 ? (
+											{passkey.isActive &&
+											dfnsStore.state.credentials.filter((crendential) => crendential.isActive).length === 1 ? (
 												key
 											) : (
 												<toggle-switch
@@ -185,7 +184,7 @@ export class DfnsSettings {
 				<div slot="bottomSection">
 					<dfns-button
 						content={langState.values.buttons.back}
-						variant={EButtonVariant.SECONDARY}
+						variant={EButtonVariant.NEUTRAL}
 						sizing={EButtonSize.MEDIUM}
 						fullwidth
 						iconposition="left"

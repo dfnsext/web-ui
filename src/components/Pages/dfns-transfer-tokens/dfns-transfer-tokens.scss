@@ -1,0 +1,95 @@
+:host {
+	display: block;
+
+	.content-container {
+		display: flex;
+		flex-direction: column;
+		align-items: start;
+		justify-content: center;
+		gap: $spacing-1;
+		width: 100%;
+		height: 100%;
+		.content {
+			display: flex;
+			flex-direction: column;
+			width: 100%;
+			gap: $spacing-1;
+
+			.tab-container {
+				display: flex;
+				flex-direction: column;
+				align-items: flex-start;
+				align-self: stretch;
+				overflow: scroll;
+				max-height: 208px;
+				width: 100%;
+
+				.row {
+					display: flex;
+					flex-direction: row;
+					padding: $spacing-1;
+					justify-content: space-between;
+					align-items: start;
+					text-align: left;
+					word-wrap: break-word;
+					gap: $spacing-3;
+					align-self: stretch;
+					border-radius: 0px;
+					height: 48px;
+					cursor: pointer;
+					&.selected {
+						border-top: 1px solid var(--line-primary);
+						border-bottom: 1px solid var(--line-primary);
+						cursor: default;
+					}
+
+					.key {
+						display: flex;
+						width: 60%;
+						justify-content: start;
+						align-items: start;
+						flex-direction: row;
+						.token-logo {
+							display: flex;
+							padding: $spacing-0-5 $spacing-1;
+							img {
+								width: 20px;
+								height: 20px;
+							}
+						}
+						.symbol {
+							display: flex;
+							flex-direction: column;
+							align-items: start;
+							justify-content: start;
+						}
+					}
+					.value {
+						display: flex;
+						height: 100%;
+						justify-content: center;
+						align-items: start;
+					}
+					.sub-value {
+						display: flex;
+						justify-content: center;
+						align-items: center;
+					}
+				}
+			}
+			.container-textfields {
+				display: flex;
+				width: 100%;
+				flex-direction: column;
+				justify-content: center;
+				align-items: flex-start;
+				gap: $spacing-2;
+				align-self: stretch;
+				padding: $spacing-3 0px;
+				.input-field {
+					width: 100%;
+				}
+			}
+		}
+	}
+}

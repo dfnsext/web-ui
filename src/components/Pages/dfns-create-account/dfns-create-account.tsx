@@ -3,9 +3,9 @@ import { Component, Event, EventEmitter, Prop, State, h } from "@stencil/core";
 import { RegisterCompleteResponse } from "../../../services/api/Register";
 import dfnsStore from "../../../stores/DfnsStore";
 import langState from "../../../stores/LanguageStore";
-import { EButtonSize, EButtonVariant } from "../../../utils/enums/buttons-enums";
-import { ITypo, ITypoColor } from "../../../utils/enums/typography-enums";
 import { registerWithOAuth } from "../../../utils/helper";
+import { ITypo, ITypoColor } from "../../../common/enums/typography-enums";
+import { EButtonSize, EButtonVariant } from "../../../common/enums/buttons-enums";
 
 @Component({
 	tag: "dfns-create-account",
@@ -14,7 +14,6 @@ import { registerWithOAuth } from "../../../utils/helper";
 })
 export class DfnsCreateAccount {
 
-	@Prop() authenticatorAttachment: AuthenticatorAttachment;
 
 	@Event() passkeyCreated: EventEmitter<RegisterCompleteResponse>;
 	@State() isLoading: boolean = false;
@@ -26,7 +25,7 @@ export class DfnsCreateAccount {
 				dfnsStore.state.apiUrl,
 				dfnsStore.state.appId,
 				dfnsStore.state.oauthAccessToken,
-				this.authenticatorAttachment,
+				dfnsStore.state.defaultDevice,
 			);
 			this.isLoading = false;
 			this.passkeyCreated.emit(response);
@@ -44,7 +43,7 @@ export class DfnsCreateAccount {
 		return (
 			<dfns-layout closeBtn onClickCloseBtn={this.closeBtn.bind(this)}>
 				<div slot="topSection">
-					<dfns-typography typo={ITypo.H5_TITLE} color={ITypoColor.PRIMARY} class="custom-class">
+					<dfns-typography typo={ITypo.H5_TITLE} color={ITypoColor.PRIMARY}>
 						{langState.values.header.create_wallet}
 					</dfns-typography>
 				</div>
@@ -59,7 +58,7 @@ export class DfnsCreateAccount {
 					/>
 					<div class="contentContainer">
 						<div class="title">
-							<dfns-typography typo={ITypo.TEXTE_LG_SEMIBOLD}>
+							<dfns-typography typo={ITypo.TEXTE_LG_SEMIBOLD} color={ITypoColor.PRIMARY}>
 								{langState.values.pages.create_account.description} {dfnsStore.state.appName && `| ${dfnsStore.state.appName}`}
 							</dfns-typography>
 						</div>

@@ -35,6 +35,7 @@
 
  - [dfns-create-passkey](../../../../Pages/dfns-create-passkey)
  - [dfns-recovery-setup](../../../../Pages/dfns-recovery-setup)
+ - [dfns-transfer-tokens](../../../../Pages/dfns-transfer-tokens)
 
 ### Depends on
 
@@ -46,6 +47,7 @@ graph TD;
   dfns-input-field --> dfns-typography
   dfns-create-passkey --> dfns-input-field
   dfns-recovery-setup --> dfns-input-field
+  dfns-transfer-tokens --> dfns-input-field
   style dfns-input-field fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

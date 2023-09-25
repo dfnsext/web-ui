@@ -4,7 +4,6 @@ import { DfnsError, UserActionChallengeResponse } from "@dfns/sdk";
 // import CookieStorageService, { DFNS_ACTIVE_WALLET_ID, DFNS_END_USER_TOKEN, OAUTH_TOKEN } from "../services/CookieStorageService";
 // import { ethereumRecIdOffset } from "../common/constant";
 
-
 import { CreateWalletRequest, GenerateSignatureRequest } from "@dfns/sdk/codegen/Wallets";
 import { BlockchainNetwork, SignatureKind } from "@dfns/sdk/codegen/datamodel/Wallets";
 
@@ -13,7 +12,24 @@ import Register from "../services/api/Register";
 import { getDfnsDelegatedClient, waitSignatureSigned } from "./dfns";
 import { ethers } from "ethers";
 import { create, sign } from "./webauthn";
+import { formatUnits } from "ethers/lib/utils";
+import { getTokenIcon } from "./tokensIcons";
+import { convertCryptoToFiat } from "./binance";
 
+import dfnsStore from "../stores/DfnsStore";
+import { ITokenInfo } from "../common/interfaces/ITokenInfo";
+import { arbitrum, bsc, bscTestnet, goerli, mainnet, polygon, polygonMumbai, sepolia } from "@wagmi/core/chains";
+
+export const networkMapping = {
+	[BlockchainNetwork.Polygon]: polygon,
+	[BlockchainNetwork.PolygonMumbai]: polygonMumbai,
+	[BlockchainNetwork.Ethereum]: mainnet,
+	[BlockchainNetwork.EthereumSepolia]: sepolia,
+	[BlockchainNetwork.EthereumGoerli]: goerli,
+	[BlockchainNetwork.ArbitrumOne]: arbitrum,
+	[BlockchainNetwork.Bsc]: bsc,
+	[BlockchainNetwork.BscTestnet]: bscTestnet,
+};
 
 export async function loginWithOAuth(apiUrl: string, appId: string, rpId: string, oauthAccessToken: string) {
 	let challenge: UserActionChallengeResponse;
@@ -34,7 +50,7 @@ export async function loginWithOAuth(apiUrl: string, appId: string, rpId: string
 	});
 }
 
-export async function registerWithOAuth(apiUrl: string, appId: string, oauthAccessToken: string, authenticatorAttachment?: AuthenticatorAttachment) {
+export async function registerWithOAuth(apiUrl: string, appId: string, oauthAccessToken: string, device?: "desktop" | "mobile") {
 	let challenge;
 	try {
 		challenge = await Register.getInstance(apiUrl, appId).init(oauthAccessToken);
@@ -44,7 +60,19 @@ export async function registerWithOAuth(apiUrl: string, appId: string, oauthAcce
 		}
 	}
 	try {
-		const attestation = await create(challenge, authenticatorAttachment);
+		const isMobile = navigator?.userAgent.indexOf("Mobile") !== -1;
+
+		let authenticatorAttachment;
+
+		if (device === "mobile") {
+			authenticatorAttachment = isMobile ? "platform" : "cross-platform";
+		}
+
+		if (device === "desktop") {
+			authenticatorAttachment = !isMobile ? "platform" : "cross-platform";
+		}
+
+		const attestation = await create(challenge, authenticatorAttachment as AuthenticatorAttachment);
 		return Register.getInstance(apiUrl, appId).complete(challenge.temporaryAuthenticationToken, {
 			firstFactorCredential: attestation,
 			// secondFactorCredential: {
@@ -89,7 +117,7 @@ export async function createWallet(dfnsHost: string, appId: string, rpId: string
 
 export async function signMessage(dfnsHost: string, appId: string, rpId: string, dfnsUserToken: string, walletId: string, message: string) {
 	const dfnsDelegated = getDfnsDelegatedClient(dfnsHost, appId, dfnsUserToken);
-	const hexMessage = ethers.utils.hashMessage(message)
+	const hexMessage = ethers.utils.hashMessage(message);
 	const request: GenerateSignatureRequest = {
 		walletId: walletId,
 		body: { kind: SignatureKind.Hash, hash: hexMessage },
@@ -109,6 +137,37 @@ export async function signMessage(dfnsHost: string, appId: string, rpId: string,
 	return signature;
 }
 
+export function waitForEvent<T>(element: HTMLElement, eventName: string): Promise<T> {
+	return new Promise((resolve) => {
+		element.addEventListener(eventName, (event: any) => {
+			resolve(event.detail as T);
+		});
+	});
+}
+export async function fetchAssets(dfnsHost: string, appId: string, dfnsUserToken: string, walletId: string, lang: string, chain: string) {
+	const tokenList: ITokenInfo[] = [];
+	try {
+		const dfnsDelegated = getDfnsDelegatedClient(dfnsHost, appId, dfnsUserToken);
+		const assets = (await dfnsDelegated.wallets.getWalletAssets({ walletId })).assets;
+		dfnsStore.setValue("assets", assets);
+		for (const asset of assets) {
+			const balance = formatUnits(asset.balance, asset.decimals);
+			const token = await getTokenIcon(asset.contract, chain);
+			tokenList.push({
+				balance: balance,
+				symbol: asset.symbol,
+				icon: token,
+				fiatValue: await convertCryptoToFiat(balance, lang, chain),
+				contract: asset.contract,
+				decimals: asset.decimals,
+			});
+		}
+		return tokenList;
+	} catch (error) {
+		console.error(error);
+	}
+}
+
 // export async function transfer(dfnsHost: string, endUserAuthToken: string, walletId: string, from: string, to: string, amount: string) {
 // 	const dfnsDelegated = getDfnsDelegatedClient(dfnsHost, endUserAuthToken!);
 // 	const provider = new ethers.JsonRpcProvider(
@@ -116,15 +175,6 @@ export async function signMessage(dfnsHost: string, appId: string, rpId: string,
 // 	);
 
 // 	const feeData = await provider.getFeeData();
-
-// 	let tx: ethers.TransactionLike = {
-// 		to,
-// 		value: ethers.parseEther("0.03"),
-// 		nonce: await provider.getTransactionCount(from, "latest"),
-// 		maxFeePerGas: feeData.maxFeePerGas, // 1 Gwei
-// 		maxPriorityFeePerGas: feeData.maxPriorityFeePerGas, // 1 Gwei
-// 		chainId: 80001,
-// 	};
 
 // 	const gasLimit = await provider.estimateGas(tx);
 
@@ -170,4 +220,3 @@ export async function signMessage(dfnsHost: string, appId: string, rpId: string,
 // 	CookieStorageService.getInstance().items[OAUTH_TOKEN].delete();
 // 	return true;
 // }
-

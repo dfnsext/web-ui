@@ -8,6 +8,9 @@
 		justify-content: space-between;
 		padding: 0px $spacing-2;
 		margin-bottom: $spacing-2;
+		@media screen and (max-width: $screen-s) {
+			flex-direction: column;
+		}
 	}
 	.credentials-container {
 		display: flex;

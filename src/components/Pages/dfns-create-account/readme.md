@@ -5,13 +5,6 @@
 <!-- Auto Generated Below -->
 
 
-## Properties
-
-| Property                  | Attribute                  | Description | Type                             | Default     |
-| ------------------------- | -------------------------- | ----------- | -------------------------------- | ----------- |
-| `authenticatorAttachment` | `authenticator-attachment` |             | `"cross-platform" \| "platform"` | `undefined` |
-
-
 ## Events
 
 | Event            | Description | Type                                    |

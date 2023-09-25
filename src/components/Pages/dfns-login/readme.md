@@ -7,16 +7,16 @@
 
 ## Properties
 
-| Property                  | Attribute                  | Description | Type                             | Default     |
-| ------------------------- | -------------------------- | ----------- | -------------------------------- | ----------- |
-| `authenticatorAttachment` | `authenticator-attachment` |             | `"cross-platform" \| "platform"` | `undefined` |
+| Property                     | Attribute                       | Description | Type      | Default     |
+| ---------------------------- | ------------------------------- | ----------- | --------- | ----------- |
+| `shouldShowWalletValidation` | `should-show-wallet-validation` |             | `boolean` | `undefined` |
 
 
 ## Events
 
-| Event            | Description | Type                                    |
-| ---------------- | ----------- | --------------------------------------- |
-| `passkeyCreated` |             | `CustomEvent<RegisterCompleteResponse>` |
+| Event             | Description | Type                  |
+| ----------------- | ----------- | --------------------- |
+| `walletConnected` |             | `CustomEvent<string>` |
 
 
 ## Dependencies
@@ -29,12 +29,16 @@
 
 - [dfns-layout](../../Materials/Templates/dfns-layout)
 - [dfns-typography](../../Elements/Typography/dfns-typography)
+- [dfns-button](../../Elements/Buttons/dfns-button)
 
 ### Graph
 ```mermaid
 graph TD;
   dfns-login --> dfns-layout
   dfns-login --> dfns-typography
+  dfns-login --> dfns-button
+  dfns-button --> dfns-typography
+  dfns-button --> dfns-loader
   dfns-main --> dfns-login
   style dfns-login fill:#f9f,stroke:#333,stroke-width:4px
 ```

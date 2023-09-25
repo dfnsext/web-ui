@@ -7,21 +7,16 @@
 
 ## Properties
 
-| Property        | Attribute         | Description | Type     | Default     |
-| --------------- | ----------------- | ----------- | -------- | ----------- |
-| `appId`         | `app-id`          |             | `string` | `undefined` |
-| `dfnsHost`      | `dfns-host`       |             | `string` | `undefined` |
-| `dfnsUserToken` | `dfns-user-token` |             | `string` | `undefined` |
-| `message`       | `message`         |             | `string` | `undefined` |
-| `rpId`          | `rp-id`           |             | `string` | `undefined` |
-| `walletId`      | `wallet-id`       |             | `string` | `undefined` |
+| Property  | Attribute | Description | Type     | Default     |
+| --------- | --------- | ----------- | -------- | ----------- |
+| `message` | `message` |             | `string` | `undefined` |
 
 
 ## Events
 
-| Event           | Description | Type                                                                                                                                                                                                                                                                                                                                             |
-| --------------- | ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `signedMessage` |             | `CustomEvent<{ id: string; walletId: string; network: BlockchainNetwork; requester: RequesterIdentity; requestBody: GenerateSignatureBody; signature?: Signature; status: SignatureStatus; txHash?: string; fee?: string; dateRequested: string; datePolicyEvaluated?: string; dateSigned?: string; dateConfirmed?: string; reason?: string; }>` |
+| Event           | Description | Type                  |
+| --------------- | ----------- | --------------------- |
+| `signedMessage` |             | `CustomEvent<string>` |
 
 
 ## Dependencies

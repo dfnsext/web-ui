@@ -16,7 +16,7 @@ export const getDfnsDelegatedClient = (dfnsHost: string, appId: string, dnfsUser
 		authToken: dnfsUserToken,
 	});
 
-function timeout(ms: number) {
+export function timeout(ms: number) {
 	return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
@@ -39,3 +39,5 @@ export async function waitSignatureSigned(dfnsHost: string, appId: string, dnfsU
 	} while (signature.status !== SignatureStatus.Signed);
 	return signature;
 }
+
+

@@ -1,6 +1,8 @@
 :host {
 	::slotted(*) {
 		display: flex;
+		align-items: center;
+		justify-content: center;
 	}
 
 	.root {
@@ -22,7 +24,6 @@
 		font-size: 16px;
 		line-height: 140%;
 		border-radius: 6px;
-
 		svg {
 			display: flex;
 			align-items: center;
