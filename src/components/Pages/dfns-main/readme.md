@@ -72,8 +72,8 @@ graph TD;
   dfns-wallet-validation --> dfns-button
   dfns-sign-message --> dfns-layout
   dfns-sign-message --> dfns-typography
-  dfns-sign-message --> dfns-button
   dfns-sign-message --> dfns-alert
+  dfns-sign-message --> dfns-button
   dfns-alert --> dfns-typography
   dfns-settings --> dfns-layout
   dfns-settings --> dfns-typography

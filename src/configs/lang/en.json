@@ -123,7 +123,10 @@
 			"button_generate": "Generate recovery kit",
 			"button_later": "Later",
 			"recovery_code": "Recovery code",
-			"recovery_key": "Recovery key ID"
+			"recovery_key": "Recovery key ID",
+			"warning_title": "This recovery key is unique, save it!",
+			"warning_content": "If you lose access to your account, this recovery kit is the only way to get it back. You can copy or download it.",
+			"button_download_kit": "Download recovery kit"
 		},
 		"profile": {
 			"title": "Profile",

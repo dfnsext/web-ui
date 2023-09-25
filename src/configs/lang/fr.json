@@ -123,7 +123,10 @@
 			"button_generate": "Générer mon kit de récupération",
 			"button_later": "Je le ferai plus tard",
 			"recovery_code": "Code de récupération",
-			"recovery_key": "Clé de récupération"
+			"recovery_key": "Clé de récupération",
+			"warning_title": "Cette clé de récupération est unique, conservez-la !",
+			"warning_content": "Si vous perdez l'accès à votre compte, ce kit de récupération est le seul moyen de le récupérer. Vous pouvez le copier ou le télécharger.",
+			"button_download_kit": "Télécharger mon kit de récupération"
 		},
 		"profile": {
 			"title": "Profil",

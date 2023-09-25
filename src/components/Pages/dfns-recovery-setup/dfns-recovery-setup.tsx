@@ -100,7 +100,7 @@ export class DfnsRecoverySetup {
 			</svg>
 		);
 		const iconCopy: JSX.Element = (
-			<svg xmlns="http://www.w3.org/2000/svg"  width="32" height="32" viewBox="0 0 32 32"  fill="none">
+			<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none">
 				<path
 					d="M7 3.5C7 2.67157 7.67157 2 8.5 2H12.3787C12.7765 2 13.158 2.15804 13.4393 2.43934L16.5607 5.56066C16.842 5.84197 17 6.2235 17 6.62132V12.5C17 13.3284 16.3284 14 15.5 14H14.5V10.6213C14.5 9.82567 14.1839 9.06261 13.6213 8.5L10.5 5.37868C9.93739 4.81607 9.17433 4.5 8.37868 4.5H7V3.5Z"
 					fill={dfnsStore.state.theme.includes("dark") ? "#D1D5DB" : "#50565E"}
@@ -108,6 +108,18 @@ export class DfnsRecoverySetup {
 				<path
 					d="M4.5 6C3.67157 6 3 6.67157 3 7.5V16.5C3 17.3284 3.67157 18 4.5 18H11.5C12.3284 18 13 17.3284 13 16.5V10.6213C13 10.2235 12.842 9.84197 12.5607 9.56066L9.43934 6.43934C9.15804 6.15804 8.7765 6 8.37868 6H4.5Z"
 					fill={dfnsStore.state.theme.includes("dark") ? "#D1D5DB" : "#50565E"}
+				/>
+			</svg>
+		);
+		const iconDownload: JSX.Element = (
+			<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+				<path
+					d="M10.75 2.75C10.75 2.33579 10.4142 2 10 2C9.58579 2 9.25 2.33579 9.25 2.75V11.3636L6.29526 8.23503C6.01085 7.93389 5.53617 7.92033 5.23503 8.20474C4.9339 8.48915 4.92033 8.96383 5.20474 9.26497L9.45474 13.765C9.59642 13.915 9.79366 14 10 14C10.2063 14 10.4036 13.915 10.5453 13.765L14.7953 9.26497C15.0797 8.96383 15.0661 8.48915 14.765 8.20474C14.4638 7.92033 13.9892 7.93389 13.7047 8.23503L10.75 11.3636V2.75Z"
+					fill="#FCD34D"
+				/>
+				<path
+					d="M3.5 12.75C3.5 12.3358 3.16421 12 2.75 12C2.33579 12 2 12.3358 2 12.75V15.25C2 16.7688 3.23122 18 4.75 18H15.25C16.7688 18 18 16.7688 18 15.25V12.75C18 12.3358 17.6642 12 17.25 12C16.8358 12 16.5 12.3358 16.5 12.75V15.25C16.5 15.9404 15.9404 16.5 15.25 16.5H4.75C4.05964 16.5 3.5 15.9404 3.5 15.25V12.75Z"
+					fill="#FCD34D"
 				/>
 			</svg>
 		);
@@ -138,7 +150,7 @@ export class DfnsRecoverySetup {
 						{this.step === 2 && (
 							<Fragment>
 								<div class="container-textfields">
-									<div class="wrapper-inputs">
+									<div class="wrapper-input">
 										<div class="input-field">
 											<dfns-input-field placeholder={""} onChange={(value) => {}} isPasswordVisible={false}>
 												<dfns-typography typo={ITypo.TEXTE_SM_MEDIUM} color={ITypoColor.PRIMARY}>
@@ -152,14 +164,41 @@ export class DfnsRecoverySetup {
 											</CopyClipboard>
 										</div>
 									</div>
-									<div class="input-field">
-										<dfns-input-field placeholder={""} onChange={(value) => {}} errors={[]} isPasswordVisible={false}>
-											<dfns-typography typo={ITypo.TEXTE_SM_MEDIUM} color={ITypoColor.PRIMARY}>
-												{langState.values.pages.recovery_setup.recovery_key}
-											</dfns-typography>
-										</dfns-input-field>
+									<div class="wrapper-input">
+										<div class="input-field">
+											<dfns-input-field
+												placeholder={""}
+												onChange={(value) => {}}
+												errors={[]}
+												isPasswordVisible={false}>
+												<dfns-typography typo={ITypo.TEXTE_SM_MEDIUM} color={ITypoColor.PRIMARY}>
+													{langState.values.pages.recovery_setup.recovery_key}
+												</dfns-typography>
+											</dfns-input-field>
+										</div>
+										<div class="copy-icon">
+											<CopyClipboard value={""} openToaster={true}>
+												{iconCopy}
+											</CopyClipboard>
+										</div>
 									</div>
 								</div>
+								<dfns-alert variant={EAlertVariant.WARNING} hasTitle={true}>
+									<div slot="title">{langState.values.pages.recovery_setup.warning_title}</div>
+									<div slot="content">
+										<p> {langState.values.pages.recovery_setup.warning_content}</p>
+										<div class="button_container">
+											<dfns-button
+												content={langState.values.pages.recovery_setup.button_download_kit}
+												variant={EButtonVariant.WARNING}
+												sizing={EButtonSize.SMALL}
+												icon={iconDownload}
+												iconposition="left"
+												onClick={() => {}}
+											/>
+										</div>
+									</div>
+								</dfns-alert>
 							</Fragment>
 						)}
 					</div>
@@ -187,12 +226,11 @@ export class DfnsRecoverySetup {
 					{this.step === 2 && (
 						<Fragment>
 							<dfns-button
-								content={langState.values.pages.create_passkey.button_save}
+								content={langState.values.buttons.done}
 								variant={EButtonVariant.PRIMARY}
 								sizing={EButtonSize.MEDIUM}
 								fullwidth
 								iconposition="left"
-								disabled={!this.passkeyName}
 								onClick={() => {}}
 								isloading={this.isLoading}
 							/>
