@@ -21,6 +21,7 @@
 		"transfert_token": "Séléctionnez un token",
 		"send_token": "Envoyer un token",
 		"receive_token": "Recevoir un token",
+		"login": "Connexion / Inscription",
 		"nav_links": {}
 	},
 	"pages": {
@@ -28,7 +29,9 @@
 			"title": "Identification\n\t"
 		},
 		"login": {
-			"wallet": "Wallet"
+			"wallet": "Wallet",
+			"recover_account": "Récupérer mon compte",
+			"or": "ou"
 		},
 		"create_account": {
 			"title": "Création du\nwallet",
