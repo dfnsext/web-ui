@@ -13,8 +13,6 @@ import { EButtonSize, EButtonVariant } from "../../../common/enums/buttons-enums
 	shadow: true,
 })
 export class DfnsCreateAccount {
-
-
 	@Event() passkeyCreated: EventEmitter<RegisterCompleteResponse>;
 	@State() isLoading: boolean = false;
 
@@ -59,7 +57,10 @@ export class DfnsCreateAccount {
 					<div class="contentContainer">
 						<div class="title">
 							<dfns-typography typo={ITypo.TEXTE_LG_SEMIBOLD} color={ITypoColor.PRIMARY}>
-								{langState.values.pages.create_account.description} {dfnsStore.state.appName && `| ${dfnsStore.state.appName}`}
+								{dfnsStore.state.defaultDevice === "mobile"
+									? langState.values.pages.create_account.description_mobile
+									: langState.values.pages.create_account.description}{" "}
+								{dfnsStore.state.appName && `| ${dfnsStore.state.appName}`}
 							</dfns-typography>
 						</div>
 					</div>

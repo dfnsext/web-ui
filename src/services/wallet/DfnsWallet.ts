@@ -114,7 +114,6 @@ class DfnsWallet implements IWalletInterface {
 	}
 
 	public async sendTransaction(to: string, value: string, data: string, txNonce?: number): Promise<string> {
-		debugger
 		this.getDfnsElement().setAttribute("transaction-to", to);
 		this.getDfnsElement().setAttribute("transaction-value", value);
 		this.getDfnsElement().setAttribute("transaction-data", data);

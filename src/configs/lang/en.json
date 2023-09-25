@@ -35,7 +35,8 @@
 		},
 		"create_account": {
 			"title": "Create your wallet",
-			"description": "Use your personal mobile phone to create your wallet",
+			"description": "Utilisez la reconnaissance d'empreinte digitale ou de visage pour vous connecter",
+			"description_mobile": "Use your personal mobile phone to create your wallet",
 			"button_create": "Continue"
 		},
 		"validate_wallet": {
