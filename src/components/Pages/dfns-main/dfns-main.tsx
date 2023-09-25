@@ -16,6 +16,8 @@ export class DfnsMain {
 	@Prop() transactionTo: BlockchainAddress;
 	@Prop() transactionValue: Amount;
 	@Prop() transactionData?: BlockchainAddress;
+	@Prop() transactionTokenSymbol?: string;
+	@Prop() transactionDecimals?: number;
 	@Prop() transactionNonce?: number;
 
 	render() {
@@ -36,8 +38,11 @@ export class DfnsMain {
 				<dfns-confirm-transaction
 					to={this.transactionTo}
 					value={this.transactionValue}
+					decimals={this.transactionDecimals}
+					tokenSymbol={this.transactionTokenSymbol}
 					data={this.transactionData}
-					txNonce={this.transactionNonce}></dfns-confirm-transaction>
+					txNonce={this.transactionNonce}
+					></dfns-confirm-transaction>
 			))
 			.with(RouteType.RECEIVE_TOKENS, () => <dfns-receive-tokens></dfns-receive-tokens>)
 			.with(null, () => null)

@@ -7,14 +7,18 @@
 
 ## Properties
 
-| Property             | Attribute              | Description | Type     | Default                                                                         |
-| -------------------- | ---------------------- | ----------- | -------- | ------------------------------------------------------------------------------- |
-| `confirmationImgSrc` | `confirmation-img-src` |             | `string` | `"https://storage.googleapis.com/dfns-frame-stg/assets/icons/confirmation.svg"` |
-| `data`               | `data`                 |             | `string` | `undefined`                                                                     |
-| `to`                 | `to`                   |             | `string` | `undefined`                                                                     |
-| `tokenSymbol`        | `token-symbol`         |             | `string` | `networkMapping[dfnsStore.state.network].nativeCurrency.symbol`                 |
-| `txNonce`            | `tx-nonce`             |             | `number` | `undefined`                                                                     |
-| `value`              | `value`                |             | `string` | `undefined`                                                                     |
+| Property                    | Attribute              | Description | Type         | Default                                                                         |
+| --------------------------- | ---------------------- | ----------- | ------------ | ------------------------------------------------------------------------------- |
+| `backButtonCallback`        | --                     |             | `() => void` | `undefined`                                                                     |
+| `confirmationImgSrc`        | `confirmation-img-src` |             | `string`     | `"https://storage.googleapis.com/dfns-frame-stg/assets/icons/confirmation.svg"` |
+| `data`                      | `data`                 |             | `string`     | `undefined`                                                                     |
+| `decimals`                  | `decimals`             |             | `number`     | `undefined`                                                                     |
+| `dfnsTransfer`              | `dfns-transfer`        |             | `boolean`    | `false`                                                                         |
+| `dfnsTransferSelectedToken` | --                     |             | `ITokenInfo` | `undefined`                                                                     |
+| `to`                        | `to`                   |             | `string`     | `undefined`                                                                     |
+| `tokenSymbol`               | `token-symbol`         |             | `string`     | `networkMapping[dfnsStore.state.network].nativeCurrency.symbol`                 |
+| `txNonce`                   | `tx-nonce`             |             | `number`     | `undefined`                                                                     |
+| `value`                     | `value`                |             | `string`     | `undefined`                                                                     |
 
 
 ## Events
@@ -29,6 +33,7 @@
 ### Used by
 
  - [dfns-main](../dfns-main)
+ - [dfns-transfer-tokens](../dfns-transfer-tokens)
 
 ### Depends on
 
@@ -50,6 +55,7 @@ graph TD;
   dfns-button --> dfns-typography
   dfns-button --> dfns-loader
   dfns-main --> dfns-confirm-transaction
+  dfns-transfer-tokens --> dfns-confirm-transaction
   style dfns-confirm-transaction fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

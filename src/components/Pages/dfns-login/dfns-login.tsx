@@ -27,7 +27,12 @@ export class DfnsLogin {
 					client_id: dfnsStore.state.googleClientId,
 					callback: this.handleCredentialResponse.bind(this),
 				});
-				google.accounts.id.renderButton(this.googleButton, { theme: "filled_blue" });
+				google.accounts.id.renderButton(this.googleButton, {
+					locale: dfnsStore.state.lang,
+					size: "large",
+					theme: "outline",
+					text: "signin_with",
+				});
 			});
 	}
 

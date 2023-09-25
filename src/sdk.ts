@@ -93,7 +93,6 @@ export class DfnsSDK {
 	private init() {
 		const existingContainers = document.getElementsByTagName("dfns-main");
 		for (let i = 0; i < existingContainers.length; i++) {
-			console.log("remove")
 			existingContainers[i].remove();
 		}
 
@@ -170,7 +169,7 @@ export class DfnsSDK {
 	}
 
 	public async transferTokens() {
-		dfnsStore.state.walletService.transferTokens();
+		return dfnsStore.state.walletService.transferTokens();
 	}
 
 	public async showWalletOverview() {
