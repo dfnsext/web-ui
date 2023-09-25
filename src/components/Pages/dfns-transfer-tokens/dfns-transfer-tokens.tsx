@@ -145,6 +145,7 @@ export class DfnsTransferTokens {
 									this.tokenList.map((asset) => {
 										return (
 											<div
+												key={asset.symbol}
 												class="row"
 												onClick={() => {
 													this.selectTokenForTransfert(asset);
