@@ -4,12 +4,12 @@ import { Component, Event, EventEmitter, Fragment, State, h } from "@stencil/cor
 import dfnsStore from "../../../stores/DfnsStore";
 import langState from "../../../stores/LanguageStore";
 import router from "../../../stores/RouterStore";
-import { generateRsaKey } from "../../../utils/crypto";
 import { getDfnsDelegatedClient } from "../../../utils/dfns";
-import { CreatePasskeyAction } from "../../../utils/enums/actions-enum";
-import { EAlertVariant } from "../../../utils/enums/alerts-enums";
-import { EButtonSize, EButtonVariant } from "../../../utils/enums/buttons-enums";
-import { ITypo, ITypoColor } from "../../../utils/enums/typography-enums";
+import { CreatePasskeyAction } from "../../../common/enums/actions-enum";
+import { ITypo, ITypoColor } from "../../../common/enums/typography-enums";
+import { EAlertVariant } from "../../../common/enums/alerts-enums";
+import { EButtonSize, EButtonVariant } from "../../../common/enums/buttons-enums";
+
 
 @Component({
 	tag: "dfns-recovery-setup",
@@ -38,8 +38,7 @@ export class DfnsRecoverySetup {
 			})) as PublicKeyOptions;
 
 
-			const privateKey = await generateRsaKey();
-			console.log(privateKey);
+			// const privateKey = await generateRsaKey();
 			// this.newPasskeyAttestation = await create(this.newPasskeyChallenge);
 			// this.step = 2;
 		} catch (err) {

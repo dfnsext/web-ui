@@ -5,11 +5,11 @@ import dfnsStore from "../../../stores/DfnsStore";
 import langState from "../../../stores/LanguageStore";
 import router from "../../../stores/RouterStore";
 import { getDfnsDelegatedClient } from "../../../utils/dfns";
-import { CreatePasskeyAction } from "../../../utils/enums/actions-enum";
-import { EAlertVariant } from "../../../utils/enums/alerts-enums";
-import { EButtonSize, EButtonVariant } from "../../../utils/enums/buttons-enums";
-import { ITypo, ITypoColor } from "../../../utils/enums/typography-enums";
 import { create, sign } from "../../../utils/webauthn";
+import { CreatePasskeyAction } from "../../../common/enums/actions-enum";
+import { ITypo, ITypoColor } from "../../../common/enums/typography-enums";
+import { EAlertVariant } from "../../../common/enums/alerts-enums";
+import { EButtonSize, EButtonVariant } from "../../../common/enums/buttons-enums";
 
 
 @Component({
@@ -17,11 +17,7 @@ import { create, sign } from "../../../utils/webauthn";
 	styleUrl: "dfns-create-passkey.scss",
 	shadow: true,
 })
-
-
-
 export class DfnsCreatePasskey {
-
 	@State() isLoading: boolean = false;
 	@State() step = 1;
 	@State() passkeyName?: string;
@@ -133,7 +129,7 @@ export class DfnsCreatePasskey {
 							/>
 							<dfns-button
 								content={langState.values.buttons.back}
-								variant={EButtonVariant.SECONDARY}
+								variant={EButtonVariant.NEUTRAL}
 								sizing={EButtonSize.MEDIUM}
 								fullwidth
 								iconposition="left"

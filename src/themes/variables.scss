@@ -5,34 +5,12 @@
 	--root-max-width: 1440px;
 	--root-margin: auto;
 	--root-padding: 64px 120px;
-	
+
 	// Variables for the light theme
 	--font-primary: $font-primary;
 	--color-generic-black: #000000ff;
 	--color-generic-none: #00000000;
 	--color-generic-white: #ffffffff;
-
-	--color-primary-50: #f5f5ffff;
-	--color-primary-100: #e1e1feff;
-	--color-primary-200: #c3c4feff;
-	--color-primary-300: #9b9dfdff;
-	--color-primary-400: #7375fdff;
-	--color-primary-500: #4b4efcff;
-	--color-primary-600: #1e22fbff;
-	--color-primary-700: #0408e7ff;
-	--color-primary-800: #0306baff;
-	--color-primary-900: #02058dff;
-
-	--color-secondary-50: #edf3fdff;
-	--color-secondary-100: #d5e4faff;
-	--color-secondary-200: #a6cafcff;
-	--color-secondary-300: #6cb1fcff;
-	--color-secondary-400: #1b98f3ff;
-	--color-secondary-500: #157dc9ff;
-	--color-secondary-600: #0f63a1ff;
-	--color-secondary-700: #084b7bff;
-	--color-secondary-800: #083356ff;
-	--color-secondary-900: #071d32ff;
 
 	--color-neutral-50: #f9fafbff;
 	--color-neutral-100: #f3f4f6ff;
@@ -44,6 +22,17 @@
 	--color-neutral-700: #374151ff;
 	--color-neutral-800: #1f2937ff;
 	--color-neutral-900: #111827ff;
+
+	--color-secondary-50: #edf3fdff;
+	--color-secondary-100: #d5e4faff;
+	--color-secondary-200: #a6cafcff;
+	--color-secondary-300: #6cb1fcff;
+	--color-secondary-400: #1b98f3ff;
+	--color-secondary-500: #157dc9ff;
+	--color-secondary-600: #0f63a1ff;
+	--color-secondary-700: #084b7bff;
+	--color-secondary-800: #083356ff;
+	--color-secondary-900: #071d32ff;
 
 	--color-tertiary-50: #f6edfdff;
 	--color-tertiary-100: #eddcfbff;
@@ -89,7 +78,5 @@
 	--color-error-800: #991b1bff;
 	--color-error-900: #7f1d1dff;
 
-	--radius-full:$radius-3xl;
-
-
+	--radius-full: $radius-3xl;
 }

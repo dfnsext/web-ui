@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Prop, State, h, Event } from "@stencil/core";
-import { ITypo, ITypoColor } from "../../../../../utils/enums/typography-enums";
+import { ITypo, ITypoColor } from "../../../../../common/enums/typography-enums";
 
 @Component({
 	tag: "dfns-input-field",
@@ -30,12 +30,20 @@ export class DfnsInputField {
 		return classNames.join(" ");
 	}
 
+	get inputClassName() {
+		const classNames = ["input"];
+		if (this.isFocused) classNames.push("focused");
+		if (this.errors.length > 0) classNames.push("error");
+		if (this.isReadOnly) classNames.push("read-only");
+		return classNames.join(" ");
+	}
+
 	renderInput() {
 		return (
 			<div>
 				<slot />
 				<input
-					class="input"
+					class={this.inputClassName}
 					type={this.type}
 					value={this.value}
 					placeholder={this.placeholder}
@@ -45,15 +53,27 @@ export class DfnsInputField {
 					// onChange={this.handleOnChange.bind(this)}
 					readOnly={this.isReadOnly}
 				/>
+				{this.rightElement && (
+					<div class="right" onClick={this.handleRightElementClick.bind(this)}>
+						{this.rightElement}
+					</div>
+				)}
 			</div>
 		);
+	}
+
+	handleRightElementClick(event: Event) {
+		// Vous pouvez implémenter ici le comportement souhaité lorsque l'élément de droite est cliqué
+		// Par exemple, ouvrir une boîte de dialogue, effectuer une action, etc.
 	}
 
 	autoRenderErrors() {
 		return (
 			<div class="errors">
 				{this.errors.map((error) => (
-					<div class="error">{error}</div>
+					<div class="error">
+						<dfns-typography typo={ITypo.TEXTE_XS_REGULAR}>{error}</dfns-typography>
+					</div>
 				))}
 			</div>
 		);
@@ -77,10 +97,8 @@ export class DfnsInputField {
 					<dfns-typography typo={ITypo.TEXTE_SM_SEMIBOLD} color={ITypoColor.PRIMARY}>
 						{this.label}
 					</dfns-typography>
-					<label></label>
 					{this.leftElement && <div class="left">{this.leftElement}</div>}
 					{this.renderInput()}
-					{this.rightElement && <div class="right">{this.rightElement}</div>}
 					{!this.disableErrors && this.autoRenderErrors()}
 				</div>
 			</div>

@@ -17,14 +17,18 @@
 		"my_wallet": "My wallet",
 		"settings": "Settings",
 		"create_passkey": "Create a passkey",
+		"confirm_transaction": "Send transaction",
+		"transfert_token": "Select Token",
+		"send_token": "Send token",
+		"receive_token": "Receive token",
 		"nav_links": {}
 	},
 	"pages": {
 		"identification": {
 			"title": "Authentication"
 		},
-		"home": {
-			"title": "Home"
+		"login": {
+			"wallet": "Wallet"
 		},
 		"create_account": {
 			"title": "Create your wallet",
@@ -68,7 +72,9 @@
 			"button_create_passkey": "Create a passkey",
 			"button_settings": "Settings",
 			"button_logout": "Logout",
-			"wallet_address": "Wallet address:"
+			"wallet_address": "Wallet address:",
+			"button_send": "Send",
+			"button_receive": "Receive"
 		},
 		"settings": {
 			"passkeys": "passkeys",
@@ -79,7 +85,32 @@
 			"public_key": "Public key ID:",
 			"button_delete": "Delete",
 			"content_alert": "Generate a new passkey to access your wallet from another device.",
-			"button_recovery_kit":"Set up recovery kit"
+			"button_recovery_kit": "Set up recovery kit"
+		},
+		"confirm_transaction": {
+			"from": "From",
+			"to": "To",
+			"amount": "Amount",
+			"fee": "Fee",
+			"total": "Total",
+			"fee_message": "Gas fees will be applied to this transaction",
+			"gas_fees": "Gas fees",
+			"transaction_confirmed": "Transaction confirmed",
+			"pending_message": "Pending transaction",
+			"sub_title_pending": "Transfer takes about 30 seconds",
+			"error_title": "Transaction failed"
+		},
+		"transfert_tokens": {
+			"send_to": "Send to",
+			"amount": "Amount",
+			"placeholder_wallet": "Wallet address",
+			"error_title": "Error"
+		},
+		"receive_tokens": {
+			"wallet_address": "Wallet address",
+			"copy_address": "Copy address",
+			"warning_title": "This is a Polygon wallet.",
+			"warning_content": "Only send MATIC or other ERC-20 tokens to this wallet"
 		},
 		"profile": {
 			"title": "Profile",
@@ -171,7 +202,7 @@
 		"view": "View",
 		"view_more": "View More",
 		"view_less": "View Less",
-		"confirm_payment": "Confirm payment",
+		"confirm": "Confirm",
 		"place_bid": "Place bid",
 		"approve_payment": "Approve payment",
 		"approve_listing": "Approve listing",

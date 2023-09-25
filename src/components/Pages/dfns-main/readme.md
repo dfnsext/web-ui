@@ -7,11 +7,14 @@
 
 ## Properties
 
-| Property                              | Attribute                                | Description | Type                             | Default     |
-| ------------------------------------- | ---------------------------------------- | ----------- | -------------------------------- | ----------- |
-| `messageToSign`                       | `message-to-sign`                        |             | `string`                         | `undefined` |
-| `network`                             | `network`                                |             | `BlockchainNetwork`              | `undefined` |
-| `userCreationAuthenticatorAttachment` | `user-creation-authenticator-attachment` |             | `"cross-platform" \| "platform"` | `undefined` |
+| Property                     | Attribute                       | Description | Type      | Default     |
+| ---------------------------- | ------------------------------- | ----------- | --------- | ----------- |
+| `messageToSign`              | `message-to-sign`               |             | `string`  | `undefined` |
+| `shouldShowWalletValidation` | `should-show-wallet-validation` |             | `boolean` | `undefined` |
+| `transactionData`            | `transaction-data`              |             | `string`  | `undefined` |
+| `transactionNonce`           | `transaction-nonce`             |             | `number`  | `undefined` |
+| `transactionTo`              | `transaction-to`                |             | `string`  | `undefined` |
+| `transactionValue`           | `transaction-value`             |             | `string`  | `undefined` |
 
 
 ## Dependencies
@@ -27,6 +30,9 @@
 - [dfns-create-passkey](../dfns-create-passkey)
 - [dfns-wallet-overview](../dfns-wallet-overview)
 - [dfns-login](../dfns-login)
+- [dfns-transfer-tokens](../dfns-transfer-tokens)
+- [dfns-confirm-transaction](../dfns-confirm-transaction)
+- [dfns-receive-tokens](../dfns-receive-tokens)
 
 ### Graph
 ```mermaid
@@ -40,6 +46,9 @@ graph TD;
   dfns-main --> dfns-create-passkey
   dfns-main --> dfns-wallet-overview
   dfns-main --> dfns-login
+  dfns-main --> dfns-transfer-tokens
+  dfns-main --> dfns-confirm-transaction
+  dfns-main --> dfns-receive-tokens
   dfns-create-account --> dfns-layout
   dfns-create-account --> dfns-typography
   dfns-create-account --> dfns-stepper
@@ -78,9 +87,26 @@ graph TD;
   dfns-wallet-overview --> dfns-layout
   dfns-wallet-overview --> dfns-typography
   dfns-wallet-overview --> dfns-button
+  dfns-wallet-overview --> dfns-loader
   dfns-wallet-overview --> dfns-alert
   dfns-login --> dfns-layout
   dfns-login --> dfns-typography
+  dfns-login --> dfns-button
+  dfns-transfer-tokens --> dfns-layout
+  dfns-transfer-tokens --> dfns-typography
+  dfns-transfer-tokens --> dfns-loader
+  dfns-transfer-tokens --> dfns-input-field
+  dfns-transfer-tokens --> dfns-alert
+  dfns-transfer-tokens --> dfns-button
+  dfns-confirm-transaction --> dfns-layout
+  dfns-confirm-transaction --> dfns-typography
+  dfns-confirm-transaction --> dfns-alert
+  dfns-confirm-transaction --> dfns-loader
+  dfns-confirm-transaction --> dfns-button
+  dfns-receive-tokens --> dfns-layout
+  dfns-receive-tokens --> dfns-typography
+  dfns-receive-tokens --> dfns-button
+  dfns-receive-tokens --> dfns-alert
   style dfns-main fill:#f9f,stroke:#333,stroke-width:4px
 ```
 
