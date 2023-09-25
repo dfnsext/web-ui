@@ -21,8 +21,10 @@ import { networkMapping } from "../../../utils/helper";
 	shadow: true,
 })
 export class DfnsConfirmTransaction {
+	// @Prop() from: ;
 	@Prop() to: BlockchainAddress;
 	@Prop() value: Amount;
+	@Prop() tokenSymbol: string = networkMapping[dfnsStore.state.network].nativeCurrency.symbol;
 	@Prop() data?: string;
 	@Prop() txNonce?: number;
 	@Prop() confirmationImgSrc = "https://storage.googleapis.com/dfns-frame-stg/assets/icons/confirmation.svg";
@@ -108,9 +110,9 @@ export class DfnsConfirmTransaction {
 	}
 
 	private async getFiatValue() {
-		const fiatValue = await convertCryptoToFiat(this.value, dfnsStore.state.lang, "polygon");
+		const fiatValue = await convertCryptoToFiat(this.value, dfnsStore.state.lang, this.tokenSymbol.toLowerCase());
 		if (fiatValue) this.priceValue = fiatValue;
-	}
+	}	
 
 	render() {
 		const iconLink: JSX.Element = (

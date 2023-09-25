@@ -33,6 +33,7 @@
 		"create_account": {
 			"title": "Création du\nwallet",
 			"description": "Utilisez votre téléphone portable personnel pour créer votre wallet",
+			"description_mobile": "Utilisez votre téléphone portable personnel pour créer votre wallet",
 			"button_create": "Continue"
 		},
 		"validate_wallet": {

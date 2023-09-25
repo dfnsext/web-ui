@@ -157,7 +157,7 @@ export async function fetchAssets(dfnsHost: string, appId: string, dfnsUserToken
 				balance: balance,
 				symbol: asset.symbol,
 				icon: token,
-				fiatValue: await convertCryptoToFiat(balance, lang, chain),
+				fiatValue: await convertCryptoToFiat(balance, lang, asset.symbol),
 				contract: asset.contract,
 				decimals: asset.decimals,
 			});

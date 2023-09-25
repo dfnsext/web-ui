@@ -53,7 +53,7 @@ export class DfnsWalletOverview {
 			dfnsStore.state.dfnsUserToken,
 			dfnsStore.state.wallet.id,
 			dfnsStore.state.lang,
-			"polygonmumbai",
+			dfnsStore.state.network.toLowerCase(),
 		)) as ITokenInfo[];
 	}
 

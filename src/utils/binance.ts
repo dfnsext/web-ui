@@ -2,13 +2,12 @@ import { binanceApiUrl } from "../common/constant";
 
 export async function convertCryptoToFiat(value: string, lang: string, symbol: string): Promise<string | null> {
     const currency = lang === 'en' ? 'usdt' : lang === 'fr' ? 'eur' : null;
-    const chain = symbol === 'polygon' || symbol === 'polygonmumbai' ? 'matic' : symbol;
 
     if (!currency) {
         return null;
     }
 
-    const tradingPair = `${chain}${currency}`.toUpperCase();
+    const tradingPair = `${symbol}${currency}`.toUpperCase();
     const url = new URL(`${binanceApiUrl}/api/v3/ticker/price`);
     url.searchParams.append('symbol', tradingPair);
 
