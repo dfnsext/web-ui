@@ -45,6 +45,7 @@ export namespace Components {
         "confirmationImgSrc": string;
         "data"?: string;
         "to": BlockchainAddress;
+        "tokenSymbol": string;
         "txNonce"?: number;
         "value": Amount;
     }
@@ -56,6 +57,7 @@ export namespace Components {
         "disableErrors": boolean;
         "errors": string[];
         "fullWidth": boolean;
+        "isPasswordVisible": boolean;
         "isReadOnly": boolean;
         "label": string;
         "leftElement": any;
@@ -371,6 +373,7 @@ declare namespace LocalJSX {
         "data"?: string;
         "onTransactionSent"?: (event: DfnsConfirmTransactionCustomEvent<string>) => void;
         "to"?: BlockchainAddress;
+        "tokenSymbol"?: string;
         "txNonce"?: number;
         "value"?: Amount;
     }
@@ -384,6 +387,7 @@ declare namespace LocalJSX {
         "disableErrors"?: boolean;
         "errors"?: string[];
         "fullWidth"?: boolean;
+        "isPasswordVisible"?: boolean;
         "isReadOnly"?: boolean;
         "label"?: string;
         "leftElement"?: any;

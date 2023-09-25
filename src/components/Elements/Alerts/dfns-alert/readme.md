@@ -21,7 +21,6 @@
  - [dfns-confirm-transaction](../../../Pages/dfns-confirm-transaction)
  - [dfns-create-passkey](../../../Pages/dfns-create-passkey)
  - [dfns-receive-tokens](../../../Pages/dfns-receive-tokens)
- - [dfns-recovery-setup](../../../Pages/dfns-recovery-setup)
  - [dfns-settings](../../../Pages/dfns-settings)
  - [dfns-sign-message](../../../Pages/dfns-sign-message)
  - [dfns-transfer-tokens](../../../Pages/dfns-transfer-tokens)
@@ -38,7 +37,6 @@ graph TD;
   dfns-confirm-transaction --> dfns-alert
   dfns-create-passkey --> dfns-alert
   dfns-receive-tokens --> dfns-alert
-  dfns-recovery-setup --> dfns-alert
   dfns-settings --> dfns-alert
   dfns-sign-message --> dfns-alert
   dfns-transfer-tokens --> dfns-alert

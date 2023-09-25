@@ -20,6 +20,7 @@ export class DfnsInputField {
 	@Prop() onChange: (input: string) => void;
 	@Event() inputChange: EventEmitter<string>;
 	@State() isFocused = false;
+	@Prop() isPasswordVisible = false;
 
 	get containerClassName() {
 		const classNames = ["wrapper"];
@@ -44,7 +45,7 @@ export class DfnsInputField {
 				<slot />
 				<input
 					class={this.inputClassName}
-					type={this.type}
+					type={this.type == "password" && this.isPasswordVisible ? "text" : "password"}
 					value={this.value}
 					placeholder={this.placeholder}
 					onInput={this.handleOnChange.bind(this)}

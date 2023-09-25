@@ -22,6 +22,7 @@
 		"send_token": "Send token",
 		"receive_token": "Receive token",
 		"login": "Sign up or log in",
+		"recovery_setup": "Recovery setup",
 		"nav_links": {}
 	},
 	"pages": {
@@ -115,6 +116,14 @@
 			"copy_address": "Copy address",
 			"warning_title": "This is a Polygon wallet.",
 			"warning_content": "Only send MATIC or other ERC-20 tokens to this wallet"
+		},
+		"recovery_setup":{
+			"title": "Verify your identity to generate your recovery kit",
+			"description": "Your recovery kit is unique and cannot be restored. Be sure to copy it, as it will be inaccessible later.",
+			"button_generate": "Generate recovery kit",
+			"button_later": "Later",
+			"recovery_code": "Recovery code",
+			"recovery_key": "Recovery key ID"
 		},
 		"profile": {
 			"title": "Profile",

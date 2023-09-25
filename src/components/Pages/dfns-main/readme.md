@@ -58,10 +58,8 @@ graph TD;
   dfns-recovery-setup --> dfns-layout
   dfns-recovery-setup --> dfns-typography
   dfns-recovery-setup --> dfns-input-field
-  dfns-recovery-setup --> dfns-alert
   dfns-recovery-setup --> dfns-button
   dfns-input-field --> dfns-typography
-  dfns-alert --> dfns-typography
   dfns-validate-wallet --> dfns-layout
   dfns-validate-wallet --> dfns-typography
   dfns-validate-wallet --> dfns-stepper
@@ -74,6 +72,7 @@ graph TD;
   dfns-sign-message --> dfns-typography
   dfns-sign-message --> dfns-button
   dfns-sign-message --> dfns-alert
+  dfns-alert --> dfns-typography
   dfns-settings --> dfns-layout
   dfns-settings --> dfns-typography
   dfns-settings --> dfns-button

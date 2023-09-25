@@ -7,19 +7,20 @@
 
 ## Properties
 
-| Property        | Attribute        | Description | Type                      | Default     |
-| --------------- | ---------------- | ----------- | ------------------------- | ----------- |
-| `disableErrors` | `disable-errors` |             | `boolean`                 | `undefined` |
-| `errors`        | --               |             | `string[]`                | `[]`        |
-| `fullWidth`     | `full-width`     |             | `boolean`                 | `undefined` |
-| `isReadOnly`    | `is-read-only`   |             | `boolean`                 | `undefined` |
-| `label`         | `label`          |             | `string`                  | `undefined` |
-| `leftElement`   | `left-element`   |             | `any`                     | `undefined` |
-| `onChange`      | --               |             | `(input: string) => void` | `undefined` |
-| `placeholder`   | `placeholder`    |             | `string`                  | `undefined` |
-| `rightElement`  | `right-element`  |             | `any`                     | `undefined` |
-| `type`          | `type`           |             | `string`                  | `undefined` |
-| `value`         | `value`          |             | `string`                  | `undefined` |
+| Property            | Attribute             | Description | Type                      | Default     |
+| ------------------- | --------------------- | ----------- | ------------------------- | ----------- |
+| `disableErrors`     | `disable-errors`      |             | `boolean`                 | `undefined` |
+| `errors`            | --                    |             | `string[]`                | `[]`        |
+| `fullWidth`         | `full-width`          |             | `boolean`                 | `undefined` |
+| `isPasswordVisible` | `is-password-visible` |             | `boolean`                 | `false`     |
+| `isReadOnly`        | `is-read-only`        |             | `boolean`                 | `undefined` |
+| `label`             | `label`               |             | `string`                  | `undefined` |
+| `leftElement`       | `left-element`        |             | `any`                     | `undefined` |
+| `onChange`          | --                    |             | `(input: string) => void` | `undefined` |
+| `placeholder`       | `placeholder`         |             | `string`                  | `undefined` |
+| `rightElement`      | `right-element`       |             | `any`                     | `undefined` |
+| `type`              | `type`                |             | `string`                  | `undefined` |
+| `value`             | `value`               |             | `string`                  | `undefined` |
 
 
 ## Events

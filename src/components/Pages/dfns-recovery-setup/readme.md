@@ -23,7 +23,6 @@
 - [dfns-layout](../../Materials/Templates/dfns-layout)
 - [dfns-typography](../../Elements/Typography/dfns-typography)
 - [dfns-input-field](../../Elements/Forms/InputField/dfns-input-field)
-- [dfns-alert](../../Elements/Alerts/dfns-alert)
 - [dfns-button](../../Elements/Buttons/dfns-button)
 
 ### Graph
@@ -32,10 +31,8 @@ graph TD;
   dfns-recovery-setup --> dfns-layout
   dfns-recovery-setup --> dfns-typography
   dfns-recovery-setup --> dfns-input-field
-  dfns-recovery-setup --> dfns-alert
   dfns-recovery-setup --> dfns-button
   dfns-input-field --> dfns-typography
-  dfns-alert --> dfns-typography
   dfns-button --> dfns-typography
   dfns-button --> dfns-loader
   dfns-main --> dfns-recovery-setup

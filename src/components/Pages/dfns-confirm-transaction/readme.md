@@ -12,6 +12,7 @@
 | `confirmationImgSrc` | `confirmation-img-src` |             | `string` | `"https://storage.googleapis.com/dfns-frame-stg/assets/icons/confirmation.svg"` |
 | `data`               | `data`                 |             | `string` | `undefined`                                                                     |
 | `to`                 | `to`                   |             | `string` | `undefined`                                                                     |
+| `tokenSymbol`        | `token-symbol`         |             | `string` | `networkMapping[dfnsStore.state.network].nativeCurrency.symbol`                 |
 | `txNonce`            | `tx-nonce`             |             | `number` | `undefined`                                                                     |
 | `value`              | `value`                |             | `string` | `undefined`                                                                     |
 
