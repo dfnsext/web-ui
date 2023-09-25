@@ -3,7 +3,7 @@ import jwt_decode, { JwtPayload } from "jwt-decode";
 import dfnsStore from "../../stores/DfnsStore";
 import router, { RouteType } from "../../stores/RouterStore";
 import { getDfnsDelegatedClient, isDfnsError } from "../../utils/dfns";
-import { loginWithOAuth, waitForEvent } from "../../utils/helper";
+import { loginWithOAuth, networkMapping, waitForEvent } from "../../utils/helper";
 import { EventEmitter } from "../EventEmitter";
 import LocalStorageService, { DFNS_ACTIVE_WALLET, DFNS_CREDENTIALS, DFNS_END_USER_TOKEN, OAUTH_ACCESS_TOKEN } from "../LocalStorageService";
 import { RegisterCompleteResponse } from "../api/Register";
@@ -83,6 +83,10 @@ class DfnsWallet implements IWalletInterface {
 
 	public async transferTokens() {
 		router.navigate(RouteType.TRANSFER_TOKENS);
+		const response = await waitForEvent<string>(this.getDfnsElement(), "transferRequest");
+		router.close();
+		if (!response) throw new Error("User cancelled transfer");
+		return response;
 	}
 
 	public async showWalletOverview() {
@@ -116,6 +120,11 @@ class DfnsWallet implements IWalletInterface {
 	public async sendTransaction(to: string, value: string, data: string, txNonce?: number): Promise<string> {
 		this.getDfnsElement().setAttribute("transaction-to", to);
 		this.getDfnsElement().setAttribute("transaction-value", value);
+		this.getDfnsElement().setAttribute(
+			"transaction-decimals",
+			networkMapping[dfnsStore.state.network].nativeCurrency.decimals.toString(),
+		);
+		this.getDfnsElement().setAttribute("transaction-token-symbol", networkMapping[dfnsStore.state.network].nativeCurrency.symbol);
 		this.getDfnsElement().setAttribute("transaction-data", data);
 		this.getDfnsElement().setAttribute("transaction-nonce", txNonce?.toString());
 		router.navigate(RouteType.CONFIRM_TRANSACTION);

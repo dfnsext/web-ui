@@ -14,6 +14,7 @@
 | `disabled`     | `disabled`     |             | `boolean`                                                                                                                       | `false`                  |
 | `fullwidth`    | `fullwidth`    |             | `boolean`                                                                                                                       | `false`                  |
 | `icon`         | --             |             | `Element`                                                                                                                       | `undefined`              |
+| `iconUrl`      | `icon-url`     |             | `string`                                                                                                                        | `undefined`              |
 | `iconposition` | `iconposition` |             | `"left" \| "right"`                                                                                                             | `"right"`                |
 | `iconstyle`    | `iconstyle`    |             | `any`                                                                                                                           | `undefined`              |
 | `isloading`    | `isloading`    |             | `boolean`                                                                                                                       | `false`                  |

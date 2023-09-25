@@ -12,8 +12,10 @@
 | `messageToSign`              | `message-to-sign`               |             | `string`  | `undefined` |
 | `shouldShowWalletValidation` | `should-show-wallet-validation` |             | `boolean` | `undefined` |
 | `transactionData`            | `transaction-data`              |             | `string`  | `undefined` |
+| `transactionDecimals`        | `transaction-decimals`          |             | `number`  | `undefined` |
 | `transactionNonce`           | `transaction-nonce`             |             | `number`  | `undefined` |
 | `transactionTo`              | `transaction-to`                |             | `string`  | `undefined` |
+| `transactionTokenSymbol`     | `transaction-token-symbol`      |             | `string`  | `undefined` |
 | `transactionValue`           | `transaction-value`             |             | `string`  | `undefined` |
 
 
@@ -92,6 +94,7 @@ graph TD;
   dfns-login --> dfns-layout
   dfns-login --> dfns-typography
   dfns-login --> dfns-button
+  dfns-transfer-tokens --> dfns-confirm-transaction
   dfns-transfer-tokens --> dfns-layout
   dfns-transfer-tokens --> dfns-typography
   dfns-transfer-tokens --> dfns-loader

@@ -195,68 +195,68 @@ export class DfnsWalletOverview {
 								/>
 							</CopyClipboard>
 						</div>
-						{dfnsStore.state.credentials.length < 2 && (
-							<div class="content">
-								<div class="transfert-buttons">
-									<div>
-										<dfns-button
-											content={langState.values.pages.wallet_overview.button_send}
-											variant={EButtonVariant.NEUTRAL}
-											sizing={EButtonSize.MEDIUM}
-											fullwidth
-											icon={iconSend}
-											iconposition="left"
-											onClick={() => {
-												router.navigate(RouteType.TRANSFER_TOKENS);
-											}}
-										/>
-									</div>
-									<div>
-										<dfns-button
-											content={langState.values.pages.wallet_overview.button_receive}
-											variant={EButtonVariant.NEUTRAL}
-											sizing={EButtonSize.MEDIUM}
-											fullwidth
-											icon={iconReceive}
-											iconposition="left"
-											onClick={() => {
-												router.navigate(RouteType.RECEIVE_TOKENS);
-											}}
-										/>
-									</div>
+						<div class="content">
+							<div class="transfert-buttons">
+								<div>
+									<dfns-button
+										content={langState.values.pages.wallet_overview.button_send}
+										variant={EButtonVariant.NEUTRAL}
+										sizing={EButtonSize.MEDIUM}
+										fullwidth
+										icon={iconSend}
+										iconposition="left"
+										onClick={() => {
+											router.navigate(RouteType.TRANSFER_TOKENS);
+										}}
+									/>
 								</div>
-								{this.isLoading && <dfns-loader size="large" />}
-								<div class="tab-container">
-									{!this.isLoading &&
-										this.tokenList.length !== 0 &&
-										this.tokenList.map((asset) => {
-											return (
-												<div class="row">
-													<div class="key">
-														<div class="token-logo">
-															<img src={asset.icon} alt={asset.symbol} width={20} height={20} />
-														</div>
-														<div class="symbol">
-															<dfns-typography typo={ITypo.TEXTE_SM_SEMIBOLD} color={ITypoColor.PRIMARY}>
-																{asset.symbol}
-															</dfns-typography>
-															<div class="sub-value">
-																<dfns-typography typo={ITypo.TEXTE_XS_REGULAR} color={ITypoColor.NEUTRAL}>
-																	{asset.balance.slice(0, 5)} {asset.symbol}
-																</dfns-typography>
-															</div>
-														</div>
+								<div>
+									<dfns-button
+										content={langState.values.pages.wallet_overview.button_receive}
+										variant={EButtonVariant.NEUTRAL}
+										sizing={EButtonSize.MEDIUM}
+										fullwidth
+										icon={iconReceive}
+										iconposition="left"
+										onClick={() => {
+											router.navigate(RouteType.RECEIVE_TOKENS);
+										}}
+									/>
+								</div>
+							</div>
+							{this.isLoading && <dfns-loader size="large" />}
+							<div class="tab-container">
+								{!this.isLoading &&
+									this.tokenList.length !== 0 &&
+									this.tokenList.map((asset) => {
+										return (
+											<div class="row">
+												<div class="key">
+													<div class="token-logo">
+														<img src={asset.icon} alt={asset.symbol} width={20} height={20} />
 													</div>
-													<div class="value">
-														<dfns-typography typo={ITypo.TEXTE_SM_REGULAR} color={ITypoColor.PRIMARY}>
-															{asset.fiatValue}
+													<div class="symbol">
+														<dfns-typography typo={ITypo.TEXTE_SM_SEMIBOLD} color={ITypoColor.PRIMARY}>
+															{asset.symbol}
 														</dfns-typography>
+														<div class="sub-value">
+															<dfns-typography typo={ITypo.TEXTE_XS_REGULAR} color={ITypoColor.NEUTRAL}>
+																{asset.balance.slice(0, 5)} {asset.symbol}
+															</dfns-typography>
+														</div>
 													</div>
 												</div>
-											);
-										})}
-								</div>
+												<div class="value">
+													<dfns-typography typo={ITypo.TEXTE_SM_REGULAR} color={ITypoColor.PRIMARY}>
+														{asset.fiatValue}
+													</dfns-typography>
+												</div>
+											</div>
+										);
+									})}
+							</div>
 
+							{dfnsStore.state.credentials.length < 2 && (
 								<dfns-alert variant={EAlertVariant.INFO} hasTitle>
 									<div slot="title">{langState.values.pages.wallet_overview.title_alert}</div>
 									<div slot="content">
@@ -273,8 +273,8 @@ export class DfnsWalletOverview {
 										</div>
 									</div>
 								</dfns-alert>
-							</div>
-						)}
+							)}
+						</div>
 					</div>
 				</div>
 				<div slot="bottomSection">

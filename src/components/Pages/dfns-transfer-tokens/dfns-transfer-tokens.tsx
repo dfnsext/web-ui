@@ -8,7 +8,7 @@ import langState from "../../../stores/LanguageStore";
 import { getDfnsDelegatedClient, timeout } from "../../../utils/dfns";
 
 import { sign } from "../../../utils/webauthn";
-import { fetchAssets } from "../../../utils/helper";
+import { fetchAssets, waitForEvent } from "../../../utils/helper";
 import { ITokenInfo } from "../../../common/interfaces/ITokenInfo";
 import { ethers } from "ethers";
 import { parseUnits } from "ethers/lib/utils";
@@ -28,7 +28,7 @@ export class DfnsTransferTokens {
 	@State() to: BlockchainAddress;
 	@State() value: Amount;
 	@State() contract?: BlockchainAddress;
-	@Event() transferRequest: EventEmitter<TransferRequest>;
+	@Event() transferRequest: EventEmitter<string>;
 	@State() hasErrors: boolean = false;
 	@State() errorMessage: string = "";
 	@State() inputErrors: boolean = false;
@@ -55,7 +55,7 @@ export class DfnsTransferTokens {
 			dfnsStore.state.dfnsUserToken,
 			dfnsStore.state.wallet.id,
 			dfnsStore.state.lang,
-			dfnsStore.state.network.toLowerCase(),
+			dfnsStore.state.network,
 		)) as ITokenInfo[];
 	}
 
@@ -68,11 +68,6 @@ export class DfnsTransferTokens {
 
 	async sendTokens() {
 		try {
-			this.isLoading = true;
-			this.kind = this.selectedToken.contract ? TransferKind.Erc20 : TransferKind.Native;
-			const dfnsDelegated = getDfnsDelegatedClient(dfnsStore.state.dfnsHost, dfnsStore.state.appId, dfnsStore.state.dfnsUserToken);
-			let request: TransferAssetRequest;
-
 			if (!ethers.utils.isAddress(this.to)) {
 				throw new Error("Invalid address format");
 			}
@@ -83,54 +78,13 @@ export class DfnsTransferTokens {
 				throw new Error(this.inputErrorMessage);
 			}
 
-			if (this.kind === TransferKind.Erc20) {
-				request = {
-					walletId: dfnsStore.state.wallet.id,
-					body: {
-						kind: TransferKind.Erc20,
-						to: this.to,
-						amount: parseUnits(this.value).toString(),
-						contract: this.selectedToken.contract,
-					},
-				};
+			this.step = 3;
+			const txHash = await waitForEvent<string>(document.getElementsByTagName("dfns-main")[0], "transactionSent");
+			if (!txHash) {
+				this.step = 2;
+				return;
 			}
-
-			if (this.kind === TransferKind.Native) {
-				request = {
-					walletId: dfnsStore.state.wallet.id,
-					body: {
-						kind: TransferKind.Native,
-						to: this.to,
-						amount: parseUnits(this.value).toString(),
-					},
-				};
-			}
-
-			const challenge = await dfnsDelegated.wallets.transferAssetInit(request);
-
-			const assertion = await sign(dfnsStore.state.rpId, challenge.challenge, challenge.allowCredentials);
-
-			let transfer = await dfnsDelegated.wallets.transferAssetComplete(request, {
-				challengeIdentifier: challenge.challengeIdentifier,
-				firstFactor: assertion,
-			});
-
-			do {
-				await timeout(1000);
-				transfer = await dfnsDelegated.wallets.getTransfer({
-					walletId: dfnsStore.state.wallet.id,
-					transferId: transfer.id,
-				});
-			} while (
-				transfer.status === TransferStatus.Pending ||
-				//@ts-ignore
-				transfer.status === "Executing"
-			);
-			this.isLoading = false;
-			if (transfer.status === TransferStatus.Failed || transfer.status === TransferStatus.Rejected) {
-				throw new Error(transfer.reason);
-			}
-			this.transferRequest.emit(transfer);
+			this.transferRequest.emit(txHash);
 		} catch (error) {
 			this.handleError(error);
 		}
@@ -158,11 +112,21 @@ export class DfnsTransferTokens {
 		this.transferRequest.emit(null);
 	}
 
-	async goBack() {
-		router.navigate(RouteType.WALLET_OVERVIEW);
-	}
-
 	render() {
+		if (this.step === 3) {
+			return (
+				<dfns-confirm-transaction
+					to={this.to}
+					tokenSymbol={this.selectedToken.symbol}
+					dfnsTransfer={true}
+					value={parseUnits(this.value, this.selectedToken.decimals).toString()}
+					backButtonCallback={() => {
+						this.step = 2;
+					}}
+					decimals={this.selectedToken.decimals}
+					dfnsTransferSelectedToken={this.selectedToken}></dfns-confirm-transaction>
+			);
+		}
 		return (
 			<dfns-layout closeBtn onClickCloseBtn={this.closeBtn.bind(this)}>
 				<div slot="topSection">
@@ -295,7 +259,14 @@ export class DfnsTransferTokens {
 						variant={EButtonVariant.NEUTRAL}
 						sizing={EButtonSize.MEDIUM}
 						fullwidth
-						onClick={this.goBack.bind(this)}
+						onClick={() => {
+							if (this.step == 2) {
+								this.step = 1;
+								return;
+							}
+							this.transferRequest.emit(null);
+							router.goBack();
+						}}
 					/>
 				</div>
 			</dfns-layout>

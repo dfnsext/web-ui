@@ -25,6 +25,6 @@ export default abstract class IWalletInterface {
 	public abstract showSettings();
 	public abstract showCreatePasskey();
 	public abstract showRecoverySetup();
-	public abstract transferTokens();
+	public abstract transferTokens(): Promise<string>;
 	public abstract isConnected(): Promise<boolean>;
 }
