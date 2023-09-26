@@ -34,7 +34,7 @@ export interface DfnsSDKOptions {
 	appLogoUrl?: string | null;
 	darkMode?: boolean;
 	assetsPath?: string;
-	shouldShowWalletValidation?: boolean;
+	showWalletValidation?: boolean;
 	defaultDevice?: "mobile" | "desktop" | null;
 	network: BlockchainNetwork;
 	googleClientId?: string;
@@ -93,7 +93,6 @@ export class DfnsSDK {
 	private init() {
 		const existingContainers = document.getElementsByTagName("dfns-main");
 		for (let i = 0; i < existingContainers.length; i++) {
-			console.log("remove")
 			existingContainers[i].remove();
 		}
 
@@ -125,10 +124,11 @@ export class DfnsSDK {
 		dfnsStore.setValue("lang", this.options.lang);
 		dfnsStore.setValue("walletConnectEnabled", this.options.walletConnectEnabled);
 		dfnsStore.setValue("walletConnectProjectId", this.options.walletConnectProjectId ?? null);
+		dfnsStore.setValue("showWalletValidation", this.options.showWalletValidation ?? false);
 
 		const walletProvider = LocalStorageService.getInstance().items[CACHED_WALLET_PROVIDER].get();
 		if (walletProvider === WalletProvider.DFNS) {	
-			const walletInstance = DfnsWallet.getInstance(this.options.shouldShowWalletValidation);
+			const walletInstance = DfnsWallet.getInstance();
 			dfnsStore.setValue("walletService", walletInstance);
 			if (this.options.autoConnect) {
 				walletInstance.autoConnect();
@@ -152,6 +152,7 @@ export class DfnsSDK {
 	public async connect() {
 		router.navigate(RouteType.LOGIN);
 		const walletAddress = await waitForEvent<string>(this.dfnsContainer, "walletConnected");
+		console.log("walletAddress", walletAddress);
 		if (!walletAddress) {
 			throw new Error("Wallet not connected");
 		}
@@ -159,7 +160,7 @@ export class DfnsSDK {
 	}
 
 	public async connectWithOAuthToken(oauthToken: string) {
-		const dfnsWalletInstance = DfnsWallet.getInstance(this.options.shouldShowWalletValidation);
+		const dfnsWalletInstance = DfnsWallet.getInstance();
 		dfnsStore.setValue("walletService", dfnsWalletInstance);
 		return dfnsStore.state.walletService.connectWithOAuthToken(oauthToken);
 	}
@@ -170,7 +171,7 @@ export class DfnsSDK {
 	}
 
 	public async transferTokens() {
-		dfnsStore.state.walletService.transferTokens();
+		return dfnsStore.state.walletService.transferTokens();
 	}
 
 	public async showWalletOverview() {
@@ -184,6 +185,11 @@ export class DfnsSDK {
 	public async showReceiveTokens() {
 		router.navigate(RouteType.RECEIVE_TOKENS);
 	}
+
+	public async showRecoverySetup() {
+		router.navigate(RouteType.RECOVERY_SETUP);
+	}
+
 
 	public async sendTransaction(to: string, value: string, data?: string, nonce?: number) {
 		return dfnsStore.state.walletService.sendTransaction(to, value, data, nonce);

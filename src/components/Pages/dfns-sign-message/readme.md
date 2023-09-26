@@ -29,19 +29,20 @@
 
 - [dfns-layout](../../Materials/Templates/dfns-layout)
 - [dfns-typography](../../Elements/Typography/dfns-typography)
-- [dfns-button](../../Elements/Buttons/dfns-button)
 - [dfns-alert](../../Elements/Alerts/dfns-alert)
+- [dfns-button](../../Elements/Buttons/dfns-button)
 
 ### Graph
 ```mermaid
 graph TD;
   dfns-sign-message --> dfns-layout
   dfns-sign-message --> dfns-typography
-  dfns-sign-message --> dfns-button
   dfns-sign-message --> dfns-alert
+  dfns-sign-message --> dfns-button
+  dfns-layout --> dfns-typography
+  dfns-alert --> dfns-typography
   dfns-button --> dfns-typography
   dfns-button --> dfns-loader
-  dfns-alert --> dfns-typography
   dfns-main --> dfns-sign-message
   style dfns-sign-message fill:#f9f,stroke:#333,stroke-width:4px
 ```

@@ -7,6 +7,7 @@ const styles = `
 	align-items: center;
 	user-select: none;
 	cursor: pointer;
+	width: 100%;
 `;
 
 interface CopyClipboardProps {

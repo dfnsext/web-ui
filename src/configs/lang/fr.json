@@ -21,6 +21,8 @@
 		"transfert_token": "Séléctionnez un token",
 		"send_token": "Envoyer un token",
 		"receive_token": "Recevoir un token",
+		"login": "Connexion / Inscription",
+		"recovery_setup": "Récupération du wallet",
 		"nav_links": {}
 	},
 	"pages": {
@@ -28,11 +30,14 @@
 			"title": "Identification\n\t"
 		},
 		"login": {
-			"wallet": "Wallet"
+			"wallet": "Wallet",
+			"recover_account": "Récupérer mon compte",
+			"or": "ou"
 		},
 		"create_account": {
 			"title": "Création du\nwallet",
 			"description": "Utilisez votre téléphone portable personnel pour créer votre wallet",
+			"description_mobile": "Utilisez votre téléphone portable personnel pour créer votre wallet",
 			"button_create": "Continue"
 		},
 		"validate_wallet": {
@@ -111,6 +116,17 @@
 			"copy_address": "Copy address",
 			"warning_title": "Ceci est un wallet Polygon",
 			"warning_content": "Veuillez vous assurer que vous envoyez des tokens Polygon (MATIC) à cette adresse."
+		},
+		"recovery_setup": {
+			"title": "Vérifiez votre identité pour générer votre kit de récupération",
+			"description": "Votre kit de récupération est unique et ne peut pas être restauré. Veillez à le copier, car il sera inaccessible ultérieurement.",
+			"button_generate": "Générer mon kit de récupération",
+			"button_later": "Je le ferai plus tard",
+			"recovery_code": "Code de récupération",
+			"recovery_key": "Clé de récupération",
+			"warning_title": "Cette clé de récupération est unique, conservez-la !",
+			"warning_content": "Si vous perdez l'accès à votre compte, ce kit de récupération est le seul moyen de le récupérer. Vous pouvez le copier ou le télécharger.",
+			"button_download_kit": "Télécharger mon kit de récupération"
 		},
 		"profile": {
 			"title": "Profil",

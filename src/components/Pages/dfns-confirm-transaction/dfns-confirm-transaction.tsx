@@ -9,10 +9,12 @@ import { ITypo, ITypoColor } from "../../../common/enums/typography-enums";
 import { EAlertVariant } from "../../../common/enums/alerts-enums";
 import { EButtonSize, EButtonVariant } from "../../../common/enums/buttons-enums";
 import { getDfnsDelegatedClient, timeout } from "../../../utils/dfns";
-import { BroadcastTransactionRequest } from "@dfns/sdk/codegen/Wallets";
-import { TransactionKind, TransactionStatus } from "@dfns/sdk/codegen/datamodel/Wallets";
+import { BroadcastTransactionRequest, TransferAssetRequest } from "@dfns/sdk/codegen/Wallets";
+import { TransactionKind, TransactionStatus, TransferKind, TransferStatus } from "@dfns/sdk/codegen/datamodel/Wallets";
 import router from "../../../stores/RouterStore";
 import { networkMapping } from "../../../utils/helper";
+import { formatUnits, parseUnits } from "ethers/lib/utils";
+import { ITokenInfo } from "../../../common/interfaces/ITokenInfo";
 
 @Component({
 	tag: "dfns-confirm-transaction",
@@ -21,8 +23,13 @@ import { networkMapping } from "../../../utils/helper";
 	shadow: true,
 })
 export class DfnsConfirmTransaction {
+	@Prop() backButtonCallback: () => void;
+	@Prop() dfnsTransfer: boolean = false;
+	@Prop() dfnsTransferSelectedToken: ITokenInfo;
 	@Prop() to: BlockchainAddress;
 	@Prop() value: Amount;
+	@Prop() decimals: number;
+	@Prop() tokenSymbol: string = networkMapping[dfnsStore.state.network].nativeCurrency.symbol;
 	@Prop() data?: string;
 	@Prop() txNonce?: number;
 	@Prop() confirmationImgSrc = "https://storage.googleapis.com/dfns-frame-stg/assets/icons/confirmation.svg";
@@ -85,6 +92,70 @@ export class DfnsConfirmTransaction {
 		}
 	}
 
+	async transferTokens() {
+		try {
+			this.isLoading = true;
+
+			this.step = 2;
+
+			const kind = this.dfnsTransferSelectedToken.contract ? TransferKind.Erc20 : TransferKind.Native;
+			const dfnsDelegated = getDfnsDelegatedClient(dfnsStore.state.dfnsHost, dfnsStore.state.appId, dfnsStore.state.dfnsUserToken);
+			let request: TransferAssetRequest;
+
+			if (kind === TransferKind.Erc20) {
+				request = {
+					walletId: dfnsStore.state.wallet.id,
+					body: {
+						kind: TransferKind.Erc20,
+						to: this.to,
+						amount: this.value,
+						contract: this.dfnsTransferSelectedToken.contract,
+					},
+				};
+			}
+
+			if (kind === TransferKind.Native) {
+				request = {
+					walletId: dfnsStore.state.wallet.id,
+					body: {
+						kind: TransferKind.Native,
+						to: this.to,
+						amount: this.value,
+					},
+				};
+			}
+
+			const challenge = await dfnsDelegated.wallets.transferAssetInit(request);
+
+			const assertion = await sign(dfnsStore.state.rpId, challenge.challenge, challenge.allowCredentials);
+
+			let transfer = await dfnsDelegated.wallets.transferAssetComplete(request, {
+				challengeIdentifier: challenge.challengeIdentifier,
+				firstFactor: assertion,
+			});
+
+			do {
+				await timeout(1000);
+				transfer = await dfnsDelegated.wallets.getTransfer({
+					walletId: dfnsStore.state.wallet.id,
+					transferId: transfer.id,
+				});
+			} while (
+				transfer.status === TransferStatus.Pending ||
+				//@ts-ignore
+				transfer.status === "Executing"
+			);
+			this.isLoading = false;
+			if (transfer.status === TransferStatus.Failed || transfer.status === TransferStatus.Rejected) {
+				throw new Error(transfer.reason);
+			}
+			this.txHash = transfer.txHash;
+			this.isLoading = false;
+		} catch (error) {
+			this.handleError(error);
+		}
+	}
+
 	private handleError(error: any) {
 		this.isLoading = false;
 		this.hasErrors = true;
@@ -100,7 +171,7 @@ export class DfnsConfirmTransaction {
 
 	async closeBtn() {
 		this.transactionSent.emit(this.txHash);
-		router.goBack();
+		router.close();
 	}
 
 	async componentDidLoad() {
@@ -108,7 +179,11 @@ export class DfnsConfirmTransaction {
 	}
 
 	private async getFiatValue() {
-		const fiatValue = await convertCryptoToFiat(this.value, dfnsStore.state.lang, "polygon");
+		const fiatValue = await convertCryptoToFiat(
+			formatUnits(this.value, this.decimals),
+			dfnsStore.state.lang,
+			this.tokenSymbol.toLowerCase(),
+		);
 		if (fiatValue) this.priceValue = fiatValue;
 	}
 
@@ -183,7 +258,7 @@ export class DfnsConfirmTransaction {
 										</div>
 										<div class="value">
 											<dfns-typography typo={ITypo.TEXTE_SM_REGULAR} color={ITypoColor.PRIMARY}>
-												{this.value}
+												{formatUnits(this.value, this.decimals)} {this.tokenSymbol.toUpperCase()}
 											</dfns-typography>
 										</div>
 										<div class="sub-value">
@@ -214,7 +289,9 @@ export class DfnsConfirmTransaction {
 										</div>
 										<div class="value">
 											<dfns-typography typo={ITypo.TEXTE_MD_SEMIBOLD} color={ITypoColor.PRIMARY}>
-												{this.value} + {langState.values.pages.confirm_transaction.gas_fees}
+												{formatUnits(this.value, this.decimals)} {this.tokenSymbol.toUpperCase()}
+												{" + "}
+												{langState.values.pages.confirm_transaction.gas_fees}
 											</dfns-typography>
 										</div>
 										<div class="sub-value">
@@ -281,7 +358,13 @@ export class DfnsConfirmTransaction {
 							sizing={EButtonSize.MEDIUM}
 							fullwidth
 							iconposition="left"
-							onClick={this.sendTransaction.bind(this)}
+							onClick={() => {
+								if (this.dfnsTransfer) {
+									this.transferTokens();
+									return;
+								}
+								this.sendTransaction();
+							}}
 							isloading={this.isLoading}
 						/>
 					)}
@@ -290,7 +373,20 @@ export class DfnsConfirmTransaction {
 						variant={EButtonVariant.NEUTRAL}
 						sizing={EButtonSize.MEDIUM}
 						fullwidth
-						onClick={this.closeBtn.bind(this)}
+						onClick={() => {
+							if (this.step === 2) {
+								this.transactionSent.emit(this.txHash);
+								this.closeBtn();
+								return;
+							}
+							if (this.dfnsTransfer) {
+								this.transactionSent.emit(this.txHash);
+								this.backButtonCallback();
+								return;
+							}
+							this.transactionSent.emit(this.txHash);
+							router.goBack();
+						}}
 					/>
 				</div>
 			</dfns-layout>

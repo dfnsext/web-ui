@@ -24,6 +24,7 @@
  - [dfns-create-account](../../../Pages/dfns-create-account)
  - [dfns-create-passkey](../../../Pages/dfns-create-passkey)
  - [dfns-input-field](../../Forms/InputField/dfns-input-field)
+ - [dfns-layout](../../../Materials/Templates/dfns-layout)
  - [dfns-login](../../../Pages/dfns-login)
  - [dfns-receive-tokens](../../../Pages/dfns-receive-tokens)
  - [dfns-recovery-setup](../../../Pages/dfns-recovery-setup)
@@ -44,6 +45,7 @@ graph TD;
   dfns-create-account --> dfns-typography
   dfns-create-passkey --> dfns-typography
   dfns-input-field --> dfns-typography
+  dfns-layout --> dfns-typography
   dfns-login --> dfns-typography
   dfns-receive-tokens --> dfns-typography
   dfns-recovery-setup --> dfns-typography

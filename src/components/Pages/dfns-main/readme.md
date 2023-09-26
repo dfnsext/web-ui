@@ -7,14 +7,15 @@
 
 ## Properties
 
-| Property                     | Attribute                       | Description | Type      | Default     |
-| ---------------------------- | ------------------------------- | ----------- | --------- | ----------- |
-| `messageToSign`              | `message-to-sign`               |             | `string`  | `undefined` |
-| `shouldShowWalletValidation` | `should-show-wallet-validation` |             | `boolean` | `undefined` |
-| `transactionData`            | `transaction-data`              |             | `string`  | `undefined` |
-| `transactionNonce`           | `transaction-nonce`             |             | `number`  | `undefined` |
-| `transactionTo`              | `transaction-to`                |             | `string`  | `undefined` |
-| `transactionValue`           | `transaction-value`             |             | `string`  | `undefined` |
+| Property                 | Attribute                  | Description | Type     | Default     |
+| ------------------------ | -------------------------- | ----------- | -------- | ----------- |
+| `messageToSign`          | `message-to-sign`          |             | `string` | `undefined` |
+| `transactionData`        | `transaction-data`         |             | `string` | `undefined` |
+| `transactionDecimals`    | `transaction-decimals`     |             | `number` | `undefined` |
+| `transactionNonce`       | `transaction-nonce`        |             | `number` | `undefined` |
+| `transactionTo`          | `transaction-to`           |             | `string` | `undefined` |
+| `transactionTokenSymbol` | `transaction-token-symbol` |             | `string` | `undefined` |
+| `transactionValue`       | `transaction-value`        |             | `string` | `undefined` |
 
 
 ## Dependencies
@@ -53,6 +54,7 @@ graph TD;
   dfns-create-account --> dfns-typography
   dfns-create-account --> dfns-stepper
   dfns-create-account --> dfns-button
+  dfns-layout --> dfns-typography
   dfns-button --> dfns-typography
   dfns-button --> dfns-loader
   dfns-recovery-setup --> dfns-layout
@@ -72,8 +74,8 @@ graph TD;
   dfns-wallet-validation --> dfns-button
   dfns-sign-message --> dfns-layout
   dfns-sign-message --> dfns-typography
-  dfns-sign-message --> dfns-button
   dfns-sign-message --> dfns-alert
+  dfns-sign-message --> dfns-button
   dfns-settings --> dfns-layout
   dfns-settings --> dfns-typography
   dfns-settings --> dfns-button
@@ -92,6 +94,7 @@ graph TD;
   dfns-login --> dfns-layout
   dfns-login --> dfns-typography
   dfns-login --> dfns-button
+  dfns-transfer-tokens --> dfns-confirm-transaction
   dfns-transfer-tokens --> dfns-layout
   dfns-transfer-tokens --> dfns-typography
   dfns-transfer-tokens --> dfns-loader

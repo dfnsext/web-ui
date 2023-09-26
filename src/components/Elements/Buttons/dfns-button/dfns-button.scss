@@ -30,6 +30,11 @@
 			width: 18px;
 			height: 18px;
 		}
+		@media screen and (max-width: $screen-s) {
+			display: flex;
+			flex-direction: column;
+			width: fit-content;
+		}
 		//variants
 		&[variant="primary"] {
 			border-radius: $radius-3xl;
@@ -124,19 +129,19 @@
 
 		&[variant="warning"] {
 			border-radius: $radius-3xl;
-			border: 1px solid var(--button-secondary-error-default-border);
-			background-color: var(--button-secondary-error-default-background);
-			color: var(--button-secondary-error-default-contrast);
+			border: 1px solid var(--button-secondary-warning-default-border);
+			background-color: var(--button-secondary-warning-default-background);
+			color: var(--button-secondary-warning-default-contrast);
 			box-shadow: $shadow-brand;
 
 			&:hover {
-				border: 1px solid var(--button-secondary-error-hovered-border);
-				background: var(--button-secondary-error-hovered-background);
+				border: 1px solid var(--button-secondary-warning-hovered-border);
+				background: var(--button-secondary-errwarningor-hovered-background);
 			}
 
 			&:focus {
-				border: 1px solid var(--button-secondary-error-pressed-border);
-				background: var(--button-secondary-error-pressed-background);
+				border: 1px solid var(--button-secondary-warning-pressed-border);
+				background: var(--button-secondary-warning-pressed-background);
 			}
 
 			&:disabled {
@@ -156,18 +161,28 @@
 		&[sizing="small"] {
 			max-height: 32px;
 			padding: 6px 12px;
+			@media screen and (max-width: $screen-s) {
+				max-height: fit-content;
+				padding: 6px $spacing-1;
+			}
 		}
 
 		&[sizing="medium"] {
 			max-height: 40px;
 			min-height: 40px;
 			padding: 6px 12px;
+			@media screen and (max-width: $screen-s) {
+				max-height: fit-content;
+			}
 		}
 
 		&[sizing="large"] {
 			max-height: 48px;
 			min-height: 48px;
 			padding: 12px 24px;
+			@media screen and (max-width: $screen-s) {
+				max-height: fit-content;
+			}
 		}
 	}
 }

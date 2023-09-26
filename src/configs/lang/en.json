@@ -21,6 +21,8 @@
 		"transfert_token": "Select Token",
 		"send_token": "Send token",
 		"receive_token": "Receive token",
+		"login": "Sign up or log in",
+		"recovery_setup": "Recovery setup",
 		"nav_links": {}
 	},
 	"pages": {
@@ -28,11 +30,14 @@
 			"title": "Authentication"
 		},
 		"login": {
-			"wallet": "Wallet"
+			"wallet": "Wallet",
+			"recover_account": "Recover my account",
+			"or": "or"
 		},
 		"create_account": {
 			"title": "Create your wallet",
-			"description": "Use your personal mobile phone to create your wallet",
+			"description": "Use fingerprint or face recognition to log in",
+			"description_mobile": "Use your personal mobile phone to create your wallet",
 			"button_create": "Continue"
 		},
 		"validate_wallet": {
@@ -111,6 +116,17 @@
 			"copy_address": "Copy address",
 			"warning_title": "This is a Polygon wallet.",
 			"warning_content": "Only send MATIC or other ERC-20 tokens to this wallet"
+		},
+		"recovery_setup":{
+			"title": "Verify your identity to generate your recovery kit",
+			"description": "Your recovery kit is unique and cannot be restored. Be sure to copy it, as it will be inaccessible later.",
+			"button_generate": "Generate recovery kit",
+			"button_later": "Later",
+			"recovery_code": "Recovery code",
+			"recovery_key": "Recovery key ID",
+			"warning_title": "This recovery key is unique, save it!",
+			"warning_content": "If you lose access to your account, this recovery kit is the only way to get it back. You can copy or download it.",
+			"button_download_kit": "Download recovery kit"
 		},
 		"profile": {
 			"title": "Profile",

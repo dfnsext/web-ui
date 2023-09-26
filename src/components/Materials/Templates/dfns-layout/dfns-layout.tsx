@@ -1,6 +1,7 @@
 import { Component, h, JSX, Prop } from "@stencil/core";
 import dfnsStore from "../../../../stores/DfnsStore";
 import router from "../../../../stores/RouterStore";
+import { ITypo, ITypoColor } from "../../../../common/enums/typography-enums";
 
 @Component({
 	tag: "dfns-layout",
@@ -48,14 +49,12 @@ export class DfnsLayout {
 					<slot name="bottomSection" />
 				</div>
 				<div class="logos-section">
-					{dfnsStore.state.appLogoUrl && (
+					{/* {dfnsStore.state.appLogoUrl && (
 						<img src={dfnsStore.state.appLogoUrl} alt={`${dfnsStore.state.appName} logo`} width={47} height={16} />
-					)}
-
-					{/* <dfns-typography typo={ITypo.TEXTE_XS_REGULAR} color={ITypoColor.BLACK}>
-						powered by
+					)} */}
+					<dfns-typography typo={ITypo.TEXTE_XS_SEMIBOLD} color={ITypoColor.PRIMARY}>
+						powered by DFNS
 					</dfns-typography>
-					<img src={this.bloomLogoSrc} alt="bloom logo" width={43} height={14} /> */}
 				</div>
 			</div>
 		);

@@ -3,9 +3,9 @@ import jwt_decode, { JwtPayload } from "jwt-decode";
 import dfnsStore from "../../stores/DfnsStore";
 import router, { RouteType } from "../../stores/RouterStore";
 import { getDfnsDelegatedClient, isDfnsError } from "../../utils/dfns";
-import { loginWithOAuth, waitForEvent } from "../../utils/helper";
+import { loginWithOAuth, networkMapping, waitForEvent } from "../../utils/helper";
 import { EventEmitter } from "../EventEmitter";
-import LocalStorageService, { DFNS_ACTIVE_WALLET, DFNS_CREDENTIALS, DFNS_END_USER_TOKEN, OAUTH_ACCESS_TOKEN } from "../LocalStorageService";
+import LocalStorageService, { CACHED_WALLET_PROVIDER, DFNS_ACTIVE_WALLET, DFNS_CREDENTIALS, DFNS_END_USER_TOKEN, OAUTH_ACCESS_TOKEN, WalletProvider } from "../LocalStorageService";
 import { RegisterCompleteResponse } from "../api/Register";
 import IWalletInterface, { WalletEvent } from "./IWalletInterface";
 
@@ -15,20 +15,16 @@ class DfnsWallet implements IWalletInterface {
 	private removeOnRouteChanged = () => {};
 
 	private events: EventEmitter<any> = new EventEmitter();
-	private constructor(private shouldShowWalletValidation: boolean) {
+	private constructor() {
 		this.removeOnRouteChanged = this.onRouteChanged();
 		// this.onStateChanged();
 
 		DfnsWallet.ctx = this;
 	}
 
-	public static getInstance(shouldShowWalletValidation: boolean): DfnsWallet {
+	public static getInstance(): DfnsWallet {
 		if (!DfnsWallet.ctx) {
-			DfnsWallet.ctx = new DfnsWallet(shouldShowWalletValidation);
-		}
-		if (DfnsWallet.ctx.shouldShowWalletValidation !== shouldShowWalletValidation) {
-			DfnsWallet.ctx.removeOnRouteChanged();
-			DfnsWallet.ctx = new DfnsWallet(shouldShowWalletValidation);
+			DfnsWallet.ctx = new DfnsWallet();
 		}
 		return DfnsWallet.ctx;
 	}
@@ -41,7 +37,7 @@ class DfnsWallet implements IWalletInterface {
 		return dfnsStore.state.wallet?.address ?? null;
 	}
 
-	public async connectWithOAuthToken(oauthToken: string): Promise<Wallet> {
+	public async connectWithOAuthToken(oauthToken: string): Promise<string> {
 		let wallet: Wallet | null = null;
 		try {
 			dfnsStore.setValue("oauthAccessToken", oauthToken);
@@ -52,7 +48,7 @@ class DfnsWallet implements IWalletInterface {
 			wallet = wallets.items[0];
 			if (!wallet) {
 				wallet = await this.validateWallet();
-				if (this.shouldShowWalletValidation) {
+				if (dfnsStore.state.showWalletValidation) {
 					wallet = await this.waitForWalletValidation();
 				}
 			}
@@ -60,7 +56,7 @@ class DfnsWallet implements IWalletInterface {
 			if (isDfnsError(error) && error.httpStatus === 401) {
 				await this.createAccount();
 				wallet = await this.validateWallet();
-				if (this.shouldShowWalletValidation) {
+				if (dfnsStore.state.showWalletValidation) {
 					wallet = await this.waitForWalletValidation();
 				}
 			} else {
@@ -69,7 +65,11 @@ class DfnsWallet implements IWalletInterface {
 		}
 		dfnsStore.setValue("wallet", wallet);
 		this.events.emit(WalletEvent.CONNECTED, dfnsStore.state.wallet.address);
-		return wallet;
+		this.getDfnsElement().dispatchEvent(new CustomEvent("walletConnected", { detail: wallet.address }));
+		LocalStorageService.getInstance().items[CACHED_WALLET_PROVIDER].set(WalletProvider.DFNS);
+		dfnsStore.setValue("walletService", this);
+		
+		return wallet.address;
 	}
 
 	public async signMessage(message: string): Promise<string> {
@@ -83,6 +83,10 @@ class DfnsWallet implements IWalletInterface {
 
 	public async transferTokens() {
 		router.navigate(RouteType.TRANSFER_TOKENS);
+		const response = await waitForEvent<string>(this.getDfnsElement(), "transferRequest");
+		router.close();
+		if (!response) throw new Error("User cancelled transfer");
+		return response;
 	}
 
 	public async showWalletOverview() {
@@ -114,9 +118,13 @@ class DfnsWallet implements IWalletInterface {
 	}
 
 	public async sendTransaction(to: string, value: string, data: string, txNonce?: number): Promise<string> {
-		debugger
 		this.getDfnsElement().setAttribute("transaction-to", to);
 		this.getDfnsElement().setAttribute("transaction-value", value);
+		this.getDfnsElement().setAttribute(
+			"transaction-decimals",
+			networkMapping[dfnsStore.state.network].nativeCurrency.decimals.toString(),
+		);
+		this.getDfnsElement().setAttribute("transaction-token-symbol", networkMapping[dfnsStore.state.network].nativeCurrency.symbol);
 		this.getDfnsElement().setAttribute("transaction-data", data);
 		this.getDfnsElement().setAttribute("transaction-nonce", txNonce?.toString());
 		router.navigate(RouteType.CONFIRM_TRANSACTION);
@@ -185,8 +193,7 @@ class DfnsWallet implements IWalletInterface {
 
 	private async validateWallet(): Promise<Wallet> {
 		router.navigate(RouteType.VALIDATE_WALLET);
-		this.getDfnsElement().setAttribute("should-show-wallet-validation", this.shouldShowWalletValidation ? "true" : undefined);
-		const response = await waitForEvent<Wallet>(this.getDfnsElement(), "walletValidated");
+		const response = await waitForEvent<Wallet>(this.getDfnsElement(), "walletCreated");
 		router.close();
 		if (!response) throw new Error("User cancelled connection");
 		dfnsStore.setValue("wallet", response);

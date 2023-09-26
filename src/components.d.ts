@@ -8,19 +8,21 @@ import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 import { EAlertVariant } from "./common/enums/alerts-enums";
 import { EButtonSize, EButtonVariant } from "./common/enums/buttons-enums";
 import { JSX } from "@stencil/core";
+import { ITokenInfo } from "./common/interfaces/ITokenInfo";
 import { Amount, BlockchainAddress } from "@dfns/sdk/codegen/datamodel/Foundations";
 import { RegisterCompleteResponse } from "./services/api/Register";
 import { CreatePasskeyAction, SettingsAction, WalletOverviewAction } from "./common/enums/actions-enum";
-import { TransferRequest, Wallet } from "@dfns/sdk/codegen/datamodel/Wallets";
 import { ITypo, ITypoColor } from "./common/enums/typography-enums";
+import { Wallet } from "@dfns/sdk/codegen/datamodel/Wallets";
 export { EAlertVariant } from "./common/enums/alerts-enums";
 export { EButtonSize, EButtonVariant } from "./common/enums/buttons-enums";
 export { JSX } from "@stencil/core";
+export { ITokenInfo } from "./common/interfaces/ITokenInfo";
 export { Amount, BlockchainAddress } from "@dfns/sdk/codegen/datamodel/Foundations";
 export { RegisterCompleteResponse } from "./services/api/Register";
 export { CreatePasskeyAction, SettingsAction, WalletOverviewAction } from "./common/enums/actions-enum";
-export { TransferRequest, Wallet } from "@dfns/sdk/codegen/datamodel/Wallets";
 export { ITypo, ITypoColor } from "./common/enums/typography-enums";
+export { Wallet } from "@dfns/sdk/codegen/datamodel/Wallets";
 export namespace Components {
     interface DfnsAlert {
         "classCss"?: string;
@@ -33,6 +35,7 @@ export namespace Components {
         "disabled": boolean;
         "fullwidth": boolean;
         "icon"?: JSX.Element;
+        "iconUrl"?: string;
         "iconposition": "left" | "right";
         "iconstyle"?: any;
         "isloading": boolean;
@@ -42,9 +45,14 @@ export namespace Components {
         "variant": EButtonVariant;
     }
     interface DfnsConfirmTransaction {
+        "backButtonCallback": () => void;
         "confirmationImgSrc": string;
         "data"?: string;
+        "decimals": number;
+        "dfnsTransfer": boolean;
+        "dfnsTransferSelectedToken": ITokenInfo;
         "to": BlockchainAddress;
+        "tokenSymbol": string;
         "txNonce"?: number;
         "value": Amount;
     }
@@ -56,6 +64,7 @@ export namespace Components {
         "disableErrors": boolean;
         "errors": string[];
         "fullWidth": boolean;
+        "isPasswordVisible": boolean;
         "isReadOnly": boolean;
         "label": string;
         "leftElement": any;
@@ -74,14 +83,14 @@ export namespace Components {
         "size"?: "small" | "large";
     }
     interface DfnsLogin {
-        "shouldShowWalletValidation": boolean;
     }
     interface DfnsMain {
         "messageToSign": string;
-        "shouldShowWalletValidation": boolean;
         "transactionData"?: BlockchainAddress;
+        "transactionDecimals"?: number;
         "transactionNonce"?: number;
         "transactionTo": BlockchainAddress;
+        "transactionTokenSymbol"?: string;
         "transactionValue": Amount;
     }
     interface DfnsReceiveTokens {
@@ -109,7 +118,6 @@ export namespace Components {
         "typo": ITypo;
     }
     interface DfnsValidateWallet {
-        "shouldShowWalletValidation": boolean;
     }
     interface DfnsWalletOverview {
     }
@@ -357,6 +365,7 @@ declare namespace LocalJSX {
         "disabled"?: boolean;
         "fullwidth"?: boolean;
         "icon"?: JSX.Element;
+        "iconUrl"?: string;
         "iconposition"?: "left" | "right";
         "iconstyle"?: any;
         "isloading"?: boolean;
@@ -367,10 +376,15 @@ declare namespace LocalJSX {
         "variant"?: EButtonVariant;
     }
     interface DfnsConfirmTransaction {
+        "backButtonCallback"?: () => void;
         "confirmationImgSrc"?: string;
         "data"?: string;
+        "decimals"?: number;
+        "dfnsTransfer"?: boolean;
+        "dfnsTransferSelectedToken"?: ITokenInfo;
         "onTransactionSent"?: (event: DfnsConfirmTransactionCustomEvent<string>) => void;
         "to"?: BlockchainAddress;
+        "tokenSymbol"?: string;
         "txNonce"?: number;
         "value"?: Amount;
     }
@@ -384,6 +398,7 @@ declare namespace LocalJSX {
         "disableErrors"?: boolean;
         "errors"?: string[];
         "fullWidth"?: boolean;
+        "isPasswordVisible"?: boolean;
         "isReadOnly"?: boolean;
         "label"?: string;
         "leftElement"?: any;
@@ -404,14 +419,14 @@ declare namespace LocalJSX {
     }
     interface DfnsLogin {
         "onWalletConnected"?: (event: DfnsLoginCustomEvent<string>) => void;
-        "shouldShowWalletValidation"?: boolean;
     }
     interface DfnsMain {
         "messageToSign"?: string;
-        "shouldShowWalletValidation"?: boolean;
         "transactionData"?: BlockchainAddress;
+        "transactionDecimals"?: number;
         "transactionNonce"?: number;
         "transactionTo"?: BlockchainAddress;
+        "transactionTokenSymbol"?: string;
         "transactionValue"?: Amount;
     }
     interface DfnsReceiveTokens {
@@ -435,7 +450,7 @@ declare namespace LocalJSX {
         "steps"?: string[];
     }
     interface DfnsTransferTokens {
-        "onTransferRequest"?: (event: DfnsTransferTokensCustomEvent<TransferRequest>) => void;
+        "onTransferRequest"?: (event: DfnsTransferTokensCustomEvent<string>) => void;
     }
     interface DfnsTypography {
         "classCss"?: string;
@@ -443,8 +458,7 @@ declare namespace LocalJSX {
         "typo"?: ITypo;
     }
     interface DfnsValidateWallet {
-        "onWalletValidated"?: (event: DfnsValidateWalletCustomEvent<Wallet>) => void;
-        "shouldShowWalletValidation"?: boolean;
+        "onWalletCreated"?: (event: DfnsValidateWalletCustomEvent<Wallet>) => void;
     }
     interface DfnsWalletOverview {
         "onAction"?: (event: DfnsWalletOverviewCustomEvent<WalletOverviewAction>) => void;

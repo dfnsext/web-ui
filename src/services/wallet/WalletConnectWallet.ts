@@ -212,7 +212,7 @@ export default class WalletConnectWallet implements IWalletInterface {
 		throw new Error("Method not implemented.");
 	}
 
-	public transferTokens() {
+	public transferTokens(): Promise<string> {
 		throw new Error("Method not implemented.");
 	}
 
