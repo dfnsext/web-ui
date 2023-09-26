@@ -159,6 +159,7 @@ export class DfnsConfirmTransaction {
 	private handleError(error: any) {
 		this.isLoading = false;
 		this.hasErrors = true;
+		this.step = 1;
 
 		if (typeof error === "string") {
 			this.errorMessage = error;

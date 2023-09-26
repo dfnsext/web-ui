@@ -23,13 +23,13 @@ export const CopyClipboard: FunctionalComponent<CopyClipboardProps> = ({ onClick
 		e.stopPropagation();
 		try {
 			await navigator.clipboard.writeText(value);
-			if (openToaster) {
-				const toast = await toastController.create({
-					message: value,
-					duration: 2000,
-				});
-				await toast.present();
-			}
+			// if (openToaster) {
+			// 	const toast = await toastController.create({
+			// 		message: value,
+			// 		duration: 2000,
+			// 	});
+			// 	await toast.present();
+			// }
 		} catch (err) {
 			console.warn(err);
 		}
