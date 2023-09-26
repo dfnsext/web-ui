@@ -43,6 +43,7 @@ graph TD;
   dfns-confirm-transaction --> dfns-alert
   dfns-confirm-transaction --> dfns-loader
   dfns-confirm-transaction --> dfns-button
+  dfns-layout --> dfns-typography
   dfns-alert --> dfns-typography
   dfns-button --> dfns-typography
   dfns-button --> dfns-loader

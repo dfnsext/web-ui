@@ -34,7 +34,7 @@ export interface DfnsSDKOptions {
 	appLogoUrl?: string | null;
 	darkMode?: boolean;
 	assetsPath?: string;
-	shouldShowWalletValidation?: boolean;
+	showWalletValidation?: boolean;
 	defaultDevice?: "mobile" | "desktop" | null;
 	network: BlockchainNetwork;
 	googleClientId?: string;
@@ -124,10 +124,11 @@ export class DfnsSDK {
 		dfnsStore.setValue("lang", this.options.lang);
 		dfnsStore.setValue("walletConnectEnabled", this.options.walletConnectEnabled);
 		dfnsStore.setValue("walletConnectProjectId", this.options.walletConnectProjectId ?? null);
+		dfnsStore.setValue("showWalletValidation", this.options.showWalletValidation ?? false);
 
 		const walletProvider = LocalStorageService.getInstance().items[CACHED_WALLET_PROVIDER].get();
 		if (walletProvider === WalletProvider.DFNS) {	
-			const walletInstance = DfnsWallet.getInstance(this.options.shouldShowWalletValidation);
+			const walletInstance = DfnsWallet.getInstance();
 			dfnsStore.setValue("walletService", walletInstance);
 			if (this.options.autoConnect) {
 				walletInstance.autoConnect();
@@ -151,6 +152,7 @@ export class DfnsSDK {
 	public async connect() {
 		router.navigate(RouteType.LOGIN);
 		const walletAddress = await waitForEvent<string>(this.dfnsContainer, "walletConnected");
+		console.log("walletAddress", walletAddress);
 		if (!walletAddress) {
 			throw new Error("Wallet not connected");
 		}
@@ -158,7 +160,7 @@ export class DfnsSDK {
 	}
 
 	public async connectWithOAuthToken(oauthToken: string) {
-		const dfnsWalletInstance = DfnsWallet.getInstance(this.options.shouldShowWalletValidation);
+		const dfnsWalletInstance = DfnsWallet.getInstance();
 		dfnsStore.setValue("walletService", dfnsWalletInstance);
 		return dfnsStore.state.walletService.connectWithOAuthToken(oauthToken);
 	}

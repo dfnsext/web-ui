@@ -30,9 +30,14 @@
  - [dfns-wallet-overview](../../../Pages/dfns-wallet-overview)
  - [dfns-wallet-validation](../../../Pages/dfns-wallet-validation)
 
+### Depends on
+
+- [dfns-typography](../../../Elements/Typography/dfns-typography)
+
 ### Graph
 ```mermaid
 graph TD;
+  dfns-layout --> dfns-typography
   dfns-confirm-transaction --> dfns-layout
   dfns-create-account --> dfns-layout
   dfns-create-passkey --> dfns-layout

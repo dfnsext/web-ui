@@ -45,7 +45,7 @@ export class DfnsInputField {
 				<slot />
 				<input
 					class={this.inputClassName}
-					type={this.type == "password" && this.isPasswordVisible ? "text" : "password"}
+					type={this.type == "password" && !this.isPasswordVisible ? "password" : "text" }
 					value={this.value}
 					placeholder={this.placeholder}
 					onInput={this.handleOnChange.bind(this)}

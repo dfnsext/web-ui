@@ -7,16 +7,15 @@
 
 ## Properties
 
-| Property                     | Attribute                       | Description | Type      | Default     |
-| ---------------------------- | ------------------------------- | ----------- | --------- | ----------- |
-| `messageToSign`              | `message-to-sign`               |             | `string`  | `undefined` |
-| `shouldShowWalletValidation` | `should-show-wallet-validation` |             | `boolean` | `undefined` |
-| `transactionData`            | `transaction-data`              |             | `string`  | `undefined` |
-| `transactionDecimals`        | `transaction-decimals`          |             | `number`  | `undefined` |
-| `transactionNonce`           | `transaction-nonce`             |             | `number`  | `undefined` |
-| `transactionTo`              | `transaction-to`                |             | `string`  | `undefined` |
-| `transactionTokenSymbol`     | `transaction-token-symbol`      |             | `string`  | `undefined` |
-| `transactionValue`           | `transaction-value`             |             | `string`  | `undefined` |
+| Property                 | Attribute                  | Description | Type     | Default     |
+| ------------------------ | -------------------------- | ----------- | -------- | ----------- |
+| `messageToSign`          | `message-to-sign`          |             | `string` | `undefined` |
+| `transactionData`        | `transaction-data`         |             | `string` | `undefined` |
+| `transactionDecimals`    | `transaction-decimals`     |             | `number` | `undefined` |
+| `transactionNonce`       | `transaction-nonce`        |             | `number` | `undefined` |
+| `transactionTo`          | `transaction-to`           |             | `string` | `undefined` |
+| `transactionTokenSymbol` | `transaction-token-symbol` |             | `string` | `undefined` |
+| `transactionValue`       | `transaction-value`        |             | `string` | `undefined` |
 
 
 ## Dependencies
@@ -55,13 +54,16 @@ graph TD;
   dfns-create-account --> dfns-typography
   dfns-create-account --> dfns-stepper
   dfns-create-account --> dfns-button
+  dfns-layout --> dfns-typography
   dfns-button --> dfns-typography
   dfns-button --> dfns-loader
   dfns-recovery-setup --> dfns-layout
   dfns-recovery-setup --> dfns-typography
   dfns-recovery-setup --> dfns-input-field
+  dfns-recovery-setup --> dfns-alert
   dfns-recovery-setup --> dfns-button
   dfns-input-field --> dfns-typography
+  dfns-alert --> dfns-typography
   dfns-validate-wallet --> dfns-layout
   dfns-validate-wallet --> dfns-typography
   dfns-validate-wallet --> dfns-stepper
@@ -74,7 +76,6 @@ graph TD;
   dfns-sign-message --> dfns-typography
   dfns-sign-message --> dfns-alert
   dfns-sign-message --> dfns-button
-  dfns-alert --> dfns-typography
   dfns-settings --> dfns-layout
   dfns-settings --> dfns-typography
   dfns-settings --> dfns-button

@@ -83,11 +83,9 @@ export namespace Components {
         "size"?: "small" | "large";
     }
     interface DfnsLogin {
-        "shouldShowWalletValidation": boolean;
     }
     interface DfnsMain {
         "messageToSign": string;
-        "shouldShowWalletValidation": boolean;
         "transactionData"?: BlockchainAddress;
         "transactionDecimals"?: number;
         "transactionNonce"?: number;
@@ -120,7 +118,6 @@ export namespace Components {
         "typo": ITypo;
     }
     interface DfnsValidateWallet {
-        "shouldShowWalletValidation": boolean;
     }
     interface DfnsWalletOverview {
     }
@@ -422,11 +419,9 @@ declare namespace LocalJSX {
     }
     interface DfnsLogin {
         "onWalletConnected"?: (event: DfnsLoginCustomEvent<string>) => void;
-        "shouldShowWalletValidation"?: boolean;
     }
     interface DfnsMain {
         "messageToSign"?: string;
-        "shouldShowWalletValidation"?: boolean;
         "transactionData"?: BlockchainAddress;
         "transactionDecimals"?: number;
         "transactionNonce"?: number;
@@ -463,8 +458,7 @@ declare namespace LocalJSX {
         "typo"?: ITypo;
     }
     interface DfnsValidateWallet {
-        "onWalletValidated"?: (event: DfnsValidateWalletCustomEvent<Wallet>) => void;
-        "shouldShowWalletValidation"?: boolean;
+        "onWalletCreated"?: (event: DfnsValidateWalletCustomEvent<Wallet>) => void;
     }
     interface DfnsWalletOverview {
         "onAction"?: (event: DfnsWalletOverviewCustomEvent<WalletOverviewAction>) => void;

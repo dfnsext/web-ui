@@ -13,8 +13,7 @@ import { ITypo, ITypoColor } from "../../../common/enums/typography-enums";
 	shadow: true,
 })
 export class DfnsValidateWallet {
-	@Prop() shouldShowWalletValidation: boolean;
-	@Event() walletValidated: EventEmitter<Wallet>;
+	@Event() walletCreated: EventEmitter<Wallet>;
 	@State() isLoading: boolean = false;
 
 	async validateWallet() {
@@ -27,7 +26,7 @@ export class DfnsValidateWallet {
 				dfnsStore.state.dfnsUserToken,
 				dfnsStore.state.network,
 			);
-			if (!this.shouldShowWalletValidation) {
+			if (!dfnsStore.state.showWalletValidation) {
 				wallet = await waitForWalletActive(
 					dfnsStore.state.dfnsHost,
 					dfnsStore.state.appId,
@@ -36,7 +35,7 @@ export class DfnsValidateWallet {
 				);
 			}
 			this.isLoading = false;
-			this.walletValidated.emit(wallet);
+			this.walletCreated.emit(wallet);
 			return wallet;
 		} catch (err) {
 			this.isLoading = false;
@@ -44,7 +43,7 @@ export class DfnsValidateWallet {
 	}
 
 	async closeBtn() {
-		this.walletValidated.emit(null);
+		this.walletCreated.emit(null);
 	}
 
 	render() {
