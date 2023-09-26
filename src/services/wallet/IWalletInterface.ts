@@ -20,7 +20,7 @@ export default abstract class IWalletInterface {
 	public abstract sendTransaction(to: string, value: string, data: string, txNonce?: number): Promise<string>;
 	public abstract autoConnect(): Promise<boolean>;
 	public abstract getAddress(): string | null;
-	public abstract connectWithOAuthToken(oauthToken: string): Promise<any>;
+	public abstract connectWithOAuthToken(oauthToken: string): Promise<string>;
 	public abstract showWalletOverview();
 	public abstract showSettings();
 	public abstract showCreatePasskey();

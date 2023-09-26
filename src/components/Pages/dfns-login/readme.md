@@ -5,13 +5,6 @@
 <!-- Auto Generated Below -->
 
 
-## Properties
-
-| Property                     | Attribute                       | Description | Type      | Default     |
-| ---------------------------- | ------------------------------- | ----------- | --------- | ----------- |
-| `shouldShowWalletValidation` | `should-show-wallet-validation` |             | `boolean` | `undefined` |
-
-
 ## Events
 
 | Event             | Description | Type                  |
@@ -37,6 +30,7 @@ graph TD;
   dfns-login --> dfns-layout
   dfns-login --> dfns-typography
   dfns-login --> dfns-button
+  dfns-layout --> dfns-typography
   dfns-button --> dfns-typography
   dfns-button --> dfns-loader
   dfns-main --> dfns-login

@@ -16,7 +16,6 @@ import { ITypo, ITypoColor } from "../../../common/enums/typography-enums";
 })
 export class DfnsLogin {
 	private googleButton: HTMLDivElement;
-	@Prop() shouldShowWalletValidation: boolean;
 	@Event() walletConnected: EventEmitter<string>;
 	@State() isLoading: boolean = false;
 
@@ -37,11 +36,8 @@ export class DfnsLogin {
 	}
 
 	async handleCredentialResponse(response) {
-		const walletInstance = DfnsWallet.getInstance(this.shouldShowWalletValidation);
-		const wallet = await walletInstance.connectWithOAuthToken(response.credential);
-		LocalStorageService.getInstance().items[CACHED_WALLET_PROVIDER].set(WalletProvider.DFNS);
-		dfnsStore.setValue("walletService", walletInstance);
-		this.walletConnected.emit(wallet.address);
+		const walletInstance = DfnsWallet.getInstance();
+		await walletInstance.connectWithOAuthToken(response.credential);
 		router.close();
 	}
 
@@ -102,7 +98,7 @@ export class DfnsLogin {
 								}}
 							/>
 						)}
-						<div class="recover-account">
+						{/* <div class="recover-account">
 							<dfns-button
 								content={langState.values.pages.login.recover_account}
 								variant={EButtonVariant.TEXT}
@@ -111,14 +107,16 @@ export class DfnsLogin {
 								iconposition="right"
 								icon={iconArrowLeft}
 							/>
-						</div>
-						<div class="separator">
-							<span>
-								<dfns-typography typo={ITypo.TEXTE_SM_REGULAR} color={ITypoColor.PRIMARY}>
-									{langState.values.pages.login.or}
-								</dfns-typography>
-							</span>
-						</div>
+						</div> */}
+						{dfnsStore.state.walletConnectEnabled && (
+							<div class="separator">
+								<span>
+									<dfns-typography typo={ITypo.TEXTE_SM_REGULAR} color={ITypoColor.PRIMARY}>
+										{langState.values.pages.login.or}
+									</dfns-typography>
+								</span>
+							</div>
+						)}
 						{dfnsStore.state.walletConnectEnabled && (
 							<dfns-button
 								content={langState.values.pages.login.wallet}

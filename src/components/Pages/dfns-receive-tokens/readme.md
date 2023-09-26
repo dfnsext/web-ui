@@ -25,6 +25,7 @@ graph TD;
   dfns-receive-tokens --> dfns-typography
   dfns-receive-tokens --> dfns-button
   dfns-receive-tokens --> dfns-alert
+  dfns-layout --> dfns-typography
   dfns-button --> dfns-typography
   dfns-button --> dfns-loader
   dfns-alert --> dfns-typography

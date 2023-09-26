@@ -34,6 +34,7 @@ graph TD;
   dfns-wallet-overview --> dfns-button
   dfns-wallet-overview --> dfns-loader
   dfns-wallet-overview --> dfns-alert
+  dfns-layout --> dfns-typography
   dfns-button --> dfns-typography
   dfns-button --> dfns-loader
   dfns-alert --> dfns-typography
