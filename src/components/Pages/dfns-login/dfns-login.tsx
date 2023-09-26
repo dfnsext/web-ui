@@ -1,4 +1,4 @@
-import { Component, Event, EventEmitter, JSX, Prop, State, h } from "@stencil/core";
+import { Component, Event, EventEmitter, Fragment, JSX, Prop, State, h } from "@stencil/core";
 
 import DfnsWallet from "../../../services/wallet/DfnsWallet";
 import WalletConnectWallet from "../../../services/wallet/WalletConnectWallet";
@@ -109,36 +109,37 @@ export class DfnsLogin {
 							/>
 						</div> */}
 						{dfnsStore.state.walletConnectEnabled && (
-							<div class="separator">
-								<span>
-									<dfns-typography typo={ITypo.TEXTE_SM_REGULAR} color={ITypoColor.PRIMARY}>
-										{langState.values.pages.login.or}
-									</dfns-typography>
-								</span>
-							</div>
-						)}
-						{dfnsStore.state.walletConnectEnabled && (
-							<dfns-button
-								content={langState.values.pages.login.wallet}
-								variant={EButtonVariant.NEUTRAL}
-								sizing={EButtonSize.MEDIUM}
-								fullwidth
-								// icon={dfnsStore.state.customButtonIcon}
-								iconposition="left"
-								icon={iconWallet}
-								onClick={async () => {
-									const web3modalInstance = WalletConnectWallet.getInstance(
-										dfnsStore.state.walletConnectProjectId,
-										dfnsStore.state.network,
-									);
-									await web3modalInstance.disconnect();
-									const walletAddress = await web3modalInstance.connect();
-									dfnsStore.setValue("walletService", web3modalInstance);
-									LocalStorageService.getInstance().items[CACHED_WALLET_PROVIDER].set(WalletProvider.WALLET_CONNECT);
-									this.walletConnected.emit(walletAddress);
-									router.close();
-								}}
-							/>
+							<Fragment>
+								<div class="separator">
+									<span>
+										<dfns-typography typo={ITypo.TEXTE_SM_REGULAR} color={ITypoColor.PRIMARY}>
+											{langState.values.pages.login.or}
+										</dfns-typography>
+									</span>
+								</div>
+
+								<dfns-button
+									content={langState.values.pages.login.wallet}
+									variant={EButtonVariant.NEUTRAL}
+									sizing={EButtonSize.MEDIUM}
+									fullwidth
+									// icon={dfnsStore.state.customButtonIcon}
+									iconposition="left"
+									icon={iconWallet}
+									onClick={async () => {
+										const web3modalInstance = WalletConnectWallet.getInstance(
+											dfnsStore.state.walletConnectProjectId,
+											dfnsStore.state.network,
+										);
+										await web3modalInstance.disconnect();
+										const walletAddress = await web3modalInstance.connect();
+										dfnsStore.setValue("walletService", web3modalInstance);
+										LocalStorageService.getInstance().items[CACHED_WALLET_PROVIDER].set(WalletProvider.WALLET_CONNECT);
+										this.walletConnected.emit(walletAddress);
+										router.close();
+									}}
+								/>
+							</Fragment>
 						)}
 					</div>
 				</div>
