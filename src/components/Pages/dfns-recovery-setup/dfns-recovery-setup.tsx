@@ -123,6 +123,7 @@ export class DfnsRecoverySetup {
 				/>
 			</svg>
 		);
+		const isMobile = window.innerWidth <= 768;
 		return (
 			<dfns-layout closeBtn onClickCloseBtn={() => this.action.emit(CreatePasskeyAction.CLOSE)}>
 				<div slot="topSection">
@@ -192,7 +193,7 @@ export class DfnsRecoverySetup {
 												content={langState.values.pages.recovery_setup.button_download_kit}
 												variant={EButtonVariant.WARNING}
 												sizing={EButtonSize.SMALL}
-												icon={iconDownload}
+												icon={isMobile ?  undefined : iconDownload}
 												iconposition="left"
 												onClick={() => {}}
 											/>
