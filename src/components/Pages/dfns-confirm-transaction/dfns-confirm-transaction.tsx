@@ -1,5 +1,4 @@
 import { Component, Event, EventEmitter, Fragment, JSX, Prop, State, h } from "@stencil/core";
-
 import { Amount, BlockchainAddress } from "@dfns/sdk/codegen/datamodel/Foundations";
 import dfnsStore from "../../../stores/DfnsStore";
 import langState from "../../../stores/LanguageStore";
@@ -13,7 +12,7 @@ import { BroadcastTransactionRequest, TransferAssetRequest } from "@dfns/sdk/cod
 import { TransactionKind, TransactionStatus, TransferKind, TransferStatus } from "@dfns/sdk/codegen/datamodel/Wallets";
 import router from "../../../stores/RouterStore";
 import { networkMapping } from "../../../utils/helper";
-import { formatUnits, parseUnits } from "ethers/lib/utils";
+import { formatUnits } from "ethers/lib/utils";
 import { ITokenInfo } from "../../../common/interfaces/ITokenInfo";
 
 @Component({
@@ -159,6 +158,7 @@ export class DfnsConfirmTransaction {
 	private handleError(error: any) {
 		this.isLoading = false;
 		this.hasErrors = true;
+		this.step = 1;
 
 		if (typeof error === "string") {
 			this.errorMessage = error;

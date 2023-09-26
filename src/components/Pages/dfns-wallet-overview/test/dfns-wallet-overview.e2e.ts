@@ -1,3 +1,4 @@
+jest.useFakeTimers();
 import { newE2EPage } from '@stencil/core/testing';
 
 describe('dfns-wallet-overview', () => {

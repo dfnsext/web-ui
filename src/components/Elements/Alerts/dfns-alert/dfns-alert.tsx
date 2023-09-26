@@ -16,13 +16,15 @@ export class DfnsAlert {
 	@Prop({ mutable: true }) variant: EAlertVariant = EAlertVariant.INFO;
 	@Prop() classCss?: string;
 	@Prop({ mutable: true }) hasTitle = false;
+	
 
 	private getIconVariant(): JSX.Element | null {
+		const primaryColor_400 = dfnsStore.state.colors ? dfnsStore.state.colors.primary_400 : "#FFFFFF";
 		const infoIconSrc: JSX.Element = (
 			<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
 				<path
 					d="M12 9V12.75M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12ZM12 15.75H12.0075V15.7575H12V15.75Z"
-					stroke={dfnsStore.state.colors.primary_400}
+					stroke={primaryColor_400}
 					stroke-width="1.5"
 					stroke-linecap="round"
 					stroke-linejoin="round"
@@ -69,6 +71,7 @@ export class DfnsAlert {
 			variant: this.variant,
 			class: classNames("root", this.classCss),
 		};
+		const primaryColor_500 = dfnsStore.state.colors ? dfnsStore.state.colors.primary_500 : "#FFFFFF";
 		return (
 			<Fragment>
 				<div
@@ -76,8 +79,8 @@ export class DfnsAlert {
 					style={
 						dfnsStore.state.theme.includes("dark") && this.variant === EAlertVariant.INFO
 							? {
-									backgroundColor: chroma(dfnsStore.state.colors.primary_500).alpha(0.1).hex(),
-									border: "1px solid" + chroma(dfnsStore.state.colors.primary_500).alpha(0.25).hex(),
+									backgroundColor: chroma(primaryColor_500).alpha(0.1).hex(),
+									border: "1px solid" + chroma(primaryColor_500).alpha(0.25).hex(),
 							  }
 							: {}
 					}>

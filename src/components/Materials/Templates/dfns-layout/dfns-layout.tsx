@@ -49,9 +49,9 @@ export class DfnsLayout {
 					<slot name="bottomSection" />
 				</div>
 				<div class="logos-section">
-					{/* {dfnsStore.state.appLogoUrl && (
+					{dfnsStore.state.appLogoUrl && (
 						<img src={dfnsStore.state.appLogoUrl} alt={`${dfnsStore.state.appName} logo`} width={47} height={16} />
-					)} */}
+					)}
 					<dfns-typography typo={ITypo.TEXTE_XS_SEMIBOLD} color={ITypoColor.PRIMARY}>
 						powered by DFNS
 					</dfns-typography>

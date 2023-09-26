@@ -25,7 +25,7 @@ export class DfnsWalletValidation {
 				dfnsStore.state.dfnsHost,
 				dfnsStore.state.appId,
 				dfnsStore.state.dfnsUserToken,
-				dfnsStore.state.wallet.id,
+				dfnsStore.state.wallet ? dfnsStore.state.wallet.id : null,
 			),
 		);
 		this.isLoading = false;
