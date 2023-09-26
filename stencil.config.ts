@@ -47,6 +47,9 @@ export const config: Config = {
     ]
   },
   testing: {
+    timers: 'fake',
+    bail: true,
+
   },
 };
 

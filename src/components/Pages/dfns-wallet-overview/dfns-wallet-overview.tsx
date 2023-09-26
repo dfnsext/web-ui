@@ -51,7 +51,7 @@ export class DfnsWalletOverview {
 			dfnsStore.state.dfnsHost,
 			dfnsStore.state.appId,
 			dfnsStore.state.dfnsUserToken,
-			dfnsStore.state.wallet.id,
+			dfnsStore.state.wallet ? dfnsStore.state.wallet.id : null,
 			dfnsStore.state.lang,
 			dfnsStore.state.network,
 		)) as ITokenInfo[];
@@ -230,7 +230,7 @@ export class DfnsWalletOverview {
 									this.tokenList.length !== 0 &&
 									this.tokenList.map((asset) => {
 										return (
-											<div class="row">
+											<div key={asset.symbol} class="row">
 												<div class="key">
 													<div class="token-logo">
 														<img src={asset.icon} alt={asset.symbol} width={20} height={20} />
