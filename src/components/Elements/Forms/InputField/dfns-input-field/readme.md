@@ -35,6 +35,7 @@
 ### Used by
 
  - [dfns-create-passkey](../../../../Pages/dfns-create-passkey)
+ - [dfns-recover-account](../../../../Pages/dfns-recover-account)
  - [dfns-recovery-setup](../../../../Pages/dfns-recovery-setup)
  - [dfns-transfer-tokens](../../../../Pages/dfns-transfer-tokens)
 
@@ -47,6 +48,7 @@
 graph TD;
   dfns-input-field --> dfns-typography
   dfns-create-passkey --> dfns-input-field
+  dfns-recover-account --> dfns-input-field
   dfns-recovery-setup --> dfns-input-field
   dfns-transfer-tokens --> dfns-input-field
   style dfns-input-field fill:#f9f,stroke:#333,stroke-width:4px

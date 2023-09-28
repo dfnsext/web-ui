@@ -27,6 +27,7 @@
  - [dfns-layout](../../../Materials/Templates/dfns-layout)
  - [dfns-login](../../../Pages/dfns-login)
  - [dfns-receive-tokens](../../../Pages/dfns-receive-tokens)
+ - [dfns-recover-account](../../../Pages/dfns-recover-account)
  - [dfns-recovery-setup](../../../Pages/dfns-recovery-setup)
  - [dfns-settings](../../../Pages/dfns-settings)
  - [dfns-sign-message](../../../Pages/dfns-sign-message)
@@ -48,6 +49,7 @@ graph TD;
   dfns-layout --> dfns-typography
   dfns-login --> dfns-typography
   dfns-receive-tokens --> dfns-typography
+  dfns-recover-account --> dfns-typography
   dfns-recovery-setup --> dfns-typography
   dfns-settings --> dfns-typography
   dfns-sign-message --> dfns-typography

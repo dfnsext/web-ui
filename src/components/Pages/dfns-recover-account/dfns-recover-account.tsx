@@ -1,11 +1,12 @@
 import { Component, Fragment, JSX, State, h, Event, EventEmitter } from "@stencil/core";
-import { EButtonSize, EButtonVariant } from "../../common/enums/buttons-enums";
-import langState from "../../stores/LanguageStore";
-import { ITypo, ITypoColor } from "../../common/enums/typography-enums";
-import { CopyClipboard } from "../Elements/CopyClipboard";
-import dfnsStore from "../../stores/DfnsStore";
-import router from "../../stores/RouterStore";
-import { CreatePasskeyAction } from "../../common/enums/actions-enum";
+import { CreatePasskeyAction } from "../../../common/enums/actions-enum";
+import router from "../../../stores/RouterStore";
+import dfnsStore from "../../../stores/DfnsStore";
+import { ITypo, ITypoColor } from "../../../common/enums/typography-enums";
+import langState from "../../../stores/LanguageStore";
+import { EButtonSize, EButtonVariant } from "../../../common/enums/buttons-enums";
+import { CopyClipboard } from "../../Elements/CopyClipboard";
+
 
 @Component({
 	tag: "dfns-recover-account",

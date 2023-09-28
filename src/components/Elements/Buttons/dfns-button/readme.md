@@ -40,6 +40,7 @@
  - [dfns-create-passkey](../../../Pages/dfns-create-passkey)
  - [dfns-login](../../../Pages/dfns-login)
  - [dfns-receive-tokens](../../../Pages/dfns-receive-tokens)
+ - [dfns-recover-account](../../../Pages/dfns-recover-account)
  - [dfns-recovery-setup](../../../Pages/dfns-recovery-setup)
  - [dfns-settings](../../../Pages/dfns-settings)
  - [dfns-sign-message](../../../Pages/dfns-sign-message)
@@ -63,6 +64,7 @@ graph TD;
   dfns-create-passkey --> dfns-button
   dfns-login --> dfns-button
   dfns-receive-tokens --> dfns-button
+  dfns-recover-account --> dfns-button
   dfns-recovery-setup --> dfns-button
   dfns-settings --> dfns-button
   dfns-sign-message --> dfns-button
