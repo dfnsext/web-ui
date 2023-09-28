@@ -184,7 +184,7 @@ export class DfnsWalletOverview {
 							<dfns-typography typo={ITypo.TEXTE_SM_SEMIBOLD} color={ITypoColor.PRIMARY}>
 								{langState.values.pages.wallet_overview.wallet_address}
 							</dfns-typography>
-							<CopyClipboard value={dfnsStore.state.wallet?.address} openToaster={true}>
+							<CopyClipboard value={dfnsStore.state.wallet?.address} openToaster={false}>
 								<dfns-button
 									content={formattedWalletAddress}
 									variant={EButtonVariant.NEUTRAL}
