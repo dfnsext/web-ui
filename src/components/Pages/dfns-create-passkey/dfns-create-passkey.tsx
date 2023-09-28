@@ -101,7 +101,7 @@ export class DfnsCreatePasskey {
 						)}
 						{this.step === 2 && (
 							<Fragment>
-								<dfns-typography typo={ITypo.TEXTE_LG_SEMIBOLD}>
+								<dfns-typography typo={ITypo.TEXTE_LG_SEMIBOLD} color={ITypoColor.PRIMARY}>
 									{langState.values.pages.create_passkey.save_title}
 								</dfns-typography>
 
