@@ -190,6 +190,10 @@ export class DfnsSDK {
 		router.navigate(RouteType.RECOVERY_SETUP);
 	}
 
+	public async showRecoverAccount() {
+		router.navigate(RouteType.RECOVER_ACCOUNT);
+	}
+
 
 	public async sendTransaction(to: string, value: string, data?: string, nonce?: number) {
 		return dfnsStore.state.walletService.sendTransaction(to, value, data, nonce);

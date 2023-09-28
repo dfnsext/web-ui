@@ -95,6 +95,8 @@ export namespace Components {
     }
     interface DfnsReceiveTokens {
     }
+    interface DfnsRecoverAccount {
+    }
     interface DfnsRecoverySetup {
     }
     interface DfnsSettings {
@@ -159,6 +161,10 @@ export interface DfnsInputFieldCustomEvent<T> extends CustomEvent<T> {
 export interface DfnsLoginCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLDfnsLoginElement;
+}
+export interface DfnsRecoverAccountCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLDfnsRecoverAccountElement;
 }
 export interface DfnsRecoverySetupCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -255,6 +261,12 @@ declare global {
         prototype: HTMLDfnsReceiveTokensElement;
         new (): HTMLDfnsReceiveTokensElement;
     };
+    interface HTMLDfnsRecoverAccountElement extends Components.DfnsRecoverAccount, HTMLStencilElement {
+    }
+    var HTMLDfnsRecoverAccountElement: {
+        prototype: HTMLDfnsRecoverAccountElement;
+        new (): HTMLDfnsRecoverAccountElement;
+    };
     interface HTMLDfnsRecoverySetupElement extends Components.DfnsRecoverySetup, HTMLStencilElement {
     }
     var HTMLDfnsRecoverySetupElement: {
@@ -339,6 +351,7 @@ declare global {
         "dfns-login": HTMLDfnsLoginElement;
         "dfns-main": HTMLDfnsMainElement;
         "dfns-receive-tokens": HTMLDfnsReceiveTokensElement;
+        "dfns-recover-account": HTMLDfnsRecoverAccountElement;
         "dfns-recovery-setup": HTMLDfnsRecoverySetupElement;
         "dfns-settings": HTMLDfnsSettingsElement;
         "dfns-sign-message": HTMLDfnsSignMessageElement;
@@ -431,6 +444,9 @@ declare namespace LocalJSX {
     }
     interface DfnsReceiveTokens {
     }
+    interface DfnsRecoverAccount {
+        "onAction"?: (event: DfnsRecoverAccountCustomEvent<CreatePasskeyAction>) => void;
+    }
     interface DfnsRecoverySetup {
         "onAction"?: (event: DfnsRecoverySetupCustomEvent<CreatePasskeyAction>) => void;
     }
@@ -490,6 +506,7 @@ declare namespace LocalJSX {
         "dfns-login": DfnsLogin;
         "dfns-main": DfnsMain;
         "dfns-receive-tokens": DfnsReceiveTokens;
+        "dfns-recover-account": DfnsRecoverAccount;
         "dfns-recovery-setup": DfnsRecoverySetup;
         "dfns-settings": DfnsSettings;
         "dfns-sign-message": DfnsSignMessage;
@@ -519,6 +536,7 @@ declare module "@stencil/core" {
             "dfns-login": LocalJSX.DfnsLogin & JSXBase.HTMLAttributes<HTMLDfnsLoginElement>;
             "dfns-main": LocalJSX.DfnsMain & JSXBase.HTMLAttributes<HTMLDfnsMainElement>;
             "dfns-receive-tokens": LocalJSX.DfnsReceiveTokens & JSXBase.HTMLAttributes<HTMLDfnsReceiveTokensElement>;
+            "dfns-recover-account": LocalJSX.DfnsRecoverAccount & JSXBase.HTMLAttributes<HTMLDfnsRecoverAccountElement>;
             "dfns-recovery-setup": LocalJSX.DfnsRecoverySetup & JSXBase.HTMLAttributes<HTMLDfnsRecoverySetupElement>;
             "dfns-settings": LocalJSX.DfnsSettings & JSXBase.HTMLAttributes<HTMLDfnsSettingsElement>;
             "dfns-sign-message": LocalJSX.DfnsSignMessage & JSXBase.HTMLAttributes<HTMLDfnsSignMessageElement>;

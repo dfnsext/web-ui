@@ -14,6 +14,7 @@ export enum RouteType {
 	"TRANSFER_TOKENS" = "transfer-tokens",
 	"CONFIRM_TRANSACTION" = "confirm-transaction",
 	"RECEIVE_TOKENS" = "receive-tokens",
+	"RECOVER_ACCOUNT" = "recover-account",
 }
 
 const routerEvent = new EventEmitter<RouteType>();
