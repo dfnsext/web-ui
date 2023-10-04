@@ -64,11 +64,14 @@ export class DfnsValidateWallet {
 						activeIndices={[0, 1]}
 					/>
 					<div class="contentContainer">
-						<div class="title">
+						{/**
+						  @todo: Need to be refacto post ACCOR 
+						**/}
+						{/* <div class="title">
 							<dfns-typography typo={ITypo.TEXTE_LG_SEMIBOLD} color={ITypoColor.PRIMARY}>
 								{langState.values.pages.validate_wallet.description}
 							</dfns-typography>
-						</div>
+						</div> */}
 						{/* <div class="content">
 								<dfns-typography typo={ITypo.TEXTE_SM_REGULAR} color={ITypoColor.SECONDARY}>
 								{langState.values.pages.validate_wallet.description}

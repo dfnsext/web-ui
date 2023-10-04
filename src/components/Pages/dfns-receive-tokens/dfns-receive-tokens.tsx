@@ -19,7 +19,9 @@ export class DfnsReceiveTokens {
 	@State() qrCodeImage: string;
 	@State() isMobile: boolean = window.innerWidth <= 768; // Initial mobile check
 
-	async closeBtn() {}
+	async closeBtn() {
+		router.goBack();
+	}
 
 	async goBack() {
 		router.goBack();

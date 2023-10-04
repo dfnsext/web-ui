@@ -115,8 +115,8 @@
 		"receive_tokens": {
 			"wallet_address": "Wallet address",
 			"copy_address": "Copy address",
-			"warning_title": "This is a Polygon wallet.",
-			"warning_content": "Only send MATIC or other ERC-20 tokens to this wallet"
+			"warning_title": "This is a Ethereum wallet.",
+			"warning_content": "Only send ETH or other ERC-20 tokens to this wallet"
 		},
 		"recovery_setup":{
 			"title": "Verify your identity to generate your recovery kit",
