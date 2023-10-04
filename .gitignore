@@ -1,6 +1,7 @@
 dist/
 www/
 loader/
+lib/
 
 *~
 *.sw[mnpcod]
