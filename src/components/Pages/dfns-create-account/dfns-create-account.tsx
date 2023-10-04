@@ -55,14 +55,17 @@ export class DfnsCreateAccount {
 						activeIndices={[0]}
 					/>
 					<div class="contentContainer">
-						<div class="title">
+						{/**
+						  @todo: Need to be refacto post ACCOR 
+						**/}
+						{/* <div class="title">
 							<dfns-typography typo={ITypo.TEXTE_LG_SEMIBOLD} color={ITypoColor.PRIMARY}>
 								{dfnsStore.state.defaultDevice === "mobile"
 									? langState.values.pages.create_account.description_mobile
 									: langState.values.pages.create_account.description}{" "}
 								{dfnsStore.state.appName && `| ${dfnsStore.state.appName}`}
 							</dfns-typography>
-						</div>
+						</div> */}
 					</div>
 				</div>
 				<div slot="bottomSection">

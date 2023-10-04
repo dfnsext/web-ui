@@ -34,6 +34,7 @@
 - [dfns-transfer-tokens](../dfns-transfer-tokens)
 - [dfns-confirm-transaction](../dfns-confirm-transaction)
 - [dfns-receive-tokens](../dfns-receive-tokens)
+- [dfns-recover-account](../dfns-recover-account)
 
 ### Graph
 ```mermaid
@@ -50,6 +51,7 @@ graph TD;
   dfns-main --> dfns-transfer-tokens
   dfns-main --> dfns-confirm-transaction
   dfns-main --> dfns-receive-tokens
+  dfns-main --> dfns-recover-account
   dfns-create-account --> dfns-layout
   dfns-create-account --> dfns-typography
   dfns-create-account --> dfns-stepper
@@ -110,6 +112,10 @@ graph TD;
   dfns-receive-tokens --> dfns-typography
   dfns-receive-tokens --> dfns-button
   dfns-receive-tokens --> dfns-alert
+  dfns-recover-account --> dfns-layout
+  dfns-recover-account --> dfns-typography
+  dfns-recover-account --> dfns-button
+  dfns-recover-account --> dfns-input-field
   style dfns-main fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

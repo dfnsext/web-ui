@@ -23,6 +23,7 @@
 		"receive_token": "Receive token",
 		"login": "Sign up or log in",
 		"recovery_setup": "Recovery setup",
+		"recover_account": "Recover account",
 		"nav_links": {}
 	},
 	"pages": {
@@ -114,8 +115,8 @@
 		"receive_tokens": {
 			"wallet_address": "Wallet address",
 			"copy_address": "Copy address",
-			"warning_title": "This is a Polygon wallet.",
-			"warning_content": "Only send MATIC or other ERC-20 tokens to this wallet"
+			"warning_title": "This is a Ethereum wallet.",
+			"warning_content": "Only send ETH or other ERC-20 tokens to this wallet"
 		},
 		"recovery_setup":{
 			"title": "Verify your identity to generate your recovery kit",
@@ -127,6 +128,16 @@
 			"warning_title": "This recovery key is unique, save it!",
 			"warning_content": "If you lose access to your account, this recovery kit is the only way to get it back. You can copy or download it.",
 			"button_download_kit": "Download recovery kit"
+		},
+		"recover_account":{
+			"title": "Connect with",
+			"title_step_2": "Verify ownership",
+			"description_step_2": "In order to regain access to your account, we require confirmation of your ownership through verification of both your recovery code and recovery key ID.",
+			"title_step_3": "Create passkey",
+			"description_step_3": "To continue the recovery, you will need to create a new passkey. Once the new passkey is set up, all your previous credentials will be invalidated.",
+			"button_create_passkey": "Create a passkey",
+			"title_step_4": "Congratulations!",
+			"description_step_4": "Your account has been recovered"
 		},
 		"profile": {
 			"title": "Profile",
@@ -223,7 +234,8 @@
 		"approve_payment": "Approve payment",
 		"approve_listing": "Approve listing",
 		"buy_now": "Buy it now",
-		"close": "Close"
+		"close": "Close",
+		"verify": "Verify"
 	},
 	"inputs": {
 		"placeholder": {

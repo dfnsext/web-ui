@@ -1,15 +1,17 @@
-import { RecoveryKeyAttestation } from "@dfns/sdk";
 import { CredentialKind, PublicKeyOptions } from "@dfns/sdk/codegen/datamodel/Auth";
 import { Component, Event, EventEmitter, Fragment, JSX, State, h } from "@stencil/core";
+import { Buffer } from "buffer";
+import { CreatePasskeyAction } from "../../../common/enums/actions-enum";
+import { EAlertVariant } from "../../../common/enums/alerts-enums";
+import { EButtonSize, EButtonVariant } from "../../../common/enums/buttons-enums";
+import { ITypo, ITypoColor } from "../../../common/enums/typography-enums";
 import dfnsStore from "../../../stores/DfnsStore";
 import langState from "../../../stores/LanguageStore";
 import router from "../../../stores/RouterStore";
 import { getDfnsDelegatedClient } from "../../../utils/dfns";
-import { CreatePasskeyAction } from "../../../common/enums/actions-enum";
-import { ITypo, ITypoColor } from "../../../common/enums/typography-enums";
-import { EAlertVariant } from "../../../common/enums/alerts-enums";
-import { EButtonSize, EButtonVariant } from "../../../common/enums/buttons-enums";
+import { generateRecoveryKeyCredential } from "../../../utils/helper";
 import { CopyClipboard } from "../../Elements/CopyClipboard";
+import { sign } from "../../../utils/webauthn";
 
 @Component({
 	tag: "dfns-recovery-setup",
@@ -18,10 +20,12 @@ import { CopyClipboard } from "../../Elements/CopyClipboard";
 })
 export class DfnsRecoverySetup {
 	@State() isLoading: boolean = false;
-	@State() step = 2;
-	@State() passkeyName?: string;
-	@State() newPasskeyAttestation: RecoveryKeyAttestation;
+	@State() step = 1;
+	@State() passkeyName: string = "Default Recovery key";
+	@State() newPasskeyAttestation: any;
 	@State() newPasskeyChallenge: PublicKeyOptions;
+	@State() recoveryKeyId: string = "YjNU2LmrVgd5ATq9V2W9zwNybQhPrs3UwRC43J3Lr3c";
+	@State() recoveryCode: string = "test";
 	@Event() action: EventEmitter<CreatePasskeyAction>;
 
 	async initPasskeyCreation() {
@@ -32,47 +36,66 @@ export class DfnsRecoverySetup {
 				body: { kind: CredentialKind.RecoveryKey },
 			})) as PublicKeyOptions;
 
-			// const privateKey = await generateRsaKey();
-			// this.newPasskeyAttestation = await create(this.newPasskeyChallenge);
-			// this.step = 2;
+			
+
+			const keyOrPasswordClientData = JSON.stringify({
+				type: "key.create",
+				challenge: Buffer.from(this.newPasskeyChallenge.challenge).toString("base64"),
+				origin: window.location.origin,
+				crossOrigin: false,
+			})
+
+			const response = await generateRecoveryKeyCredential(
+				"aHR0cHM6Ly9hY2NvdW50cy5nb29nbGUuY29tLTExNzMwMjI0NTA3OTIzMTgwMjcyNi1rZXZpbi50YW5Ac21hcnQtY2hhaW4uZnI=",
+				keyOrPasswordClientData,
+			);
+
+			const { encryptedPrivateKey, attestationData, recoveryKey, credentialId } = response;
+			const recoveryFactor = {
+				credentialKind: CredentialKind.RecoveryKey,
+				credentialInfo: {
+					attestationData: Buffer.from(attestationData),
+					clientData: Buffer.from(keyOrPasswordClientData),
+					credId: credentialId,
+				},
+				encryptedPrivateKey: encryptedPrivateKey,
+			};
+
+			// Used internally (not sent to the Dfns server) to the user's browser
+
+			const request = {
+				body: {
+					...recoveryFactor,
+					credentialName: this.passkeyName,
+					//@ts-ignore
+					challengeIdentifier: this.newPasskeyChallenge.temporaryAuthenticationToken,
+				},
+			};
+
+			//@ts-ignore
+			const addCredentialInitChallenge = await dfnsDelegated.auth.createUserCredentialInit(request);
+			const assertion = await sign(
+				dfnsStore.state.rpId,
+				addCredentialInitChallenge.challenge,
+				addCredentialInitChallenge.allowCredentials,
+			);
+
+			//@ts-ignore
+			await dfnsDelegated.auth.createUserCredentialComplete(request, {
+				challengeIdentifier: addCredentialInitChallenge.challengeIdentifier,
+				firstFactor: assertion,
+			});
+
+			this.recoveryKeyId = credentialId;
+			this.recoveryCode = recoveryKey;
+
+			this.step = 2;
 		} catch (err) {
 			console.error(err);
-			this.isLoading = false;
 		}
 
 		this.isLoading = false;
 	}
-
-	// async completePasskeyCreation() {
-	// 	this.isLoading = true;
-	// 	try {
-	// 		const dfnsDelegated = getDfnsDelegatedClient(dfnsStore.state.dfnsHost, dfnsStore.state.appId, dfnsStore.state.dfnsUserToken);
-	// 		const request = {
-	// 			body: {
-	// 				...this.newPasskeyAttestation,
-	// 				credentialName: this.passkeyName,
-	// 				//@ts-ignore
-	// 				challengeIdentifier: this.newPasskeyChallenge.temporaryAuthenticationToken,
-	// 			},
-	// 		};
-	// 		//@ts-ignore
-	// 		const addCredentialInitChallenge = await dfnsDelegated.auth.createUserCredentialInit(request);
-	// 		const assertion = await sign(dfnsStore.state.rpId, addCredentialInitChallenge.challenge, addCredentialInitChallenge.allowCredentials);
-
-	// 		//@ts-ignore
-	// 		await dfnsDelegated.auth.createUserCredentialComplete(request, {
-	// 			challengeIdentifier: addCredentialInitChallenge.challengeIdentifier,
-	// 			firstFactor: assertion,
-	// 		});
-	// 		this.action.emit(CreatePasskeyAction.BACK);
-	// 		this.isLoading = false;
-	// 		this.step = 1;
-	// 		this.passkeyName = undefined;
-	// 	} catch (err) {
-	// 		this.isLoading = false;
-	// 		console.error(err);
-	// 	}
-	// }
 
 	handleBackClick() {
 		router.goBack();
@@ -153,14 +176,18 @@ export class DfnsRecoverySetup {
 								<div class="container-textfields">
 									<div class="wrapper-input">
 										<div class="input-field">
-											<dfns-input-field placeholder={""} onChange={(value) => {}} isPasswordVisible={false}>
+											<dfns-input-field
+												type="password"
+												isReadOnly
+												value={this.recoveryCode}
+												isPasswordVisible={false}>
 												<dfns-typography typo={ITypo.TEXTE_SM_MEDIUM} color={ITypoColor.PRIMARY}>
 													{langState.values.pages.recovery_setup.recovery_code}
 												</dfns-typography>
 											</dfns-input-field>
 										</div>
 										<div class="copy-icon">
-											<CopyClipboard value={""} openToaster={true}>
+											<CopyClipboard value={this.recoveryCode} openToaster={false}>
 												{iconCopy}
 											</CopyClipboard>
 										</div>
@@ -168,8 +195,9 @@ export class DfnsRecoverySetup {
 									<div class="wrapper-input">
 										<div class="input-field">
 											<dfns-input-field
-												placeholder={""}
-												onChange={(value) => {}}
+												type="password"
+												value={this.recoveryKeyId}
+												isReadOnly
 												errors={[]}
 												isPasswordVisible={false}>
 												<dfns-typography typo={ITypo.TEXTE_SM_MEDIUM} color={ITypoColor.PRIMARY}>
@@ -178,7 +206,7 @@ export class DfnsRecoverySetup {
 											</dfns-input-field>
 										</div>
 										<div class="copy-icon">
-											<CopyClipboard value={""} openToaster={true}>
+											<CopyClipboard value={this.recoveryKeyId} openToaster={false}>
 												{iconCopy}
 											</CopyClipboard>
 										</div>
@@ -193,7 +221,7 @@ export class DfnsRecoverySetup {
 												content={langState.values.pages.recovery_setup.button_download_kit}
 												variant={EButtonVariant.WARNING}
 												sizing={EButtonSize.SMALL}
-												icon={isMobile ?  undefined : iconDownload}
+												icon={isMobile ? undefined : iconDownload}
 												iconposition="left"
 												onClick={() => {}}
 											/>
@@ -212,7 +240,9 @@ export class DfnsRecoverySetup {
 								variant={EButtonVariant.PRIMARY}
 								sizing={EButtonSize.MEDIUM}
 								fullwidth
-								onClick={() => {}}
+								onClick={() => {
+									this.initPasskeyCreation();
+								}}
 							/>
 							<dfns-button
 								content={langState.values.pages.recovery_setup.button_later}

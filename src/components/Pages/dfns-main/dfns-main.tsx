@@ -46,6 +46,7 @@ export class DfnsMain {
 					txNonce={this.transactionNonce}></dfns-confirm-transaction>
 			))
 			.with(RouteType.RECEIVE_TOKENS, () => <dfns-receive-tokens></dfns-receive-tokens>)
+			.with(RouteType.RECOVER_ACCOUNT, () => <dfns-recover-account></dfns-recover-account>)
 			.with(null, () => null)
 			.with(undefined, () => null)
 			.exhaustive();
