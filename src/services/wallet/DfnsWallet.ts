@@ -12,10 +12,11 @@ import IWalletInterface, { WalletEvent } from "./IWalletInterface";
 class DfnsWallet implements IWalletInterface {
 	private static ctx: DfnsWallet;
 
-	private removeOnRouteChanged = () => {};
+	private removeOnRouteChanged = () => { };
 
 	private events: EventEmitter<any> = new EventEmitter();
 	private constructor() {
+		window["DFNSWalletMassi"] = this;
 		this.removeOnRouteChanged = this.onRouteChanged();
 		// this.onStateChanged();
 
@@ -39,6 +40,7 @@ class DfnsWallet implements IWalletInterface {
 
 	public async connectWithOAuthToken(oauthToken: string): Promise<string> {
 		let wallet: Wallet | null = null;
+		let autoReconnect = false;
 		try {
 			dfnsStore.setValue("oauthAccessToken", oauthToken);
 			const response = await loginWithOAuth(dfnsStore.state.apiUrl, dfnsStore.state.appId, dfnsStore.state.rpId, oauthToken);
@@ -54,21 +56,26 @@ class DfnsWallet implements IWalletInterface {
 			}
 		} catch (error) {
 			if (isDfnsError(error) && error.httpStatus === 401) {
-				await this.createAccount();
+				const response = await this.createAccount();
+				dfnsStore.setValue("dfnsUserToken", response.userAuthToken);
 				wallet = await this.validateWallet();
 				if (dfnsStore.state.showWalletValidation) {
 					wallet = await this.waitForWalletValidation();
 				}
+				autoReconnect = true;
 			} else {
 				throw error;
 			}
 		}
+
 		dfnsStore.setValue("wallet", wallet);
 		this.events.emit(WalletEvent.CONNECTED, dfnsStore.state.wallet.address);
 		this.getDfnsElement().dispatchEvent(new CustomEvent("walletConnected", { detail: wallet.address }));
 		LocalStorageService.getInstance().items[CACHED_WALLET_PROVIDER].set(WalletProvider.DFNS);
 		dfnsStore.setValue("walletService", this);
-		
+
+		if (autoReconnect) this.connectWithOAuthToken(oauthToken);
+
 		return wallet.address;
 	}
 
@@ -187,7 +194,6 @@ class DfnsWallet implements IWalletInterface {
 		const response = await waitForEvent<RegisterCompleteResponse>(this.getDfnsElement(), "passkeyCreated");
 		router.close();
 		if (!response) throw new Error("User cancelled connection");
-		dfnsStore.setValue("dfnsUserToken", response.userAuthToken);
 		return response;
 	}
 
