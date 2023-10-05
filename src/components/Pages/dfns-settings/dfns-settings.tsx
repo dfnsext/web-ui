@@ -1,5 +1,5 @@
 import { DeactivateCredentialRequest } from "@dfns/sdk/codegen/Auth";
-import { CredentialInfo } from "@dfns/sdk/codegen/datamodel/Auth";
+import { CredentialInfo, CredentialKind } from "@dfns/sdk/codegen/datamodel/Auth";
 import { Component, Event, EventEmitter, JSX, Prop, h } from "@stencil/core";
 import dfnsStore from "../../../stores/DfnsStore";
 import langState from "../../../stores/LanguageStore";
@@ -29,7 +29,7 @@ export class DfnsSettings {
 	async fetchPasskeys() {
 		try {
 			const dfnsDelegated = getDfnsDelegatedClient(dfnsStore.state.dfnsHost, dfnsStore.state.appId, dfnsStore.state.dfnsUserToken);
-			const credentials = (await dfnsDelegated.auth.listUserCredentials()).items;
+			const credentials = (await dfnsDelegated.auth.listUserCredentials()).items.filter((passkey) => passkey.kind !== CredentialKind.RecoveryKey);
 			dfnsStore.setValue("credentials", credentials);
 		} catch (error) {
 			console.error(error);
