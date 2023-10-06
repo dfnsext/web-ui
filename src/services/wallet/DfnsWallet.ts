@@ -40,7 +40,6 @@ class DfnsWallet implements IWalletInterface {
 
 	public async connectWithOAuthToken(oauthToken: string): Promise<string> {
 		let wallet: Wallet | null = null;
-		let autoReconnect = false;
 		try {
 			dfnsStore.setValue("oauthAccessToken", oauthToken);
 			const response = await loginWithOAuth(dfnsStore.state.apiUrl, dfnsStore.state.appId, dfnsStore.state.rpId, oauthToken);
@@ -62,7 +61,6 @@ class DfnsWallet implements IWalletInterface {
 				if (dfnsStore.state.showWalletValidation) {
 					wallet = await this.waitForWalletValidation();
 				}
-				autoReconnect = true;
 			} else {
 				throw error;
 			}
@@ -73,8 +71,6 @@ class DfnsWallet implements IWalletInterface {
 		this.getDfnsElement().dispatchEvent(new CustomEvent("walletConnected", { detail: wallet.address }));
 		LocalStorageService.getInstance().items[CACHED_WALLET_PROVIDER].set(WalletProvider.DFNS);
 		dfnsStore.setValue("walletService", this);
-
-		if (autoReconnect) this.connectWithOAuthToken(oauthToken);
 
 		return wallet.address;
 	}
