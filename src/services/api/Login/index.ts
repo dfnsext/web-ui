@@ -19,10 +19,10 @@ export default class Login extends BaseApiService {
 		return Login.instance;
 	}
 
-	public async delegated(username: string): Promise<{ userAuthToken: string }> {
+	public async delegated(oAuthToken: string): Promise<{ token: string }> {
 		const path = this.baseUrl.concat("/delegated");
 		try {
-			return await this.postRequest(path, { username }, { appId: this.appId });
+			return await this.postRequest(path, { oAuthToken }, { appId: this.appId });
 		} catch (err) {
 			this.onError(err);
 			return Promise.reject(err);

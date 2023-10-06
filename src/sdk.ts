@@ -1,4 +1,3 @@
-
 import chroma from "chroma-js";
 import LocalStorageService, {
 	CACHED_WALLET_PROVIDER,
@@ -19,6 +18,7 @@ import router, { RouteType } from "./stores/RouterStore";
 import { EThemeModeType } from "./common/enums/themes-enums";
 import { IColors } from "./common/interfaces/IColors";
 import { waitForEvent } from "./utils/helper";
+import Login from "./services/api/Login";
 
 export const DEFAULT_API_URL = "https://app.dfns.smart-chain.fr";
 export const DEFAULT_DFNS_HOST = "https://api.dfns.io";
@@ -127,7 +127,7 @@ export class DfnsSDK {
 		dfnsStore.setValue("showWalletValidation", this.options.showWalletValidation ?? false);
 
 		const walletProvider = LocalStorageService.getInstance().items[CACHED_WALLET_PROVIDER].get();
-		if (walletProvider === WalletProvider.DFNS) {	
+		if (walletProvider === WalletProvider.DFNS) {
 			const walletInstance = DfnsWallet.getInstance();
 			dfnsStore.setValue("walletService", walletInstance);
 			if (this.options.autoConnect) {
@@ -136,17 +136,12 @@ export class DfnsSDK {
 		}
 
 		if (walletProvider === WalletProvider.WALLET_CONNECT) {
-			const web3modalInstance = WalletConnectWallet.getInstance(
-				dfnsStore.state.walletConnectProjectId,
-				dfnsStore.state.network,
-			);
+			const web3modalInstance = WalletConnectWallet.getInstance(dfnsStore.state.walletConnectProjectId, dfnsStore.state.network);
 			dfnsStore.setValue("walletService", web3modalInstance);
 			if (this.options.autoConnect) {
 				web3modalInstance.autoConnect();
 			}
 		}
-
-
 	}
 
 	public async connect() {
@@ -165,7 +160,6 @@ export class DfnsSDK {
 		return dfnsStore.state.walletService.connectWithOAuthToken(oauthToken);
 	}
 
-	
 	public async signMessage(message: string) {
 		return dfnsStore.state.walletService.signMessage(message);
 	}
@@ -193,7 +187,6 @@ export class DfnsSDK {
 	public async showRecoverAccount() {
 		router.navigate(RouteType.RECOVER_ACCOUNT);
 	}
-
 
 	public async sendTransaction(to: string, value: string, data?: string, nonce?: number) {
 		return dfnsStore.state.walletService.sendTransaction(to, value, data, nonce);
@@ -232,7 +225,7 @@ export class DfnsSDK {
 		}
 	}
 
-	public getWalletProvider(){
+	public getWalletProvider() {
 		return LocalStorageService.getInstance().items[CACHED_WALLET_PROVIDER].get();
 	}
 
@@ -316,5 +309,14 @@ export class DfnsSDK {
 			}
 		}
 		dfnsStore.setValue("colors", colors);
+	}
+
+	public async refreshToken() {
+		try {
+			const response = await Login.getInstance(dfnsStore.state.apiUrl, dfnsStore.state.appId).delegated(dfnsStore.state.oauthAccessToken);
+			dfnsStore.setValue("dfnsUserToken", response.token);
+		} catch (err) {
+			console.log(err);
+		}
 	}
 }
