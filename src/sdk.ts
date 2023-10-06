@@ -48,6 +48,11 @@ export interface DfnsSDKOptions {
 	walletConnectEnabled?: boolean;
 	walletConnectProjectId?: string;
 	autoConnect?: boolean;
+	/**
+	 * @description Disable logout UI
+	 * @default false
+	 */
+	disableLogoutUI?: boolean;
 }
 
 type Options = NonNullable<DfnsSDKOptions>;
@@ -125,6 +130,7 @@ export class DfnsSDK {
 		dfnsStore.setValue("walletConnectEnabled", this.options.walletConnectEnabled);
 		dfnsStore.setValue("walletConnectProjectId", this.options.walletConnectProjectId ?? null);
 		dfnsStore.setValue("showWalletValidation", this.options.showWalletValidation ?? false);
+		dfnsStore.setValue("disableLogoutUI", this.options.disableLogoutUI ?? false);
 
 		const walletProvider = LocalStorageService.getInstance().items[CACHED_WALLET_PROVIDER].get();
 		if (walletProvider === WalletProvider.DFNS) {

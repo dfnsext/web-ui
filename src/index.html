@@ -37,6 +37,7 @@
 			darkMode: false,
 			autoConnect: true,
 			walletConnectProjectId: "805249de63491bccea9d8bab3468c34f",
+			disableLogoutUI: true,
 		};
 
 		const dfnsSDK = new DfnsSDK(dfnsSdkOptions);
@@ -51,10 +52,10 @@
 		// });
 		//dfnsSDK.showReceiveTokens();
 		//dfnsSDK.showRecoverySetup();
-		dfnsSDK.showRecoverAccount();
+		//dfnsSDK.showRecoverAccount();
 		//dfnsSDK.transferTokens();
 		//dfnsSDK.connect();
 		// dfnsSDK.showCreatePasskey();
-		//dfnsSDK.showWalletOverview();
+		dfnsSDK.showWalletOverview();
 	</script>
 </html>

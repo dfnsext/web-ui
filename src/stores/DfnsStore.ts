@@ -42,6 +42,7 @@ interface DfnsState {
 	walletConnectProjectId: string;
 	colors: IColors;
 	showWalletValidation: boolean;
+	disableLogoutUI: boolean;
 }
 
 const dfnsStoreEvent = new EventEmitter<DfnsState>();
@@ -74,6 +75,7 @@ const { state } = createStore<DfnsState>({
 	defaultDevice: null,
 	colors: null,
 	showWalletValidation: false,
+	disableLogoutUI: false,
 });
 
 function setValue<T extends keyof DfnsState>(key: T, value: DfnsState[T]) {
