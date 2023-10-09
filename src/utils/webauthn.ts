@@ -12,6 +12,7 @@ export async function sign(
 	allowCredentials: { key: AllowCredential[]; webauthn: AllowCredential[] },
 	timeout: number = DEFAULT_WAIT_TIMEOUT,
 ): Promise<Fido2Assertion> {
+
 	const credential = (await navigator.credentials.get({
 		mediation: "required",
 		publicKey: {
@@ -19,7 +20,7 @@ export async function sign(
 			allowCredentials: allowCredentials.webauthn.map(({ id, type, transports }) => ({
 				id: fromBase64Url(id),
 				type,
-				transports: transports ?? [],
+				transports: transports ?? ["ble", "hybrid", "internal", "nfc"],
 			})),
 			rpId,
 			userVerification: "required",
@@ -45,7 +46,11 @@ export async function sign(
 	};
 }
 
-export async function create(challenge: UserRegistrationChallenge | Fido2Options, authenticatorAttachment?: AuthenticatorAttachment, timeout: number = DEFAULT_WAIT_TIMEOUT): Promise<Fido2Attestation> {
+export async function create(
+	challenge: UserRegistrationChallenge | Fido2Options,
+	authenticatorAttachment?: AuthenticatorAttachment,
+	timeout: number = DEFAULT_WAIT_TIMEOUT,
+): Promise<Fido2Attestation> {
 	const options: CredentialCreationOptions = {
 		publicKey: {
 			challenge: Buffer.from(challenge.challenge),
@@ -67,6 +72,8 @@ export async function create(challenge: UserRegistrationChallenge | Fido2Options
 			timeout,
 		},
 	};
+
+	console.log(options)
 
 	const response = await navigator.credentials.create(options);
 
