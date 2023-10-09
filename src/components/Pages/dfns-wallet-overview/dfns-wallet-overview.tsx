@@ -287,19 +287,21 @@ export class DfnsWalletOverview {
 						iconposition="left"
 						onClick={() => router.navigate(RouteType.SETTINGS)}
 					/>
-					<dfns-button
-						content={langState.values.pages.wallet_overview.button_logout}
-						variant={EButtonVariant.NEUTRAL}
-						sizing={EButtonSize.MEDIUM}
-						fullwidth
-						icon={iconLogout}
-						iconposition="left"
-						onClick={() => {
-							router.close();
-							dfnsStore.state.walletService.disconnect();
-							LocalStorageService.getInstance().items[CACHED_WALLET_PROVIDER].delete();
-						}}
-					/>
+					{!dfnsStore.state.disableLogoutUI && (
+						<dfns-button
+							content={langState.values.pages.wallet_overview.button_logout}
+							variant={EButtonVariant.NEUTRAL}
+							sizing={EButtonSize.MEDIUM}
+							fullwidth
+							icon={iconLogout}
+							iconposition="left"
+							onClick={() => {
+								router.close();
+								dfnsStore.state.walletService.disconnect();
+								LocalStorageService.getInstance().items[CACHED_WALLET_PROVIDER].delete();
+							}}
+						/>
+					)}
 				</div>
 			</dfns-layout>
 		);
