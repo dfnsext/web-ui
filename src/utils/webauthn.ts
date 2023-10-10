@@ -20,7 +20,7 @@ export async function sign(
 			allowCredentials: allowCredentials.webauthn.map(({ id, type, transports }) => ({
 				id: fromBase64Url(id),
 				type,
-				transports: transports ?? ["ble", "hybrid", "internal", "nfc"],
+				transports: transports ?? ["hybrid"],
 			})),
 			rpId,
 			userVerification: "required",
