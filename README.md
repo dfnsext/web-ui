@@ -18,7 +18,6 @@ npm install @smart-chain-fr/dfns-sdk
 
 ### Get your App ID from DFNS Dashboard
 
-Hop on to the [DFNS Dashboard](https://docs.dfns.co/dfns-docs/getting-started/gettingstarted) and create a new project. Use the Client ID of the project to start your integration.
 Please visit the [DFNS Dashboard](https://docs.dfns.co/dfns-docs/getting-started/gettingstarted) and register. Begin your integration by utilizing the application's Client ID.
 
 ![Dfns Dashboard](https://1738750162-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FtnSPOZGQ2hBmgoVWX5H6%2Fuploads%2FYsciNnSjfRPBK1Gs6j4i%2FScreenshot%202023-06-29%20at%205.34.41%20PM.png?alt=media&token=256b5cd9-dc20-4861-8a9e-b53737d59d64)
@@ -62,7 +61,7 @@ export default class DfnsWallet {
 	}
 }
 ```
-## DfnsSDKOptions
+#### DfnsSDKOptions
 
 | Option               | Type              | Description                                                                                      |
 |----------------------|-------------------|--------------------------------------------------------------------------------------------------|
@@ -91,14 +90,14 @@ export default class DfnsWallet {
 | `autoConnect`        | boolean           | (Optional) Whether to auto-connect.                                                              |
 | `disableLogoutUI`    | boolean           | (Optional) Whether to disable the logout UI.                                                     |
 
-## LoginOption
+#### LoginOption
 
 | Option               | Type              | Description                                                                                      |
 |----------------------|-------------------|--------------------------------------------------------------------------------------------------|
 | `type`               | "social" \| "web3" | Required. The type of login option, either "social" or "web3".                                  |
 | `name`               | ESocialLogin      | Required. The name of the social login provider (e.g., "google" or "other").                    |
 
-## DfnsSDK Functions
+#### DfnsSDK Functions
 
 | Function             | Description                             | Return Type                   |
 |----------------------|-----------------------------------------|--------------------------------|
