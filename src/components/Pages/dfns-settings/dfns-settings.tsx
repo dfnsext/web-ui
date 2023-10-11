@@ -1,5 +1,5 @@
 import { DeactivateCredentialRequest } from "@dfns/sdk/codegen/Auth";
-import { CredentialInfo } from "@dfns/sdk/codegen/datamodel/Auth";
+import { CredentialInfo, CredentialKind } from "@dfns/sdk/codegen/datamodel/Auth";
 import { Component, Event, EventEmitter, JSX, Prop, h } from "@stencil/core";
 import dfnsStore from "../../../stores/DfnsStore";
 import langState from "../../../stores/LanguageStore";
@@ -11,6 +11,7 @@ import { SettingsAction } from "../../../common/enums/actions-enum";
 import { ITypo, ITypoColor } from "../../../common/enums/typography-enums";
 import { EButtonSize, EButtonVariant } from "../../../common/enums/buttons-enums";
 import { EAlertVariant } from "../../../common/enums/alerts-enums";
+import { getDefaultTransports } from "../../../utils/helper";
 
 @Component({
 	tag: "dfns-settings",
@@ -29,7 +30,7 @@ export class DfnsSettings {
 	async fetchPasskeys() {
 		try {
 			const dfnsDelegated = getDfnsDelegatedClient(dfnsStore.state.dfnsHost, dfnsStore.state.appId, dfnsStore.state.dfnsUserToken);
-			const credentials = (await dfnsDelegated.auth.listUserCredentials()).items;
+			const credentials = (await dfnsDelegated.auth.listUserCredentials()).items.filter((passkey) => passkey.kind !== CredentialKind.RecoveryKey);
 			dfnsStore.setValue("credentials", credentials);
 		} catch (error) {
 			console.error(error);
@@ -41,7 +42,8 @@ export class DfnsSettings {
 			const dfnsDelegated = getDfnsDelegatedClient(dfnsStore.state.dfnsHost, dfnsStore.state.appId, dfnsStore.state.dfnsUserToken);
 			const request: DeactivateCredentialRequest = { body: { credentialUuid: passkey.credentialUuid } };
 			const challenge = await dfnsDelegated.auth.deactivateCredentialInit(request);
-			const signedChallenge = await sign(dfnsStore.state.rpId, challenge.challenge, challenge.allowCredentials);
+			const defaultTransports = getDefaultTransports();
+			const signedChallenge = await sign(dfnsStore.state.rpId, challenge.challenge, challenge.allowCredentials, defaultTransports);
 			await dfnsDelegated.auth.deactivateCredentialComplete(request, {
 				challengeIdentifier: challenge.challengeIdentifier,
 				firstFactor: signedChallenge,
@@ -56,7 +58,8 @@ export class DfnsSettings {
 			const dfnsDelegated = getDfnsDelegatedClient(dfnsStore.state.dfnsHost, dfnsStore.state.appId, dfnsStore.state.dfnsUserToken);
 			const request: DeactivateCredentialRequest = { body: { credentialUuid: passkey.credentialUuid } };
 			const challenge = await dfnsDelegated.auth.activateCredentialInit(request);
-			const signedChallenge = await sign(dfnsStore.state.rpId, challenge.challenge, challenge.allowCredentials);
+			const defaultTransports = getDefaultTransports();
+			const signedChallenge = await sign(dfnsStore.state.rpId, challenge.challenge, challenge.allowCredentials, defaultTransports);
 			await dfnsDelegated.auth.activateCredentialComplete(request, {
 				challengeIdentifier: challenge.challengeIdentifier,
 				firstFactor: signedChallenge,

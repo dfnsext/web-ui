@@ -13,6 +13,7 @@ import { EButtonSize, EButtonVariant } from "../../../common/enums/buttons-enums
 import { ITypo, ITypoColor } from "../../../common/enums/typography-enums";
 import { EAlertVariant } from "../../../common/enums/alerts-enums";
 import { formatWalletAddress } from "../../../common/helpers/formatWalletAddress";
+import { CredentialKind } from "@dfns/sdk/codegen/datamodel/Auth";
 
 @Component({
 	tag: "dfns-wallet-overview",
@@ -39,7 +40,7 @@ export class DfnsWalletOverview {
 	async fetchPasskeys() {
 		try {
 			const dfnsDelegated = getDfnsDelegatedClient(dfnsStore.state.dfnsHost, dfnsStore.state.appId, dfnsStore.state.dfnsUserToken);
-			const credentials = (await dfnsDelegated.auth.listUserCredentials()).items;
+			const credentials = (await dfnsDelegated.auth.listUserCredentials()).items.filter((passkey) => passkey.kind !== CredentialKind.RecoveryKey);
 			dfnsStore.setValue("credentials", credentials);
 		} catch (error) {
 			console.error(error);

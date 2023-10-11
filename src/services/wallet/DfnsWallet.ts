@@ -3,11 +3,13 @@ import jwt_decode, { JwtPayload } from "jwt-decode";
 import dfnsStore from "../../stores/DfnsStore";
 import router, { RouteType } from "../../stores/RouterStore";
 import { getDfnsDelegatedClient, isDfnsError } from "../../utils/dfns";
-import { loginWithOAuth, networkMapping, waitForEvent } from "../../utils/helper";
+import { isHexPrefixed, loginWithOAuth, msgHexToText, networkMapping, waitForEvent } from "../../utils/helper";
 import { EventEmitter } from "../EventEmitter";
 import LocalStorageService, { CACHED_WALLET_PROVIDER, DFNS_ACTIVE_WALLET, DFNS_CREDENTIALS, DFNS_END_USER_TOKEN, OAUTH_ACCESS_TOKEN, WalletProvider } from "../LocalStorageService";
 import { RegisterCompleteResponse } from "../api/Register";
 import IWalletInterface, { WalletEvent } from "./IWalletInterface";
+import { DfnsWalletProvider } from "../provider/DfnsWalletProvider";
+import { BigNumber } from "ethers";
 
 class DfnsWallet implements IWalletInterface {
 	private static ctx: DfnsWallet;
@@ -76,8 +78,11 @@ class DfnsWallet implements IWalletInterface {
 	}
 
 	public async signMessage(message: string): Promise<string> {
+
+		const sanitizedMesssage =  isHexPrefixed(message) ? msgHexToText(message) : message
 		router.navigate(RouteType.SIGN_MESSAGE);
-		this.getDfnsElement().setAttribute("message-to-sign", message);
+		
+		this.getDfnsElement().setAttribute("message-to-sign", sanitizedMesssage);
 		const response = await waitForEvent<string>(this.getDfnsElement(), "signedMessage");
 		router.close();
 		if (!response) throw new Error("User cancelled signature");
@@ -122,7 +127,7 @@ class DfnsWallet implements IWalletInterface {
 
 	public async sendTransaction(to: string, value: string, data: string, txNonce?: number): Promise<string> {
 		this.getDfnsElement().setAttribute("transaction-to", to);
-		this.getDfnsElement().setAttribute("transaction-value", value);
+		this.getDfnsElement().setAttribute("transaction-value", BigNumber.from(value).toString());
 		this.getDfnsElement().setAttribute(
 			"transaction-decimals",
 			networkMapping[dfnsStore.state.network].nativeCurrency.decimals.toString(),
@@ -229,6 +234,10 @@ class DfnsWallet implements IWalletInterface {
 			return true;
 		}
 		return false;
+	}
+
+	public async getProvider(): Promise<any> {
+		return new DfnsWalletProvider(this)
 	}
 
 	private getDfnsElement() {

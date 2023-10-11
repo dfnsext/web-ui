@@ -42,7 +42,9 @@ export async function loginWithOAuth(apiUrl: string, appId: string, rpId: string
 		throw error;
 	}
 
-	const assertion = await sign(rpId, challenge!.challenge, challenge!.allowCredentials);
+	const defaultTransports = getDefaultTransports();
+
+	const assertion = await sign(rpId, challenge!.challenge, challenge!.allowCredentials, defaultTransports);
 
 	return Login.getInstance(apiUrl, appId).complete({
 		challengeIdentifier: challenge!.challengeIdentifier,
@@ -105,7 +107,9 @@ export async function createWallet(dfnsHost: string, appId: string, rpId: string
 
 	const challenge = await dfnsDelegated.wallets.createWalletInit(createWalletRequest);
 
-	const assertion = await sign(rpId, challenge.challenge, challenge.allowCredentials);
+	const defaultTransports = getDefaultTransports();
+
+	const assertion = await sign(rpId, challenge.challenge, challenge.allowCredentials, defaultTransports);
 
 	const wallet = await dfnsDelegated.wallets.createWalletComplete(createWalletRequest, {
 		challengeIdentifier: challenge.challengeIdentifier,
@@ -125,7 +129,9 @@ export async function signMessage(dfnsHost: string, appId: string, rpId: string,
 
 	const challenge = await dfnsDelegated.wallets.generateSignatureInit(request);
 
-	const assertion = await sign(rpId, challenge.challenge, challenge.allowCredentials);
+	const defaultTransports = getDefaultTransports();
+
+	const assertion = await sign(rpId, challenge.challenge, challenge.allowCredentials, defaultTransports);
 
 	const signatureInit = await dfnsDelegated.wallets.generateSignatureComplete(request, {
 		challengeIdentifier: challenge.challengeIdentifier,
@@ -272,7 +278,6 @@ function minimizeBigInt(value) {
 
 function rawSignatureToAns1(rawSignature) {
 	if (rawSignature.length !== 64) {
-		console.log(rawSignature.length);
 		return new Uint8Array([0]);
 	}
 	const r = rawSignature.slice(0, 32);
@@ -410,6 +415,7 @@ export const generateRecoveryKeyCredential = async (username, clientData) => {
 	const { encryptedPrivateKey, pemPublicKey } = await generateEncryptedPrivateKeyAndPublicKey(recoveryKey, username);
 
 	const clientDataHash = arrayBufferToHex(await crypto.subtle.digest("SHA-256", new TextEncoder().encode(clientData)));
+
 	const signature = await generateSignature(
 		encryptedPrivateKey,
 		JSON.stringify({
@@ -437,4 +443,52 @@ export const generateRecoveryKeyCredential = async (username, clientData) => {
 	};
 };
 
+export const msgHexToText = (hex) => {
+	try {
+		const stripped = stripHexPrefix(hex);
+		const buff = Buffer.from(stripped, "hex");
+		return buff.length === 32 ? hex : buff.toString("utf8");
+	} catch (e) {
+		return hex;
+	}
+};
 
+export function stripHexPrefix(str: string) {
+	if (typeof str !== "string") {
+		return str;
+	}
+	return isHexPrefixed(str) ? str.slice(2) : str;
+}
+
+export function getDefaultTransports() {
+	const isMobile = navigator?.userAgent.indexOf("Mobile") !== -1;
+
+	const defaultTransports = [];
+
+	switch (dfnsStore.state.defaultDevice) {
+		case "mobile":
+			if (isMobile) {
+				defaultTransports.push("internal");
+			}
+			if (!isMobile) {
+				defaultTransports.push("hybrid");
+			}
+			break;
+		case "desktop":
+			if (!isMobile) {
+				defaultTransports.push("internal");
+			}
+			if (isMobile) {
+				defaultTransports.push("hybrid");
+			}
+			break;
+		case null:
+			defaultTransports.push("internal", "hybrid", "ble", "nfc");
+			break;
+	}
+	return defaultTransports
+}
+
+export function isHexPrefixed(str: string) {
+	return str.slice(0, 2) === "0x";
+}

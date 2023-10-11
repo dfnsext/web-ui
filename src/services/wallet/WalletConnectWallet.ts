@@ -17,7 +17,6 @@ export interface IWallet {
 	provider: ethers.providers.Web3Provider | null;
 }
 
-
 export default class WalletConnectWallet implements IWalletInterface {
 	private static ctx: WalletConnectWallet;
 	private removeEvents = () => {};
@@ -216,10 +215,6 @@ export default class WalletConnectWallet implements IWalletInterface {
 		throw new Error("Method not implemented.");
 	}
 
-	// public get web3WalletData() {
-	// 	return this._web3WalletData;
-	// }
-
 	private async updateWalletData() {
 		const userAddress: string | null = (await this.ethersProvider?.listAccounts())?.[0] ?? null;
 		const balance: BigNumber | null = userAddress ? (await this.ethersProvider?.getBalance(userAddress)) ?? null : null;
@@ -231,6 +226,12 @@ export default class WalletConnectWallet implements IWalletInterface {
 		};
 		this._web3WalletData = web3Event;
 		this.event.emit("web3modal-change", web3Event);
+	}
+
+	public async getProvider() {
+		let account = this.ethereumClient?.getAccount();
+		let provider = await account.connector?.getProvider();
+		return provider;
 	}
 
 	// private initEvents(): void {

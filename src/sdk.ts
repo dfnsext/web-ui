@@ -9,16 +9,16 @@ import LocalStorageService, {
 } from "./services/LocalStorageService";
 
 import { BlockchainNetwork } from "@dfns/sdk/codegen/datamodel/Wallets";
+import { EThemeModeType } from "./common/enums/themes-enums";
+import { IColors } from "./common/interfaces/IColors";
+import Login from "./services/api/Login";
 import DfnsWallet from "./services/wallet/DfnsWallet";
 import { WalletEvent } from "./services/wallet/IWalletInterface";
 import WalletConnectWallet from "./services/wallet/WalletConnectWallet";
 import dfnsStore from "./stores/DfnsStore";
 import { setActiveLanguage } from "./stores/LanguageStore";
 import router, { RouteType } from "./stores/RouterStore";
-import { EThemeModeType } from "./common/enums/themes-enums";
-import { IColors } from "./common/interfaces/IColors";
 import { waitForEvent } from "./utils/helper";
-import Login from "./services/api/Login";
 
 export const DEFAULT_API_URL = "https://app.dfns.smart-chain.fr";
 export const DEFAULT_DFNS_HOST = "https://api.dfns.io";
@@ -153,7 +153,6 @@ export class DfnsSDK {
 	public async connect() {
 		router.navigate(RouteType.LOGIN);
 		const walletAddress = await waitForEvent<string>(this.dfnsContainer, "walletConnected");
-		console.log("walletAddress", walletAddress);
 		if (!walletAddress) {
 			throw new Error("Wallet not connected");
 		}
@@ -231,10 +230,14 @@ export class DfnsSDK {
 		}
 	}
 
+	public getProvider() {
+		return dfnsStore.state.walletService.getProvider();
+	}
+
 	public getWalletProvider() {
 		return LocalStorageService.getInstance().items[CACHED_WALLET_PROVIDER].get();
 	}
-
+	
 	private async generateColorPalette(container: HTMLElement) {
 		const baseColor = chroma(this.options.primaryColor ?? "#000000");
 		const variableName = `--color-primary-900`;
