@@ -106,7 +106,7 @@ export class DfnsWalletProvider extends EventEmitter implements Web3Provider {
 			case JSONRPCMethod.eth_accounts:
 				return this._eth_accounts();
 			case JSONRPCMethod.eth_sendTransaction:
-				return this._dfns_sendTransaction(params[0], params[1], params[2], params[3]);
+				return this._dfns_sendTransaction(params[0].to, params[0].value, params[0].data);
 			case JSONRPCMethod.eth_sign:
 				return this._eth_sign(params[0], params[1]);
 			case JSONRPCMethod.personal_sign:

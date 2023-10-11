@@ -19,7 +19,6 @@ import { convertCryptoToFiat } from "./binance";
 import dfnsStore from "../stores/DfnsStore";
 import { ITokenInfo } from "../common/interfaces/ITokenInfo";
 import { arbitrum, bsc, bscTestnet, goerli, mainnet, polygon, polygonMumbai, sepolia } from "@wagmi/core/chains";
-import isHexPrefixed from "is-hex-prefixed";
 
 export const networkMapping = {
 	[BlockchainNetwork.Polygon]: polygon,
@@ -417,10 +416,6 @@ export const generateRecoveryKeyCredential = async (username, clientData) => {
 
 	const clientDataHash = arrayBufferToHex(await crypto.subtle.digest("SHA-256", new TextEncoder().encode(clientData)));
 
-	console.log(JSON.stringify({
-		clientDataHash: clientDataHash,
-		publicKey: pemPublicKey,
-	}))
 	const signature = await generateSignature(
 		encryptedPrivateKey,
 		JSON.stringify({
@@ -492,4 +487,8 @@ export function getDefaultTransports() {
 			break;
 	}
 	return defaultTransports
+}
+
+export function isHexPrefixed(str: string) {
+	return str.slice(0, 2) === "0x";
 }

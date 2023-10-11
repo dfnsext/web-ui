@@ -48,7 +48,7 @@ export async function sign(
 }
 
 export async function create(
-	challenge: UserRegistrationChallenge | Fido2Options,
+	challenge: UserRegistrationChallenge | Fido2Options | UserRecoveryChallenge,
 	authenticatorAttachment?: AuthenticatorAttachment,
 	timeout: number = DEFAULT_WAIT_TIMEOUT,
 ): Promise<Fido2Attestation> {
