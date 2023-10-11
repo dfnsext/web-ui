@@ -11,7 +11,7 @@ import { getDfnsDelegatedClient, timeout } from "../../../utils/dfns";
 import { BroadcastTransactionRequest, TransferAssetRequest } from "@dfns/sdk/codegen/Wallets";
 import { TransactionKind, TransactionStatus, TransferKind, TransferStatus } from "@dfns/sdk/codegen/datamodel/Wallets";
 import router from "../../../stores/RouterStore";
-import { networkMapping } from "../../../utils/helper";
+import { getDefaultTransports, networkMapping } from "../../../utils/helper";
 import { formatUnits } from "ethers/lib/utils";
 import { ITokenInfo } from "../../../common/interfaces/ITokenInfo";
 
@@ -62,7 +62,9 @@ export class DfnsConfirmTransaction {
 			}
 			const challenge = await dfnsDelegated.wallets.broadcastTransactionInit(request);
 
-			const assertion = await sign(dfnsStore.state.rpId, challenge.challenge, challenge.allowCredentials);
+			const defaultTransports = getDefaultTransports();
+
+			const assertion = await sign(dfnsStore.state.rpId, challenge.challenge, challenge.allowCredentials, defaultTransports);
 
 			let transaction = await dfnsDelegated.wallets.broadcastTransactionComplete(request, {
 				challengeIdentifier: challenge.challengeIdentifier,
@@ -126,7 +128,9 @@ export class DfnsConfirmTransaction {
 
 			const challenge = await dfnsDelegated.wallets.transferAssetInit(request);
 
-			const assertion = await sign(dfnsStore.state.rpId, challenge.challenge, challenge.allowCredentials);
+			const defaultTransports = getDefaultTransports();
+
+			const assertion = await sign(dfnsStore.state.rpId, challenge.challenge, challenge.allowCredentials, defaultTransports);
 
 			let transfer = await dfnsDelegated.wallets.transferAssetComplete(request, {
 				challengeIdentifier: challenge.challengeIdentifier,

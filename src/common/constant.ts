@@ -3,7 +3,23 @@ import { BlockchainNetwork } from "@dfns/sdk/codegen/datamodel/Wallets";
 export const ethereumRecIdOffset = 27;
 export const coingeckoApiUrl = "https://api.coingecko.com/api/v3/";
 
-export const networkInfo = {
+type NetworkInfo = {
+	[network in BlockchainNetwork]:
+		| {
+				chainId: string;
+				chainName: string;
+				nativeCurrency: {
+					name: string;
+					symbol: string;
+					decimals: number;
+				};
+				rpcUrls: string[];
+				blockExplorerUrls: string[];
+		  }
+		| undefined;
+};
+
+export const networkInfo: NetworkInfo = {
 	[BlockchainNetwork.Polygon]: {
 		chainId: "0x89",
 		chainName: "Polygon",
@@ -92,5 +108,22 @@ export const networkInfo = {
 		rpcUrls: ["https://bsc-testnet.publicnode.com"],
 		blockExplorerUrls: ["https://testnet.bscscan.com/"],
 	},
+	[BlockchainNetwork.ArbitrumGoerli]: undefined,
+	[BlockchainNetwork.AvalancheC]: undefined,
+	[BlockchainNetwork.AvalancheCFuji]: undefined,
+	[BlockchainNetwork.Bitcoin]: undefined,
+	[BlockchainNetwork.BitcoinTestnet]: undefined,
+	[BlockchainNetwork.FantomOpera]: undefined,
+	[BlockchainNetwork.FantomTestnet]: undefined,
+	[BlockchainNetwork.Optimism]: undefined,
+	[BlockchainNetwork.OptimismGoerli]: undefined,
+	[BlockchainNetwork.Ripple]: undefined,
+	[BlockchainNetwork.RippleTestnet]: undefined,
+	[BlockchainNetwork.Solana]: undefined,
+	[BlockchainNetwork.SolanaDevnet]: undefined,
+	[BlockchainNetwork.Tron]: undefined,
+	[BlockchainNetwork.TronShasta]: undefined,
+	[BlockchainNetwork.KeyECDSA]: undefined,
+	[BlockchainNetwork.KeyEdDSA]: undefined,
 };
 export const binanceApiUrl = "https://api.binance.com";
