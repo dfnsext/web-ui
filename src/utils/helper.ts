@@ -19,7 +19,7 @@ import { convertCryptoToFiat } from "./binance";
 import dfnsStore from "../stores/DfnsStore";
 import { ITokenInfo } from "../common/interfaces/ITokenInfo";
 import { arbitrum, bsc, bscTestnet, goerli, mainnet, polygon, polygonMumbai, sepolia } from "@wagmi/core/chains";
-import isHexPrefixed from "is-hex-prefixed"
+import isHexPrefixed from "is-hex-prefixed";
 
 export const networkMapping = {
 	[BlockchainNetwork.Polygon]: polygon,
@@ -43,7 +43,9 @@ export async function loginWithOAuth(apiUrl: string, appId: string, rpId: string
 		throw error;
 	}
 
-	const assertion = await sign(rpId, challenge!.challenge, challenge!.allowCredentials);
+	const defaultTransports = getDefaultTransports();
+
+	const assertion = await sign(rpId, challenge!.challenge, challenge!.allowCredentials, defaultTransports);
 
 	return Login.getInstance(apiUrl, appId).complete({
 		challengeIdentifier: challenge!.challengeIdentifier,
@@ -106,7 +108,9 @@ export async function createWallet(dfnsHost: string, appId: string, rpId: string
 
 	const challenge = await dfnsDelegated.wallets.createWalletInit(createWalletRequest);
 
-	const assertion = await sign(rpId, challenge.challenge, challenge.allowCredentials);
+	const defaultTransports = getDefaultTransports();
+
+	const assertion = await sign(rpId, challenge.challenge, challenge.allowCredentials, defaultTransports);
 
 	const wallet = await dfnsDelegated.wallets.createWalletComplete(createWalletRequest, {
 		challengeIdentifier: challenge.challengeIdentifier,
@@ -126,7 +130,9 @@ export async function signMessage(dfnsHost: string, appId: string, rpId: string,
 
 	const challenge = await dfnsDelegated.wallets.generateSignatureInit(request);
 
-	const assertion = await sign(rpId, challenge.challenge, challenge.allowCredentials);
+	const defaultTransports = getDefaultTransports();
+
+	const assertion = await sign(rpId, challenge.challenge, challenge.allowCredentials, defaultTransports);
 
 	const signatureInit = await dfnsDelegated.wallets.generateSignatureComplete(request, {
 		challengeIdentifier: challenge.challengeIdentifier,
@@ -273,7 +279,6 @@ function minimizeBigInt(value) {
 
 function rawSignatureToAns1(rawSignature) {
 	if (rawSignature.length !== 64) {
-		console.log(rawSignature.length);
 		return new Uint8Array([0]);
 	}
 	const r = rawSignature.slice(0, 32);
@@ -453,4 +458,33 @@ export function stripHexPrefix(str: string) {
 		return str;
 	}
 	return isHexPrefixed(str) ? str.slice(2) : str;
+}
+
+export function getDefaultTransports() {
+	const isMobile = navigator?.userAgent.indexOf("Mobile") !== -1;
+
+	const defaultTransports = [];
+
+	switch (dfnsStore.state.defaultDevice) {
+		case "mobile":
+			if (isMobile) {
+				defaultTransports.push("internal");
+			}
+			if (!isMobile) {
+				defaultTransports.push("hybrid");
+			}
+			break;
+		case "desktop":
+			if (!isMobile) {
+				defaultTransports.push("internal");
+			}
+			if (isMobile) {
+				defaultTransports.push("hybrid");
+			}
+			break;
+		case null:
+			defaultTransports.push("internal", "hybrid", "ble", "nfc");
+			break;
+	}
+	return defaultTransports
 }

@@ -153,7 +153,6 @@ export class DfnsSDK {
 	public async connect() {
 		router.navigate(RouteType.LOGIN);
 		const walletAddress = await waitForEvent<string>(this.dfnsContainer, "walletConnected");
-		console.log("walletAddress", walletAddress);
 		if (!walletAddress) {
 			throw new Error("Wallet not connected");
 		}

@@ -1,5 +1,5 @@
 import { Fido2Attestation, UserRegistrationChallenge } from "@dfns/sdk";
-import { Fido2Options } from "@dfns/sdk/codegen/datamodel/Auth";
+import { Fido2Options, FidoCredentialsTransportKind } from "@dfns/sdk/codegen/datamodel/Auth";
 import { AllowCredential, Fido2Assertion } from "@dfns/sdk/signer";
 import { fromBase64Url, toBase64Url } from "@dfns/sdk/utils/base64";
 import { Buffer } from "buffer";
@@ -10,23 +10,25 @@ export async function sign(
 	rpId: string,
 	challenge: string,
 	allowCredentials: { key: AllowCredential[]; webauthn: AllowCredential[] },
+
+	defaultPlatforms?: AuthenticatorTransport[],
 	timeout: number = DEFAULT_WAIT_TIMEOUT,
 ): Promise<Fido2Assertion> {
-
-	const credential = (await navigator.credentials.get({
+	const options: CredentialRequestOptions = {
 		mediation: "required",
 		publicKey: {
 			challenge: Buffer.from(challenge),
 			allowCredentials: allowCredentials.webauthn.map(({ id, type, transports }) => ({
 				id: fromBase64Url(id),
 				type,
-				transports: transports ?? ["ble", "hybrid", "internal", "nfc"],
+				transports: transports ?? defaultPlatforms ?? [],
 			})),
 			rpId,
 			userVerification: "required",
 			timeout,
 		},
-	})) as PublicKeyCredential | null;
+	};
+	const credential = (await navigator.credentials.get(options)) as PublicKeyCredential | null;
 
 	if (!credential) {
 		throw new Error("Failed to sign with WebAuthn credential");
@@ -72,8 +74,6 @@ export async function create(
 			timeout,
 		},
 	};
-
-	console.log(options)
 
 	const response = await navigator.credentials.create(options);
 

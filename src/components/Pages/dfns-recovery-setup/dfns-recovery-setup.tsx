@@ -9,7 +9,7 @@ import dfnsStore from "../../../stores/DfnsStore";
 import langState from "../../../stores/LanguageStore";
 import router from "../../../stores/RouterStore";
 import { getDfnsDelegatedClient } from "../../../utils/dfns";
-import { generateRecoveryKeyCredential } from "../../../utils/helper";
+import { generateRecoveryKeyCredential, getDefaultTransports } from "../../../utils/helper";
 import { CopyClipboard } from "../../Elements/CopyClipboard";
 import { sign } from "../../../utils/webauthn";
 
@@ -74,10 +74,13 @@ export class DfnsRecoverySetup {
 
 			//@ts-ignore
 			const addCredentialInitChallenge = await dfnsDelegated.auth.createUserCredentialInit(request);
+			const defaultTransports = getDefaultTransports();
+
 			const assertion = await sign(
 				dfnsStore.state.rpId,
 				addCredentialInitChallenge.challenge,
 				addCredentialInitChallenge.allowCredentials,
+				defaultTransports
 			);
 
 			//@ts-ignore

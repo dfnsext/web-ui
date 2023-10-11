@@ -205,8 +205,6 @@ export class DfnsWalletProvider extends EventEmitter implements Web3Provider {
 
 	private async _eth_sign(address: string, message: string): Promise<string> {
 		const ownAddress = DfnsWalletProvider.walletInstance.getAddress();
-		console.log("address", address)
-		console.log("message", message)
 		if (address !== ownAddress) {
 			throw standardErrors.provider.unauthorized({
 				message: `The address ${address} cannot be used to sign messages.`,

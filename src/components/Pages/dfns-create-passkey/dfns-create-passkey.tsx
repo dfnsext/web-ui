@@ -10,6 +10,7 @@ import { CreatePasskeyAction } from "../../../common/enums/actions-enum";
 import { ITypo, ITypoColor } from "../../../common/enums/typography-enums";
 import { EAlertVariant } from "../../../common/enums/alerts-enums";
 import { EButtonSize, EButtonVariant } from "../../../common/enums/buttons-enums";
+import { getDefaultTransports } from "../../../utils/helper";
 
 
 @Component({
@@ -56,7 +57,10 @@ export class DfnsCreatePasskey {
 			};
 			//@ts-ignore
 			const addCredentialInitChallenge = await dfnsDelegated.auth.createUserCredentialInit(request);
-			const assertion = await sign(dfnsStore.state.rpId, addCredentialInitChallenge.challenge, addCredentialInitChallenge.allowCredentials);
+
+			const defaultTransports = getDefaultTransports();
+
+			const assertion = await sign(dfnsStore.state.rpId, addCredentialInitChallenge.challenge, addCredentialInitChallenge.allowCredentials, defaultTransports);
 
 			//@ts-ignore
 			await dfnsDelegated.auth.createUserCredentialComplete(request, {
