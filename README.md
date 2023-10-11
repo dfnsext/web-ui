@@ -149,7 +149,7 @@ export default async function CustomComponent() {
     await DfnsWallet.getInstance().dfnsSdk.connectWithOAuthToken('YOUR_OAUTH_TOKEN');
 }
 ```
-### Directly in Browser
+### Usage in a web page
 
 This HTML and JavaScript code demonstrates how to integrate the DFNS Web Component into a web page. The DFNS Web Component allows you to add DFNS authentication and wallet functionality to your web application.
 
