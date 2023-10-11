@@ -19,6 +19,7 @@ import { convertCryptoToFiat } from "./binance";
 import dfnsStore from "../stores/DfnsStore";
 import { ITokenInfo } from "../common/interfaces/ITokenInfo";
 import { arbitrum, bsc, bscTestnet, goerli, mainnet, polygon, polygonMumbai, sepolia } from "@wagmi/core/chains";
+import isHexPrefixed from "is-hex-prefixed"
 
 export const networkMapping = {
 	[BlockchainNetwork.Polygon]: polygon,
@@ -437,4 +438,19 @@ export const generateRecoveryKeyCredential = async (username, clientData) => {
 	};
 };
 
+export const msgHexToText = (hex) => {
+	try {
+		const stripped = stripHexPrefix(hex);
+		const buff = Buffer.from(stripped, "hex");
+		return buff.length === 32 ? hex : buff.toString("utf8");
+	} catch (e) {
+		return hex;
+	}
+};
 
+export function stripHexPrefix(str: string) {
+	if (typeof str !== "string") {
+		return str;
+	}
+	return isHexPrefixed(str) ? str.slice(2) : str;
+}

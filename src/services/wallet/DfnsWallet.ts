@@ -3,11 +3,12 @@ import jwt_decode, { JwtPayload } from "jwt-decode";
 import dfnsStore from "../../stores/DfnsStore";
 import router, { RouteType } from "../../stores/RouterStore";
 import { getDfnsDelegatedClient, isDfnsError } from "../../utils/dfns";
-import { loginWithOAuth, networkMapping, waitForEvent } from "../../utils/helper";
+import { loginWithOAuth, msgHexToText, networkMapping, waitForEvent } from "../../utils/helper";
 import { EventEmitter } from "../EventEmitter";
 import LocalStorageService, { CACHED_WALLET_PROVIDER, DFNS_ACTIVE_WALLET, DFNS_CREDENTIALS, DFNS_END_USER_TOKEN, OAUTH_ACCESS_TOKEN, WalletProvider } from "../LocalStorageService";
 import { RegisterCompleteResponse } from "../api/Register";
 import IWalletInterface, { WalletEvent } from "./IWalletInterface";
+import { DfnsWalletProvider } from "../provider/DfnsWalletProvider";
 
 class DfnsWallet implements IWalletInterface {
 	private static ctx: DfnsWallet;
@@ -76,8 +77,10 @@ class DfnsWallet implements IWalletInterface {
 	}
 
 	public async signMessage(message: string): Promise<string> {
+
+		const sanitizedMesssage = msgHexToText(message);
 		router.navigate(RouteType.SIGN_MESSAGE);
-		this.getDfnsElement().setAttribute("message-to-sign", message);
+		this.getDfnsElement().setAttribute("message-to-sign", sanitizedMesssage);
 		const response = await waitForEvent<string>(this.getDfnsElement(), "signedMessage");
 		router.close();
 		if (!response) throw new Error("User cancelled signature");
@@ -229,6 +232,10 @@ class DfnsWallet implements IWalletInterface {
 			return true;
 		}
 		return false;
+	}
+
+	public async getProvider(): Promise<any> {
+		return new DfnsWalletProvider(this)
 	}
 
 	private getDfnsElement() {

@@ -48,11 +48,13 @@
 		"classnames": "^2.3.2",
 		"defer-promise": "^3.0.0",
 		"ethers": "^5.7.2",
+		"is-hex-prefixed": "^1.0.0",
 		"js-cookie": "^3.0.5",
 		"jwt-decode": "^3.1.2",
 		"prettier": "^3.0.1",
 		"qrcode": "^1.5.3",
 		"ts-pattern": "^5.0.5",
+		"uuid": "^9.0.1",
 		"viem": "^1.10.12"
 	},
 	"devDependencies": {
@@ -63,6 +65,7 @@
 		"@types/jest": "^27.5.2",
 		"@types/node": "^16.18.42",
 		"@types/qrcode": "^1.5.2",
+		"@types/uuid": "^9.0.4",
 		"jest": "^27.5.1",
 		"jest-cli": "^27.5.1",
 		"puppeteer": "^20.7.3",
