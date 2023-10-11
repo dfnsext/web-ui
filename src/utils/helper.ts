@@ -416,6 +416,11 @@ export const generateRecoveryKeyCredential = async (username, clientData) => {
 	const { encryptedPrivateKey, pemPublicKey } = await generateEncryptedPrivateKeyAndPublicKey(recoveryKey, username);
 
 	const clientDataHash = arrayBufferToHex(await crypto.subtle.digest("SHA-256", new TextEncoder().encode(clientData)));
+
+	console.log(JSON.stringify({
+		clientDataHash: clientDataHash,
+		publicKey: pemPublicKey,
+	}))
 	const signature = await generateSignature(
 		encryptedPrivateKey,
 		JSON.stringify({

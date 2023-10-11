@@ -11,7 +11,9 @@ import router from "../../../stores/RouterStore";
 import { getDfnsDelegatedClient } from "../../../utils/dfns";
 import { generateRecoveryKeyCredential, getDefaultTransports } from "../../../utils/helper";
 import { CopyClipboard } from "../../Elements/CopyClipboard";
-import { sign } from "../../../utils/webauthn";
+import { create, sign } from "../../../utils/webauthn";
+import { arrayBufferToBase64UrlString } from "../../../utils/base64url";
+import Recover from "../../../services/api/Recover";
 
 @Component({
 	tag: "dfns-recovery-setup",
@@ -36,14 +38,14 @@ export class DfnsRecoverySetup {
 				body: { kind: CredentialKind.RecoveryKey },
 			})) as PublicKeyOptions;
 
-			
-
-			const keyOrPasswordClientData = JSON.stringify({
-				type: "key.create",
-				challenge: Buffer.from(this.newPasskeyChallenge.challenge).toString("base64"),
-				origin: window.location.origin,
-				crossOrigin: false,
-			})
+			const keyOrPasswordClientData = arrayBufferToBase64UrlString(Buffer.from(
+				JSON.stringify({
+					type: "key.create",
+					challenge: arrayBufferToBase64UrlString(Buffer.from(this.newPasskeyChallenge.challenge)).toString(),
+					origin: window.location.origin,
+					crossOrigin: false,
+				}),
+			)).toString();
 
 			const response = await generateRecoveryKeyCredential(
 				"aHR0cHM6Ly9hY2NvdW50cy5nb29nbGUuY29tLTExNzMwMjI0NTA3OTIzMTgwMjcyNi1rZXZpbi50YW5Ac21hcnQtY2hhaW4uZnI=",
@@ -54,8 +56,8 @@ export class DfnsRecoverySetup {
 			const recoveryFactor = {
 				credentialKind: CredentialKind.RecoveryKey,
 				credentialInfo: {
-					attestationData: Buffer.from(attestationData),
-					clientData: Buffer.from(keyOrPasswordClientData),
+					attestationData: arrayBufferToBase64UrlString(Buffer.from(attestationData)).toString(),
+					clientData: keyOrPasswordClientData,
 					credId: credentialId,
 				},
 				encryptedPrivateKey: encryptedPrivateKey,
@@ -98,6 +100,28 @@ export class DfnsRecoverySetup {
 		}
 
 		this.isLoading = false;
+	}
+
+	async recoverAccount() {
+
+		const challenge = await Recover.getInstance(dfnsStore.state.apiUrl, dfnsStore.state.appId).delegated(dfnsStore.state.oauthAccessToken, "4PS4opV4ClePLV28KF0EKwNxRsSc0pq70LvuJ3vJ4oM")
+
+		const attestation = await create(challenge);
+		const dfnsDelegated = getDfnsDelegatedClient(dfnsStore.state.dfnsHost, dfnsStore.state.appId, dfnsStore.state.dfnsUserToken);
+		// const initChallenge = await dfnsDelegated.auth.createUserRecovery({
+		// 	body: {
+		// 		username: "aHR0cHM6Ly9hY2NvdW50cy5nb29nbGUuY29tLTExNzMwMjI0NTA3OTIzMTgwMjcyNi1rZXZpbi50YW5Ac21hcnQtY2hhaW4uZnI=",
+		// 		credentialId: "4PS4opV4ClePLV28KF0EKwNxRsSc0pq70LvuJ3vJ4oM",
+		// 	},
+		// });
+
+		// const assertion = await sign(dfnsStore.state.rpId, initChallenge.challenge, initChallenge.allowCredentials);
+
+		// console.log(assertion)
+
+		// dfnsDelegated.auth.createDelegatedUserRecoveryComplete({
+			
+		// });
 	}
 
 	handleBackClick() {
@@ -244,7 +268,8 @@ export class DfnsRecoverySetup {
 								sizing={EButtonSize.MEDIUM}
 								fullwidth
 								onClick={() => {
-									this.initPasskeyCreation();
+									// this.recoverAccount();
+									this.initPasskeyCreation()
 								}}
 							/>
 							<dfns-button

@@ -1,5 +1,5 @@
 import { Fido2Attestation, UserRegistrationChallenge } from "@dfns/sdk";
-import { Fido2Options, FidoCredentialsTransportKind } from "@dfns/sdk/codegen/datamodel/Auth";
+import { Fido2Options, FidoCredentialsTransportKind, UserRecoveryChallenge } from "@dfns/sdk/codegen/datamodel/Auth";
 import { AllowCredential, Fido2Assertion } from "@dfns/sdk/signer";
 import { fromBase64Url, toBase64Url } from "@dfns/sdk/utils/base64";
 import { Buffer } from "buffer";
@@ -10,7 +10,6 @@ export async function sign(
 	rpId: string,
 	challenge: string,
 	allowCredentials: { key: AllowCredential[]; webauthn: AllowCredential[] },
-
 	defaultPlatforms?: AuthenticatorTransport[],
 	timeout: number = DEFAULT_WAIT_TIMEOUT,
 ): Promise<Fido2Assertion> {
