@@ -101,25 +101,25 @@ export default class DfnsWallet {
 
 | Function             | Description                             | Parameters                                | Return Type                   |
 |----------------------|-----------------------------------------|--------------------------------------------|--------------------------------|
-| `connect`            | Connects to the DFNS SDK.               | None                                       | 'Promise<string>'                |
-| `connectWithOAuthToken`| Connects to the DFNS SDK with an OAuth token. | `oauthToken: string`                | 'Promise<string>'          |
-| `signMessage`        | Signs a message using the DFNS wallet.  | `message: string`                         | 'Promise<string>'                |
-| `transferTokens`     | Transfers tokens.                       | None                                       | 'Promise<string>'                |
-| `showWalletOverview` | Shows the wallet overview UI.            | None                                       | 'Promise<void>'                  |
-| `showSettings`       | Shows the settings UI.                  | None                                       | 'Promise<void>'                  |
-| `showReceiveTokens`  | Shows the receive tokens UI.             | None                                       | 'Promise<void>'                  |
-| `showRecoverySetup`  | Shows the recovery setup UI.             | None                                       | 'Promise<void>'                  |
-| `showRecoverAccount` | Shows the recover account UI.            | None                                       | 'Promise<void>'                  |
-| `sendTransaction`    | Sends a transaction.                     | `to: string, value: string, data?: string, nonce?: number` | 'Promise<string>'        |
-| `showCreatePasskey`  | Shows the create passkey UI.            | None                                       | 'Promise<void>'                  |
-| `showConfirmTransaction`| Shows the confirm transaction UI.     | None                                       | 'Promise<void>'                  |
+| `connect`            | Connects to the DFNS SDK.               | None                                       | `Promise<string>`                |
+| `connectWithOAuthToken`| Connects to the DFNS SDK with an OAuth token. | `oauthToken: string`                | Promise<string>          |
+| `signMessage`        | Signs a message using the DFNS wallet.  | `message: string`                         | Promise<string>                |
+| `transferTokens`     | Transfers tokens.                       | None                                       | Promise<string>                |
+| `showWalletOverview` | Shows the wallet overview UI.            | None                                       | Promise<void>                  |
+| `showSettings`       | Shows the settings UI.                  | None                                       | Promise<void>                  |
+| `showReceiveTokens`  | Shows the receive tokens UI.             | None                                       | Promise<void>                  |
+| `showRecoverySetup`  | Shows the recovery setup UI.             | None                                       | Promise<void>                  |
+| `showRecoverAccount` | Shows the recover account UI.            | None                                       | Promise<void>                  |
+| `sendTransaction`    | Sends a transaction.                     | `to: string, value: string, data?: string, nonce?: number` | Promise<string>        |
+| `showCreatePasskey`  | Shows the create passkey UI.            | None                                       | Promise<void>                  |
+| `showConfirmTransaction`| Shows the confirm transaction UI.     | None                                       | Promise<void>                  |
 | `setLanguage`        | Sets the language of the SDK.           | `lang: "fr" \| "en"`                      | void                           |
 | `disconnect`         | Disconnects from the DFNS SDK.           | None                                       | void                           |
 | `onChange`           | Registers an event listener for wallet events. | `event: WalletEvent, callback: (data: any) => void` | () => void                 |
-| `isConnected`        | Checks if the SDK is connected.          | None                                       | 'Promise<boolean>'               |
-| `getAddress`         | Retrieves the wallet address.            | None                                       | 'Promise<string>'                |
+| `isConnected`        | Checks if the SDK is connected.          | None                                       | Promise<boolean>               |
+| `getAddress`         | Retrieves the wallet address.            | None                                       | Promise<string>                |
 | `getWalletProvider`  | Gets the wallet provider.                | None                                       | WalletProvider                 |
-| `refreshToken`       | Refreshes the token.                    | None                                       | 'Promise<void>'                  |
+| `refreshToken`       | Refreshes the token.                    | None                                       | Promise<void>                  |
 
 
 
