@@ -5,13 +5,6 @@
 <!-- Auto Generated Below -->
 
 
-## Events
-
-| Event    | Description | Type                                                                 |
-| -------- | ----------- | -------------------------------------------------------------------- |
-| `action` |             | `CustomEvent<CreatePasskeyAction.BACK \| CreatePasskeyAction.CLOSE>` |
-
-
 ## Dependencies
 
 ### Used by

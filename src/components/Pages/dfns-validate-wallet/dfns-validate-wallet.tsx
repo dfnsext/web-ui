@@ -3,9 +3,12 @@ import { Component, Event, EventEmitter, Prop, State, h } from "@stencil/core";
 import dfnsStore from "../../../stores/DfnsStore";
 import langState from "../../../stores/LanguageStore";
 import { waitForWalletActive } from "../../../utils/dfns";
-import { createWallet } from "../../../utils/helper";
+import { createWallet } from "../../../utils/dfns";
 import { EButtonSize, EButtonVariant } from "../../../common/enums/buttons-enums";
 import { ITypo, ITypoColor } from "../../../common/enums/typography-enums";
+import { disconnectWallet } from "../../../utils/helper";
+import { WalletDisconnectedError, isTokenExpiredError } from "../../../utils/errors";
+import router, { RouteType } from "../../../stores/RouterStore";
 
 @Component({
 	tag: "dfns-validate-wallet",
@@ -20,6 +23,7 @@ export class DfnsValidateWallet {
 		try {
 			this.isLoading = true;
 			let wallet = await createWallet(
+				dfnsStore.state.apiUrl,
 				dfnsStore.state.dfnsHost,
 				dfnsStore.state.appId,
 				dfnsStore.state.rpId,
@@ -28,6 +32,7 @@ export class DfnsValidateWallet {
 			);
 			if (!dfnsStore.state.showWalletValidation) {
 				wallet = await waitForWalletActive(
+					dfnsStore.state.apiUrl,
 					dfnsStore.state.dfnsHost,
 					dfnsStore.state.appId,
 					dfnsStore.state.dfnsUserToken,
@@ -36,9 +41,19 @@ export class DfnsValidateWallet {
 			}
 			this.isLoading = false;
 			this.walletCreated.emit(wallet);
+			setTimeout(() => {
+				if (dfnsStore.state.showRecoverySetupAtWalletCreation && !dfnsStore.state.showWalletValidation) {
+					router.navigate(RouteType.RECOVERY_SETUP);
+				}
+			}, 500);
 			return wallet;
 		} catch (err) {
 			this.isLoading = false;
+			if (isTokenExpiredError(err)) {
+				disconnectWallet();
+				throw new WalletDisconnectedError();
+			}
+			throw err;
 		}
 	}
 

@@ -7,13 +7,14 @@ import { convertCryptoToFiat } from "../../../utils/binance";
 import { ITypo, ITypoColor } from "../../../common/enums/typography-enums";
 import { EAlertVariant } from "../../../common/enums/alerts-enums";
 import { EButtonSize, EButtonVariant } from "../../../common/enums/buttons-enums";
-import { getDfnsDelegatedClient, timeout } from "../../../utils/dfns";
+import { getDfnsDelegatedClient, sendTransaction, timeout, transferTokens } from "../../../utils/dfns";
 import { BroadcastTransactionRequest, TransferAssetRequest } from "@dfns/sdk/codegen/Wallets";
 import { TransactionKind, TransactionStatus, TransferKind, TransferStatus } from "@dfns/sdk/codegen/datamodel/Wallets";
 import router from "../../../stores/RouterStore";
-import { getDefaultTransports, networkMapping } from "../../../utils/helper";
+import { disconnectWallet, getDefaultTransports, networkMapping } from "../../../utils/helper";
 import { formatUnits } from "ethers/lib/utils";
 import { ITokenInfo } from "../../../common/interfaces/ITokenInfo";
+import { WalletDisconnectedError, isTokenExpiredError } from "../../../utils/errors";
 
 @Component({
 	tag: "dfns-confirm-transaction",
@@ -45,49 +46,12 @@ export class DfnsConfirmTransaction {
 			this.isLoading = true;
 
 			this.step = 2;
-
-			const dfnsDelegated = getDfnsDelegatedClient(dfnsStore.state.dfnsHost, dfnsStore.state.appId, dfnsStore.state.dfnsUserToken);
-			const request: BroadcastTransactionRequest = {
-				walletId: dfnsStore.state.wallet.id,
-				body: {
-					kind: TransactionKind.Evm,
-					to: this.to,
-					value: this.value,
-					data: this.data,
-				},
-			};
-
-			if (this.txNonce) {
-				request.body.nonce = this.txNonce;
-			}
-			const challenge = await dfnsDelegated.wallets.broadcastTransactionInit(request);
-
-			const defaultTransports = getDefaultTransports();
-
-			const assertion = await sign(dfnsStore.state.rpId, challenge.challenge, challenge.allowCredentials, defaultTransports);
-
-			let transaction = await dfnsDelegated.wallets.broadcastTransactionComplete(request, {
-				challengeIdentifier: challenge.challengeIdentifier,
-				firstFactor: assertion,
-			});
-
-			do {
-				await timeout(1000);
-				transaction = await dfnsDelegated.wallets.getTransaction({
-					walletId: dfnsStore.state.wallet.id,
-					transactionId: transaction.id,
-				});
-				//@ts-ignore
-			} while (transaction.status === TransactionStatus.Pending || transaction.status === "Executing");
-			if (transaction.status === TransactionStatus.Failed || transaction.status === TransactionStatus.Rejected) {
-				throw new Error(transaction.reason);
-			}
-
-			this.txHash = transaction.txHash;
+			const txHash = await sendTransaction(dfnsStore.state.apiUrl, dfnsStore.state.dfnsHost, dfnsStore.state.appId, dfnsStore.state.rpId, dfnsStore.state.dfnsUserToken, dfnsStore.state.wallet, this.to, this.value, this.data, this.txNonce);
+			this.txHash = txHash;
 
 			this.isLoading = false;
 
-			// this.transactionSent.emit(this.txHash);
+			this.transactionSent.emit(this.txHash);
 		} catch (error) {
 			this.handleError(error);
 		}
@@ -99,60 +63,19 @@ export class DfnsConfirmTransaction {
 
 			this.step = 2;
 
-			const kind = this.dfnsTransferSelectedToken.contract ? TransferKind.Erc20 : TransferKind.Native;
-			const dfnsDelegated = getDfnsDelegatedClient(dfnsStore.state.dfnsHost, dfnsStore.state.appId, dfnsStore.state.dfnsUserToken);
-			let request: TransferAssetRequest;
-
-			if (kind === TransferKind.Erc20) {
-				request = {
-					walletId: dfnsStore.state.wallet.id,
-					body: {
-						kind: TransferKind.Erc20,
-						to: this.to,
-						amount: this.value,
-						contract: this.dfnsTransferSelectedToken.contract,
-					},
-				};
-			}
-
-			if (kind === TransferKind.Native) {
-				request = {
-					walletId: dfnsStore.state.wallet.id,
-					body: {
-						kind: TransferKind.Native,
-						to: this.to,
-						amount: this.value,
-					},
-				};
-			}
-
-			const challenge = await dfnsDelegated.wallets.transferAssetInit(request);
-
-			const defaultTransports = getDefaultTransports();
-
-			const assertion = await sign(dfnsStore.state.rpId, challenge.challenge, challenge.allowCredentials, defaultTransports);
-
-			let transfer = await dfnsDelegated.wallets.transferAssetComplete(request, {
-				challengeIdentifier: challenge.challengeIdentifier,
-				firstFactor: assertion,
-			});
-
-			do {
-				await timeout(1000);
-				transfer = await dfnsDelegated.wallets.getTransfer({
-					walletId: dfnsStore.state.wallet.id,
-					transferId: transfer.id,
-				});
-			} while (
-				transfer.status === TransferStatus.Pending ||
-				//@ts-ignore
-				transfer.status === "Executing"
+			const txHash = await transferTokens(
+				this.dfnsTransferSelectedToken,
+				dfnsStore.state.apiUrl,
+				dfnsStore.state.dfnsHost,
+				dfnsStore.state.appId,
+				dfnsStore.state.rpId,
+				dfnsStore.state.dfnsUserToken,
+				dfnsStore.state.wallet,
+				this.to,
+				this.value,
 			);
-			this.isLoading = false;
-			if (transfer.status === TransferStatus.Failed || transfer.status === TransferStatus.Rejected) {
-				throw new Error(transfer.reason);
-			}
-			this.txHash = transfer.txHash;
+			this.txHash = txHash;
+			this.transactionSent.emit(this.txHash);
 			this.isLoading = false;
 		} catch (error) {
 			this.handleError(error);
@@ -163,6 +86,12 @@ export class DfnsConfirmTransaction {
 		this.isLoading = false;
 		this.hasErrors = true;
 		this.step = 1;
+
+		if (isTokenExpiredError(error)) {
+			disconnectWallet();
+			this.transactionSent.emit(this.txHash);
+			throw new WalletDisconnectedError();
+		}
 
 		if (typeof error === "string") {
 			this.errorMessage = error;

@@ -4,14 +4,15 @@ import { Component, Event, EventEmitter, JSX, Prop, h } from "@stencil/core";
 import dfnsStore from "../../../stores/DfnsStore";
 import langState from "../../../stores/LanguageStore";
 import router, { RouteType } from "../../../stores/RouterStore";
-import { getDfnsDelegatedClient } from "../../../utils/dfns";
+import { activatePasskey, deactivatePasskey, fetchCredentials, getDfnsDelegatedClient } from "../../../utils/dfns";
 
 import { sign } from "../../../utils/webauthn";
 import { SettingsAction } from "../../../common/enums/actions-enum";
 import { ITypo, ITypoColor } from "../../../common/enums/typography-enums";
 import { EButtonSize, EButtonVariant } from "../../../common/enums/buttons-enums";
 import { EAlertVariant } from "../../../common/enums/alerts-enums";
-import { getDefaultTransports } from "../../../utils/helper";
+import { disconnectWallet, getDefaultTransports } from "../../../utils/helper";
+import { WalletDisconnectedError, isTokenExpiredError } from "../../../utils/errors";
 
 @Component({
 	tag: "dfns-settings",
@@ -29,49 +30,66 @@ export class DfnsSettings {
 
 	async fetchPasskeys() {
 		try {
-			const dfnsDelegated = getDfnsDelegatedClient(dfnsStore.state.dfnsHost, dfnsStore.state.appId, dfnsStore.state.dfnsUserToken);
-			const credentials = (await dfnsDelegated.auth.listUserCredentials()).items.filter((passkey) => passkey.kind !== CredentialKind.RecoveryKey);
+			const credentials = (
+				await fetchCredentials(
+					dfnsStore.state.apiUrl,
+					dfnsStore.state.dfnsHost,
+					dfnsStore.state.appId,
+					dfnsStore.state.dfnsUserToken,
+				)
+			).items.filter((passkey) => passkey.kind !== CredentialKind.RecoveryKey);
+
 			dfnsStore.setValue("credentials", credentials);
 		} catch (error) {
-			console.error(error);
+			if (isTokenExpiredError(error)) {
+				disconnectWallet();
+				throw new WalletDisconnectedError();
+			}
+			throw error;
 		}
 	}
 
-	async desactivatePasskey(passkey: CredentialInfo) {
+	async deactivatePasskey(passkey: CredentialInfo) {
 		try {
-			const dfnsDelegated = getDfnsDelegatedClient(dfnsStore.state.dfnsHost, dfnsStore.state.appId, dfnsStore.state.dfnsUserToken);
-			const request: DeactivateCredentialRequest = { body: { credentialUuid: passkey.credentialUuid } };
-			const challenge = await dfnsDelegated.auth.deactivateCredentialInit(request);
-			const defaultTransports = getDefaultTransports();
-			const signedChallenge = await sign(dfnsStore.state.rpId, challenge.challenge, challenge.allowCredentials, defaultTransports);
-			await dfnsDelegated.auth.deactivateCredentialComplete(request, {
-				challengeIdentifier: challenge.challengeIdentifier,
-				firstFactor: signedChallenge,
-			});
-		} catch (err) {
-			console.error(err);
+			await deactivatePasskey(
+				dfnsStore.state.apiUrl,
+				dfnsStore.state.dfnsHost,
+				dfnsStore.state.appId,
+				dfnsStore.state.rpId,
+				dfnsStore.state.dfnsUserToken,
+				passkey,
+			);
+		} catch (error) {
+			if (isTokenExpiredError(error)) {
+				disconnectWallet();
+				throw new WalletDisconnectedError();
+			}
+			throw error;
 		}
 	}
 
 	async activatePasskey(passkey: CredentialInfo) {
 		try {
-			const dfnsDelegated = getDfnsDelegatedClient(dfnsStore.state.dfnsHost, dfnsStore.state.appId, dfnsStore.state.dfnsUserToken);
-			const request: DeactivateCredentialRequest = { body: { credentialUuid: passkey.credentialUuid } };
-			const challenge = await dfnsDelegated.auth.activateCredentialInit(request);
-			const defaultTransports = getDefaultTransports();
-			const signedChallenge = await sign(dfnsStore.state.rpId, challenge.challenge, challenge.allowCredentials, defaultTransports);
-			await dfnsDelegated.auth.activateCredentialComplete(request, {
-				challengeIdentifier: challenge.challengeIdentifier,
-				firstFactor: signedChallenge,
-			});
+			await activatePasskey(
+				dfnsStore.state.apiUrl,
+				dfnsStore.state.dfnsHost,
+				dfnsStore.state.appId,
+				dfnsStore.state.rpId,
+				dfnsStore.state.dfnsUserToken,
+				passkey,
+			);
 		} catch (error) {
-			console.error(error);
+			if (isTokenExpiredError(error)) {
+				disconnectWallet();
+				throw new WalletDisconnectedError();
+			}
+			throw error;
 		}
 	}
 
 	async onClickToggle(passkey: CredentialInfo) {
 		if (passkey.isActive) {
-			await this.desactivatePasskey(passkey);
+			await this.deactivatePasskey(passkey);
 		} else {
 			await this.activatePasskey(passkey);
 		}
@@ -109,16 +127,16 @@ export class DfnsSettings {
 				/>
 			</svg>
 		);
-		// const arrowRight = (
-		// 	<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
-		// 		<path
-		// 			fill-rule="evenodd"
-		// 			clip-rule="evenodd"
-		// 			d="M5 10C5 9.58579 5.33579 9.25 5.75 9.25H12.3879L10.2302 7.29063C9.93159 7.00353 9.92228 6.52875 10.2094 6.23017C10.4965 5.93159 10.9713 5.92228 11.2698 6.20938L14.7698 9.45938C14.9169 9.60078 15 9.79599 15 10C15 10.204 14.9169 10.3992 14.7698 10.5406L11.2698 13.7906C10.9713 14.0777 10.4965 14.0684 10.2094 13.7698C9.92228 13.4713 9.93159 12.9965 10.2302 12.7094L12.3879 10.75H5.75C5.33579 10.75 5 10.4142 5 10Z"
-		// 			fill={dfnsStore.state.theme.includes("dark") ? "#D1D5DB" : "#50565E"}
-		// 		/>
-		// 	</svg>
-		// );
+		const arrowRight = (
+			<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+				<path
+					fill-rule="evenodd"
+					clip-rule="evenodd"
+					d="M5 10C5 9.58579 5.33579 9.25 5.75 9.25H12.3879L10.2302 7.29063C9.93159 7.00353 9.92228 6.52875 10.2094 6.23017C10.4965 5.93159 10.9713 5.92228 11.2698 6.20938L14.7698 9.45938C14.9169 9.60078 15 9.79599 15 10C15 10.204 14.9169 10.3992 14.7698 10.5406L11.2698 13.7906C10.9713 14.0777 10.4965 14.0684 10.2094 13.7698C9.92228 13.4713 9.93159 12.9965 10.2302 12.7094L12.3879 10.75H5.75C5.33579 10.75 5 10.4142 5 10Z"
+					fill={dfnsStore.state.theme.includes("dark") ? "#D1D5DB" : "#50565E"}
+				/>
+			</svg>
+		);
 
 		return (
 			<dfns-layout closeBtn>
@@ -170,16 +188,18 @@ export class DfnsSettings {
 							);
 						})}
 					</div>
-					{/* <div class="recovery-kit">
-						<dfns-button
-							content={langState.values.pages.settings.button_recovery_kit}
-							variant={EButtonVariant.SECONDARY}
-							sizing={EButtonSize.SMALL}
-							iconposition="right"
-							icon={arrowRight}
-							onClick={() => {}}
-						/>
-					</div> */}
+					{dfnsStore.state.activateRecovery && (
+						<div class="recovery-kit">
+							<dfns-button
+								content={langState.values.pages.settings.button_recovery_kit}
+								variant={EButtonVariant.SECONDARY}
+								sizing={EButtonSize.SMALL}
+								iconposition="right"
+								icon={arrowRight}
+								onClick={() => {router.navigate(RouteType.RECOVERY_SETUP)}}
+							/>
+						</div>
+					)}
 
 					<dfns-alert variant={EAlertVariant.INFO}>
 						<div slot="content">{langState.values.pages.settings.content_alert}</div>

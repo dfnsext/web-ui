@@ -24,8 +24,7 @@ export default class Login extends BaseApiService {
 		try {
 			return await this.postRequest(path, { oAuthToken }, { appId: this.appId });
 		} catch (err) {
-			this.onError(err);
-			return Promise.reject(err);
+			return this.onError(err);;
 		}
 	}
 
@@ -34,8 +33,7 @@ export default class Login extends BaseApiService {
 		try {
 			return await this.postRequest(path, { oAuthToken }, { appId: this.appId });
 		} catch (err) {
-			this.onError(err);
-			return Promise.reject(err);
+			return this.onError(err);
 		}
 	}
 
@@ -44,8 +42,7 @@ export default class Login extends BaseApiService {
 		try {
 			return await this.postRequest(path, params, { appId: this.appId });
 		} catch (err) {
-			this.onError(err);
-			return Promise.reject(err);
+			return this.onError(err);
 		}
 	}
 }

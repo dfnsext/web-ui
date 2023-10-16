@@ -24,6 +24,7 @@
 		"login": "Connexion / Inscription",
 		"recovery_setup": "Récupération du wallet",
 		"recover_account": "Récupérer mon compte",
+		"recovery_validation_step": "Avez-vous sauvegardé votre kit de récupération ?",
 		"nav_links": {}
 	},
 	"pages": {
@@ -127,7 +128,10 @@
 			"recovery_key": "Clé de récupération",
 			"warning_title": "Cette clé de récupération est unique, conservez-la !",
 			"warning_content": "Si vous perdez l'accès à votre compte, ce kit de récupération est le seul moyen de le récupérer. Vous pouvez le copier ou le télécharger.",
-			"button_download_kit": "Télécharger mon kit de récupération"
+			"button_download_kit": "Télécharger mon kit de récupération",
+			"validation_description": "Votre kit de récupération est unique et ne peut pas être restauré. Veillez à le copier, car il sera inaccessible ultérieurement.",
+			"button_review_kit": "Examinez mon kit de récupération",
+			"button_backed_kit": "J'ai sauvegardé mon kit de récupération"
 		},
 		"recover_account": {
 			"title": "Se connecter",

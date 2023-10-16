@@ -1,6 +1,6 @@
-import { CredentialKind, PublicKeyOptions } from "@dfns/sdk/codegen/datamodel/Auth";
+import { PublicKeyOptions } from "@dfns/sdk/codegen/datamodel/Auth";
 import { Component, Event, EventEmitter, Fragment, JSX, State, h } from "@stencil/core";
-import { Buffer } from "buffer";
+import jsPDF from "jspdf";
 import { CreatePasskeyAction } from "../../../common/enums/actions-enum";
 import { EAlertVariant } from "../../../common/enums/alerts-enums";
 import { EButtonSize, EButtonVariant } from "../../../common/enums/buttons-enums";
@@ -8,12 +8,12 @@ import { ITypo, ITypoColor } from "../../../common/enums/typography-enums";
 import dfnsStore from "../../../stores/DfnsStore";
 import langState from "../../../stores/LanguageStore";
 import router from "../../../stores/RouterStore";
-import { getDfnsDelegatedClient } from "../../../utils/dfns";
-import { generateRecoveryKeyCredential, getDefaultTransports } from "../../../utils/helper";
+import { createRecoveryKey } from "../../../utils/dfns";
+import { WalletDisconnectedError, isTokenExpiredError } from "../../../utils/errors";
+import {
+	disconnectWallet
+} from "../../../utils/helper";
 import { CopyClipboard } from "../../Elements/CopyClipboard";
-import { create, sign } from "../../../utils/webauthn";
-import { arrayBufferToBase64UrlString } from "../../../utils/base64url";
-import Recover from "../../../services/api/Recover";
 
 @Component({
 	tag: "dfns-recovery-setup",
@@ -30,98 +30,42 @@ export class DfnsRecoverySetup {
 	@State() recoveryCode: string = "test";
 	@Event() action: EventEmitter<CreatePasskeyAction>;
 
-	async initPasskeyCreation() {
-		this.isLoading = true;
+	async createRecoveryKey() {
 		try {
-			const dfnsDelegated = getDfnsDelegatedClient(dfnsStore.state.dfnsHost, dfnsStore.state.appId, dfnsStore.state.dfnsUserToken);
-			this.newPasskeyChallenge = (await dfnsDelegated.auth.createUserCredentialChallenge({
-				body: { kind: CredentialKind.RecoveryKey },
-			})) as PublicKeyOptions;
-
-			const keyOrPasswordClientData = arrayBufferToBase64UrlString(Buffer.from(
-				JSON.stringify({
-					type: "key.create",
-					challenge: arrayBufferToBase64UrlString(Buffer.from(this.newPasskeyChallenge.challenge)).toString(),
-					origin: window.location.origin,
-					crossOrigin: false,
-				}),
-			)).toString();
-
-			const response = await generateRecoveryKeyCredential(
-				"aHR0cHM6Ly9hY2NvdW50cy5nb29nbGUuY29tLTExNzMwMjI0NTA3OTIzMTgwMjcyNi1rZXZpbi50YW5Ac21hcnQtY2hhaW4uZnI=",
-				keyOrPasswordClientData,
-			);
-
-			const { encryptedPrivateKey, attestationData, recoveryKey, credentialId } = response;
-			const recoveryFactor = {
-				credentialKind: CredentialKind.RecoveryKey,
-				credentialInfo: {
-					attestationData: arrayBufferToBase64UrlString(Buffer.from(attestationData)).toString(),
-					clientData: keyOrPasswordClientData,
-					credId: credentialId,
-				},
-				encryptedPrivateKey: encryptedPrivateKey,
-			};
-
-			// Used internally (not sent to the Dfns server) to the user's browser
-
-			const request = {
-				body: {
-					...recoveryFactor,
-					credentialName: this.passkeyName,
-					//@ts-ignore
-					challengeIdentifier: this.newPasskeyChallenge.temporaryAuthenticationToken,
-				},
-			};
-
-			//@ts-ignore
-			const addCredentialInitChallenge = await dfnsDelegated.auth.createUserCredentialInit(request);
-			const defaultTransports = getDefaultTransports();
-
-			const assertion = await sign(
+			this.isLoading = true;
+			const { recoveryKeyId, recoveryCode } = await createRecoveryKey(
+				dfnsStore.state.apiUrl,
+				dfnsStore.state.dfnsHost,
+				dfnsStore.state.appId,
 				dfnsStore.state.rpId,
-				addCredentialInitChallenge.challenge,
-				addCredentialInitChallenge.allowCredentials,
-				defaultTransports
+				dfnsStore.state.dfnsUserToken,
 			);
-
-			//@ts-ignore
-			await dfnsDelegated.auth.createUserCredentialComplete(request, {
-				challengeIdentifier: addCredentialInitChallenge.challengeIdentifier,
-				firstFactor: assertion,
-			});
-
-			this.recoveryKeyId = credentialId;
-			this.recoveryCode = recoveryKey;
-
+			this.recoveryKeyId = recoveryKeyId;
+			this.recoveryCode = recoveryCode;
 			this.step = 2;
-		} catch (err) {
-			console.error(err);
+		} catch (error) {
+			if (isTokenExpiredError(error)) {
+				disconnectWallet();
+				throw new WalletDisconnectedError();
+			}
+			throw error;
 		}
 
 		this.isLoading = false;
 	}
 
-	async recoverAccount() {
-
-		const challenge = await Recover.getInstance(dfnsStore.state.apiUrl, dfnsStore.state.appId).delegated(dfnsStore.state.oauthAccessToken, "4PS4opV4ClePLV28KF0EKwNxRsSc0pq70LvuJ3vJ4oM")
-
-		const attestation = await create(challenge);
-		const dfnsDelegated = getDfnsDelegatedClient(dfnsStore.state.dfnsHost, dfnsStore.state.appId, dfnsStore.state.dfnsUserToken);
-		// const initChallenge = await dfnsDelegated.auth.createUserRecovery({
-		// 	body: {
-		// 		username: "aHR0cHM6Ly9hY2NvdW50cy5nb29nbGUuY29tLTExNzMwMjI0NTA3OTIzMTgwMjcyNi1rZXZpbi50YW5Ac21hcnQtY2hhaW4uZnI=",
-		// 		credentialId: "4PS4opV4ClePLV28KF0EKwNxRsSc0pq70LvuJ3vJ4oM",
-		// 	},
-		// });
-
-		// const assertion = await sign(dfnsStore.state.rpId, initChallenge.challenge, initChallenge.allowCredentials);
-
-		// console.log(assertion)
-
-		// dfnsDelegated.auth.createDelegatedUserRecoveryComplete({
-			
-		// });
+	//download recovery key and recovery code to pdf using jsPDF
+	downloadRecoveryKey() {
+		const doc = new jsPDF();
+		doc.setFontSize(15);
+		doc.text("Recovery Key: ", 10, 10);
+		doc.setFontSize(10);
+		doc.text(this.recoveryKeyId, 10, 20);
+		doc.setFontSize(15);
+		doc.text("Recovery Code:", 10, 30);
+		doc.setFontSize(10);
+		doc.text(this.recoveryCode, 10, 40);
+		doc.save("RecoveryKey.pdf");
 	}
 
 	handleBackClick() {
@@ -178,7 +122,9 @@ export class DfnsRecoverySetup {
 			<dfns-layout closeBtn onClickCloseBtn={() => this.action.emit(CreatePasskeyAction.CLOSE)}>
 				<div slot="topSection">
 					<dfns-typography typo={ITypo.H5_TITLE} color={ITypoColor.PRIMARY} class="custom-class">
-						{langState.values.header.recovery_setup}
+						{this.step === 1 || this.step === 2
+							? langState.values.header.recovery_setup
+							: langState.values.header.recovery_validation_step}
 					</dfns-typography>
 				</div>
 				<div slot="contentSection">
@@ -250,11 +196,22 @@ export class DfnsRecoverySetup {
 												sizing={EButtonSize.SMALL}
 												icon={isMobile ? undefined : iconDownload}
 												iconposition="left"
-												onClick={() => {}}
+												onClick={() => {
+													this.downloadRecoveryKey();
+												}}
 											/>
 										</div>
 									</div>
 								</dfns-alert>
+							</Fragment>
+						)}
+						{this.step === 3 && (
+							<Fragment>
+								<div class="description">
+									<dfns-typography typo={ITypo.TEXTE_SM_REGULAR} color={ITypoColor.SECONDARY}>
+										{langState.values.pages.recovery_setup.description}
+									</dfns-typography>
+								</div>
 							</Fragment>
 						)}
 					</div>
@@ -268,8 +225,8 @@ export class DfnsRecoverySetup {
 								sizing={EButtonSize.MEDIUM}
 								fullwidth
 								onClick={() => {
-									// this.recoverAccount();
-									this.initPasskeyCreation()
+									//this.recoverAccount();
+									this.createRecoveryKey();
 								}}
 							/>
 							<dfns-button
@@ -290,8 +247,31 @@ export class DfnsRecoverySetup {
 								sizing={EButtonSize.MEDIUM}
 								fullwidth
 								iconposition="left"
-								onClick={() => {}}
+								onClick={() => {
+									this.step = 3;
+								}}
 								isloading={this.isLoading}
+							/>
+						</Fragment>
+					)}
+					{this.step === 3 && (
+						<Fragment>
+							<dfns-button
+								content={langState.values.pages.recovery_setup.button_review_kit}
+								variant={EButtonVariant.PRIMARY}
+								sizing={EButtonSize.MEDIUM}
+								fullwidth
+								onClick={() => {
+									this.step = 2;
+								}}
+							/>
+							<dfns-button
+								content={langState.values.pages.recovery_setup.button_backed_kit}
+								variant={EButtonVariant.NEUTRAL}
+								sizing={EButtonSize.MEDIUM}
+								fullwidth
+								iconposition="left"
+								onClick={() => this.handleBackClick()}
 							/>
 						</Fragment>
 					)}

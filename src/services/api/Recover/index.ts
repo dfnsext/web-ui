@@ -25,8 +25,8 @@ export default class Recover extends BaseApiService {
 		try {
 			return await this.postRequest(path, { oAuthToken, credentialId }, { appId: this.appId });
 		} catch (err) {
-			this.onError(err);
-			return Promise.reject(err);
+			return this.onError(err);
+			
 		}
 	}
 }

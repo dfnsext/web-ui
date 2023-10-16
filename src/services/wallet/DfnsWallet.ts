@@ -2,14 +2,15 @@ import { Wallet } from "@dfns/sdk/codegen/datamodel/Wallets";
 import jwt_decode, { JwtPayload } from "jwt-decode";
 import dfnsStore from "../../stores/DfnsStore";
 import router, { RouteType } from "../../stores/RouterStore";
-import { getDfnsDelegatedClient, isDfnsError } from "../../utils/dfns";
-import { isHexPrefixed, loginWithOAuth, msgHexToText, networkMapping, waitForEvent } from "../../utils/helper";
+import { getDfnsDelegatedClient, loginWithOAuth } from "../../utils/dfns";
+import { isHexPrefixed, msgHexToText, networkMapping, waitForEvent } from "../../utils/helper";
 import { EventEmitter } from "../EventEmitter";
 import LocalStorageService, { CACHED_WALLET_PROVIDER, DFNS_ACTIVE_WALLET, DFNS_CREDENTIALS, DFNS_END_USER_TOKEN, OAUTH_ACCESS_TOKEN, WalletProvider } from "../LocalStorageService";
 import { RegisterCompleteResponse } from "../api/Register";
 import IWalletInterface, { WalletEvent } from "./IWalletInterface";
 import { DfnsWalletProvider } from "../provider/DfnsWalletProvider";
 import { BigNumber } from "ethers";
+import { isDfnsError } from "../../utils/errors";
 
 class DfnsWallet implements IWalletInterface {
 	private static ctx: DfnsWallet;
@@ -18,7 +19,6 @@ class DfnsWallet implements IWalletInterface {
 
 	private events: EventEmitter<any> = new EventEmitter();
 	private constructor() {
-		window["DFNSWalletMassi"] = this;
 		this.removeOnRouteChanged = this.onRouteChanged();
 		// this.onStateChanged();
 
@@ -56,6 +56,7 @@ class DfnsWallet implements IWalletInterface {
 				}
 			}
 		} catch (error) {
+			console.log(error, isDfnsError(error), error.httpStatus);
 			if (isDfnsError(error) && error.httpStatus === 401) {
 				const response = await this.createAccount();
 				dfnsStore.setValue("dfnsUserToken", response.userAuthToken);
@@ -73,7 +74,6 @@ class DfnsWallet implements IWalletInterface {
 		this.getDfnsElement().dispatchEvent(new CustomEvent("walletConnected", { detail: wallet.address }));
 		LocalStorageService.getInstance().items[CACHED_WALLET_PROVIDER].set(WalletProvider.DFNS);
 		dfnsStore.setValue("walletService", this);
-
 		return wallet.address;
 	}
 
@@ -123,6 +123,7 @@ class DfnsWallet implements IWalletInterface {
 		LocalStorageService.getInstance().items[DFNS_ACTIVE_WALLET].delete();
 		LocalStorageService.getInstance().items[DFNS_CREDENTIALS].delete();
 		this.events.emit(WalletEvent.DISCONNECTED, null);
+		this.removeOnRouteChanged();
 	}
 
 	public async sendTransaction(to: string, value: string, data: string, txNonce?: number): Promise<string> {
@@ -180,6 +181,36 @@ class DfnsWallet implements IWalletInterface {
 		};
 	}
 
+	public async isConnected() {
+		const dfnsUserToken = LocalStorageService.getInstance().items[DFNS_END_USER_TOKEN].get();
+		let wallet = LocalStorageService.getInstance().items[DFNS_ACTIVE_WALLET].get();
+		const oauthToken = LocalStorageService.getInstance().items[OAUTH_ACCESS_TOKEN].get();
+
+		if (!dfnsUserToken || !oauthToken || !wallet) {
+			return false;
+		}
+
+		const decodedToken = jwt_decode(dfnsUserToken) as JwtPayload;
+
+		const issuedAt = new Date(decodedToken?.iat! * 1000);
+		const expiresAt = new Date(decodedToken?.exp! * 1000);
+		const now = new Date();
+
+		if (issuedAt < now && now < expiresAt) {
+			return true;
+		}
+		return false;
+	}
+
+	public async getProvider(): Promise<any> {
+		return new DfnsWalletProvider(this)
+	}
+
+	public close() {
+		router.close();
+	}
+
+
 	private onRouteChanged() {
 		const callback = (route: RouteType) => {
 			this.events.emit(WalletEvent.ROUTE_CHANGED, route);
@@ -213,31 +244,6 @@ class DfnsWallet implements IWalletInterface {
 		router.close();
 		if (!response) throw new Error("User cancelled connection");
 		return response;
-	}
-
-	public async isConnected() {
-		const dfnsUserToken = LocalStorageService.getInstance().items[DFNS_END_USER_TOKEN].get();
-		let wallet = LocalStorageService.getInstance().items[DFNS_ACTIVE_WALLET].get();
-		const oauthToken = LocalStorageService.getInstance().items[OAUTH_ACCESS_TOKEN].get();
-
-		if (!dfnsUserToken || !oauthToken || !wallet) {
-			return false;
-		}
-
-		const decodedToken = jwt_decode(dfnsUserToken) as JwtPayload;
-
-		const issuedAt = new Date(decodedToken?.iat! * 1000);
-		const expiresAt = new Date(decodedToken?.exp! * 1000);
-		const now = new Date();
-
-		if (issuedAt < now && now < expiresAt) {
-			return true;
-		}
-		return false;
-	}
-
-	public async getProvider(): Promise<any> {
-		return new DfnsWalletProvider(this)
 	}
 
 	private getDfnsElement() {

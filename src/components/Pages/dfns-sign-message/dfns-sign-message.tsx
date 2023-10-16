@@ -3,10 +3,12 @@ import { Component, Event, EventEmitter, JSX, Prop, State, h } from "@stencil/co
 import dfnsStore from "../../../stores/DfnsStore";
 import langState from "../../../stores/LanguageStore";
 
-import { signMessage } from "../../../utils/helper";
+import { signMessage } from "../../../utils/dfns";
 import { ITypo, ITypoColor } from "../../../common/enums/typography-enums";
 import { EButtonSize, EButtonVariant } from "../../../common/enums/buttons-enums";
 import { EAlertVariant } from "../../../common/enums/alerts-enums";
+import { WalletDisconnectedError, isTokenExpiredError } from "../../../utils/errors";
+import { disconnectWallet } from "../../../utils/helper";
 
 @Component({
 	tag: "dfns-sign-message",
@@ -25,6 +27,7 @@ export class DfnsSignMessage {
 		try {
 			this.isLoading = true;
 			const signedMessage = await signMessage(
+				dfnsStore.state.apiUrl,
 				dfnsStore.state.dfnsHost,
 				dfnsStore.state.appId,
 				dfnsStore.state.rpId,
@@ -50,6 +53,12 @@ export class DfnsSignMessage {
 	private handleError(error: any) {
 		this.isLoading = false;
 		this.hasErrors = true;
+
+		if (isTokenExpiredError(error)) {
+			disconnectWallet();
+			this.signedMessage.emit(null);
+			throw new WalletDisconnectedError();
+		}
 
 		if (typeof error === "string") {
 			this.errorMessage = error;

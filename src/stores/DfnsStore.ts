@@ -43,6 +43,8 @@ interface DfnsState {
 	colors: IColors;
 	showWalletValidation: boolean;
 	disableLogoutUI: boolean;
+	activateRecovery: boolean;
+	showRecoverySetupAtWalletCreation: boolean;
 }
 
 const dfnsStoreEvent = new EventEmitter<DfnsState>();
@@ -76,6 +78,8 @@ const { state } = createStore<DfnsState>({
 	colors: null,
 	showWalletValidation: false,
 	disableLogoutUI: false,
+	activateRecovery: false,
+	showRecoverySetupAtWalletCreation: false,
 });
 
 function setValue<T extends keyof DfnsState>(key: T, value: DfnsState[T]) {

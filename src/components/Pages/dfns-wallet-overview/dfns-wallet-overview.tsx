@@ -2,18 +2,22 @@ import { Component, Event, EventEmitter, JSX, State, h } from "@stencil/core";
 import dfnsStore from "../../../stores/DfnsStore";
 import langState from "../../../stores/LanguageStore";
 import router, { RouteType } from "../../../stores/RouterStore";
-import { getDfnsDelegatedClient } from "../../../utils/dfns";
 
-import { CopyClipboard } from "../../Elements/CopyClipboard";
-import LocalStorageService, { CACHED_WALLET_PROVIDER } from "../../../services/LocalStorageService";
-import { fetchAssets } from "../../../utils/helper";
-import { ITokenInfo } from "../../../common/interfaces/ITokenInfo";
+import { CredentialKind } from "@dfns/sdk/codegen/datamodel/Auth";
+import { formatUnits } from "ethers/lib/utils";
 import { WalletOverviewAction } from "../../../common/enums/actions-enum";
+import { EAlertVariant } from "../../../common/enums/alerts-enums";
 import { EButtonSize, EButtonVariant } from "../../../common/enums/buttons-enums";
 import { ITypo, ITypoColor } from "../../../common/enums/typography-enums";
-import { EAlertVariant } from "../../../common/enums/alerts-enums";
 import { formatWalletAddress } from "../../../common/helpers/formatWalletAddress";
-import { CredentialKind } from "@dfns/sdk/codegen/datamodel/Auth";
+import { ITokenInfo } from "../../../common/interfaces/ITokenInfo";
+import LocalStorageService, { CACHED_WALLET_PROVIDER } from "../../../services/LocalStorageService";
+import { convertCryptoToFiat } from "../../../utils/binance";
+import { fetchAssets, fetchCredentials } from "../../../utils/dfns";
+import { disconnectWallet, networkMapping } from "../../../utils/helper";
+import { getTokenIcon } from "../../../utils/tokensIcons";
+import { CopyClipboard } from "../../Elements/CopyClipboard";
+import { WalletDisconnectedError, isTokenExpiredError } from "../../../utils/errors";
 
 @Component({
 	tag: "dfns-wallet-overview",
@@ -21,41 +25,61 @@ import { CredentialKind } from "@dfns/sdk/codegen/datamodel/Auth";
 	shadow: true,
 })
 export class DfnsWalletOverview {
-	@State() isLoading: boolean = false;
+	@State() isLoading: boolean = true;
 	@State() tokenList: ITokenInfo[] = [];
 
 	@Event() action: EventEmitter<WalletOverviewAction>;
 
-	async componentWillLoad() {
-		this.tokenList = [];
-		this.isLoading = true;
-		this.fetchPasskeys();
-	}
-
 	async componentDidLoad() {
-		await this.getAssets();
-		this.isLoading = false;
-	}
-
-	async fetchPasskeys() {
 		try {
-			const dfnsDelegated = getDfnsDelegatedClient(dfnsStore.state.dfnsHost, dfnsStore.state.appId, dfnsStore.state.dfnsUserToken);
-			const credentials = (await dfnsDelegated.auth.listUserCredentials()).items.filter((passkey) => passkey.kind !== CredentialKind.RecoveryKey);
-			dfnsStore.setValue("credentials", credentials);
+			await this.getAssets();
+			await this.fetchPasskeys();
+			this.isLoading = false;
 		} catch (error) {
-			console.error(error);
+			this.isLoading = false;
+			if (isTokenExpiredError(error)) {
+				disconnectWallet();
+				throw new WalletDisconnectedError();
+			}
+			throw error;
 		}
 	}
 
+	async fetchPasskeys() {
+		const credentials = (
+			await fetchCredentials(dfnsStore.state.apiUrl, dfnsStore.state.dfnsHost, dfnsStore.state.appId, dfnsStore.state.dfnsUserToken)
+		).items.filter((passkey) => passkey.kind !== CredentialKind.RecoveryKey);
+		dfnsStore.setValue("credentials", credentials);
+	}
+
 	async getAssets() {
-		this.tokenList = (await fetchAssets(
+		const assets = await fetchAssets(
+			dfnsStore.state.apiUrl,
 			dfnsStore.state.dfnsHost,
 			dfnsStore.state.appId,
 			dfnsStore.state.dfnsUserToken,
 			dfnsStore.state.wallet ? dfnsStore.state.wallet.id : null,
-			dfnsStore.state.lang,
-			dfnsStore.state.network,
-		)) as ITokenInfo[];
+		);
+
+		const tokenList: ITokenInfo[] = [];
+
+		dfnsStore.setValue("assets", assets);
+		for (let i = 0; i < assets.length; i++) {
+			const asset = assets[i];
+			let symbol = i == 0 ? networkMapping[dfnsStore.state.network].nativeCurrency.symbol : asset.symbol;
+			const balance = formatUnits(asset.balance, asset.decimals);
+			const token = await getTokenIcon(asset.contract, dfnsStore.state.network.toLowerCase());
+			tokenList.push({
+				balance: balance,
+				symbol,
+				icon: token,
+				fiatValue: await convertCryptoToFiat(balance, dfnsStore.state.lang, symbol),
+				contract: asset.contract,
+				decimals: asset.decimals,
+			});
+		}
+
+		this.tokenList = tokenList;
 	}
 
 	render() {
@@ -228,6 +252,7 @@ export class DfnsWalletOverview {
 							{this.isLoading && <dfns-loader size="large" />}
 							<div class="tab-container">
 								{!this.isLoading &&
+									this.tokenList &&
 									this.tokenList.length !== 0 &&
 									this.tokenList.map((asset) => {
 										return (

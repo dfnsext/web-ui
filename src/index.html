@@ -16,7 +16,7 @@
 			apiUrl: "http://localhost:3000",
 			rpId: "localhost",
 			appId: "ap-5i7r1-sndgk-9gc9isroh4h9epk4",
-			lang: "fr",
+			lang: "en",
 			showWalletValidation: true,
 			// userCreationAuthenticatorAttachment: "platform",
 			network: "PolygonMumbai",
@@ -38,6 +38,8 @@
 			autoConnect: true,
 			walletConnectProjectId: "805249de63491bccea9d8bab3468c34f",
 			disableLogoutUI: true,
+			activateRecovery: true,
+			showRecoverySetupAtWalletCreation: true,
 		};
 
 		const dfnsSDK = new DfnsSDK(dfnsSdkOptions);
@@ -52,10 +54,10 @@
 		// });
 		//dfnsSDK.showReceiveTokens();
 		//dfnsSDK.showRecoverySetup();
-		//dfnsSDK.showRecoverAccount();
+		dfnsSDK.showRecoverAccount();
 		//dfnsSDK.transferTokens();
-		//dfnsSDK.connect();
+		// dfnsSDK.connect();
 		// dfnsSDK.showCreatePasskey();
-		dfnsSDK.showWalletOverview();
+		// dfnsSDK.showWalletOverview();
 	</script>
 </html>
