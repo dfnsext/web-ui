@@ -26,7 +26,7 @@ export default class WalletConnectWallet implements IWalletInterface {
 	private ethersProvider: ethers.providers.Web3Provider | null = null;
 
 	private _web3WalletData: IWallet | null = null;
-	private readonly event = new EventEmitter();
+	private readonly events = new EventEmitter();
 	private web3modal: Web3Modal;
 
 	private constructor(
@@ -99,14 +99,14 @@ export default class WalletConnectWallet implements IWalletInterface {
 
 		this.ethersProvider = new ethers.providers.Web3Provider(provider);
 
-		// this.initEvents();
+		this.initEvents();
 		await this.updateWalletData();
 	}
 
 	public onChange(event: WalletEvent, callback: (web3WalletData: IWallet) => void) {
-		this.event.on(event, callback);
+		this.events.on(event, callback);
 		return () => {
-			this.event.off(event, callback);
+			this.events.off(event, callback);
 		};
 	}
 
@@ -227,7 +227,7 @@ export default class WalletConnectWallet implements IWalletInterface {
 			provider: this.ethersProvider,
 		};
 		this._web3WalletData = web3Event;
-		this.event.emit("web3modal-change", web3Event);
+		this.events.emit("web3modal-change", web3Event);
 	}
 
 	public async getProvider() {
@@ -240,26 +240,41 @@ export default class WalletConnectWallet implements IWalletInterface {
 		this.web3modal.closeModal();
 	}
 
-	public recoverAccount(apiUrl: string, dfnsHost: string, appId: string, oauthAccessToken: string, challenge: UserRecoveryChallenge, recoveryCode: string, recoveryCredId: string) {
+	public recoverAccount(
+		apiUrl: string,
+		dfnsHost: string,
+		appId: string,
+		oauthAccessToken: string,
+		challenge: UserRecoveryChallenge,
+		recoveryCode: string,
+		recoveryCredId: string,
+	) {
 		throw new Error("Method not implemented.");
 	}
 
-	// private initEvents(): void {
-	// 	this.removeEvents();
-	// 	const anyChanged = () => {
-	// 		console.log("anyChanged");
-	// 		this.updateWalletData();
-	// 	};
+	private initEvents(): void {
+		this.removeEvents();
+		const anyChanged = async () => {
+			this.updateWalletData();
+		};
 
-	// 	this.ethersProvider?.on("accountsChanged", anyChanged);
-	// 	this.ethersProvider?.on("chainChanged", anyChanged);
-	// 	this.ethersProvider?.on("connect", anyChanged);
-	// 	this.ethersProvider?.on("disconnect", anyChanged);
+		this.ethersProvider?.on("accountsChanged", async () => {
+			await anyChanged();
+			this.events.emit(WalletEvent.CONNECTED, this._web3WalletData.userAddress);
+		});
+		this.ethersProvider?.on("chainChanged", anyChanged);
+		this.ethersProvider?.on("connect", async () => {
+			await anyChanged();
+			this.events.emit(WalletEvent.CONNECTED, this._web3WalletData.userAddress);
+		});
+		this.ethersProvider?.on("disconnect", async () => {
+			this.events.emit(WalletEvent.DISCONNECTED, null);
+		});
 
-	// 	this.removeEvents = () => {
-	// 		if (this.ethersProvider?.removeAllListeners) {
-	// 			this.ethersProvider?.removeAllListeners();
-	// 		}
-	// 	};
-	// }
+		this.removeEvents = () => {
+			if (this.ethersProvider?.removeAllListeners) {
+				this.ethersProvider?.removeAllListeners();
+			}
+		};
+	}
 }

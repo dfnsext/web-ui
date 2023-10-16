@@ -28,7 +28,6 @@ class DfnsWallet implements IWalletInterface {
 	private events: EventEmitter<any> = new EventEmitter();
 	private constructor() {
 		this.removeOnRouteChanged = this.onRouteChanged();
-		// this.onStateChanged();
 
 		DfnsWallet.ctx = this;
 	}
@@ -160,7 +159,6 @@ class DfnsWallet implements IWalletInterface {
 		LocalStorageService.getInstance().items[DFNS_ACTIVE_WALLET].delete();
 		LocalStorageService.getInstance().items[DFNS_CREDENTIALS].delete();
 		this.events.emit(WalletEvent.DISCONNECTED, null);
-		this.removeOnRouteChanged();
 	}
 
 	public async sendTransaction(to: string, value: string, data: string, txNonce?: number): Promise<string> {
