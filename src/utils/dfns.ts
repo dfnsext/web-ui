@@ -1,6 +1,6 @@
 import { Buffer } from "buffer";
 import jwt_decode, { JwtPayload } from "jwt-decode";
-import { DfnsDelegatedApiClient, Fido2Attestation, UserActionChallengeResponse, UserRegistrationChallenge } from "@dfns/sdk";
+import { DfnsApiClient, DfnsDelegatedApiClient, Fido2Attestation, UserActionChallengeResponse, UserRegistrationChallenge } from "@dfns/sdk";
 import {
 	BlockchainNetwork,
 	SignatureKind,
@@ -39,6 +39,7 @@ import {
 	PublicKeyOptions,
 	RecoverUserInput,
 	RegistrationConfirmationFido2,
+	UserRecoveryChallenge,
 } from "@dfns/sdk/codegen/datamodel/Auth";
 import { resolve } from "path";
 import { arrayBufferToBase64UrlString, base64url } from "./base64url";
@@ -46,7 +47,6 @@ import Recover from "../services/api/Recover";
 
 export function isDfnsHttpError(err: unknown): err is DfnsHttpError {
 	if (hasErrorProperty(err)) {
-		console.log(err);
 		if (typeof err.error === "object") {
 			if (
 				"name" in err.error &&
@@ -58,7 +58,6 @@ export function isDfnsHttpError(err: unknown): err is DfnsHttpError {
 			) {
 				return true;
 			}
-			console.log(err);
 			if ("id" in err.error) {
 				return true;
 			}
@@ -624,16 +623,32 @@ export function createRecoveryKey(apiUrl: string, dfnsHost: string, appId: strin
 	});
 }
 
-export async function recoverAccount(apiUrl: string, dfnsHost: string, appId: string, dfnsUserToken: string, oauthAccessToken: string, recoveryCode: string, recoveryCredId: string) {
+export async function getRecoverAccountChallenge(
+	apiUrl: string,
+	appId: string,
+	oauthAccessToken: string,
+	recoveryCredId: string,
+) {
 	try {
-		const username = getDfnsUsernameFromUserToken(dfnsUserToken);
 
-		
+		const challenge = await Recover.getInstance(apiUrl, appId).delegated(oauthAccessToken, recoveryCredId);
 
-		const challenge = await Recover.getInstance(apiUrl, appId).delegated(
-			oauthAccessToken,
-			recoveryCredId,
-		);
+		return challenge;
+	} catch (err) {
+		throw isDfnsError(err) ? new DfnsError(err.httpStatus, err.context) : err;
+	}
+}
+
+export async function recoverAccount(
+	apiUrl: string,
+	dfnsHost: string,
+	appId: string,
+	oauthAccessToken: string,
+	challenge: UserRecoveryChallenge,
+	recoveryCode: string,
+	recoveryCredId: string,
+) {
+	try {
 
 		const encryptedPrivateKey = challenge.allowedRecoveryCredentials[0].encryptedRecoveryKey;
 
@@ -663,7 +678,7 @@ export async function recoverAccount(apiUrl: string, dfnsHost: string, appId: st
 			encryptedPrivateKey,
 			JSON.stringify(recoveryClientData),
 			recoveryCode,
-			username,
+			challenge.user.name,
 			"base64url",
 		);
 
@@ -694,7 +709,6 @@ export async function recoverAccount(apiUrl: string, dfnsHost: string, appId: st
 		throw isDfnsError(err) ? new DfnsError(err.httpStatus, err.context) : err;
 	}
 }
-
 
 export function handleError(apiUrl: string, appId: string, error: unknown): Promise<string> {
 	return new Promise((resolve, reject) => {

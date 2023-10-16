@@ -7,9 +7,9 @@
 
 ## Events
 
-| Event    | Description | Type                                                                 |
-| -------- | ----------- | -------------------------------------------------------------------- |
-| `action` |             | `CustomEvent<CreatePasskeyAction.BACK \| CreatePasskeyAction.CLOSE>` |
+| Event             | Description | Type                  |
+| ----------------- | ----------- | --------------------- |
+| `walletConnected` |             | `CustomEvent<string>` |
 
 
 ## Dependencies

@@ -3,31 +3,39 @@ import { EButtonSize, EButtonVariant } from "../../../common/enums/buttons-enums
 import { ITypo, ITypoColor } from "../../../common/enums/typography-enums";
 import dfnsStore from "../../../stores/DfnsStore";
 import langState from "../../../stores/LanguageStore";
-import router from "../../../stores/RouterStore";
+import router, { RouteType } from "../../../stores/RouterStore";
 import { CopyClipboard } from "../../Elements/CopyClipboard";
 
 import GoogleStore from "../../../stores/GoogleStore";
 import DfnsWallet from "../../../services/wallet/DfnsWallet";
+import { getRecoverAccountChallenge, recoverAccount } from "../../../utils/dfns";
+import { WalletDisconnectedError, isTokenExpiredError } from "../../../utils/errors";
+import { disconnectWallet } from "../../../utils/helper";
+import { UserRecoveryChallenge } from "@dfns/sdk/codegen/datamodel/Auth";
 @Component({
 	tag: "dfns-recover-account",
 	styleUrl: "dfns-recover-account.scss",
 	shadow: true,
 })
 export class DfnsRecoverAccount {
-	private googleButton: HTMLDivElement;
+	private googleButtonContainer: HTMLDivElement;
 	@State() isLoading: boolean = false;
 	@State() step = 1;
 	@State() oauthAccessToken: string;
 	@Event() walletConnected: EventEmitter<string>;
+	@State() recoveryKeyId: string;
+	@State() recoveryCode: string;
+	@State() recoveryChallenge: UserRecoveryChallenge;
 
 	async componentDidRender() {
-		dfnsStore.state.googleEnabled && this.step === 1 &&
+		dfnsStore.state.googleEnabled &&
+			this.step === 1 &&
 			GoogleStore.deferred.promise.then((google) => {
 				google.accounts.id.initialize({
 					client_id: dfnsStore.state.googleClientId,
 					callback: this.handleCredentialResponse.bind(this),
 				});
-				google.accounts.id.renderButton(this.googleButton, {
+				google.accounts.id.renderButton(this.googleButtonContainer, {
 					locale: dfnsStore.state.lang,
 					size: "large",
 					theme: "outline",
@@ -38,12 +46,50 @@ export class DfnsRecoverAccount {
 
 	async handleCredentialResponse(response) {
 		this.oauthAccessToken = response.credential;
+
 		this.step = 2;
-		// this.googleButton.remove();
-		
+		// Remove Google Button
+		this.googleButtonContainer.getElementsByTagName("iframe")[0]?.parentElement.remove();
 	}
 
-	async recoverAccount() {}
+	async getRecoverAccountChallenge() {
+		try {
+			this.isLoading = true;
+			const challenge = await getRecoverAccountChallenge(
+				dfnsStore.state.apiUrl,
+				dfnsStore.state.appId,
+				this.oauthAccessToken,
+				this.recoveryKeyId,
+			);
+			this.recoveryChallenge = challenge;
+			this.isLoading = false;
+			this.step = 3;
+		} catch (error) {
+			this.isLoading = false;
+			console.error(error);
+		}
+	}
+
+	async recoverAccount() {
+		try {
+			this.isLoading = true;
+			const walletInstance = DfnsWallet.getInstance();
+			await walletInstance.recoverAccount(
+				dfnsStore.state.apiUrl,
+				dfnsStore.state.dfnsHost,
+				dfnsStore.state.appId,
+				this.oauthAccessToken,
+				this.recoveryChallenge,
+				this.recoveryCode,
+				this.recoveryKeyId,
+			);
+			this.isLoading = false;
+			this.step = 4;
+		} catch (error) {
+			this.isLoading = false;
+			console.error;
+		}
+	}
 
 	render() {
 		const iconCopy: JSX.Element = (
@@ -76,115 +122,117 @@ export class DfnsRecoverAccount {
 					</dfns-typography>
 				</div>
 				<div slot="contentSection">
-					<div class="content-container">
-						{this.step === 1 && (
-							<Fragment>
+					{this.step === 1 && (
+						<div class="content-container">
+							<div class="title">
+								<dfns-typography typo={ITypo.TEXTE_SM_SEMIBOLD} color={ITypoColor.PRIMARY}>
+									{langState.values.pages.recover_account.title}
+								</dfns-typography>
+							</div>
+							{dfnsStore.state.googleEnabled && <div id="google" ref={(el) => (this.googleButtonContainer = el)}></div>}
+							<div class="container">
+								<dfns-button
+									content={langState.values.buttons.back}
+									variant={EButtonVariant.NEUTRAL}
+									sizing={EButtonSize.MEDIUM}
+									fullwidth
+									iconposition="left"
+									onClick={() => router.goBack()}
+								/>
+							</div>
+						</div>
+					)}
+
+					{this.step === 2 && (
+						<div class="content-container">
+							<div class="container">
 								<div class="title">
 									<dfns-typography typo={ITypo.TEXTE_SM_SEMIBOLD} color={ITypoColor.PRIMARY}>
-										{langState.values.pages.recover_account.title}
+										{langState.values.pages.recover_account.title_step_2}
 									</dfns-typography>
 								</div>
-								{dfnsStore.state.googleEnabled && <div ref={(el) => (this.googleButton = el)}></div>}
-								<div class="container">
-									<dfns-button
-										content={langState.values.buttons.back}
-										variant={EButtonVariant.NEUTRAL}
-										sizing={EButtonSize.MEDIUM}
-										fullwidth
-										iconposition="left"
-										onClick={() => router.goBack()}
-									/>
+								<div class="description">
+									<dfns-typography typo={ITypo.TEXTE_SM_REGULAR} color={ITypoColor.SECONDARY}>
+										{langState.values.pages.recover_account.description_step_2}
+									</dfns-typography>
 								</div>
-							</Fragment>
-						)}
-
-						{this.step === 2 && (
-							<Fragment>
-								<div class="container">
-									<div class="title">
-										<dfns-typography typo={ITypo.TEXTE_SM_SEMIBOLD} color={ITypoColor.PRIMARY}>
-											{langState.values.pages.recover_account.title_step_2}
-										</dfns-typography>
+							</div>
+							<div class="container-textfields">
+								<div class="wrapper-input">
+									<div class="input-field">
+										<dfns-input-field
+											placeholder={"D1-XXXXXX-XXXXXX-XXXXXX-XXXXXX-XXXXXX-XXXXXX"}
+											onChange={(value) => {
+												this.recoveryCode = value;
+											}}
+											value={this.recoveryCode}
+											isPasswordVisible={false}>
+											<dfns-typography typo={ITypo.TEXTE_SM_MEDIUM} color={ITypoColor.PRIMARY}>
+												{langState.values.pages.recovery_setup.recovery_code}
+											</dfns-typography>
+										</dfns-input-field>
 									</div>
-									<div class="description">
-										<dfns-typography typo={ITypo.TEXTE_SM_REGULAR} color={ITypoColor.SECONDARY}>
-											{langState.values.pages.recover_account.description_step_2}
-										</dfns-typography>
-									</div>
-								</div>
-								<div class="container-textfields">
-									<div class="wrapper-input">
-										<div class="input-field">
-											<dfns-input-field
-												placeholder={"D1-XXXXXX-XXXXXX-XXXXXX-XXXXXX-XXXXXX-XXXXXX"}
-												onChange={(value) => {}}
-												isPasswordVisible={false}>
-												<dfns-typography typo={ITypo.TEXTE_SM_MEDIUM} color={ITypoColor.PRIMARY}>
-													{langState.values.pages.recovery_setup.recovery_code}
-												</dfns-typography>
-											</dfns-input-field>
-										</div>
-										<div class="copy-icon">
-											<CopyClipboard value={""} openToaster={true}>
-												{iconCopy}
-											</CopyClipboard>
-										</div>
-									</div>
-									<div class="wrapper-input">
-										<div class="input-field">
-											<dfns-input-field
-												placeholder={"234-738-293"}
-												onChange={(value) => {}}
-												errors={[]}
-												isPasswordVisible={false}>
-												<dfns-typography typo={ITypo.TEXTE_SM_MEDIUM} color={ITypoColor.PRIMARY}>
-													{langState.values.pages.recovery_setup.recovery_key}
-												</dfns-typography>
-											</dfns-input-field>
-										</div>
-										<div class="copy-icon">
-											<CopyClipboard value={""} openToaster={true}>
-												{iconCopy}
-											</CopyClipboard>
-										</div>
+									<div class="copy-icon">
+										<CopyClipboard value={""} openToaster={true}>
+											{iconCopy}
+										</CopyClipboard>
 									</div>
 								</div>
-							</Fragment>
-						)}
-						{this.step === 3 && (
-							<Fragment>
-								<div class="container">
-									<div class="title">
-										<dfns-typography typo={ITypo.TEXTE_SM_SEMIBOLD} color={ITypoColor.PRIMARY}>
-											{langState.values.pages.recover_account.title_step_3}
-										</dfns-typography>
+								<div class="wrapper-input">
+									<div class="input-field">
+										<dfns-input-field
+											placeholder={"234-738-293"}
+											onChange={(value) => (this.recoveryKeyId = value)}
+											value={this.recoveryKeyId}
+											errors={[]}
+											isPasswordVisible={false}>
+											<dfns-typography typo={ITypo.TEXTE_SM_MEDIUM} color={ITypoColor.PRIMARY}>
+												{langState.values.pages.recovery_setup.recovery_key}
+											</dfns-typography>
+										</dfns-input-field>
 									</div>
-									<div class="description">
-										<dfns-typography typo={ITypo.TEXTE_SM_REGULAR} color={ITypoColor.SECONDARY}>
-											{langState.values.pages.recover_account.description_step_3}
-										</dfns-typography>
-									</div>
-								</div>
-							</Fragment>
-						)}
-						{this.step === 4 && (
-							<Fragment>
-								<div class="container-confirmation">
-									{confirmationImgSrc}
-									<div class="title">
-										<dfns-typography typo={ITypo.H6_TITLE} color={ITypoColor.PRIMARY}>
-											{langState.values.pages.recover_account.title_step_4}
-										</dfns-typography>
-									</div>
-									<div class="content">
-										<dfns-typography typo={ITypo.TEXTE_MD_REGULAR} color={ITypoColor.SECONDARY}>
-											{langState.values.pages.recover_account.description_step_4}
-										</dfns-typography>
+									<div class="copy-icon">
+										<CopyClipboard value={""} openToaster={true}>
+											{iconCopy}
+										</CopyClipboard>
 									</div>
 								</div>
-							</Fragment>
-						)}
-					</div>
+							</div>
+						</div>
+					)}
+					{this.step === 3 && (
+						<div class="content-container">
+							<div class="container">
+								<div class="title">
+									<dfns-typography typo={ITypo.TEXTE_SM_SEMIBOLD} color={ITypoColor.PRIMARY}>
+										{langState.values.pages.recover_account.title_step_3}
+									</dfns-typography>
+								</div>
+								<div class="description">
+									<dfns-typography typo={ITypo.TEXTE_SM_REGULAR} color={ITypoColor.SECONDARY}>
+										{langState.values.pages.recover_account.description_step_3}
+									</dfns-typography>
+								</div>
+							</div>
+						</div>
+					)}
+					{this.step === 4 && (
+						<div class="content-container">
+							<div class="container-confirmation">
+								{confirmationImgSrc}
+								<div class="title">
+									<dfns-typography typo={ITypo.H6_TITLE} color={ITypoColor.PRIMARY}>
+										{langState.values.pages.recover_account.title_step_4}
+									</dfns-typography>
+								</div>
+								<div class="content">
+									<dfns-typography typo={ITypo.TEXTE_MD_REGULAR} color={ITypoColor.SECONDARY}>
+										{langState.values.pages.recover_account.description_step_4}
+									</dfns-typography>
+								</div>
+							</div>
+						</div>
+					)}
 				</div>
 				<div slot="bottomSection">
 					{this.step === 2 && (
@@ -194,7 +242,10 @@ export class DfnsRecoverAccount {
 								variant={EButtonVariant.PRIMARY}
 								sizing={EButtonSize.MEDIUM}
 								fullwidth
-								onClick={() => {}}
+								isloading={this.isLoading}
+								onClick={() => {
+									this.getRecoverAccountChallenge();
+								}}
 							/>
 							<dfns-button
 								content={langState.values.buttons.back}
@@ -202,7 +253,9 @@ export class DfnsRecoverAccount {
 								sizing={EButtonSize.MEDIUM}
 								fullwidth
 								iconposition="left"
-								onClick={() => router.goBack()}
+								onClick={() => {
+									this.step = 1;
+								}}
 							/>
 						</Fragment>
 					)}
@@ -213,7 +266,10 @@ export class DfnsRecoverAccount {
 								variant={EButtonVariant.PRIMARY}
 								sizing={EButtonSize.MEDIUM}
 								fullwidth
-								onClick={() => {}}
+								isloading={this.isLoading}
+								onClick={() => {
+									this.recoverAccount();
+								}}
 							/>
 							<dfns-button
 								content={langState.values.buttons.back}
@@ -221,18 +277,30 @@ export class DfnsRecoverAccount {
 								sizing={EButtonSize.MEDIUM}
 								fullwidth
 								iconposition="left"
-								onClick={() => router.goBack()}
+								onClick={() => {
+									this.step = 2;
+								}}
 							/>
 						</Fragment>
 					)}
 					{this.step === 4 && (
 						<Fragment>
 							<dfns-button
-								content={langState.values.buttons.next}
+								content={
+									dfnsStore.state.showRecoverySetupAfterRecoverAccount
+										? langState.values.buttons.next
+										: langState.values.buttons.done
+								}
 								variant={EButtonVariant.PRIMARY}
 								sizing={EButtonSize.MEDIUM}
 								fullwidth
-								onClick={() => {}}
+								onClick={() => {
+									if (!dfnsStore.state.showRecoverySetupAfterRecoverAccount) {
+										router.close();
+										return;
+									}
+									router.navigate(RouteType.RECOVERY_SETUP);
+								}}
 							/>
 						</Fragment>
 					)}

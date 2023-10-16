@@ -48,7 +48,7 @@ export class DfnsWalletOverview {
 	async fetchPasskeys() {
 		const credentials = (
 			await fetchCredentials(dfnsStore.state.apiUrl, dfnsStore.state.dfnsHost, dfnsStore.state.appId, dfnsStore.state.dfnsUserToken)
-		).items.filter((passkey) => passkey.kind !== CredentialKind.RecoveryKey);
+		).items;
 		dfnsStore.setValue("credentials", credentials);
 	}
 
@@ -282,7 +282,7 @@ export class DfnsWalletOverview {
 									})}
 							</div>
 
-							{dfnsStore.state.credentials.length < 2 && (
+							{dfnsStore.state.credentials.filter((passkey) => passkey.kind !== CredentialKind.RecoveryKey).length < 2 && (
 								<dfns-alert variant={EAlertVariant.INFO} hasTitle>
 									<div slot="title">{langState.values.pages.wallet_overview.title_alert}</div>
 									<div slot="content">

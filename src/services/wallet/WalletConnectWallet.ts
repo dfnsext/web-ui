@@ -9,6 +9,7 @@ import { networkInfo } from "../../common/constant";
 import { EventEmitter } from "../EventEmitter";
 import IWalletInterface, { WalletEvent } from "./IWalletInterface";
 import { networkMapping } from "../../utils/helper";
+import { UserRecoveryChallenge } from "@dfns/sdk/codegen/datamodel/Auth";
 
 export interface IWallet {
 	userAddress: string | null;
@@ -237,6 +238,10 @@ export default class WalletConnectWallet implements IWalletInterface {
 
 	public close(): void {
 		this.web3modal.closeModal();
+	}
+
+	public recoverAccount(apiUrl: string, dfnsHost: string, appId: string, oauthAccessToken: string, challenge: UserRecoveryChallenge, recoveryCode: string, recoveryCredId: string) {
+		throw new Error("Method not implemented.");
 	}
 
 	// private initEvents(): void {

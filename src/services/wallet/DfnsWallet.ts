@@ -2,20 +2,28 @@ import { Wallet } from "@dfns/sdk/codegen/datamodel/Wallets";
 import jwt_decode, { JwtPayload } from "jwt-decode";
 import dfnsStore from "../../stores/DfnsStore";
 import router, { RouteType } from "../../stores/RouterStore";
-import { getDfnsDelegatedClient, loginWithOAuth } from "../../utils/dfns";
+import { getDfnsDelegatedClient, loginWithOAuth, recoverAccount } from "../../utils/dfns";
 import { isHexPrefixed, msgHexToText, networkMapping, waitForEvent } from "../../utils/helper";
 import { EventEmitter } from "../EventEmitter";
-import LocalStorageService, { CACHED_WALLET_PROVIDER, DFNS_ACTIVE_WALLET, DFNS_CREDENTIALS, DFNS_END_USER_TOKEN, OAUTH_ACCESS_TOKEN, WalletProvider } from "../LocalStorageService";
+import LocalStorageService, {
+	CACHED_WALLET_PROVIDER,
+	DFNS_ACTIVE_WALLET,
+	DFNS_CREDENTIALS,
+	DFNS_END_USER_TOKEN,
+	OAUTH_ACCESS_TOKEN,
+	WalletProvider,
+} from "../LocalStorageService";
 import { RegisterCompleteResponse } from "../api/Register";
 import IWalletInterface, { WalletEvent } from "./IWalletInterface";
 import { DfnsWalletProvider } from "../provider/DfnsWalletProvider";
 import { BigNumber } from "ethers";
 import { isDfnsError } from "../../utils/errors";
+import { UserRecoveryChallenge } from "@dfns/sdk/codegen/datamodel/Auth";
 
 class DfnsWallet implements IWalletInterface {
 	private static ctx: DfnsWallet;
 
-	private removeOnRouteChanged = () => { };
+	private removeOnRouteChanged = () => {};
 
 	private events: EventEmitter<any> = new EventEmitter();
 	private constructor() {
@@ -56,7 +64,7 @@ class DfnsWallet implements IWalletInterface {
 				}
 			}
 		} catch (error) {
-			console.log(error, isDfnsError(error), error.httpStatus);
+
 			if (isDfnsError(error) && error.httpStatus === 401) {
 				const response = await this.createAccount();
 				dfnsStore.setValue("dfnsUserToken", response.userAuthToken);
@@ -77,11 +85,40 @@ class DfnsWallet implements IWalletInterface {
 		return wallet.address;
 	}
 
-	public async signMessage(message: string): Promise<string> {
+	public async recoverAccount(
+		apiUrl: string,
+		dfnsHost: string,
+		appId: string,
+		oauthAccessToken: string,
+		challenge: UserRecoveryChallenge,
+		recoveryCode: string,
+		recoveryCredId: string,
+	) {
+		const userAuthToken = await recoverAccount(apiUrl, dfnsHost, appId, oauthAccessToken, challenge, recoveryCode, recoveryCredId);
+		dfnsStore.setValue("oauthAccessToken", oauthAccessToken);
+		dfnsStore.setValue("dfnsUserToken", userAuthToken);
+		const dfnsDelegated = getDfnsDelegatedClient(dfnsStore.state.dfnsHost, dfnsStore.state.appId, userAuthToken);
+		const wallets = await dfnsDelegated.wallets.listWallets({});
+		let wallet: Wallet | null = null;
+		wallet = wallets.items[0];
+		if (!wallet) {
+			wallet = await this.validateWallet();
+			if (dfnsStore.state.showWalletValidation) {
+				wallet = await this.waitForWalletValidation();
+			}
+		}
+		dfnsStore.setValue("wallet", wallet);
+		this.events.emit(WalletEvent.CONNECTED, dfnsStore.state.wallet.address);
+		this.getDfnsElement().dispatchEvent(new CustomEvent("walletConnected", { detail: wallet.address }));
+		LocalStorageService.getInstance().items[CACHED_WALLET_PROVIDER].set(WalletProvider.DFNS);
+		dfnsStore.setValue("walletService", this);
+		return wallet.address;
+	}
 
-		const sanitizedMesssage =  isHexPrefixed(message) ? msgHexToText(message) : message
+	public async signMessage(message: string): Promise<string> {
+		const sanitizedMesssage = isHexPrefixed(message) ? msgHexToText(message) : message;
 		router.navigate(RouteType.SIGN_MESSAGE);
-		
+
 		this.getDfnsElement().setAttribute("message-to-sign", sanitizedMesssage);
 		const response = await waitForEvent<string>(this.getDfnsElement(), "signedMessage");
 		router.close();
@@ -203,13 +240,12 @@ class DfnsWallet implements IWalletInterface {
 	}
 
 	public async getProvider(): Promise<any> {
-		return new DfnsWalletProvider(this)
+		return new DfnsWalletProvider(this);
 	}
 
 	public close() {
 		router.close();
 	}
-
 
 	private onRouteChanged() {
 		const callback = (route: RouteType) => {
