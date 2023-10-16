@@ -24,6 +24,7 @@
 		"login": "Sign up or log in",
 		"recovery_setup": "Recovery setup",
 		"recover_account": "Recover account",
+		"recovery_validation_step": "Have you backed up your recovery kit?",
 		"nav_links": {}
 	},
 	"pages": {
@@ -127,7 +128,10 @@
 			"recovery_key": "Recovery key ID",
 			"warning_title": "This recovery key is unique, save it!",
 			"warning_content": "If you lose access to your account, this recovery kit is the only way to get it back. You can copy or download it.",
-			"button_download_kit": "Download recovery kit"
+			"button_download_kit": "Download recovery kit",
+			"validation_description": "Your recovery kit is unique and cannot be restored. Be sure to copy it, as it will be inaccessible later.",
+			"button_review_kit": "Review my recovery kit",
+			"button_backed_kit": "I have backed up my recovery kit"
 		},
 		"recover_account":{
 			"title": "Connect with",

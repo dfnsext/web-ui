@@ -1,5 +1,6 @@
-import { Component, EventEmitter, Prop, State, h, Event } from "@stencil/core";
+import { Component, EventEmitter, Prop, State, h, Event, JSX } from "@stencil/core";
 import { ITypo, ITypoColor } from "../../../../../common/enums/typography-enums";
+import dfnsStore from "../../../../../stores/DfnsStore";
 
 @Component({
 	tag: "dfns-input-field",
@@ -20,7 +21,8 @@ export class DfnsInputField {
 	@Prop() onChange: (input: string) => void;
 	@Event() inputChange: EventEmitter<string>;
 	@State() isFocused = false;
-	@Prop() isPasswordVisible = false;
+	@Prop({ mutable: true }) isPasswordVisible = false;
+	@State() showPassword = false;
 
 	get containerClassName() {
 		const classNames = ["wrapper"];
@@ -40,25 +42,52 @@ export class DfnsInputField {
 	}
 
 	renderInput() {
+		const eyeIcon: JSX.Element = (
+			<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+				<path
+					d="M10 12.5C11.3807 12.5 12.5 11.3807 12.5 10C12.5 8.61929 11.3807 7.5 10 7.5C8.61929 7.5 7.5 8.61929 7.5 10C7.5 11.3807 8.61929 12.5 10 12.5Z"
+					fill={dfnsStore.state.theme.includes("dark") ? "#D1D5DB" : "#50565E"}
+				/>
+				<path
+					fill-rule="evenodd"
+					clip-rule="evenodd"
+					d="M0.664255 10.5904C0.517392 10.2087 0.517518 9.78563 0.66461 9.40408C2.10878 5.65788 5.7433 3 9.99859 3C14.256 3 17.892 5.66051 19.3347 9.40962C19.4816 9.79127 19.4814 10.2144 19.3344 10.5959C17.8902 14.3421 14.2557 17 10.0004 17C5.74298 17 2.10698 14.3395 0.664255 10.5904ZM14.0004 10C14.0004 12.2091 12.2095 14 10.0004 14C7.79123 14 6.00037 12.2091 6.00037 10C6.00037 7.79086 7.79123 6 10.0004 6C12.2095 6 14.0004 7.79086 14.0004 10Z"
+					fill={dfnsStore.state.theme.includes("dark") ? "#D1D5DB" : "#50565E"}
+				/>
+			</svg>
+		);
 		return (
 			<div>
 				<slot />
-				<input
-					class={this.inputClassName}
-					type={this.type == "password" && !this.isPasswordVisible ? "password" : "text" }
-					value={this.value}
-					placeholder={this.placeholder}
-					onInput={this.handleOnChange.bind(this)}
-					onFocus={this.toggleFocus.bind(this)}
-					onBlur={this.toggleFocus.bind(this)}
-					// onChange={this.handleOnChange.bind(this)}
-					readOnly={this.isReadOnly}
-				/>
-				{this.rightElement && (
-					<div class="right" onClick={this.handleRightElementClick.bind(this)}>
-						{this.rightElement}
-					</div>
-				)}
+				<div class="input-container">
+					<input
+						class={this.inputClassName}
+						type={this.type == "password" && !this.isPasswordVisible && !this.showPassword ? "password" : "text"}
+						value={this.value}
+						placeholder={this.placeholder}
+						onInput={this.handleOnChange.bind(this)}
+						onFocus={this.toggleFocus.bind(this)}
+						onBlur={this.toggleFocus.bind(this)}
+						// onChange={this.handleOnChange.bind(this)}
+						readOnly={this.isReadOnly}
+					/>
+					{this.rightElement && (
+						<div class="right" onClick={this.handleRightElementClick.bind(this)}>
+							{this.rightElement}
+						</div>
+					)}
+					{this.type == "password" && (
+						<i
+							class="fa-solid fa-eye"
+							role="button"
+							onClick={() => {
+								this.isPasswordVisible = !this.isPasswordVisible;
+								this.showPassword = !this.showPassword;
+							}}>
+							{eyeIcon}
+						</i>
+					)}
+				</div>
 			</div>
 		);
 	}

@@ -3,7 +3,7 @@ import { Component, Event, EventEmitter, Prop, State, h } from "@stencil/core";
 import { RegisterCompleteResponse } from "../../../services/api/Register";
 import dfnsStore from "../../../stores/DfnsStore";
 import langState from "../../../stores/LanguageStore";
-import { registerWithOAuth } from "../../../utils/helper";
+import { registerWithOAuth } from "../../../utils/dfns";
 import { ITypo, ITypoColor } from "../../../common/enums/typography-enums";
 import { EButtonSize, EButtonVariant } from "../../../common/enums/buttons-enums";
 

@@ -5,7 +5,7 @@ import WalletConnectWallet from "../../../services/wallet/WalletConnectWallet";
 import dfnsStore from "../../../stores/DfnsStore";
 import GoogleStore from "../../../stores/GoogleStore";
 import langState from "../../../stores/LanguageStore";
-import router from "../../../stores/RouterStore";
+import router, { RouteType } from "../../../stores/RouterStore";
 import LocalStorageService, { CACHED_WALLET_PROVIDER, WalletProvider } from "../../../services/LocalStorageService";
 import { EButtonSize, EButtonVariant } from "../../../common/enums/buttons-enums";
 import { ITypo, ITypoColor } from "../../../common/enums/typography-enums";
@@ -88,7 +88,7 @@ export class DfnsLogin {
 							<dfns-button
 								content={dfnsStore.state.customButtonText}
 								variant={EButtonVariant.PRIMARY}
-								sizing={EButtonSize.SMALL}
+								sizing={EButtonSize.MEDIUM}
 								fullwidth
 								icon={dfnsStore.state.customButtonIcon}
 								iconposition="left"
@@ -98,16 +98,18 @@ export class DfnsLogin {
 								}}
 							/>
 						)}
-						{/* <div class="recover-account">
-							<dfns-button
-								content={langState.values.pages.login.recover_account}
-								variant={EButtonVariant.TEXT}
-								sizing={EButtonSize.SMALL}
-								onClick={async () => {}}
-								iconposition="right"
-								icon={iconArrowLeft}
-							/>
-						</div> */}
+						{dfnsStore.state.activateRecovery && (
+							<div class="recover-account">
+								<dfns-button
+									content={langState.values.pages.login.recover_account}
+									variant={EButtonVariant.TEXT}
+									sizing={EButtonSize.SMALL}
+									onClick={async () => router.navigate(RouteType.RECOVER_ACCOUNT)}
+									iconposition="right"
+									icon={iconArrowLeft}
+								/>
+							</div>
+						)}
 						{dfnsStore.state.walletConnectEnabled && (
 							<Fragment>
 								<div class="separator">

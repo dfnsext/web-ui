@@ -1,27 +1,49 @@
-import { Component, Fragment, JSX, State, h, Event, EventEmitter } from "@stencil/core";
-import { CreatePasskeyAction } from "../../../common/enums/actions-enum";
-import router from "../../../stores/RouterStore";
-import dfnsStore from "../../../stores/DfnsStore";
-import { ITypo, ITypoColor } from "../../../common/enums/typography-enums";
-import langState from "../../../stores/LanguageStore";
+import { Component, Event, EventEmitter, Fragment, JSX, State, h } from "@stencil/core";
 import { EButtonSize, EButtonVariant } from "../../../common/enums/buttons-enums";
+import { ITypo, ITypoColor } from "../../../common/enums/typography-enums";
+import dfnsStore from "../../../stores/DfnsStore";
+import langState from "../../../stores/LanguageStore";
+import router from "../../../stores/RouterStore";
 import { CopyClipboard } from "../../Elements/CopyClipboard";
 
-
+import GoogleStore from "../../../stores/GoogleStore";
+import DfnsWallet from "../../../services/wallet/DfnsWallet";
 @Component({
 	tag: "dfns-recover-account",
 	styleUrl: "dfns-recover-account.scss",
 	shadow: true,
 })
 export class DfnsRecoverAccount {
+	private googleButton: HTMLDivElement;
 	@State() isLoading: boolean = false;
-	@State() step = 4;
-	@State() passkeyName?: string;
-	@Event() action: EventEmitter<CreatePasskeyAction>;
+	@State() step = 1;
+	@State() oauthAccessToken: string;
+	@Event() walletConnected: EventEmitter<string>;
 
-	handleBackClick() {
-		router.goBack();
+	async componentDidRender() {
+		dfnsStore.state.googleEnabled && this.step === 1 &&
+			GoogleStore.deferred.promise.then((google) => {
+				google.accounts.id.initialize({
+					client_id: dfnsStore.state.googleClientId,
+					callback: this.handleCredentialResponse.bind(this),
+				});
+				google.accounts.id.renderButton(this.googleButton, {
+					locale: dfnsStore.state.lang,
+					size: "large",
+					theme: "outline",
+					text: "signin_with",
+				});
+			});
 	}
+
+	async handleCredentialResponse(response) {
+		this.oauthAccessToken = response.credential;
+		this.step = 2;
+		// this.googleButton.remove();
+		
+	}
+
+	async recoverAccount() {}
 
 	render() {
 		const iconCopy: JSX.Element = (
@@ -47,7 +69,7 @@ export class DfnsRecoverAccount {
 			</svg>
 		);
 		return (
-			<dfns-layout closeBtn onClickCloseBtn={() => this.action.emit(CreatePasskeyAction.CLOSE)}>
+			<dfns-layout closeBtn onClickCloseBtn={() => {}}>
 				<div slot="topSection">
 					<dfns-typography typo={ITypo.H5_TITLE} color={ITypoColor.PRIMARY} class="custom-class">
 						{langState.values.header.recover_account}
@@ -62,21 +84,15 @@ export class DfnsRecoverAccount {
 										{langState.values.pages.recover_account.title}
 									</dfns-typography>
 								</div>
+								{dfnsStore.state.googleEnabled && <div ref={(el) => (this.googleButton = el)}></div>}
 								<div class="container">
-									<dfns-button
-										content={langState.values.buttons.next}
-										variant={EButtonVariant.PRIMARY}
-										sizing={EButtonSize.MEDIUM}
-										fullwidth
-										onClick={() => {}}
-									/>
 									<dfns-button
 										content={langState.values.buttons.back}
 										variant={EButtonVariant.NEUTRAL}
 										sizing={EButtonSize.MEDIUM}
 										fullwidth
 										iconposition="left"
-										onClick={() => this.handleBackClick()}
+										onClick={() => router.goBack()}
 									/>
 								</div>
 							</Fragment>
@@ -186,7 +202,7 @@ export class DfnsRecoverAccount {
 								sizing={EButtonSize.MEDIUM}
 								fullwidth
 								iconposition="left"
-								onClick={() => this.handleBackClick()}
+								onClick={() => router.goBack()}
 							/>
 						</Fragment>
 					)}
@@ -205,7 +221,7 @@ export class DfnsRecoverAccount {
 								sizing={EButtonSize.MEDIUM}
 								fullwidth
 								iconposition="left"
-								onClick={() => this.handleBackClick()}
+								onClick={() => router.goBack()}
 							/>
 						</Fragment>
 					)}

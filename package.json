@@ -1,6 +1,6 @@
 {
 	"name": "@smart-chain-fr/dfns-sdk",
-	"version": "0.2.8",
+	"version": "0.2.9",
 	"description": "Dfns SDK",
 	"main": "dist/index.cjs.js",
 	"module": "dist/index.js",
@@ -33,9 +33,9 @@
 		"generate": "stencil generate"
 	},
 	"dependencies": {
-		"@dfns/sdk": "^0.1.0-beta.4",
-		"@dfns/sdk-keysigner": "^0.1.0-beta.4",
-		"@dfns/sdk-webauthn": "^0.1.0-beta.4",
+		"@dfns/sdk": "^0.1.0-beta.5",
+		"@dfns/sdk-keysigner": "^0.1.0-beta.5",
+		"@dfns/sdk-webauthn": "^0.1.0-beta.5",
 		"@heroicons/react": "^2.0.18",
 		"@ionic/core": "^7.3.1",
 		"@stencil/core": "^4.1.0",
@@ -49,6 +49,7 @@
 		"defer-promise": "^3.0.0",
 		"ethers": "^5.7.2",
 		"js-cookie": "^3.0.5",
+		"jspdf": "^2.5.1",
 		"jwt-decode": "^3.1.2",
 		"prettier": "^3.0.1",
 		"qrcode": "^1.5.3",

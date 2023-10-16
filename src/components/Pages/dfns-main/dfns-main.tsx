@@ -21,7 +21,7 @@ export class DfnsMain {
 
 	@Listen("walletConnected")
 	walletConnectedHandler(event: CustomEvent<Wallet>) {
-		console.log("Received the custom walletConnected event: ", event.detail);
+		console.log("Wallet connected", event.detail);
 	}
 
 	render() {

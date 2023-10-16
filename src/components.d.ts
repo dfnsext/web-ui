@@ -150,10 +150,6 @@ export interface DfnsCreateAccountCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLDfnsCreateAccountElement;
 }
-export interface DfnsCreatePasskeyCustomEvent<T> extends CustomEvent<T> {
-    detail: T;
-    target: HTMLDfnsCreatePasskeyElement;
-}
 export interface DfnsInputFieldCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLDfnsInputFieldElement;
@@ -405,7 +401,6 @@ declare namespace LocalJSX {
         "onPasskeyCreated"?: (event: DfnsCreateAccountCustomEvent<RegisterCompleteResponse>) => void;
     }
     interface DfnsCreatePasskey {
-        "onAction"?: (event: DfnsCreatePasskeyCustomEvent<CreatePasskeyAction>) => void;
     }
     interface DfnsInputField {
         "disableErrors"?: boolean;
@@ -445,7 +440,7 @@ declare namespace LocalJSX {
     interface DfnsReceiveTokens {
     }
     interface DfnsRecoverAccount {
-        "onAction"?: (event: DfnsRecoverAccountCustomEvent<CreatePasskeyAction>) => void;
+        "onWalletConnected"?: (event: DfnsRecoverAccountCustomEvent<string>) => void;
     }
     interface DfnsRecoverySetup {
         "onAction"?: (event: DfnsRecoverySetupCustomEvent<CreatePasskeyAction>) => void;

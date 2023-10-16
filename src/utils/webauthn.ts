@@ -1,5 +1,5 @@
 import { Fido2Attestation, UserRegistrationChallenge } from "@dfns/sdk";
-import { Fido2Options, FidoCredentialsTransportKind, UserRecoveryChallenge } from "@dfns/sdk/codegen/datamodel/Auth";
+import { Fido2Options, FidoCredentialsTransportKind, RegistrationConfirmationFido2, UserRecoveryChallenge } from "@dfns/sdk/codegen/datamodel/Auth";
 import { AllowCredential, Fido2Assertion } from "@dfns/sdk/signer";
 import { fromBase64Url, toBase64Url } from "@dfns/sdk/utils/base64";
 import { Buffer } from "buffer";
@@ -10,7 +10,7 @@ export async function sign(
 	rpId: string,
 	challenge: string,
 	allowCredentials: { key: AllowCredential[]; webauthn: AllowCredential[] },
-	defaultPlatforms?: AuthenticatorTransport[],
+	defaultTransports?: AuthenticatorTransport[],
 	timeout: number = DEFAULT_WAIT_TIMEOUT,
 ): Promise<Fido2Assertion> {
 	const options: CredentialRequestOptions = {
@@ -20,7 +20,7 @@ export async function sign(
 			allowCredentials: allowCredentials.webauthn.map(({ id, type, transports }) => ({
 				id: fromBase64Url(id),
 				type,
-				transports: transports ?? defaultPlatforms ?? [],
+				transports: transports ?? defaultTransports ?? [],
 			})),
 			rpId,
 			userVerification: "required",
@@ -51,7 +51,7 @@ export async function create(
 	challenge: UserRegistrationChallenge | Fido2Options | UserRecoveryChallenge,
 	authenticatorAttachment?: AuthenticatorAttachment,
 	timeout: number = DEFAULT_WAIT_TIMEOUT,
-): Promise<Fido2Attestation> {
+): Promise<Fido2Attestation | RegistrationConfirmationFido2> {
 	const options: CredentialCreationOptions = {
 		publicKey: {
 			challenge: Buffer.from(challenge.challenge),

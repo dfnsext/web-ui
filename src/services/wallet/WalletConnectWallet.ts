@@ -60,6 +60,7 @@ export default class WalletConnectWallet implements IWalletInterface {
 
 		WalletConnectWallet.ctx = this;
 	}
+
 	public async isConnected(): Promise<boolean> {
 		let account = this.ethereumClient?.getAccount();
 		do {
@@ -232,6 +233,10 @@ export default class WalletConnectWallet implements IWalletInterface {
 		let account = this.ethereumClient?.getAccount();
 		let provider = await account.connector?.getProvider();
 		return provider;
+	}
+
+	public close(): void {
+		this.web3modal.closeModal();
 	}
 
 	// private initEvents(): void {

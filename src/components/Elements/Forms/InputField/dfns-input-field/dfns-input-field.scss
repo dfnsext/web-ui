@@ -10,56 +10,71 @@
 		gap: $spacing-0-5;
 		width: 100%;
 
-		.input {
+		.input-container {
+			position: relative;
 			margin-top: $spacing-1;
-			display: flex;
-			padding: 0 12px;
-			font-family: $font-primary;
-			box-sizing: border-box;
-			height: 38px;
-			font-weight: 400;
-			width: 100% !important;
-			outline: none;
-			background-color: var(--color-generic-white);
-			color: var(--input-core-default-placeholder);
-			border: 1px solid var(--color-neutral-200);
-			border-radius: $radius-3xl;
-			border: 1px solid var(--input-core-default-border);
-			background: var(--input-core-default-background);
-
-			&[readonly] {
-				color: var(--color-neutral-500);
+				padding: 0 12px;
+				font-family: $font-primary;
+				box-sizing: border-box;
+				height: 38px;
+				font-weight: 400;
+				width: 100% !important;
+				background-color: var(--color-generic-white);
+				color: var(--input-core-default-placeholder);
+				border: 1px solid var(--color-neutral-200);
+				border-radius: $radius-3xl;
+				border: 1px solid var(--input-core-default-border);
+				background: var(--input-core-default-background);
+			.input {
+				font-family: $font-primary;
+				height: 100%;
+				width: 90% !important;
+				background-color: transparent;
+				border: none;
+				outline: none;
+				&[readonly] {
+					color: var(--color-neutral-500);
+				}
 			}
-		}
 
-		.error {
-			color: var(--color-error-600);
-			border-color: var(--color-error-600);
-		}
+			.error {
+				color: var(--color-error-600);
+				border-color: var(--color-error-600);
+			}
 
-		.error-text {
-			color: var(--color-error-600);
-		}
+			.error-text {
+				color: var(--color-error-600);
+			}
 
-		.placeholder {
-			pointer-events: none;
-			position: absolute;
-			top: 50%;
-			transform: translateY(-50%);
-			left: calc(24px - 16px);
-			padding: 0 16px;
-			font-weight: 400;
-			font-size: 16px;
-			letter-spacing: 0.5px;
-			background-color: var(--color-generic-white);
-			color: var(--color-generic-white);
-			cursor: text;
-			transition: all 0.1s linear;
-		}
+			.placeholder {
+				pointer-events: none;
+				position: absolute;
+				top: 50%;
+				transform: translateY(-50%);
+				left: calc(24px - 16px);
+				padding: 0 16px;
+				font-weight: 400;
+				font-size: 16px;
+				letter-spacing: 0.5px;
+				background-color: var(--color-generic-white);
+				color: var(--color-generic-white);
+				cursor: text;
+				transition: all 0.1s linear;
+			}
 
-		.focused {
-			top: 0;
-			z-index: 2;
+			.focused {
+				top: 0;
+				z-index: 2;
+				outline: none;
+			}
+			.fa-eye{
+				position: absolute;
+				top: 25%;
+				right: 4%;
+				cursor: pointer;
+				width: 20px;
+				height: 20px;
+			  }
 		}
 	}
 }

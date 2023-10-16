@@ -2,8 +2,8 @@
 
 Embark on your web3 journey with seamless onboarding that takes just a few moments.
 
-## 📖 Documentation
-
+## 📄 Description
+This web component based SDK aims to offer a Wallet-as-a-Service (WaaS) solution built on top of DFNS's MPC solution.
 Checkout the official [DFNS Documentation](https://docs.dfns.co/dfns-docs/) to get started!
 
 ## ⚡ Quick Start
@@ -28,7 +28,8 @@ Following installation, the next action required to utilize DFNS is initializing
 
 #### Initialize DfnsSDFK 
 
-DfnsSDK needs to initialise as soon as your app loads up to enable the user to log in. It uses a singleton pattern to ensure there is only one instance of DfnsWallet throughout the application. This instance can be retrieved using the getInstance method and will look like this:
+DfnsSDK needs to initialize as soon as your app loads up to enable the user to log in. 
+the following implemtation is a use case based on a singleton pattern to ensure there is only one instance of `CustomClass` throughout the application. This instance can be retrieved using the `getInstance` method:
 
 
 ```ts
@@ -40,24 +41,24 @@ const dfnsSdkOptions = {
 	apiUrl: 'YOUR_API_URL',
 	lang: 'en',
 	network: 'PolygonMumbai',
-	dfnsHost: 'https://api.dfns.ninja' // (testnet),
+	dfnsHost: 'https://api.dfns.ninja',//(testnet)
 	defaultDevice: "desktop",
 	autoConnect: true,
 };
 
-export default class DfnsWallet {
-	private static ctx: DfnsWallet;
+export default class CustomClass {
+	private static ctx: CustomClass;
 	public dfnsSdk: DfnsSDK;
 
 	public constructor() {
-		DfnsWallet.ctx = this;
+		CustomClass.ctx = this;
 		const { DfnsSDK } = require("@smart-chain-fr/dfns-sdk");
 		this.dfnsSdk = new DfnsSDK(dfnsSdkOptions);
 	}
 
 	public static getInstance() {
-		if (!DfnsWallet.ctx) return new this();
-		return DfnsWallet.ctx;
+		if (!CustomClass.ctx) return new this();
+		return CustomClass.ctx;
 	}
 }
 ```
@@ -70,7 +71,7 @@ export default class DfnsWallet {
 | `appId`              | string            | Required. The application ID for your application.                                              |
 | `dfnsHost`           | string            | (Optional) The DFNS host URL.                                                                   |
 | `apiUrl`             | string            | (Optional) The API URL.                                                                         |
-| `loginOptions`       | LoginOption[]     | (Optional) An array of login options, which can be either "social" or "web3".                   |
+| `loginOptions`       | LoginOption[]     | (Optional) An array of login options, which can be both "social" or "web3".                   |
 | `appLogoUrl`         | string \| null    | (Optional) URL to the application logo.                                                          |
 | `darkMode`           | boolean           | (Optional) Whether to enable dark mode.                                                          |
 | `assetsPath`         | string            | (Optional) The path to assets.                                                                  |
@@ -101,25 +102,19 @@ export default class DfnsWallet {
 
 | Function             | Description                             | Parameters                                | Return Type                   |
 |----------------------|-----------------------------------------|--------------------------------------------|--------------------------------|
-| `connect`            | Connects to the DFNS SDK.               | None                                       | Promise<string>                |
-| `connectWithOAuthToken`| Connects to the DFNS SDK with an OAuth token. | `oauthToken: string`                | Promise<string>          |
-| `signMessage`        | Signs a message using the DFNS wallet.  | `message: string`                         | Promise<string>                |
-| `transferTokens`     | Transfers tokens.                       | None                                       | Promise<string>                |
-| `showWalletOverview` | Shows the wallet overview UI.            | None                                       | Promise<void>                  |
-| `showSettings`       | Shows the settings UI.                  | None                                       | Promise<void>                  |
-| `showReceiveTokens`  | Shows the receive tokens UI.             | None                                       | Promise<void>                  |
-| `showRecoverySetup`  | Shows the recovery setup UI.             | None                                       | Promise<void>                  |
-| `showRecoverAccount` | Shows the recover account UI.            | None                                       | Promise<void>                  |
-| `sendTransaction`    | Sends a transaction.                     | `to: string, value: string, data?: string, nonce?: number` | Promise<string>        |
-| `showCreatePasskey`  | Shows the create passkey UI.            | None                                       | Promise<void>                  |
-| `showConfirmTransaction`| Shows the confirm transaction UI.     | None                                       | Promise<void>                  |
+| `connect`            | Connects to the DFNS SDK.               | None                                       | `Promise<string>`                |
+| `connectWithOAuthToken`| Connects to the DFNS SDK with an OAuth token. | `oauthToken: string`                | `Promise<string>`          |
+| `signMessage`        | Signs a message using the DFNS wallet.  | `message: string`                         | `Promise<string>`                |
+| `transferTokens`     | Transfers tokens.                       | None                                       | `Promise<string>`                |
+| `sendTransaction`    | Sends a transaction.                     | `to: string, value: string, data?: string, nonce?: number` | `Promise<string>`        |
 | `setLanguage`        | Sets the language of the SDK.           | `lang: "fr" \| "en"`                      | void                           |
 | `disconnect`         | Disconnects from the DFNS SDK.           | None                                       | void                           |
 | `onChange`           | Registers an event listener for wallet events. | `event: WalletEvent, callback: (data: any) => void` | () => void                 |
-| `isConnected`        | Checks if the SDK is connected.          | None                                       | Promise<boolean>               |
-| `getAddress`         | Retrieves the wallet address.            | None                                       | Promise<string>                |
+| `isConnected`        | Checks if the SDK is connected.          | None                                       | `Promise<boolean>`               |
+| `getAddress`         | Retrieves the wallet address.            | None                                       | `Promise<string>`                |
 | `getWalletProvider`  | Gets the wallet provider.                | None                                       | WalletProvider                 |
-| `refreshToken`       | Refreshes the token.                    | None                                       | Promise<void>                  |
+| `getProvider`        | Gets DFNS wallet provider.               | None                                       | any                 |
+| `refreshToken`       | Refreshes the token. works only with `connectWithOAuthToken`  | None                    | `Promise<void>`                    |
 
 
 
@@ -134,19 +129,22 @@ This module is distributed in es6 format
 - `esm` build `@smart-chain-fr/dfns-sdk/dist/dfns-web-component/dfns-web-component.esm` 
 
 ### Usage in a react component
-This code snippet demonstrates how to initialize a custom component using the `@smart-chain-fr/dfns-sdk/loader` library and connect it with the `DfnsWallet` service.
+This code snippet demonstrates how to initialize a custom component using the `@smart-chain-fr/dfns-sdk/loader` library.
 
 
 ```ts
 import { defineCustomElements } from "@smart-chain-fr/dfns-sdk/loader";
-import DfnsWallet from "@Services/wallet/DfnsWallet";
+import { DfnsSDK } from "@smart-chain-fr/dfns-sdk";
 
 export default async function CustomComponent() {
     // Initialize custom elements
     defineCustomElements();
 
     // Connect with OAuth token
-    await DfnsWallet.getInstance().dfnsSdk.connectWithOAuthToken('YOUR_OAUTH_TOKEN');
+    await DfnsSDK.connectWithOAuthToken('YOUR_OAUTH_TOKEN');
+
+    // Connect with a social provider
+    await DfnsSDK.connect();
 }
 ```
 ### Usage in a web page

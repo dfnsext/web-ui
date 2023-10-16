@@ -1,21 +1,22 @@
-import { TransferAssetRequest } from "@dfns/sdk/codegen/Wallets";
 import { Component, Event, EventEmitter, Fragment, State, h } from "@stencil/core";
 
 import { Amount, BlockchainAddress } from "@dfns/sdk/codegen/datamodel/Foundations";
-import { TransferKind, TransferRequest, TransferStatus } from "@dfns/sdk/codegen/datamodel/Wallets";
+import { TransferKind } from "@dfns/sdk/codegen/datamodel/Wallets";
 import dfnsStore from "../../../stores/DfnsStore";
 import langState from "../../../stores/LanguageStore";
-import { getDfnsDelegatedClient, timeout } from "../../../utils/dfns";
 
-import { sign } from "../../../utils/webauthn";
-import { fetchAssets, waitForEvent } from "../../../utils/helper";
-import { ITokenInfo } from "../../../common/interfaces/ITokenInfo";
 import { ethers } from "ethers";
-import { parseUnits } from "ethers/lib/utils";
-import { ITypo, ITypoColor } from "../../../common/enums/typography-enums";
+import { formatUnits, parseUnits } from "ethers/lib/utils";
 import { EAlertVariant } from "../../../common/enums/alerts-enums";
 import { EButtonSize, EButtonVariant } from "../../../common/enums/buttons-enums";
-import router, { RouteType } from "../../../stores/RouterStore";
+import { ITypo, ITypoColor } from "../../../common/enums/typography-enums";
+import { ITokenInfo } from "../../../common/interfaces/ITokenInfo";
+import router from "../../../stores/RouterStore";
+import { disconnectWallet, networkMapping, waitForEvent } from "../../../utils/helper";
+import { fetchAssets } from "../../../utils/dfns";
+import { getTokenIcon } from "../../../utils/tokensIcons";
+import { convertCryptoToFiat } from "../../../utils/binance";
+import { WalletDisconnectedError, isTokenExpiredError } from "../../../utils/errors";
 
 @Component({
 	tag: "dfns-transfer-tokens",
@@ -39,24 +40,48 @@ export class DfnsTransferTokens {
 	@State() selectedToken: ITokenInfo;
 	@State() step: number = 1;
 
-	async componentWillLoad() {
-		this.tokenList = [];
-		this.isLoadingAssets = true;
-	}
 
 	async componentDidLoad() {
-		await this.getAssets();
-		this.isLoadingAssets = false;
+		try {
+			this.isLoadingAssets = true;
+			await this.getAssets();
+		} catch (error) {
+			this.isLoadingAssets = false;
+			if (isTokenExpiredError(error)) {
+				disconnectWallet();
+				throw new WalletDisconnectedError();
+			}
+			throw error;
+		}
 	}
 	async getAssets() {
-		this.tokenList = (await fetchAssets(
+		const assets = await fetchAssets(
+			dfnsStore.state.apiUrl,
 			dfnsStore.state.dfnsHost,
 			dfnsStore.state.appId,
 			dfnsStore.state.dfnsUserToken,
-			dfnsStore.state.wallet.id,
-			dfnsStore.state.lang,
-			dfnsStore.state.network,
-		)) as ITokenInfo[];
+			dfnsStore.state.wallet ? dfnsStore.state.wallet.id : null,
+		);
+
+		const tokenList: ITokenInfo[] = [];
+
+		dfnsStore.setValue("assets", assets);
+		for (let i = 0; i < assets.length; i++) {
+			const asset = assets[i];
+			let symbol = i == 0 ? networkMapping[dfnsStore.state.network].nativeCurrency.symbol : asset.symbol;
+			const balance = formatUnits(asset.balance, asset.decimals);
+			const token = await getTokenIcon(asset.contract, dfnsStore.state.network.toLowerCase());
+			tokenList.push({
+				balance: balance,
+				symbol,
+				icon: token,
+				fiatValue: await convertCryptoToFiat(balance, dfnsStore.state.lang, symbol),
+				contract: asset.contract,
+				decimals: asset.decimals,
+			});
+		}
+
+		this.tokenList = tokenList;
 	}
 
 	async selectTokenForTransfert(asset: ITokenInfo) {
@@ -67,7 +92,9 @@ export class DfnsTransferTokens {
 	}
 
 	async sendTokens() {
+		
 		try {
+			this.isLoading = true;
 			if (!ethers.utils.isAddress(this.to)) {
 				throw new Error("Invalid address format");
 			}
@@ -140,7 +167,7 @@ export class DfnsTransferTokens {
 							{this.isLoadingAssets && <dfns-loader size="large" />}
 							<div class="tab-container">
 								{!this.isLoadingAssets &&
-									this.step === 1 &&
+									this.step === 1 && this.tokenList &&
 									this.tokenList.length !== 0 &&
 									this.tokenList.map((asset) => {
 										return (

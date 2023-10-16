@@ -19,6 +19,7 @@ import dfnsStore from "./stores/DfnsStore";
 import { setActiveLanguage } from "./stores/LanguageStore";
 import router, { RouteType } from "./stores/RouterStore";
 import { waitForEvent } from "./utils/helper";
+import { WalletDisconnectedError } from "./utils/errors";
 
 export const DEFAULT_API_URL = "https://app.dfns.smart-chain.fr";
 export const DEFAULT_DFNS_HOST = "https://api.dfns.io";
@@ -53,6 +54,8 @@ export interface DfnsSDKOptions {
 	 * @default false
 	 */
 	disableLogoutUI?: boolean;
+	activateRecovery?: boolean;
+	showRecoverySetupAtWalletCreation?: boolean;
 }
 
 type Options = NonNullable<DfnsSDKOptions>;
@@ -131,6 +134,8 @@ export class DfnsSDK {
 		dfnsStore.setValue("walletConnectProjectId", this.options.walletConnectProjectId ?? null);
 		dfnsStore.setValue("showWalletValidation", this.options.showWalletValidation ?? false);
 		dfnsStore.setValue("disableLogoutUI", this.options.disableLogoutUI ?? false);
+		dfnsStore.setValue("activateRecovery", this.options.activateRecovery ?? false);
+		dfnsStore.setValue("showRecoverySetupAtWalletCreation", this.options.showRecoverySetupAtWalletCreation ?? false);
 
 		const walletProvider = LocalStorageService.getInstance().items[CACHED_WALLET_PROVIDER].get();
 		if (walletProvider === WalletProvider.DFNS) {
@@ -166,42 +171,72 @@ export class DfnsSDK {
 	}
 
 	public async signMessage(message: string) {
+		if (!(await this.isConnected())) {
+			throw new WalletDisconnectedError();
+		}
 		return dfnsStore.state.walletService.signMessage(message);
 	}
 
 	public async transferTokens() {
+		if (!(await this.isConnected())) {
+			throw new WalletDisconnectedError();
+		}
 		return dfnsStore.state.walletService.transferTokens();
 	}
 
 	public async showWalletOverview() {
+		if (!(await this.isConnected())) {
+			throw new WalletDisconnectedError();
+		}
 		dfnsStore.state.walletService.showWalletOverview();
 	}
 
 	public async showSettings() {
+		if (!(await this.isConnected())) {
+			throw new WalletDisconnectedError();
+		}
 		dfnsStore.state.walletService.showSettings();
 	}
 
 	public async showReceiveTokens() {
+		if (!(await this.isConnected())) {
+			throw new WalletDisconnectedError();
+		}
 		router.navigate(RouteType.RECEIVE_TOKENS);
 	}
 
 	public async showRecoverySetup() {
+		if (!(await this.isConnected())) {
+			throw new WalletDisconnectedError();
+		}
 		router.navigate(RouteType.RECOVERY_SETUP);
 	}
 
 	public async showRecoverAccount() {
+		if (!(await this.isConnected())) {
+			throw new WalletDisconnectedError();
+		}
 		router.navigate(RouteType.RECOVER_ACCOUNT);
 	}
 
 	public async sendTransaction(to: string, value: string, data?: string, nonce?: number) {
+		if (!(await this.isConnected())) {
+			throw new WalletDisconnectedError();
+		}
 		return dfnsStore.state.walletService.sendTransaction(to, value, data, nonce);
 	}
 
 	public async showCreatePasskey() {
+		if (!(await this.isConnected())) {
+			throw new WalletDisconnectedError();
+		}
 		dfnsStore.state.walletService.showCreatePasskey();
 	}
 
 	public async showConfirmTransaction() {
+		if (!(await this.isConnected())) {
+			throw new WalletDisconnectedError();
+		}
 		router.navigate(RouteType.CONFIRM_TRANSACTION);
 	}
 
@@ -237,7 +272,7 @@ export class DfnsSDK {
 	public getWalletProvider() {
 		return LocalStorageService.getInstance().items[CACHED_WALLET_PROVIDER].get();
 	}
-	
+
 	private async generateColorPalette(container: HTMLElement) {
 		const baseColor = chroma(this.options.primaryColor ?? "#000000");
 		const variableName = `--color-primary-900`;
@@ -322,7 +357,9 @@ export class DfnsSDK {
 
 	public async refreshToken() {
 		try {
-			const response = await Login.getInstance(dfnsStore.state.apiUrl, dfnsStore.state.appId).delegated(dfnsStore.state.oauthAccessToken);
+			const response = await Login.getInstance(dfnsStore.state.apiUrl, dfnsStore.state.appId).delegated(
+				dfnsStore.state.oauthAccessToken,
+			);
 			dfnsStore.setValue("dfnsUserToken", response.token);
 		} catch (err) {
 			console.log(err);

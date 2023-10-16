@@ -1,4 +1,5 @@
 import defer from "defer-promise";
+import { DfnsError, isDfnsError } from "../../utils/errors";
 
 export enum ContentType {
 	JSON = "application/json",
@@ -36,7 +37,12 @@ export default abstract class BaseApiService {
 		return this.stackSendRequest<T>(request, synchroneRequest);
 	}
 
-	protected async postRequest<T>(url: URL | string, body: { [key: string]: unknown } = {}, header: Record<string, string> = {}, synchroneRequest = false) {
+	protected async postRequest<T>(
+		url: URL | string,
+		body: { [key: string]: unknown } = {},
+		header: Record<string, string> = {},
+		synchroneRequest = false,
+	) {
 		const request = async () => {
 			return fetch(url, {
 				method: "POST",
@@ -47,7 +53,12 @@ export default abstract class BaseApiService {
 		return this.stackSendRequest<T>(request, synchroneRequest);
 	}
 
-	protected async putRequest<T>(url: URL | string, body: { [key: string]: unknown } = {}, header: Record<string, string> = {}, synchroneRequest = false) {
+	protected async putRequest<T>(
+		url: URL | string,
+		body: { [key: string]: unknown } = {},
+		header: Record<string, string> = {},
+		synchroneRequest = false,
+	) {
 		const request = async () => {
 			return fetch(url, {
 				method: "PUT",
@@ -159,6 +170,9 @@ export default abstract class BaseApiService {
 	}
 
 	protected async onError(error: unknown) {
+		if (isDfnsError(error)) {
+			Promise.reject(new DfnsError(error.httpStatus, error.context));
+		}
 		return Promise.reject(error);
 	}
 }

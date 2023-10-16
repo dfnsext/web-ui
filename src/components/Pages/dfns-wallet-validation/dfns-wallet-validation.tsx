@@ -5,7 +5,10 @@ import langState from "../../../stores/LanguageStore";
 import { waitForWalletActive } from "../../../utils/dfns";
 import { ITypo, ITypoColor } from "../../../common/enums/typography-enums";
 import { EButtonSize, EButtonVariant } from "../../../common/enums/buttons-enums";
-
+import { WalletDisconnectedError, isTokenExpiredError } from "../../../utils/errors";
+import { disconnectWallet } from "../../../utils/helper";
+import router, { RouteType } from "../../../stores/RouterStore";
+import { set } from "ts-pattern/dist/patterns";
 
 @Component({
 	tag: "dfns-wallet-validation",
@@ -19,20 +22,38 @@ export class DfnsWalletValidation {
 	@State() isLoading = true;
 
 	async componentDidLoad() {
-		dfnsStore.setValue(
-			"wallet",
-			await waitForWalletActive(
-				dfnsStore.state.dfnsHost,
-				dfnsStore.state.appId,
-				dfnsStore.state.dfnsUserToken,
-				dfnsStore.state.wallet ? dfnsStore.state.wallet.id : null,
-			),
-		);
-		this.isLoading = false;
+		try {
+			this.isLoading = true;
+			dfnsStore.setValue(
+				"wallet",
+				await waitForWalletActive(
+					dfnsStore.state.apiUrl,
+					dfnsStore.state.dfnsHost,
+					dfnsStore.state.appId,
+					dfnsStore.state.dfnsUserToken,
+					dfnsStore.state.wallet ? dfnsStore.state.wallet.id : null,
+				),
+			);
+			this.isLoading = false;
+		} catch (error) {
+			this.isLoading = false;
+
+			if (isTokenExpiredError(error)) {
+				disconnectWallet();
+				throw new WalletDisconnectedError();
+			}
+			this.walletValidated.emit(dfnsStore.state.wallet);
+			throw error;
+		}
 	}
 
 	async validateWallet() {
 		this.walletValidated.emit(dfnsStore.state.wallet);
+		setTimeout(() => {
+			if (dfnsStore.state.showRecoverySetupAtWalletCreation) {
+				router.navigate(RouteType.RECOVERY_SETUP);
+			}
+		}, 500);
 	}
 
 	async closeBtn() {
