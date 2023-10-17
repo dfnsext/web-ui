@@ -90,6 +90,9 @@ export default class CustomClass {
 | `walletConnectProjectId`| string         | (Optional) WalletConnect project ID.                                                           |
 | `autoConnect`        | boolean           | (Optional) Whether to auto-connect.                                                              |
 | `disableLogoutUI`    | boolean           | (Optional) Whether to disable the logout UI.                                                     |
+| `showRecoverySetupAtWalletCreation`    | boolean           | (Optional) shows recovery setup after the wallet creation                                                  |
+| `activateRecovery`    | boolean           | (Optional) Whether to enable the link to the recover account                                                |
+| `showRecoverySetupAfterRecoverAccount`    | boolean           | (Optional) Whether to show the recover setup after recovering the account.                                                     |
 
 #### LoginOption
 
