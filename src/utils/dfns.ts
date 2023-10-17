@@ -623,14 +623,8 @@ export function createRecoveryKey(apiUrl: string, dfnsHost: string, appId: strin
 	});
 }
 
-export async function getRecoverAccountChallenge(
-	apiUrl: string,
-	appId: string,
-	oauthAccessToken: string,
-	recoveryCredId: string,
-) {
+export async function getRecoverAccountChallenge(apiUrl: string, appId: string, oauthAccessToken: string, recoveryCredId: string) {
 	try {
-
 		const challenge = await Recover.getInstance(apiUrl, appId).delegated(oauthAccessToken, recoveryCredId);
 
 		return challenge;
@@ -649,7 +643,6 @@ export async function recoverAccount(
 	recoveryCredId: string,
 ) {
 	try {
-
 		const encryptedPrivateKey = challenge.allowedRecoveryCredentials[0].encryptedRecoveryKey;
 
 		const attestation = (await create(challenge)) as RegistrationConfirmationFido2;
@@ -673,7 +666,6 @@ export async function recoverAccount(
 		};
 
 		const authToken = challenge.temporaryAuthenticationToken;
-
 		const signature = await generateSignature(
 			encryptedPrivateKey,
 			JSON.stringify(recoveryClientData),

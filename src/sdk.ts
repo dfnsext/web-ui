@@ -247,7 +247,7 @@ export class DfnsSDK {
 	}
 
 	public disconnect() {
-		dfnsStore.state.walletService.disconnect();
+		dfnsStore.state.walletService?.disconnect();
 		LocalStorageService.getInstance().items[CACHED_WALLET_PROVIDER].delete();
 	}
 

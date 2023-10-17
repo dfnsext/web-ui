@@ -109,18 +109,24 @@ export async function generateSignature(encryptedPrivateKey, message, password, 
 		["wrapKey", "unwrapKey"],
 	);
 
-	const privateKey = await crypto.subtle.unwrapKey(
-		"pkcs8",
-		key,
-		unwrappingKey,
-		{
-			name: "AES-GCM",
-			iv: iv,
-		},
-		{ name: "ECDSA", namedCurve: "P-256" },
-		true,
-		["sign"],
-	);
+	let privateKey;
+
+	try {
+		privateKey = await crypto.subtle.unwrapKey(
+			"pkcs8",
+			key,
+			unwrappingKey,
+			{
+				name: "AES-GCM",
+				iv: iv,
+			},
+			{ name: "ECDSA", namedCurve: "P-256" },
+			true,
+			["sign"],
+		);
+	} catch (e) {
+		throw new Error("Invalid password");
+	}
 
 	const signature = await crypto.subtle.sign({ name: "ECDSA", hash: { name: "SHA-256" } }, privateKey, new TextEncoder().encode(message));
 

@@ -9,7 +9,7 @@ import { CopyClipboard } from "../../Elements/CopyClipboard";
 import GoogleStore from "../../../stores/GoogleStore";
 import DfnsWallet from "../../../services/wallet/DfnsWallet";
 import { getRecoverAccountChallenge, recoverAccount } from "../../../utils/dfns";
-import { WalletDisconnectedError, isTokenExpiredError } from "../../../utils/errors";
+import { DfnsError, WalletDisconnectedError, isDfnsError, isTokenExpiredError } from "../../../utils/errors";
 import { disconnectWallet } from "../../../utils/helper";
 import { UserRecoveryChallenge } from "@dfns/sdk/codegen/datamodel/Auth";
 import { EAlertVariant } from "../../../common/enums/alerts-enums";
@@ -27,7 +27,7 @@ export class DfnsRecoverAccount {
 	@State() recoveryKeyId: string;
 	@State() recoveryCode: string;
 	@State() recoveryChallenge: UserRecoveryChallenge;
-	@State() hasErrors: boolean = true;
+	@State() hasErrors: boolean = false;
 	@State() errorMessage: string = "";
 
 	async componentDidRender() {
@@ -57,24 +57,42 @@ export class DfnsRecoverAccount {
 
 	async getRecoverAccountChallenge() {
 		try {
+			this.errorMessage = "";
+			this.hasErrors = false;
 			this.isLoading = true;
+			if (!this.recoveryCode) {
+				throw new Error(langState.values.pages.recover_account.error.missing_recovery_code);
+			}
+			if (!this.recoveryKeyId) {
+				throw new Error(langState.values.pages.recover_account.error.missing_recovery_key);
+			}
 			const challenge = await getRecoverAccountChallenge(
 				dfnsStore.state.apiUrl,
 				dfnsStore.state.appId,
 				this.oauthAccessToken,
 				this.recoveryKeyId,
 			);
+			if (challenge.allowedRecoveryCredentials.length === 0) {
+				throw new Error(langState.values.pages.recover_account.error.invalid_recovery_key);
+			}
 			this.recoveryChallenge = challenge;
 			this.isLoading = false;
 			this.step = 3;
 		} catch (error) {
+			this.hasErrors = true;
 			this.isLoading = false;
-			console.error(error);
+			if (isDfnsError(error)) {
+				this.errorMessage = error.context.message;
+				return;
+			}
+			this.errorMessage = error.message;
 		}
 	}
 
 	async recoverAccount() {
 		try {
+			this.errorMessage = "";
+			this.hasErrors = false;
 			this.isLoading = true;
 			const walletInstance = DfnsWallet.getInstance();
 			await walletInstance.recoverAccount(
@@ -89,8 +107,17 @@ export class DfnsRecoverAccount {
 			this.isLoading = false;
 			this.step = 4;
 		} catch (error) {
+			this.hasErrors = true;
 			this.isLoading = false;
-			console.error;
+			if (isDfnsError(error)) {
+				this.errorMessage = error.context.message;
+				return;
+			}
+			if (error.message === "Invalid password") {
+				this.errorMessage = langState.values.pages.recover_account.error.invalid_recovery_code;
+				return;
+			}
+			this.errorMessage = error.message;
 		}
 	}
 
@@ -203,7 +230,7 @@ export class DfnsRecoverAccount {
 							</div>
 							{this.hasErrors && (
 								<dfns-alert variant={EAlertVariant.ERROR} hasTitle={true}>
-									<div slot="title">{langState.values.pages.recover_account.error_title}</div>
+									<div slot="title">{langState.values.pages.recover_account.error.title}</div>
 									<div slot="content">{this.errorMessage}</div>
 								</dfns-alert>
 							)}
@@ -223,6 +250,12 @@ export class DfnsRecoverAccount {
 									</dfns-typography>
 								</div>
 							</div>
+							{this.hasErrors && (
+								<dfns-alert variant={EAlertVariant.ERROR} hasTitle={true}>
+									<div slot="title">{langState.values.pages.recover_account.error.title}</div>
+									<div slot="content">{this.errorMessage}</div>
+								</dfns-alert>
+							)}
 						</div>
 					)}
 					{this.step === 4 && (
@@ -263,6 +296,10 @@ export class DfnsRecoverAccount {
 								fullwidth
 								iconposition="left"
 								onClick={() => {
+									this.errorMessage = "";
+									this.hasErrors = false;
+									this.recoveryCode = "";
+									this.recoveryKeyId = "";
 									this.step = 1;
 								}}
 							/>
