@@ -81,7 +81,8 @@
 			"button_logout": "Déconnexion",
 			"wallet_address": "Adresse de mon wallet:",
 			"button_send": "Envoyer",
-			"button_receive": "Recevoir"
+			"button_receive": "Recevoir",
+			"copied_to_clipboard": "Copié dans le presse-papiers"
 		},
 		"settings": {
 			"passkeys": "Clé(s) de sauvegarde",

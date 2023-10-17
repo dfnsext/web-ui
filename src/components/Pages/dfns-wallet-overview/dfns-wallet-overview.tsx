@@ -27,6 +27,7 @@ import { WalletDisconnectedError, isTokenExpiredError } from "../../../utils/err
 export class DfnsWalletOverview {
 	@State() isLoading: boolean = true;
 	@State() tokenList: ITokenInfo[] = [];
+	@State() isWalletCopied: boolean = false;
 
 	@Event() action: EventEmitter<WalletOverviewAction>;
 
@@ -211,12 +212,19 @@ export class DfnsWalletOverview {
 							</dfns-typography>
 							<CopyClipboard value={dfnsStore.state.wallet?.address} openToaster={false}>
 								<dfns-button
-									content={formattedWalletAddress}
+									content={this.isWalletCopied ? langState.values.pages.wallet_overview.copied_to_clipboard: formattedWalletAddress}
 									variant={EButtonVariant.NEUTRAL}
 									sizing={EButtonSize.SMALL}
 									fullwidth
 									icon={iconCopy}
 									iconposition="right"
+									onClick={() => {
+										//show in the content that the address has been copied to clipboard
+										this.isWalletCopied = true;
+										setTimeout(() => {
+											this.isWalletCopied = false;
+										}, 2000);
+									}}
 								/>
 							</CopyClipboard>
 						</div>

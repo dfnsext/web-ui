@@ -81,7 +81,8 @@
 			"button_logout": "Logout",
 			"wallet_address": "Wallet address:",
 			"button_send": "Send",
-			"button_receive": "Receive"
+			"button_receive": "Receive",
+			"copied_to_clipboard": "Copied to clipboard"
 		},
 		"settings": {
 			"passkeys": "passkeys",
