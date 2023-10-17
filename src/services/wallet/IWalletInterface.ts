@@ -1,3 +1,5 @@
+import { UserRecoveryChallenge } from "@dfns/sdk/codegen/datamodel/Auth";
+
 export interface IWalletData {
 	userAddress: string | null;
 	publicKey: string | null;
@@ -29,4 +31,13 @@ export default abstract class IWalletInterface {
 	public abstract isConnected(): Promise<boolean>;
 	public abstract getProvider(): Promise<any>
 	public abstract close(): void;
+	public abstract recoverAccount(
+		apiUrl: string,
+		dfnsHost: string,
+		appId: string,
+		oauthAccessToken: string,
+		challenge: UserRecoveryChallenge,
+		recoveryCode: string,
+		recoveryCredId: string,
+	)
 }

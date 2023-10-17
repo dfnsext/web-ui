@@ -37,7 +37,7 @@ export class DfnsSettings {
 					dfnsStore.state.appId,
 					dfnsStore.state.dfnsUserToken,
 				)
-			).items.filter((passkey) => passkey.kind !== CredentialKind.RecoveryKey);
+			).items;
 
 			dfnsStore.setValue("credentials", credentials);
 		} catch (error) {
@@ -138,6 +138,8 @@ export class DfnsSettings {
 			</svg>
 		);
 
+		const credentials = dfnsStore.state.credentials.filter((passkey) => passkey.kind !== CredentialKind.RecoveryKey);
+
 		return (
 			<dfns-layout closeBtn>
 				<div slot="topSection">
@@ -148,7 +150,7 @@ export class DfnsSettings {
 				<div slot="contentSection">
 					<div class="first-section">
 						<dfns-typography typo={ITypo.TEXTE_SM_SEMIBOLD} color={ITypoColor.PRIMARY}>
-							{dfnsStore.state.credentials.length} {langState.values.pages.settings.passkeys}
+							{credentials.length} {langState.values.pages.settings.passkeys}
 						</dfns-typography>
 						<dfns-button
 							content={langState.values.pages.settings.button_create_passkey}
@@ -160,18 +162,17 @@ export class DfnsSettings {
 						/>
 					</div>
 					<div class="credentials-container">
-						{dfnsStore.state.credentials.map((passkey) => {
+						{credentials.map((passkey) => {
 							return (
 								<div key={passkey.credentialUuid} class="tab-container">
 									<div class="row">
 										<div class="toggle">
-											{passkey.isActive &&
-											dfnsStore.state.credentials.filter((crendential) => crendential.isActive).length === 1 ? (
+											{passkey.isActive && credentials.filter((crendential) => crendential.isActive).length === 1 ? (
 												key
 											) : (
 												<toggle-switch
 													checked={passkey.isActive}
-													onClick={() => dfnsStore.state.credentials.length > 1 && this.onClickToggle(passkey)}
+													onClick={() => credentials.length > 1 && this.onClickToggle(passkey)}
 												/>
 											)}
 										</div>
@@ -188,18 +189,22 @@ export class DfnsSettings {
 							);
 						})}
 					</div>
-					{dfnsStore.state.activateRecovery && (
-						<div class="recovery-kit">
-							<dfns-button
-								content={langState.values.pages.settings.button_recovery_kit}
-								variant={EButtonVariant.SECONDARY}
-								sizing={EButtonSize.SMALL}
-								iconposition="right"
-								icon={arrowRight}
-								onClick={() => {router.navigate(RouteType.RECOVERY_SETUP)}}
-							/>
-						</div>
-					)}
+					{dfnsStore.state.activateRecovery &&
+						dfnsStore.state.credentials.filter((passkey) => passkey.kind === CredentialKind.RecoveryKey && passkey.isActive)
+							.length === 0 && (
+							<div class="recovery-kit">
+								<dfns-button
+									content={langState.values.pages.settings.button_recovery_kit}
+									variant={EButtonVariant.SECONDARY}
+									sizing={EButtonSize.SMALL}
+									iconposition="right"
+									icon={arrowRight}
+									onClick={() => {
+										router.navigate(RouteType.RECOVERY_SETUP);
+									}}
+								/>
+							</div>
+						)}
 
 					<dfns-alert variant={EAlertVariant.INFO}>
 						<div slot="content">{langState.values.pages.settings.content_alert}</div>

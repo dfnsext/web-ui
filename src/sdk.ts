@@ -56,6 +56,7 @@ export interface DfnsSDKOptions {
 	disableLogoutUI?: boolean;
 	activateRecovery?: boolean;
 	showRecoverySetupAtWalletCreation?: boolean;
+	showRecoverySetupAfterRecoverAccount?: boolean;
 }
 
 type Options = NonNullable<DfnsSDKOptions>;
@@ -136,6 +137,7 @@ export class DfnsSDK {
 		dfnsStore.setValue("disableLogoutUI", this.options.disableLogoutUI ?? false);
 		dfnsStore.setValue("activateRecovery", this.options.activateRecovery ?? false);
 		dfnsStore.setValue("showRecoverySetupAtWalletCreation", this.options.showRecoverySetupAtWalletCreation ?? false);
+		dfnsStore.setValue("showRecoverySetupAfterRecoverAccount", this.options.showRecoverySetupAfterRecoverAccount ?? false);
 
 		const walletProvider = LocalStorageService.getInstance().items[CACHED_WALLET_PROVIDER].get();
 		if (walletProvider === WalletProvider.DFNS) {
@@ -245,7 +247,7 @@ export class DfnsSDK {
 	}
 
 	public disconnect() {
-		dfnsStore.state.walletService.disconnect();
+		dfnsStore.state.walletService?.disconnect();
 		LocalStorageService.getInstance().items[CACHED_WALLET_PROVIDER].delete();
 	}
 

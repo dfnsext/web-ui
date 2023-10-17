@@ -7,9 +7,9 @@
 
 ## Events
 
-| Event    | Description | Type                                                                 |
-| -------- | ----------- | -------------------------------------------------------------------- |
-| `action` |             | `CustomEvent<CreatePasskeyAction.BACK \| CreatePasskeyAction.CLOSE>` |
+| Event             | Description | Type                  |
+| ----------------- | ----------- | --------------------- |
+| `walletConnected` |             | `CustomEvent<string>` |
 
 
 ## Dependencies
@@ -24,6 +24,7 @@
 - [dfns-typography](../../Elements/Typography/dfns-typography)
 - [dfns-button](../../Elements/Buttons/dfns-button)
 - [dfns-input-field](../../Elements/Forms/InputField/dfns-input-field)
+- [dfns-alert](../../Elements/Alerts/dfns-alert)
 
 ### Graph
 ```mermaid
@@ -32,10 +33,12 @@ graph TD;
   dfns-recover-account --> dfns-typography
   dfns-recover-account --> dfns-button
   dfns-recover-account --> dfns-input-field
+  dfns-recover-account --> dfns-alert
   dfns-layout --> dfns-typography
   dfns-button --> dfns-typography
   dfns-button --> dfns-loader
   dfns-input-field --> dfns-typography
+  dfns-alert --> dfns-typography
   dfns-main --> dfns-recover-account
   style dfns-recover-account fill:#f9f,stroke:#333,stroke-width:4px
 ```

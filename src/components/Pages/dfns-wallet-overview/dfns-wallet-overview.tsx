@@ -27,6 +27,7 @@ import { WalletDisconnectedError, isTokenExpiredError } from "../../../utils/err
 export class DfnsWalletOverview {
 	@State() isLoading: boolean = true;
 	@State() tokenList: ITokenInfo[] = [];
+	@State() isWalletCopied: boolean = false;
 
 	@Event() action: EventEmitter<WalletOverviewAction>;
 
@@ -48,7 +49,7 @@ export class DfnsWalletOverview {
 	async fetchPasskeys() {
 		const credentials = (
 			await fetchCredentials(dfnsStore.state.apiUrl, dfnsStore.state.dfnsHost, dfnsStore.state.appId, dfnsStore.state.dfnsUserToken)
-		).items.filter((passkey) => passkey.kind !== CredentialKind.RecoveryKey);
+		).items;
 		dfnsStore.setValue("credentials", credentials);
 	}
 
@@ -211,12 +212,19 @@ export class DfnsWalletOverview {
 							</dfns-typography>
 							<CopyClipboard value={dfnsStore.state.wallet?.address} openToaster={false}>
 								<dfns-button
-									content={formattedWalletAddress}
+									content={this.isWalletCopied ? langState.values.pages.wallet_overview.copied_to_clipboard: formattedWalletAddress}
 									variant={EButtonVariant.NEUTRAL}
 									sizing={EButtonSize.SMALL}
 									fullwidth
 									icon={iconCopy}
 									iconposition="right"
+									onClick={() => {
+										//show in the content that the address has been copied to clipboard
+										this.isWalletCopied = true;
+										setTimeout(() => {
+											this.isWalletCopied = false;
+										}, 2000);
+									}}
 								/>
 							</CopyClipboard>
 						</div>
@@ -282,7 +290,7 @@ export class DfnsWalletOverview {
 									})}
 							</div>
 
-							{dfnsStore.state.credentials.length < 2 && (
+							{dfnsStore.state.credentials.filter((passkey) => passkey.kind !== CredentialKind.RecoveryKey).length < 2 && (
 								<dfns-alert variant={EAlertVariant.INFO} hasTitle>
 									<div slot="title">{langState.values.pages.wallet_overview.title_alert}</div>
 									<div slot="content">

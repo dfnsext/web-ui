@@ -81,7 +81,8 @@
 			"button_logout": "Logout",
 			"wallet_address": "Wallet address:",
 			"button_send": "Send",
-			"button_receive": "Receive"
+			"button_receive": "Receive",
+			"copied_to_clipboard": "Copied to clipboard"
 		},
 		"settings": {
 			"passkeys": "passkeys",
@@ -141,7 +142,15 @@
 			"description_step_3": "To continue the recovery, you will need to create a new passkey. Once the new passkey is set up, all your previous credentials will be invalidated.",
 			"button_create_passkey": "Create a passkey",
 			"title_step_4": "Congratulations!",
-			"description_step_4": "Your account has been recovered"
+			"description_step_4": "Your account has been recovered",
+			"error": {
+				"title": "Recovery failed",
+				"missing_recovery_code": "Missing recovery code",
+				"missing_recovery_key": "Missing recovery key",
+				"invalid_recovery_code": "Invalid recovery code",
+				"invalid_recovery_key": "Invalid recovery key"
+			}
+			
 		},
 		"profile": {
 			"title": "Profile",

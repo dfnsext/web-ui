@@ -1,14 +1,14 @@
-import { Component, Event, EventEmitter, JSX, State, Watch, h } from "@stencil/core";
+import { Component, JSX, State, Watch, h } from "@stencil/core";
 import langState from "../../../stores/LanguageStore";
 import router from "../../../stores/RouterStore";
 
+import * as QRCode from "qrcode";
+import { EAlertVariant } from "../../../common/enums/alerts-enums";
+import { EButtonSize, EButtonVariant } from "../../../common/enums/buttons-enums";
+import { ITypo, ITypoColor } from "../../../common/enums/typography-enums";
+import { formatWalletAddress } from "../../../common/helpers/formatWalletAddress";
 import dfnsStore from "../../../stores/DfnsStore";
 import { CopyClipboard } from "../../Elements/CopyClipboard";
-import * as QRCode from "qrcode";
-import { ITypo, ITypoColor } from "../../../common/enums/typography-enums";
-import { EButtonSize, EButtonVariant } from "../../../common/enums/buttons-enums";
-import { EAlertVariant } from "../../../common/enums/alerts-enums";
-import { formatWalletAddress } from "../../../common/helpers/formatWalletAddress";
 
 @Component({
 	tag: "dfns-receive-tokens",

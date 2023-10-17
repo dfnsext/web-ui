@@ -2,13 +2,14 @@ import { BigNumber, ethers } from "ethers";
 
 import { Web3Modal } from "@web3modal/html";
 
+import { UserRecoveryChallenge } from "@dfns/sdk/codegen/datamodel/Auth";
 import { BlockchainNetwork } from "@dfns/sdk/codegen/datamodel/Wallets";
 import { GetAccountResult, PublicClient, configureChains, createConfig } from "@wagmi/core";
 import { EthereumClient, w3mConnectors, w3mProvider } from "@web3modal/ethereum";
 import { networkInfo } from "../../common/constant";
+import { networkMapping } from "../../utils/helper";
 import { EventEmitter } from "../EventEmitter";
 import IWalletInterface, { WalletEvent } from "./IWalletInterface";
-import { networkMapping } from "../../utils/helper";
 
 export interface IWallet {
 	userAddress: string | null;
@@ -25,7 +26,7 @@ export default class WalletConnectWallet implements IWalletInterface {
 	private ethersProvider: ethers.providers.Web3Provider | null = null;
 
 	private _web3WalletData: IWallet | null = null;
-	private readonly event = new EventEmitter();
+	private readonly events = new EventEmitter();
 	private web3modal: Web3Modal;
 
 	private constructor(
@@ -98,14 +99,14 @@ export default class WalletConnectWallet implements IWalletInterface {
 
 		this.ethersProvider = new ethers.providers.Web3Provider(provider);
 
-		// this.initEvents();
+		this.initEvents();
 		await this.updateWalletData();
 	}
 
 	public onChange(event: WalletEvent, callback: (web3WalletData: IWallet) => void) {
-		this.event.on(event, callback);
+		this.events.on(event, callback);
 		return () => {
-			this.event.off(event, callback);
+			this.events.off(event, callback);
 		};
 	}
 
@@ -226,7 +227,7 @@ export default class WalletConnectWallet implements IWalletInterface {
 			provider: this.ethersProvider,
 		};
 		this._web3WalletData = web3Event;
-		this.event.emit("web3modal-change", web3Event);
+		this.events.emit("web3modal-change", web3Event);
 	}
 
 	public async getProvider() {
@@ -239,22 +240,41 @@ export default class WalletConnectWallet implements IWalletInterface {
 		this.web3modal.closeModal();
 	}
 
-	// private initEvents(): void {
-	// 	this.removeEvents();
-	// 	const anyChanged = () => {
-	// 		console.log("anyChanged");
-	// 		this.updateWalletData();
-	// 	};
+	public recoverAccount(
+		apiUrl: string,
+		dfnsHost: string,
+		appId: string,
+		oauthAccessToken: string,
+		challenge: UserRecoveryChallenge,
+		recoveryCode: string,
+		recoveryCredId: string,
+	) {
+		throw new Error("Method not implemented.");
+	}
 
-	// 	this.ethersProvider?.on("accountsChanged", anyChanged);
-	// 	this.ethersProvider?.on("chainChanged", anyChanged);
-	// 	this.ethersProvider?.on("connect", anyChanged);
-	// 	this.ethersProvider?.on("disconnect", anyChanged);
+	private initEvents(): void {
+		this.removeEvents();
+		const anyChanged = async () => {
+			this.updateWalletData();
+		};
 
-	// 	this.removeEvents = () => {
-	// 		if (this.ethersProvider?.removeAllListeners) {
-	// 			this.ethersProvider?.removeAllListeners();
-	// 		}
-	// 	};
-	// }
+		this.ethersProvider?.on("accountsChanged", async () => {
+			await anyChanged();
+			this.events.emit(WalletEvent.CONNECTED, this._web3WalletData.userAddress);
+		});
+		this.ethersProvider?.on("chainChanged", anyChanged);
+		this.ethersProvider?.on("connect", async () => {
+			await anyChanged();
+			this.events.emit(WalletEvent.CONNECTED, this._web3WalletData.userAddress);
+		});
+		this.ethersProvider?.on("disconnect", async () => {
+			this.events.emit(WalletEvent.DISCONNECTED, null);
+		});
+
+		this.removeEvents = () => {
+			if (this.ethersProvider?.removeAllListeners) {
+				this.ethersProvider?.removeAllListeners();
+			}
+		};
+	}
 }

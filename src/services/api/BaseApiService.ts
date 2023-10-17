@@ -171,7 +171,7 @@ export default abstract class BaseApiService {
 
 	protected async onError(error: unknown) {
 		if (isDfnsError(error)) {
-			Promise.reject(new DfnsError(error.httpStatus, error.context));
+			return Promise.reject(new DfnsError(error.httpStatus, error.context));
 		}
 		return Promise.reject(error);
 	}

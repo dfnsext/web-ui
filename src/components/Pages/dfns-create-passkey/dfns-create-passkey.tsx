@@ -1,17 +1,15 @@
 import { Fido2Attestation } from "@dfns/sdk";
-import { CredentialKind, Fido2Options } from "@dfns/sdk/codegen/datamodel/Auth";
-import { Component, Event, EventEmitter, Fragment, State, h } from "@stencil/core";
+import { Fido2Options } from "@dfns/sdk/codegen/datamodel/Auth";
+import { Component, Fragment, State, h } from "@stencil/core";
+import { EAlertVariant } from "../../../common/enums/alerts-enums";
+import { EButtonSize, EButtonVariant } from "../../../common/enums/buttons-enums";
+import { ITypo, ITypoColor } from "../../../common/enums/typography-enums";
 import dfnsStore from "../../../stores/DfnsStore";
 import langState from "../../../stores/LanguageStore";
 import router from "../../../stores/RouterStore";
-import { completePasskeyCreation, getDfnsDelegatedClient, initPasskeyCreation } from "../../../utils/dfns";
-import { create, sign } from "../../../utils/webauthn";
-import { CreatePasskeyAction } from "../../../common/enums/actions-enum";
-import { ITypo, ITypoColor } from "../../../common/enums/typography-enums";
-import { EAlertVariant } from "../../../common/enums/alerts-enums";
-import { EButtonSize, EButtonVariant } from "../../../common/enums/buttons-enums";
-import { disconnectWallet, getDefaultTransports } from "../../../utils/helper";
+import { completePasskeyCreation, initPasskeyCreation } from "../../../utils/dfns";
 import { WalletDisconnectedError, isTokenExpiredError } from "../../../utils/errors";
+import { disconnectWallet } from "../../../utils/helper";
 
 @Component({
 	tag: "dfns-create-passkey",

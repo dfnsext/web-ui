@@ -7,12 +7,10 @@ import { EButtonSize, EButtonVariant } from "../../../common/enums/buttons-enums
 import { ITypo, ITypoColor } from "../../../common/enums/typography-enums";
 import dfnsStore from "../../../stores/DfnsStore";
 import langState from "../../../stores/LanguageStore";
-import router from "../../../stores/RouterStore";
+import router, { RouteType } from "../../../stores/RouterStore";
 import { createRecoveryKey } from "../../../utils/dfns";
 import { WalletDisconnectedError, isTokenExpiredError } from "../../../utils/errors";
-import {
-	disconnectWallet
-} from "../../../utils/helper";
+import { disconnectWallet } from "../../../utils/helper";
 import { CopyClipboard } from "../../Elements/CopyClipboard";
 
 @Component({
@@ -26,8 +24,8 @@ export class DfnsRecoverySetup {
 	@State() passkeyName: string = "Default Recovery key";
 	@State() newPasskeyAttestation: any;
 	@State() newPasskeyChallenge: PublicKeyOptions;
-	@State() recoveryKeyId: string = "YjNU2LmrVgd5ATq9V2W9zwNybQhPrs3UwRC43J3Lr3c";
-	@State() recoveryCode: string = "test";
+	@State() recoveryKeyId: string;
+	@State() recoveryCode: string;
 	@Event() action: EventEmitter<CreatePasskeyAction>;
 
 	async createRecoveryKey() {
@@ -69,7 +67,11 @@ export class DfnsRecoverySetup {
 	}
 
 	handleBackClick() {
-		router.goBack();
+		if (router.state.history[router.state.history.length - 2] === RouteType.SETTINGS) {
+			router.goBack();
+			return;
+		}
+		router.close();
 	}
 
 	render() {
