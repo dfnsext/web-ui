@@ -142,7 +142,8 @@
 			"description_step_3": "To continue the recovery, you will need to create a new passkey. Once the new passkey is set up, all your previous credentials will be invalidated.",
 			"button_create_passkey": "Create a passkey",
 			"title_step_4": "Congratulations!",
-			"description_step_4": "Your account has been recovered"
+			"description_step_4": "Your account has been recovered",
+			"error_title": "Recovery failed"
 		},
 		"profile": {
 			"title": "Profile",

@@ -12,6 +12,7 @@ import { getRecoverAccountChallenge, recoverAccount } from "../../../utils/dfns"
 import { WalletDisconnectedError, isTokenExpiredError } from "../../../utils/errors";
 import { disconnectWallet } from "../../../utils/helper";
 import { UserRecoveryChallenge } from "@dfns/sdk/codegen/datamodel/Auth";
+import { EAlertVariant } from "../../../common/enums/alerts-enums";
 @Component({
 	tag: "dfns-recover-account",
 	styleUrl: "dfns-recover-account.scss",
@@ -26,6 +27,8 @@ export class DfnsRecoverAccount {
 	@State() recoveryKeyId: string;
 	@State() recoveryCode: string;
 	@State() recoveryChallenge: UserRecoveryChallenge;
+	@State() hasErrors: boolean = true;
+	@State() errorMessage: string = "";
 
 	async componentDidRender() {
 		dfnsStore.state.googleEnabled &&
@@ -198,6 +201,12 @@ export class DfnsRecoverAccount {
 									</div>
 								</div>
 							</div>
+							{this.hasErrors && (
+								<dfns-alert variant={EAlertVariant.ERROR} hasTitle={true}>
+									<div slot="title">{langState.values.pages.recover_account.error_title}</div>
+									<div slot="content">{this.errorMessage}</div>
+								</dfns-alert>
+							)}
 						</div>
 					)}
 					{this.step === 3 && (

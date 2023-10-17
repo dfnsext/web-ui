@@ -142,7 +142,8 @@
 			"description_step_3": "Pour poursuivre la récupération, vous devrez créer un nouveau mot de passe. Une fois le nouveau mot de passe créé, toutes les données d'identification précédentes seront invalidées.",
 			"button_create_passkey": "Créer un nouveau passkey",
 			"title_step_4": "Félicitation!",
-			"description_step_4": "Votre compte a été récupéré avec succès"
+			"description_step_4": "Votre compte a été récupéré avec succès",
+			"error_title": "Récupération échouée"
 		},
 		"profile": {
 			"title": "Profil",
