@@ -1,11 +1,11 @@
-import { Component, Event, EventEmitter, Prop, State, h } from "@stencil/core";
+import { Component, Event, EventEmitter, State, h } from "@stencil/core";
 
+import { EButtonSize, EButtonVariant } from "../../../common/enums/buttons-enums";
+import { ITypo, ITypoColor } from "../../../common/enums/typography-enums";
 import { RegisterCompleteResponse } from "../../../services/api/Register";
 import dfnsStore from "../../../stores/DfnsStore";
 import langState from "../../../stores/LanguageStore";
 import { registerWithOAuth } from "../../../utils/dfns";
-import { ITypo, ITypoColor } from "../../../common/enums/typography-enums";
-import { EButtonSize, EButtonVariant } from "../../../common/enums/buttons-enums";
 
 @Component({
 	tag: "dfns-create-account",

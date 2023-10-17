@@ -1,6 +1,21 @@
-import { Buffer } from "buffer";
-import jwt_decode, { JwtPayload } from "jwt-decode";
 import { DfnsApiClient, DfnsDelegatedApiClient, Fido2Attestation, UserActionChallengeResponse, UserRegistrationChallenge } from "@dfns/sdk";
+import { DeactivateCredentialRequest, ListUserCredentialsResponse } from "@dfns/sdk/codegen/Auth";
+import {
+	BroadcastTransactionRequest,
+	CreateWalletRequest,
+	GenerateSignatureRequest,
+	GetSignatureResponse,
+	TransferAssetRequest,
+} from "@dfns/sdk/codegen/Wallets";
+import {
+	CredentialInfo,
+	CredentialKind,
+	Fido2Options,
+	PublicKeyOptions,
+	RecoverUserInput,
+	RegistrationConfirmationFido2,
+	UserRecoveryChallenge,
+} from "@dfns/sdk/codegen/datamodel/Auth";
 import {
 	BlockchainNetwork,
 	SignatureKind,
@@ -13,37 +28,19 @@ import {
 	WalletAsset,
 	WalletStatus,
 } from "@dfns/sdk/codegen/datamodel/Wallets";
-import {
-	BroadcastTransactionRequest,
-	CreateWalletRequest,
-	GenerateSignatureRequest,
-	GetSignatureResponse,
-	TransferAssetRequest,
-} from "@dfns/sdk/codegen/Wallets";
+import { Buffer } from "buffer";
 import { ethers } from "ethers";
+import jwt_decode, { JwtPayload } from "jwt-decode";
+import { ITokenInfo } from "../common/interfaces/ITokenInfo";
+import LocalStorageService, { DFNS_END_USER_TOKEN, OAUTH_ACCESS_TOKEN } from "../services/LocalStorageService";
+import Login from "../services/api/Login";
+import Recover from "../services/api/Recover";
+import Register from "../services/api/Register";
+import dfnsStore from "../stores/DfnsStore";
+import { arrayBufferToBase64UrlString, base64url } from "./base64url";
+import { DfnsError, DfnsHttpError, TokenExpiredError, isDfnsError } from "./errors";
 import { generateRecoveryKeyCredential, generateSignature, getDefaultTransports, getDfnsUsernameFromUserToken } from "./helper";
 import { create, sign } from "./webauthn";
-import Login from "../services/api/Login";
-import Register from "../services/api/Register";
-import { convertCryptoToFiat } from "./binance";
-import { formatUnits } from "ethers/lib/utils";
-import LocalStorageService, { DFNS_END_USER_TOKEN, OAUTH_ACCESS_TOKEN } from "../services/LocalStorageService";
-import dfnsStore from "../stores/DfnsStore";
-import { DeactivateCredentialRequest, ListUserCredentialsResponse } from "@dfns/sdk/codegen/Auth";
-import { DfnsError, DfnsHttpError, TokenExpiredError, isDfnsError } from "./errors";
-import { ITokenInfo } from "../common/interfaces/ITokenInfo";
-import {
-	CredentialInfo,
-	CredentialKind,
-	Fido2Options,
-	PublicKeyOptions,
-	RecoverUserInput,
-	RegistrationConfirmationFido2,
-	UserRecoveryChallenge,
-} from "@dfns/sdk/codegen/datamodel/Auth";
-import { resolve } from "path";
-import { arrayBufferToBase64UrlString, base64url } from "./base64url";
-import Recover from "../services/api/Recover";
 
 export function isDfnsHttpError(err: unknown): err is DfnsHttpError {
 	if (hasErrorProperty(err)) {

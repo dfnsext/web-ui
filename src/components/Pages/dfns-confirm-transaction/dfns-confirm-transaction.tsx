@@ -1,20 +1,17 @@
-import { Component, Event, EventEmitter, Fragment, JSX, Prop, State, h } from "@stencil/core";
 import { Amount, BlockchainAddress } from "@dfns/sdk/codegen/datamodel/Foundations";
-import dfnsStore from "../../../stores/DfnsStore";
-import langState from "../../../stores/LanguageStore";
-import { sign } from "../../../utils/webauthn";
-import { convertCryptoToFiat } from "../../../utils/binance";
-import { ITypo, ITypoColor } from "../../../common/enums/typography-enums";
+import { Component, Event, EventEmitter, Fragment, JSX, Prop, State, h } from "@stencil/core";
+import { formatUnits } from "ethers/lib/utils";
 import { EAlertVariant } from "../../../common/enums/alerts-enums";
 import { EButtonSize, EButtonVariant } from "../../../common/enums/buttons-enums";
-import { getDfnsDelegatedClient, sendTransaction, timeout, transferTokens } from "../../../utils/dfns";
-import { BroadcastTransactionRequest, TransferAssetRequest } from "@dfns/sdk/codegen/Wallets";
-import { TransactionKind, TransactionStatus, TransferKind, TransferStatus } from "@dfns/sdk/codegen/datamodel/Wallets";
-import router from "../../../stores/RouterStore";
-import { disconnectWallet, getDefaultTransports, networkMapping } from "../../../utils/helper";
-import { formatUnits } from "ethers/lib/utils";
+import { ITypo, ITypoColor } from "../../../common/enums/typography-enums";
 import { ITokenInfo } from "../../../common/interfaces/ITokenInfo";
+import dfnsStore from "../../../stores/DfnsStore";
+import langState from "../../../stores/LanguageStore";
+import router from "../../../stores/RouterStore";
+import { convertCryptoToFiat } from "../../../utils/binance";
+import { sendTransaction, transferTokens } from "../../../utils/dfns";
 import { WalletDisconnectedError, isTokenExpiredError } from "../../../utils/errors";
+import { disconnectWallet, networkMapping } from "../../../utils/helper";
 
 @Component({
 	tag: "dfns-confirm-transaction",

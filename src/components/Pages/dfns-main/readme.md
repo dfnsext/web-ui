@@ -116,6 +116,7 @@ graph TD;
   dfns-recover-account --> dfns-typography
   dfns-recover-account --> dfns-button
   dfns-recover-account --> dfns-input-field
+  dfns-recover-account --> dfns-alert
   style dfns-main fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

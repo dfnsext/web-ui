@@ -1,9 +1,9 @@
+import { Amount, BlockchainAddress } from "@dfns/sdk/codegen/datamodel/Foundations";
+import { Wallet } from "@dfns/sdk/codegen/datamodel/Wallets";
 import { Component, Listen, Prop, h } from "@stencil/core";
 import { match } from "ts-pattern";
 import dfnsStore from "../../../stores/DfnsStore";
 import router, { RouteType } from "../../../stores/RouterStore"; // Import the navigate and goBack functions
-import { TransferKind, Wallet } from "@dfns/sdk/codegen/datamodel/Wallets";
-import { Amount, BlockchainAddress } from "@dfns/sdk/codegen/datamodel/Foundations";
 
 @Component({
 	tag: "dfns-main",

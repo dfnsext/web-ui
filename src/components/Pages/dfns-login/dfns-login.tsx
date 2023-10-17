@@ -1,14 +1,14 @@
-import { Component, Event, EventEmitter, Fragment, JSX, Prop, State, h } from "@stencil/core";
+import { Component, Event, EventEmitter, Fragment, JSX, State, h } from "@stencil/core";
 
+import { EButtonSize, EButtonVariant } from "../../../common/enums/buttons-enums";
+import { ITypo, ITypoColor } from "../../../common/enums/typography-enums";
+import LocalStorageService, { CACHED_WALLET_PROVIDER, WalletProvider } from "../../../services/LocalStorageService";
 import DfnsWallet from "../../../services/wallet/DfnsWallet";
 import WalletConnectWallet from "../../../services/wallet/WalletConnectWallet";
 import dfnsStore from "../../../stores/DfnsStore";
 import GoogleStore from "../../../stores/GoogleStore";
 import langState from "../../../stores/LanguageStore";
 import router, { RouteType } from "../../../stores/RouterStore";
-import LocalStorageService, { CACHED_WALLET_PROVIDER, WalletProvider } from "../../../services/LocalStorageService";
-import { EButtonSize, EButtonVariant } from "../../../common/enums/buttons-enums";
-import { ITypo, ITypoColor } from "../../../common/enums/typography-enums";
 @Component({
 	tag: "dfns-login",
 	styleUrl: "dfns-login.scss",

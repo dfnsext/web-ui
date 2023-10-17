@@ -2,14 +2,14 @@ import { BigNumber, ethers } from "ethers";
 
 import { Web3Modal } from "@web3modal/html";
 
+import { UserRecoveryChallenge } from "@dfns/sdk/codegen/datamodel/Auth";
 import { BlockchainNetwork } from "@dfns/sdk/codegen/datamodel/Wallets";
 import { GetAccountResult, PublicClient, configureChains, createConfig } from "@wagmi/core";
 import { EthereumClient, w3mConnectors, w3mProvider } from "@web3modal/ethereum";
 import { networkInfo } from "../../common/constant";
+import { networkMapping } from "../../utils/helper";
 import { EventEmitter } from "../EventEmitter";
 import IWalletInterface, { WalletEvent } from "./IWalletInterface";
-import { networkMapping } from "../../utils/helper";
-import { UserRecoveryChallenge } from "@dfns/sdk/codegen/datamodel/Auth";
 
 export interface IWallet {
 	userAddress: string | null;
