@@ -12,6 +12,7 @@ import { createRecoveryKey } from "../../../utils/dfns";
 import { WalletDisconnectedError, isTokenExpiredError } from "../../../utils/errors";
 import { disconnectWallet } from "../../../utils/helper";
 import { CopyClipboard } from "../../Elements/CopyClipboard";
+import { set } from "ts-pattern/dist/patterns";
 
 @Component({
 	tag: "dfns-recovery-setup",
@@ -27,6 +28,8 @@ export class DfnsRecoverySetup {
 	@State() recoveryKeyId: string;
 	@State() recoveryCode: string;
 	@Event() action: EventEmitter<CreatePasskeyAction>;
+	@State() isRecoveryCodeCopied: boolean = false;
+	@State() isRecoveryKeyCopied: boolean = false;
 
 	async createRecoveryKey() {
 		try {
@@ -74,6 +77,34 @@ export class DfnsRecoverySetup {
 		router.close();
 	}
 
+	getIconCopy() {
+		return (
+			<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none">
+				<path
+					d="M7 3.5C7 2.67157 7.67157 2 8.5 2H12.3787C12.7765 2 13.158 2.15804 13.4393 2.43934L16.5607 5.56066C16.842 5.84197 17 6.2235 17 6.62132V12.5C17 13.3284 16.3284 14 15.5 14H14.5V10.6213C14.5 9.82567 14.1839 9.06261 13.6213 8.5L10.5 5.37868C9.93739 4.81607 9.17433 4.5 8.37868 4.5H7V3.5Z"
+					fill={dfnsStore.state.theme.includes("dark") ? "#D1D5DB" : "#50565E"}
+				/>
+				<path
+					d="M4.5 6C3.67157 6 3 6.67157 3 7.5V16.5C3 17.3284 3.67157 18 4.5 18H11.5C12.3284 18 13 17.3284 13 16.5V10.6213C13 10.2235 12.842 9.84197 12.5607 9.56066L9.43934 6.43934C9.15804 6.15804 8.7765 6 8.37868 6H4.5Z"
+					fill={dfnsStore.state.theme.includes("dark") ? "#D1D5DB" : "#50565E"}
+				/>
+			</svg>
+		);
+	}
+
+	getIconCheck() {
+		return (
+			<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none">
+				<path
+					fill-rule="evenodd"
+					clip-rule="evenodd"
+					d="M19.916 4.62604C20.2607 4.85581 20.3538 5.32146 20.124 5.6661L11.124 19.1661C10.9994 19.3531 10.7975 19.4743 10.5739 19.4964C10.3503 19.5186 10.1286 19.4393 9.96967 19.2804L3.96967 13.2804C3.67678 12.9875 3.67678 12.5126 3.96967 12.2197C4.26256 11.9269 4.73744 11.9269 5.03033 12.2197L10.3834 17.5729L18.876 4.83405C19.1057 4.48941 19.5714 4.39628 19.916 4.62604Z"
+					fill={dfnsStore.state.theme.includes("dark") ? "#D1D5DB" : "#50565E"}
+				/>
+			</svg>
+		);
+	}
+
 	render() {
 		const iconTools: JSX.Element = (
 			<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
@@ -95,18 +126,6 @@ export class DfnsRecoverySetup {
 				/>
 			</svg>
 		);
-		const iconCopy: JSX.Element = (
-			<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none">
-				<path
-					d="M7 3.5C7 2.67157 7.67157 2 8.5 2H12.3787C12.7765 2 13.158 2.15804 13.4393 2.43934L16.5607 5.56066C16.842 5.84197 17 6.2235 17 6.62132V12.5C17 13.3284 16.3284 14 15.5 14H14.5V10.6213C14.5 9.82567 14.1839 9.06261 13.6213 8.5L10.5 5.37868C9.93739 4.81607 9.17433 4.5 8.37868 4.5H7V3.5Z"
-					fill={dfnsStore.state.theme.includes("dark") ? "#D1D5DB" : "#50565E"}
-				/>
-				<path
-					d="M4.5 6C3.67157 6 3 6.67157 3 7.5V16.5C3 17.3284 3.67157 18 4.5 18H11.5C12.3284 18 13 17.3284 13 16.5V10.6213C13 10.2235 12.842 9.84197 12.5607 9.56066L9.43934 6.43934C9.15804 6.15804 8.7765 6 8.37868 6H4.5Z"
-					fill={dfnsStore.state.theme.includes("dark") ? "#D1D5DB" : "#50565E"}
-				/>
-			</svg>
-		);
 		const iconDownload: JSX.Element = (
 			<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
 				<path
@@ -119,6 +138,7 @@ export class DfnsRecoverySetup {
 				/>
 			</svg>
 		);
+
 		const isMobile = window.innerWidth <= 768;
 		return (
 			<dfns-layout closeBtn onClickCloseBtn={() => this.action.emit(CreatePasskeyAction.CLOSE)}>
@@ -162,8 +182,16 @@ export class DfnsRecoverySetup {
 											</dfns-input-field>
 										</div>
 										<div class="copy-icon">
-											<CopyClipboard value={this.recoveryCode} openToaster={false}>
-												{iconCopy}
+											<CopyClipboard
+												onClick={() => {
+													this.isRecoveryCodeCopied = true;
+													setTimeout(() => {
+														this.isRecoveryCodeCopied = false;
+													}, 2000);
+												}}
+												value={this.recoveryCode}
+												openToaster={false}>
+												{!this.isRecoveryCodeCopied ? this.getIconCopy() : this.getIconCheck()}
 											</CopyClipboard>
 										</div>
 									</div>
@@ -181,8 +209,16 @@ export class DfnsRecoverySetup {
 											</dfns-input-field>
 										</div>
 										<div class="copy-icon">
-											<CopyClipboard value={this.recoveryKeyId} openToaster={false}>
-												{iconCopy}
+											<CopyClipboard
+												onClick={() => {
+													this.isRecoveryKeyCopied = true;
+													setTimeout(() => {
+														this.isRecoveryKeyCopied = false;
+													}, 2000);
+												}}
+												value={this.recoveryKeyId}
+												openToaster={false}>
+												{!this.isRecoveryKeyCopied ? this.getIconCopy() : this.getIconCheck()}
 											</CopyClipboard>
 										</div>
 									</div>

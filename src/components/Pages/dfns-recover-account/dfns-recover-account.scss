@@ -44,12 +44,8 @@
 				align-items: end;
 				gap: $spacing-2;
 				.input-field {
-					width: 85%;
+					width: 100%;
 					justify-content: space-between;
-				}
-				.copy-icon {
-					display: flex;
-					cursor: pointer;
 				}
 			}
 		}
