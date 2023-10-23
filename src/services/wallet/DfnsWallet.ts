@@ -63,13 +63,16 @@ class DfnsWallet implements IWalletInterface {
 				}
 			}
 		} catch (error) {
-
 			if (isDfnsError(error) && error.httpStatus === 401) {
-				const response = await this.createAccount();
-				dfnsStore.setValue("dfnsUserToken", response.userAuthToken);
-				wallet = await this.validateWallet();
-				if (dfnsStore.state.showWalletValidation) {
-					wallet = await this.waitForWalletValidation();
+				try {
+					const response = await this.createAccount();
+					dfnsStore.setValue("dfnsUserToken", response.userAuthToken);
+					wallet = await this.validateWallet();
+					if (dfnsStore.state.showWalletValidation) {
+						wallet = await this.waitForWalletValidation();
+					}
+				} catch (err) {
+					throw error;
 				}
 			} else {
 				throw error;
@@ -227,11 +230,10 @@ class DfnsWallet implements IWalletInterface {
 
 		const decodedToken = jwt_decode(dfnsUserToken) as JwtPayload;
 
-		const issuedAt = new Date(decodedToken?.iat! * 1000);
 		const expiresAt = new Date(decodedToken?.exp! * 1000);
 		const now = new Date();
 
-		if (issuedAt < now && now < expiresAt) {
+		if (now < expiresAt) {
 			return true;
 		}
 		return false;

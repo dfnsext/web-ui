@@ -202,11 +202,6 @@ export class DfnsRecoverAccount {
 											</dfns-typography>
 										</dfns-input-field>
 									</div>
-									<div class="copy-icon">
-										<CopyClipboard value={""} openToaster={true}>
-											{iconCopy}
-										</CopyClipboard>
-									</div>
 								</div>
 								<div class="wrapper-input">
 									<div class="input-field">
@@ -220,11 +215,6 @@ export class DfnsRecoverAccount {
 												{langState.values.pages.recovery_setup.recovery_key}
 											</dfns-typography>
 										</dfns-input-field>
-									</div>
-									<div class="copy-icon">
-										<CopyClipboard value={""} openToaster={true}>
-											{iconCopy}
-										</CopyClipboard>
 									</div>
 								</div>
 							</div>

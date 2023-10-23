@@ -275,7 +275,7 @@ export function getDefaultTransports(defaultDevice?: "mobile" | "desktop") {
 				defaultTransports.push("internal");
 			}
 			if (!isMobile) {
-				defaultTransports.push("hybrid");
+				defaultTransports.push("hybrid", "usb", "ble", "nfc");
 			}
 			break;
 		case "desktop":
@@ -283,11 +283,11 @@ export function getDefaultTransports(defaultDevice?: "mobile" | "desktop") {
 				defaultTransports.push("internal");
 			}
 			if (isMobile) {
-				defaultTransports.push("hybrid");
+				defaultTransports.push("hybrid", "usb", "ble", "nfc");
 			}
 			break;
 		default:
-			defaultTransports.push("internal", "hybrid", "ble", "nfc");
+			defaultTransports.push("internal", "hybrid", "ble", "nfc", "usb");
 			break;
 	}
 	return defaultTransports;
