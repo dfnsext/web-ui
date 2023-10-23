@@ -26,7 +26,7 @@
 		"prepublishOnly": "",
 		"version": "npm run format && git add -A src",
 		"postversion": "git push && git push --tags",
-		"build": "stencil build --docs",
+		"build": "stencil build --docs --max_old_space_size=8192",
 		"start": "stencil build --dev --watch --serve",
 		"test": "stencil test --spec --e2e",
 		"test.watch": "stencil test --spec --e2e --watchAll",
