@@ -1,7 +1,7 @@
 import { Config } from '@stencil/core';
 import { sass } from '@stencil/sass';
 import nodePolyfills from 'rollup-plugin-node-polyfills';
-import dotenvPlugin from 'rollup-plugin-dotenv' 
+import dotenvPlugin from 'rollup-plugin-dotenv'
 
 export const config: Config = {
   namespace: 'dfns-web-component',
@@ -36,6 +36,7 @@ export const config: Config = {
         'src/themes/fonts.scss',
         'src/themes/modes.scss',
         'src/themes/constants.scss',
+        'src/themes/mixins.scss',
       ]
     }),
     dotenvPlugin()
@@ -46,6 +47,9 @@ export const config: Config = {
     ]
   },
   testing: {
+    timers: 'fake',
+    bail: true,
+
   },
 };
 

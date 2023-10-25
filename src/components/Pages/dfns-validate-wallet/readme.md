@@ -5,19 +5,11 @@
 <!-- Auto Generated Below -->
 
 
-## Properties
-
-| Property                     | Attribute                       | Description | Type                | Default     |
-| ---------------------------- | ------------------------------- | ----------- | ------------------- | ----------- |
-| `network`                    | `network`                       |             | `BlockchainNetwork` | `undefined` |
-| `shouldShowWalletValidation` | `should-show-wallet-validation` |             | `boolean`           | `undefined` |
-
-
 ## Events
 
-| Event             | Description | Type                                                                                                                                                                                                 |
-| ----------------- | ----------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `walletValidated` |             | `CustomEvent<{ id: string; network: BlockchainNetwork; status: WalletStatus; signingKey?: SigningKey; address?: string; name?: string; externalId?: string; tags: string[]; dateCreated: string; }>` |
+| Event           | Description | Type                                                                                                                                                                                                 |
+| --------------- | ----------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `walletCreated` |             | `CustomEvent<{ id: string; network: BlockchainNetwork; status: WalletStatus; signingKey?: SigningKey; address?: string; name?: string; externalId?: string; tags: string[]; dateCreated: string; }>` |
 
 
 ## Dependencies
@@ -40,6 +32,7 @@ graph TD;
   dfns-validate-wallet --> dfns-typography
   dfns-validate-wallet --> dfns-stepper
   dfns-validate-wallet --> dfns-button
+  dfns-layout --> dfns-typography
   dfns-button --> dfns-typography
   dfns-button --> dfns-loader
   dfns-main --> dfns-validate-wallet

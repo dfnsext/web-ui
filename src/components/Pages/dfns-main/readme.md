@@ -7,11 +7,15 @@
 
 ## Properties
 
-| Property                              | Attribute                                | Description | Type                             | Default     |
-| ------------------------------------- | ---------------------------------------- | ----------- | -------------------------------- | ----------- |
-| `messageToSign`                       | `message-to-sign`                        |             | `string`                         | `undefined` |
-| `network`                             | `network`                                |             | `BlockchainNetwork`              | `undefined` |
-| `userCreationAuthenticatorAttachment` | `user-creation-authenticator-attachment` |             | `"cross-platform" \| "platform"` | `undefined` |
+| Property                 | Attribute                  | Description | Type     | Default     |
+| ------------------------ | -------------------------- | ----------- | -------- | ----------- |
+| `messageToSign`          | `message-to-sign`          |             | `string` | `undefined` |
+| `transactionData`        | `transaction-data`         |             | `string` | `undefined` |
+| `transactionDecimals`    | `transaction-decimals`     |             | `number` | `undefined` |
+| `transactionNonce`       | `transaction-nonce`        |             | `number` | `undefined` |
+| `transactionTo`          | `transaction-to`           |             | `string` | `undefined` |
+| `transactionTokenSymbol` | `transaction-token-symbol` |             | `string` | `undefined` |
+| `transactionValue`       | `transaction-value`        |             | `string` | `undefined` |
 
 
 ## Dependencies
@@ -27,6 +31,10 @@
 - [dfns-create-passkey](../dfns-create-passkey)
 - [dfns-wallet-overview](../dfns-wallet-overview)
 - [dfns-login](../dfns-login)
+- [dfns-transfer-tokens](../dfns-transfer-tokens)
+- [dfns-confirm-transaction](../dfns-confirm-transaction)
+- [dfns-receive-tokens](../dfns-receive-tokens)
+- [dfns-recover-account](../dfns-recover-account)
 
 ### Graph
 ```mermaid
@@ -40,10 +48,15 @@ graph TD;
   dfns-main --> dfns-create-passkey
   dfns-main --> dfns-wallet-overview
   dfns-main --> dfns-login
+  dfns-main --> dfns-transfer-tokens
+  dfns-main --> dfns-confirm-transaction
+  dfns-main --> dfns-receive-tokens
+  dfns-main --> dfns-recover-account
   dfns-create-account --> dfns-layout
   dfns-create-account --> dfns-typography
   dfns-create-account --> dfns-stepper
   dfns-create-account --> dfns-button
+  dfns-layout --> dfns-typography
   dfns-button --> dfns-typography
   dfns-button --> dfns-loader
   dfns-recovery-setup --> dfns-layout
@@ -63,8 +76,8 @@ graph TD;
   dfns-wallet-validation --> dfns-button
   dfns-sign-message --> dfns-layout
   dfns-sign-message --> dfns-typography
-  dfns-sign-message --> dfns-button
   dfns-sign-message --> dfns-alert
+  dfns-sign-message --> dfns-button
   dfns-settings --> dfns-layout
   dfns-settings --> dfns-typography
   dfns-settings --> dfns-button
@@ -78,9 +91,32 @@ graph TD;
   dfns-wallet-overview --> dfns-layout
   dfns-wallet-overview --> dfns-typography
   dfns-wallet-overview --> dfns-button
+  dfns-wallet-overview --> dfns-loader
   dfns-wallet-overview --> dfns-alert
   dfns-login --> dfns-layout
   dfns-login --> dfns-typography
+  dfns-login --> dfns-button
+  dfns-transfer-tokens --> dfns-confirm-transaction
+  dfns-transfer-tokens --> dfns-layout
+  dfns-transfer-tokens --> dfns-typography
+  dfns-transfer-tokens --> dfns-loader
+  dfns-transfer-tokens --> dfns-input-field
+  dfns-transfer-tokens --> dfns-alert
+  dfns-transfer-tokens --> dfns-button
+  dfns-confirm-transaction --> dfns-layout
+  dfns-confirm-transaction --> dfns-typography
+  dfns-confirm-transaction --> dfns-alert
+  dfns-confirm-transaction --> dfns-loader
+  dfns-confirm-transaction --> dfns-button
+  dfns-receive-tokens --> dfns-layout
+  dfns-receive-tokens --> dfns-typography
+  dfns-receive-tokens --> dfns-button
+  dfns-receive-tokens --> dfns-alert
+  dfns-recover-account --> dfns-layout
+  dfns-recover-account --> dfns-typography
+  dfns-recover-account --> dfns-button
+  dfns-recover-account --> dfns-input-field
+  dfns-recover-account --> dfns-alert
   style dfns-main fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

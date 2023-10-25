@@ -1,6 +1,7 @@
 dist/
 www/
 loader/
+lib/
 
 *~
 *.sw[mnpcod]
@@ -25,3 +26,4 @@ $RECYCLE.BIN/
 Thumbs.db
 UserInterfaceState.xcuserstate
 .env
+node_modules

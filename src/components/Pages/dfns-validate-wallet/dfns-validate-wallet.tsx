@@ -1,11 +1,14 @@
-import { BlockchainNetwork, Wallet } from "@dfns/sdk/codegen/datamodel/Wallets";
+import { Wallet } from "@dfns/sdk/codegen/datamodel/Wallets";
 import { Component, Event, EventEmitter, Prop, State, h } from "@stencil/core";
 import dfnsStore from "../../../stores/DfnsStore";
 import langState from "../../../stores/LanguageStore";
 import { waitForWalletActive } from "../../../utils/dfns";
-import { EButtonSize, EButtonVariant } from "../../../utils/enums/buttons-enums";
-import { ITypo, ITypoColor } from "../../../utils/enums/typography-enums";
-import { createWallet } from "../../../utils/helper";
+import { createWallet } from "../../../utils/dfns";
+import { EButtonSize, EButtonVariant } from "../../../common/enums/buttons-enums";
+import { ITypo, ITypoColor } from "../../../common/enums/typography-enums";
+import { disconnectWallet } from "../../../utils/helper";
+import { WalletDisconnectedError, isTokenExpiredError } from "../../../utils/errors";
+import router, { RouteType } from "../../../stores/RouterStore";
 
 @Component({
 	tag: "dfns-validate-wallet",
@@ -13,23 +16,23 @@ import { createWallet } from "../../../utils/helper";
 	shadow: true,
 })
 export class DfnsValidateWallet {
-	@Prop() network: BlockchainNetwork;
-	@Prop() shouldShowWalletValidation: boolean;
-	@Event() walletValidated: EventEmitter<Wallet>;
+	@Event() walletCreated: EventEmitter<Wallet>;
 	@State() isLoading: boolean = false;
 
 	async validateWallet() {
 		try {
 			this.isLoading = true;
 			let wallet = await createWallet(
+				dfnsStore.state.apiUrl,
 				dfnsStore.state.dfnsHost,
 				dfnsStore.state.appId,
 				dfnsStore.state.rpId,
 				dfnsStore.state.dfnsUserToken,
-				this.network,
+				dfnsStore.state.network,
 			);
-			if (!this.shouldShowWalletValidation) {
+			if (!dfnsStore.state.showWalletValidation) {
 				wallet = await waitForWalletActive(
+					dfnsStore.state.apiUrl,
 					dfnsStore.state.dfnsHost,
 					dfnsStore.state.appId,
 					dfnsStore.state.dfnsUserToken,
@@ -37,15 +40,25 @@ export class DfnsValidateWallet {
 				);
 			}
 			this.isLoading = false;
-			this.walletValidated.emit(wallet);
+			this.walletCreated.emit(wallet);
+			setTimeout(() => {
+				if (dfnsStore.state.showRecoverySetupAtWalletCreation && !dfnsStore.state.showWalletValidation) {
+					router.navigate(RouteType.RECOVERY_SETUP);
+				}
+			}, 500);
 			return wallet;
 		} catch (err) {
 			this.isLoading = false;
+			if (isTokenExpiredError(err)) {
+				disconnectWallet();
+				throw new WalletDisconnectedError();
+			}
+			throw err;
 		}
 	}
 
 	async closeBtn() {
-		this.walletValidated.emit(null);
+		this.walletCreated.emit(null);
 	}
 
 	render() {
@@ -66,11 +79,14 @@ export class DfnsValidateWallet {
 						activeIndices={[0, 1]}
 					/>
 					<div class="contentContainer">
-						<div class="title">
-							<dfns-typography typo={ITypo.TEXTE_LG_SEMIBOLD}>
+						{/**
+						  @todo: Need to be refacto post ACCOR 
+						**/}
+						{/* <div class="title">
+							<dfns-typography typo={ITypo.TEXTE_LG_SEMIBOLD} color={ITypoColor.PRIMARY}>
 								{langState.values.pages.validate_wallet.description}
 							</dfns-typography>
-						</div>
+						</div> */}
 						{/* <div class="content">
 								<dfns-typography typo={ITypo.TEXTE_SM_REGULAR} color={ITypoColor.SECONDARY}>
 								{langState.values.pages.validate_wallet.description}

@@ -5,7 +5,13 @@ export const DFNS_END_USER_TOKEN = 'dfnsEndUserToken'
 export const DFNS_ACTIVE_WALLET = 'dfnsActiveWallet'
 export const OAUTH_ACCESS_TOKEN = 'oauthAccessToken'
 export const DFNS_CREDENTIALS = 'dfnsCredentials'
+export const CACHED_WALLET_PROVIDER = 'cachedWalletProvider'
 
+
+export enum WalletProvider {
+	DFNS = 'dfns',
+	WALLET_CONNECT = 'walletConnect'
+}
 export default class LocalStorageService {
 	private static instance: LocalStorageService;
 
@@ -39,6 +45,11 @@ export default class LocalStorageService {
 			set: (item: CredentialInfo[]) => this.setValue(DFNS_CREDENTIALS, item),
 			delete: () => this.delete(DFNS_CREDENTIALS),
 		},
+		[CACHED_WALLET_PROVIDER]: {
+			get: () => this.getValue<WalletProvider>(CACHED_WALLET_PROVIDER),
+			set: (item: WalletProvider) => this.setValue(CACHED_WALLET_PROVIDER, item),
+			delete: () => this.delete(CACHED_WALLET_PROVIDER),
+		}
 	};
 
 	private getValue<T>(key: keyof typeof this.items): T | null {

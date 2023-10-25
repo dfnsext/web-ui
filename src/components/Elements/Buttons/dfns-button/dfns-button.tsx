@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Event, JSX, Prop, h, Fragment } from "@stencil/core";
 import classNames from "classnames";
-import { EButtonVariant, EButtonSize } from "../../../../utils/enums/buttons-enums";
-import { ITypo } from "../../../../utils/enums/typography-enums";
+import { EButtonSize, EButtonVariant } from "../../../../common/enums/buttons-enums";
+import { ITypo } from "../../../../common/enums/typography-enums";
 
 @Component({
 	tag: "dfns-button",
@@ -18,6 +18,7 @@ export class DfnsButton {
 	@Prop() fullwidth = false;
 	@Prop() iconposition: "left" | "right" = "right";
 	@Prop() icon?: JSX.Element;
+	@Prop() iconUrl?: string;
 	@Prop() iconstyle?: any;
 	@Prop() classCss?: string;
 	@Prop() onClick: () => any;
@@ -64,10 +65,21 @@ export class DfnsButton {
 		return (
 			<button onClick={this.onClick} {...attributes} class={classNames("root", this.classCss)} type={this.type}>
 				<Fragment>
-					{this.isloading ? <dfns-loader /> : null}
+					{this.isloading ? <dfns-loader size="small" /> : null}
 					{!this.isloading && this.icon && this.iconposition === "left" ? <div class="icon">{this.icon}</div> : null}
+					{!this.isloading && this.iconUrl && this.iconposition === "left" ? (
+						<div class="icon">
+							<img src={this.iconUrl} alt={this.iconUrl} width={18} height={18} />
+						</div>
+					) : null}
 					{!this.isloading ? this.formatWithTypo() : null}
 					{!this.isloading && this.icon && this.iconposition === "right" ? <div class="icon">{this.icon}</div> : null}
+					
+					{!this.isloading && this.iconUrl && this.iconposition === "right" ? (
+						<div class="icon">
+							<img src={this.iconUrl} alt={this.iconUrl} width={18} height={18} />
+						</div>
+					) : null}
 				</Fragment>
 			</button>
 		);

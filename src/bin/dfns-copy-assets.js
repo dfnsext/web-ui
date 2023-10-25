@@ -11,7 +11,7 @@ if (args.length !== 1) {
 }
 
 const destinationPath = args[0];
-const directoryPath = path.join("./node_modules/@smart-chain-fr/dfns-sdk/dist/dfns-web-component/assets/");
+const directoryPath = path.join("./node_modules/@dfns/web-ui/dist/dfns-web-component/assets/");
 
 copy(directoryPath, destinationPath, function (error, results) {
 	if (error) {

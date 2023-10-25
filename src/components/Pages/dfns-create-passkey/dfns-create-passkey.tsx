@@ -1,77 +1,74 @@
 import { Fido2Attestation } from "@dfns/sdk";
-import { CredentialKind, Fido2Options } from "@dfns/sdk/codegen/datamodel/Auth";
-import { Component, Event, EventEmitter, Fragment, State, h } from "@stencil/core";
+import { Fido2Options } from "@dfns/sdk/codegen/datamodel/Auth";
+import { Component, Fragment, State, h } from "@stencil/core";
+import { EAlertVariant } from "../../../common/enums/alerts-enums";
+import { EButtonSize, EButtonVariant } from "../../../common/enums/buttons-enums";
+import { ITypo, ITypoColor } from "../../../common/enums/typography-enums";
 import dfnsStore from "../../../stores/DfnsStore";
 import langState from "../../../stores/LanguageStore";
 import router from "../../../stores/RouterStore";
-import { getDfnsDelegatedClient } from "../../../utils/dfns";
-import { CreatePasskeyAction } from "../../../utils/enums/actions-enum";
-import { EAlertVariant } from "../../../utils/enums/alerts-enums";
-import { EButtonSize, EButtonVariant } from "../../../utils/enums/buttons-enums";
-import { ITypo, ITypoColor } from "../../../utils/enums/typography-enums";
-import { create, sign } from "../../../utils/webauthn";
-
+import { completePasskeyCreation, initPasskeyCreation } from "../../../utils/dfns";
+import { WalletDisconnectedError, isTokenExpiredError } from "../../../utils/errors";
+import { disconnectWallet } from "../../../utils/helper";
 
 @Component({
 	tag: "dfns-create-passkey",
 	styleUrl: "dfns-create-passkey.scss",
 	shadow: true,
 })
-
-
-
 export class DfnsCreatePasskey {
-
 	@State() isLoading: boolean = false;
 	@State() step = 1;
 	@State() passkeyName?: string;
 	@State() newPasskeyAttestation: Fido2Attestation;
 	@State() newPasskeyChallenge: Fido2Options;
-	@Event() action: EventEmitter<CreatePasskeyAction>;
 
 	async initPasskeyCreation() {
 		this.isLoading = true;
 		try {
-			const dfnsDelegated = getDfnsDelegatedClient(dfnsStore.state.dfnsHost, dfnsStore.state.appId, dfnsStore.state.dfnsUserToken);
-			this.newPasskeyChallenge = (await dfnsDelegated.auth.createUserCredentialChallenge({
-				body: { kind: CredentialKind.Fido2 },
-			})) as Fido2Options;
-			this.newPasskeyAttestation = await create(this.newPasskeyChallenge);
+			const { attestation, challenge } = await initPasskeyCreation(
+				dfnsStore.state.apiUrl,
+				dfnsStore.state.dfnsHost,
+				dfnsStore.state.appId,
+				dfnsStore.state.dfnsUserToken,
+			);
+			this.newPasskeyChallenge = challenge;
+			this.newPasskeyAttestation = attestation;
 			this.step = 2;
 		} catch (err) {
-			console.error(err);
+			if (isTokenExpiredError(err)) {
+				disconnectWallet();
+				throw new WalletDisconnectedError();
+			}
 			this.isLoading = false;
+			throw err;
 		}
 
 		this.isLoading = false;
 	}
 
 	async completePasskeyCreation() {
-		this.isLoading = true;
 		try {
-			const dfnsDelegated = getDfnsDelegatedClient(dfnsStore.state.dfnsHost, dfnsStore.state.appId, dfnsStore.state.dfnsUserToken);
-			const request = {
-				body: {
-					...this.newPasskeyAttestation,
-					credentialName: this.passkeyName,
-					//@ts-ignore
-					challengeIdentifier: this.newPasskeyChallenge.temporaryAuthenticationToken,
-				},
-			};
-			//@ts-ignore
-			const addCredentialInitChallenge = await dfnsDelegated.auth.createUserCredentialInit(request);
-			const assertion = await sign(dfnsStore.state.rpId, addCredentialInitChallenge.challenge, addCredentialInitChallenge.allowCredentials);
-
-			//@ts-ignore
-			await dfnsDelegated.auth.createUserCredentialComplete(request, {
-				challengeIdentifier: addCredentialInitChallenge.challengeIdentifier,
-				firstFactor: assertion,
-			});
+			this.isLoading = true;
+			await completePasskeyCreation(
+				dfnsStore.state.apiUrl,
+				dfnsStore.state.dfnsHost,
+				dfnsStore.state.appId,
+				dfnsStore.state.rpId,
+				dfnsStore.state.dfnsUserToken,
+				this.newPasskeyAttestation,
+				this.newPasskeyChallenge,
+				this.passkeyName,
+			);
 			router.goBack();
 			this.isLoading = false;
 			this.step = 1;
 			this.passkeyName = undefined;
 		} catch (err) {
+			if (isTokenExpiredError(err)) {
+				disconnectWallet();
+				throw new WalletDisconnectedError();
+			}
 			this.isLoading = false;
 			console.error(err);
 		}
@@ -105,7 +102,7 @@ export class DfnsCreatePasskey {
 						)}
 						{this.step === 2 && (
 							<Fragment>
-								<dfns-typography typo={ITypo.TEXTE_LG_SEMIBOLD}>
+								<dfns-typography typo={ITypo.TEXTE_LG_SEMIBOLD} color={ITypoColor.PRIMARY}>
 									{langState.values.pages.create_passkey.save_title}
 								</dfns-typography>
 
@@ -133,7 +130,7 @@ export class DfnsCreatePasskey {
 							/>
 							<dfns-button
 								content={langState.values.buttons.back}
-								variant={EButtonVariant.SECONDARY}
+								variant={EButtonVariant.NEUTRAL}
 								sizing={EButtonSize.MEDIUM}
 								fullwidth
 								iconposition="left"

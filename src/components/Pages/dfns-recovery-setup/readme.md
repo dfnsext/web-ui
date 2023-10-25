@@ -34,6 +34,7 @@ graph TD;
   dfns-recovery-setup --> dfns-input-field
   dfns-recovery-setup --> dfns-alert
   dfns-recovery-setup --> dfns-button
+  dfns-layout --> dfns-typography
   dfns-input-field --> dfns-typography
   dfns-alert --> dfns-typography
   dfns-button --> dfns-typography

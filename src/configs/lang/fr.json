@@ -17,24 +17,35 @@
 		"my_wallet": "Mon wallet",
 		"settings": "Paramètres",
 		"create_passkey": "Créer une clé d'accès",
+		"confirm_transaction": "Confirmer la transaction",
+		"transfert_token": "Séléctionnez un token",
+		"send_token": "Envoyer un token",
+		"receive_token": "Recevoir un token",
+		"login": "Connexion / Inscription",
+		"recovery_setup": "Récupération du wallet",
+		"recover_account": "Récupérer mon compte",
+		"recovery_validation_step": "Avez-vous sauvegardé votre kit de récupération ?",
 		"nav_links": {}
 	},
 	"pages": {
 		"identification": {
 			"title": "Identification\n\t"
 		},
-		"home": {
-			"title": "Accueil"
+		"login": {
+			"wallet": "Wallet",
+			"recover_account": "Récupérer mon compte",
+			"or": "ou"
 		},
 		"create_account": {
 			"title": "Création du\nwallet",
-			"description": "Utilisez votre téléphone portable personnel pour créer votre wallet | ",
-			"button_create": "Continue"
+			"description": "Utilisez la reconnaissance d'empreinte digitale ou de visage pour vous connecter",
+			"description_mobile": "Utilisez votre téléphone portable personnel pour créer votre wallet",
+			"button_create": "CRÉER MON WALLET"
 		},
 		"validate_wallet": {
 			"title": "Validation du\nwallet",
 			"description": "Connectez-vous pour accéder à votre wallet",
-			"button_validate": "Accéder à mon wallet"
+			"button_validate": "ACCÉDER À MON WALLET"
 		},
 		"validation_success": {
 			"title": "Félicitation!",
@@ -53,7 +64,6 @@
 			"button_save": "Enregistrer la clé d'accès",
 			"input_placeholder": "Device 1",
 			"passkey_name_label": "Nom de la clé d'accès"
-
 		},
 		"signature_request": {
 			"title": "Vous signez: ",
@@ -69,7 +79,10 @@
 			"button_create_passkey": "Créer une nouvelle clé d'accès",
 			"button_settings": "Paramètres",
 			"button_logout": "Déconnexion",
-			"wallet_address": "Adresse de mon wallet:"
+			"wallet_address": "Adresse de mon wallet:",
+			"button_send": "Envoyer",
+			"button_receive": "Recevoir",
+			"copied_to_clipboard": "Copié dans le presse-papiers"
 		},
 		"settings": {
 			"passkeys": "Clé(s) de sauvegarde",
@@ -80,7 +93,63 @@
 			"public_key": "Clé publique:",
 			"button_delete": "Supprimer",
 			"content_alert": "Générer une nouvelle clé d'accès pour accéder à votre wallet à partir d'un autre appareil.",
-			"button_recovery_kit":"Kit de récupération"
+			"button_recovery_kit": "Kit de récupération"
+		},
+		"confirm_transaction": {
+			"from": "Expéditeur",
+			"to": "Destinataire",
+			"amount": "Montant",
+			"fee": "Frais",
+			"total": "Total",
+			"fee_message": "Les frais sont payés au réseau pour traiter votre transaction",
+			"gas_fees": "Frais de gaz",
+			"transaction_confirmed": "Transaction confirmée",
+			"pending_message": "Transaction en cours de traitement",
+			"sub_title_pending": "Le transfert prend environ 30 secondes",
+			"error_title": "Transaction échouée"
+		},
+		"transfert_tokens": {
+			"send_to": "Envoyer à",
+			"amount": "Montant",
+			"placeholder_wallet": "Adresse du wallet",
+			"error_title": "Erreur"
+		},
+		"receive_tokens": {
+			"wallet_address": "Wallet address",
+			"copy_address": "Copy address",
+			"warning_title": "Ceci est un wallet Ethereum",
+			"warning_content": "Veuillez vous assurer que vous envoyez des tokens Ethereum (ETH) à cette adresse."
+		},
+		"recovery_setup": {
+			"title": "Vérifiez votre identité pour générer votre kit de récupération",
+			"description": "Votre kit de récupération est unique et ne peut pas être restauré. Veillez à le copier, car il sera inaccessible ultérieurement.",
+			"button_generate": "Générer mon kit de récupération",
+			"button_later": "Je le ferai plus tard",
+			"recovery_code": "Code de récupération",
+			"recovery_key": "Clé de récupération",
+			"warning_title": "Cette clé de récupération est unique, conservez-la !",
+			"warning_content": "Si vous perdez l'accès à votre compte, ce kit de récupération est le seul moyen de le récupérer. Vous pouvez le copier ou le télécharger.",
+			"button_download_kit": "Télécharger mon kit de récupération",
+			"validation_description": "Votre kit de récupération est unique et ne peut pas être restauré. Veillez à le copier, car il sera inaccessible ultérieurement.",
+			"button_review_kit": "Examinez mon kit de récupération",
+			"button_backed_kit": "J'ai sauvegardé mon kit de récupération"
+		},
+		"recover_account": {
+			"title": "Se connecter",
+			"title_step_2": "Vérifiez votre identité pour récupérer votre compte",
+			"description_step_2": "Pour retrouver l'accès à votre compte, nous devons confirmer que vous en êtes le propriétaire en vérifiant à la fois votre code de récupération et l'identifiant de votre clé de récupération.",
+			"title_step_3": "Créer un nouveau passkey",
+			"description_step_3": "Pour poursuivre la récupération, vous devrez créer un nouveau mot de passe. Une fois le nouveau mot de passe créé, toutes les données d'identification précédentes seront invalidées.",
+			"button_create_passkey": "Créer un nouveau passkey",
+			"title_step_4": "Félicitation!",
+			"description_step_4": "Votre compte a été récupéré avec succès",
+			"error": {
+				"title": "Récupération échouée",
+				"missing_recovery_code": "Code de récupération manquant",
+				"missing_recovery_key": "Clé de récupération manquante",
+				"invalid_recovery_code": "Code de récupération invalide",
+				"invalid_recovery_key": "Clé de récupération invalide"
+			}
 		},
 		"profile": {
 			"title": "Profil",
@@ -172,12 +241,13 @@
 		"view": "Voir",
 		"view_more": "Voir plus",
 		"view_less": "Voir moins",
-		"confirm_payment": "Confirmer le paiement",
+		"confirm": "Confirmer",
 		"place_bid": "Placer une enchère",
 		"approve_payment": "Approuver le paiement",
 		"approve_listing": "Approuver la liste",
 		"buy_now": "Acheter",
-		"close": "Fermer"
+		"close": "Fermer",
+		"verify": "Verifier"
 	},
 	"inputs": {
 		"placeholder": {

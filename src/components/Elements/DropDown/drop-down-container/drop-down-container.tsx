@@ -1,5 +1,5 @@
 import { Component, JSX, Prop, h } from "@stencil/core";
-import { ITypo, ITypoColor } from "../../../../utils/enums/typography-enums";
+import { ITypo, ITypoColor } from "../../../../common/enums/typography-enums";
 
 @Component({
 	tag: "drop-down-container",

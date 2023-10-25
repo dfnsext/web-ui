@@ -10,7 +10,17 @@
 	align-content: center;
 	justify-content: center;
 	gap: $spacing-2;
-	border-radius: $radius-sm;
+	border-radius: $radius-lg;
+	@media screen and (max-width: $screen-xs) {
+		flex-direction: column;
+		display: block; /* or inline-block */
+		text-overflow: ellipsis;
+		word-wrap: break-word;
+		overflow: scroll;
+		-ms-word-break: break-all;
+		word-break: break-all;
+		word-break: break-word;
+	}
 
 	.container {
 		display: flex;
@@ -19,18 +29,17 @@
 		justify-content: center;
 		width: 100%;
 		height: 100%;
-
 	}
 
 	&[variant="info"] {
 		border: 1px solid var(--alert-info-border);
 		background: var(--alert-info-background);
-		color: var(--alert-info-color);
+		color: var(--alert-info-primary);
 		.icon {
 			display: flex;
 			align-items: start;
 			justify-content: center;
-			color: var(--alert-info-color);
+			color: var(--alert-info-primary);
 			img {
 				width: 24px;
 				height: 24px;
@@ -40,12 +49,12 @@
 	&[variant="success"] {
 		border: 1px solid var(--alert-success-border);
 		background: var(--alert-success-background);
-		color: var(--alert-success-color);
+		color: var(--alert-success-primary);
 	}
 	&[variant="warning"] {
 		border: 1px solid var(--alert-warning-border);
 		background: var(--alert-warning-background);
-		color: var(--alert-warning-color);
+		color: var(--alert-warning-primary);
 		.icon {
 			display: flex;
 			align-items: start;
@@ -59,7 +68,7 @@
 	&[variant="error"] {
 		border: 1px solid var(--alert-error-border);
 		background: var(--alert-error-background);
-		color: var(--alert-error-color);
+		color: var(--alert-error-primary);
 		.icon {
 			display: flex;
 			align-items: start;

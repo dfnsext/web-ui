@@ -29,8 +29,8 @@ export default class Register extends BaseApiService {
 		try {
 			return await this.postRequest(path, { oAuthToken }, { appId: this.appId });
 		} catch (err) {
-			this.onError(err);
-			return Promise.reject(err);
+			return this.onError(err);
+			
 		}
 	}
 
@@ -39,8 +39,8 @@ export default class Register extends BaseApiService {
 		try {
 			return await this.postRequest(path, { oAuthToken }, { appId: this.appId });
 		} catch (err) {
-			this.onError(err);
-			return Promise.reject(err);
+			return this.onError(err);
+			
 		}
 	}
 
@@ -49,8 +49,8 @@ export default class Register extends BaseApiService {
 		try {
 			return await this.postRequest(path, { username }, { appId: this.appId });
 		} catch (err) {
-			this.onError(err);
-			return Promise.reject(err);
+			return this.onError(err);
+			
 		}
 	}
 
@@ -59,8 +59,8 @@ export default class Register extends BaseApiService {
 		try {
 			return await this.postRequest(path, { tempAuthToken, signedChallenge }, { appId: this.appId });
 		} catch (err) {
-			this.onError(err);
-			return Promise.reject(err);
+			return this.onError(err);
+			
 		}
 	}
 }

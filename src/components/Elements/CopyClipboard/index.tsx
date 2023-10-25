@@ -3,9 +3,11 @@ import { toastController } from "@ionic/core";
 
 const styles = `
 	display: flex;
+	justify-content: center;
 	align-items: center;
 	user-select: none;
 	cursor: pointer;
+	width: 100%;
 `;
 
 interface CopyClipboardProps {

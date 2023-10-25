@@ -1,11 +1,11 @@
-import { Component, Event, EventEmitter, Prop, State, h } from "@stencil/core";
+import { Component, Event, EventEmitter, State, h } from "@stencil/core";
 
+import { EButtonSize, EButtonVariant } from "../../../common/enums/buttons-enums";
+import { ITypo, ITypoColor } from "../../../common/enums/typography-enums";
 import { RegisterCompleteResponse } from "../../../services/api/Register";
 import dfnsStore from "../../../stores/DfnsStore";
 import langState from "../../../stores/LanguageStore";
-import { EButtonSize, EButtonVariant } from "../../../utils/enums/buttons-enums";
-import { ITypo, ITypoColor } from "../../../utils/enums/typography-enums";
-import { registerWithOAuth } from "../../../utils/helper";
+import { registerWithOAuth } from "../../../utils/dfns";
 
 @Component({
 	tag: "dfns-create-account",
@@ -13,9 +13,6 @@ import { registerWithOAuth } from "../../../utils/helper";
 	shadow: true,
 })
 export class DfnsCreateAccount {
-
-	@Prop() authenticatorAttachment: AuthenticatorAttachment;
-
 	@Event() passkeyCreated: EventEmitter<RegisterCompleteResponse>;
 	@State() isLoading: boolean = false;
 
@@ -26,7 +23,7 @@ export class DfnsCreateAccount {
 				dfnsStore.state.apiUrl,
 				dfnsStore.state.appId,
 				dfnsStore.state.oauthAccessToken,
-				this.authenticatorAttachment,
+				dfnsStore.state.defaultDevice,
 			);
 			this.isLoading = false;
 			this.passkeyCreated.emit(response);
@@ -44,7 +41,7 @@ export class DfnsCreateAccount {
 		return (
 			<dfns-layout closeBtn onClickCloseBtn={this.closeBtn.bind(this)}>
 				<div slot="topSection">
-					<dfns-typography typo={ITypo.H5_TITLE} color={ITypoColor.PRIMARY} class="custom-class">
+					<dfns-typography typo={ITypo.H5_TITLE} color={ITypoColor.PRIMARY}>
 						{langState.values.header.create_wallet}
 					</dfns-typography>
 				</div>
@@ -58,11 +55,17 @@ export class DfnsCreateAccount {
 						activeIndices={[0]}
 					/>
 					<div class="contentContainer">
-						<div class="title">
-							<dfns-typography typo={ITypo.TEXTE_LG_SEMIBOLD}>
-								{langState.values.pages.create_account.description} {dfnsStore.state.appName}
+						{/**
+						  @todo: Need to be refacto post ACCOR 
+						**/}
+						{/* <div class="title">
+							<dfns-typography typo={ITypo.TEXTE_LG_SEMIBOLD} color={ITypoColor.PRIMARY}>
+								{dfnsStore.state.defaultDevice === "mobile"
+									? langState.values.pages.create_account.description_mobile
+									: langState.values.pages.create_account.description}{" "}
+								{dfnsStore.state.appName && `| ${dfnsStore.state.appName}`}
 							</dfns-typography>
-						</div>
+						</div> */}
 					</div>
 				</div>
 				<div slot="bottomSection">

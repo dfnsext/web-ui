@@ -1,5 +1,6 @@
 import { Component, h, Prop } from "@stencil/core";
-import { ITypoColor, ITypo } from "../../../../utils/enums/typography-enums";
+import { ITypo, ITypoColor } from "../../../../common/enums/typography-enums";
+
 
 @Component({
 	tag: "dfns-typography",

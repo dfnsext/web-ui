@@ -36,4 +36,5 @@ export enum ITypoColor {
 	PRIMARY = "var(--text-primary)",
 	SECONDARY = "var(--text-secondary)",
 	INVERTED = "var(--text-inverted)",
+	NEUTRAL = "var(--text-neutral)",
 }

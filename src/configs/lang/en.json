@@ -17,18 +17,29 @@
 		"my_wallet": "My wallet",
 		"settings": "Settings",
 		"create_passkey": "Create a passkey",
+		"confirm_transaction": "Send transaction",
+		"transfert_token": "Select Token",
+		"send_token": "Send token",
+		"receive_token": "Receive token",
+		"login": "Sign up or log in",
+		"recovery_setup": "Recovery setup",
+		"recover_account": "Recover account",
+		"recovery_validation_step": "Have you backed up your recovery kit?",
 		"nav_links": {}
 	},
 	"pages": {
 		"identification": {
 			"title": "Authentication"
 		},
-		"home": {
-			"title": "Home"
+		"login": {
+			"wallet": "Wallet",
+			"recover_account": "Recover my account",
+			"or": "or"
 		},
 		"create_account": {
 			"title": "Create your wallet",
-			"description": "Use your personal mobile phone to create your wallet | ",
+			"description": "Use fingerprint or face recognition to log in",
+			"description_mobile": "Use your personal mobile phone to create your wallet",
 			"button_create": "Continue"
 		},
 		"validate_wallet": {
@@ -68,7 +79,10 @@
 			"button_create_passkey": "Create a passkey",
 			"button_settings": "Settings",
 			"button_logout": "Logout",
-			"wallet_address": "Wallet address:"
+			"wallet_address": "Wallet address:",
+			"button_send": "Send",
+			"button_receive": "Receive",
+			"copied_to_clipboard": "Copied to clipboard"
 		},
 		"settings": {
 			"passkeys": "passkeys",
@@ -79,7 +93,64 @@
 			"public_key": "Public key ID:",
 			"button_delete": "Delete",
 			"content_alert": "Generate a new passkey to access your wallet from another device.",
-			"button_recovery_kit":"Set up recovery kit"
+			"button_recovery_kit": "Set up recovery kit"
+		},
+		"confirm_transaction": {
+			"from": "From",
+			"to": "To",
+			"amount": "Amount",
+			"fee": "Fee",
+			"total": "Total",
+			"fee_message": "Gas fees will be applied to this transaction",
+			"gas_fees": "Gas fees",
+			"transaction_confirmed": "Transaction confirmed",
+			"pending_message": "Pending transaction",
+			"sub_title_pending": "Transfer takes about 30 seconds",
+			"error_title": "Transaction failed"
+		},
+		"transfert_tokens": {
+			"send_to": "Send to",
+			"amount": "Amount",
+			"placeholder_wallet": "Wallet address",
+			"error_title": "Error"
+		},
+		"receive_tokens": {
+			"wallet_address": "Wallet address",
+			"copy_address": "Copy address",
+			"warning_title": "This is a Ethereum wallet.",
+			"warning_content": "Only send ETH or other ERC-20 tokens to this wallet"
+		},
+		"recovery_setup":{
+			"title": "Verify your identity to generate your recovery kit",
+			"description": "Your recovery kit is unique and cannot be restored. Be sure to copy it, as it will be inaccessible later.",
+			"button_generate": "Generate recovery kit",
+			"button_later": "Later",
+			"recovery_code": "Recovery code",
+			"recovery_key": "Recovery key ID",
+			"warning_title": "This recovery key is unique, save it!",
+			"warning_content": "If you lose access to your account, this recovery kit is the only way to get it back. You can copy or download it.",
+			"button_download_kit": "Download recovery kit",
+			"validation_description": "Your recovery kit is unique and cannot be restored. Be sure to copy it, as it will be inaccessible later.",
+			"button_review_kit": "Review my recovery kit",
+			"button_backed_kit": "I have backed up my recovery kit"
+		},
+		"recover_account":{
+			"title": "Connect with",
+			"title_step_2": "Verify ownership",
+			"description_step_2": "In order to regain access to your account, we require confirmation of your ownership through verification of both your recovery code and recovery key ID.",
+			"title_step_3": "Create passkey",
+			"description_step_3": "To continue the recovery, you will need to create a new passkey. Once the new passkey is set up, all your previous credentials will be invalidated.",
+			"button_create_passkey": "Create a passkey",
+			"title_step_4": "Congratulations!",
+			"description_step_4": "Your account has been recovered",
+			"error": {
+				"title": "Recovery failed",
+				"missing_recovery_code": "Missing recovery code",
+				"missing_recovery_key": "Missing recovery key",
+				"invalid_recovery_code": "Invalid recovery code",
+				"invalid_recovery_key": "Invalid recovery key"
+			}
+			
 		},
 		"profile": {
 			"title": "Profile",
@@ -171,12 +242,13 @@
 		"view": "View",
 		"view_more": "View More",
 		"view_less": "View Less",
-		"confirm_payment": "Confirm payment",
+		"confirm": "Confirm",
 		"place_bid": "Place bid",
 		"approve_payment": "Approve payment",
 		"approve_listing": "Approve listing",
 		"buy_now": "Buy it now",
-		"close": "Close"
+		"close": "Close",
+		"verify": "Verify"
 	},
 	"inputs": {
 		"placeholder": {

@@ -1,4 +1,4 @@
-import { Signature, TypedDataDomain, TypedDataField } from "ethers";
+import { UserRecoveryChallenge } from "@dfns/sdk/codegen/datamodel/Auth";
 
 export interface IWalletData {
 	userAddress: string | null;
@@ -8,22 +8,36 @@ export interface IWalletData {
 	chainId?: number | null;
 }
 
-export default interface IWalletInterface {
-	getWalletData(): IWalletData;
+export enum WalletEvent {
+	CONNECTED = "connected",
+	DISCONNECTED = "disconnected",
+	ROUTE_CHANGED = "routeChanged",
+}
 
-	connect(): Promise<any>;
-
-	connectTo(walletName: string, idpHint?: string): Promise<any>;
-
-	disconnect(): Promise<void>;
-
-	onChange(callback: (data: any) => void): () => void;
-
-	autoConnect(): Promise<boolean>;
-
-	signMessage(message: string): Promise<string>;
-
-	signTypedData(domain: TypedDataDomain, types: Record<string, Array<TypedDataField>>, value: Record<string, any>): Promise<Signature>;
-
-	sendTransaction(tx: any): Promise<any>;
+export default abstract class IWalletInterface {
+	public abstract connect(): Promise<string>;
+	public abstract disconnect(): Promise<void>;
+	public abstract onChange(event: WalletEvent, callback: (data: any) => void): () => void;
+	public abstract signMessage(message: string): Promise<string>;
+	public abstract sendTransaction(to: string, value: string, data: string, txNonce?: number): Promise<string>;
+	public abstract autoConnect(): Promise<boolean>;
+	public abstract getAddress(): string | null;
+	public abstract connectWithOAuthToken(oauthToken: string): Promise<string>;
+	public abstract showWalletOverview();
+	public abstract showSettings();
+	public abstract showCreatePasskey();
+	public abstract showRecoverySetup();
+	public abstract transferTokens(): Promise<string>;
+	public abstract isConnected(): Promise<boolean>;
+	public abstract getProvider(): Promise<any>
+	public abstract close(): void;
+	public abstract recoverAccount(
+		apiUrl: string,
+		dfnsHost: string,
+		appId: string,
+		oauthAccessToken: string,
+		challenge: UserRecoveryChallenge,
+		recoveryCode: string,
+		recoveryCredId: string,
+	)
 }

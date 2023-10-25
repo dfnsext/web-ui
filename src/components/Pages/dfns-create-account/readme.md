@@ -5,13 +5,6 @@
 <!-- Auto Generated Below -->
 
 
-## Properties
-
-| Property                  | Attribute                  | Description | Type                             | Default     |
-| ------------------------- | -------------------------- | ----------- | -------------------------------- | ----------- |
-| `authenticatorAttachment` | `authenticator-attachment` |             | `"cross-platform" \| "platform"` | `undefined` |
-
-
 ## Events
 
 | Event            | Description | Type                                    |
@@ -39,6 +32,7 @@ graph TD;
   dfns-create-account --> dfns-typography
   dfns-create-account --> dfns-stepper
   dfns-create-account --> dfns-button
+  dfns-layout --> dfns-typography
   dfns-button --> dfns-typography
   dfns-button --> dfns-loader
   dfns-main --> dfns-create-account

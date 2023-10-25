@@ -1,3 +1,6 @@
+import { Buffer } from "buffer";
+
+
 export const base64url = (buf: string | Buffer) : string => {
     if (typeof buf === 'string') {
       buf = Buffer.from(buf)
