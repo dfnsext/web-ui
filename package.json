@@ -10,9 +10,6 @@
 	"collection": "dist/collection/collection-manifest.json",
 	"collection:main": "dist/collection/index.js",
 	"unpkg": "dist/dfns-web-component/dfns-web-component.esm.js",
-	"publishConfig": {
-		"registry": "https://npm.pkg.github.com"
-	},
 	"repository": {
 		"type": "git",
 		"url": "git+https://github.com/dfns/web-ui"
