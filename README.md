@@ -13,7 +13,7 @@ Checkout the official [DFNS Documentation](https://docs.dfns.co/dfns-docs/) to g
 Incorporating your application with DfnsSDK necessitates the use of our client-side NPM package:
 
 ```shell
-npm install @smart-chain-fr/dfns-sdk
+npm install @dfns/web-ui
 ```
 
 ### Get your App ID from DFNS Dashboard
@@ -33,7 +33,7 @@ the following implemtation is a use case based on a singleton pattern to ensure 
 
 
 ```ts
-import { DfnsSDK } from "@smart-chain-fr/dfns-sdk";
+import { DfnsSDK } from "@dfns/web-ui";
 
 const dfnsSdkOptions = {
 	rpId: 'YOUR_RELYING_PARTY_ID',
@@ -52,7 +52,7 @@ export default class CustomClass {
 
 	public constructor() {
 		CustomClass.ctx = this;
-		const { DfnsSDK } = require("@smart-chain-fr/dfns-sdk");
+		const { DfnsSDK } = require("@dfns/web-ui");
 		this.dfnsSdk = new DfnsSDK(dfnsSdkOptions);
 	}
 
@@ -129,15 +129,15 @@ export default class CustomClass {
 
 This module is distributed in es6 format
 
-- `esm` build `@smart-chain-fr/dfns-sdk/dist/dfns-web-component/dfns-web-component.esm` 
+- `esm` build `@dfns/web-ui/dist/dfns-web-component/dfns-web-component.esm` 
 
 ### Usage in a react component
-This code snippet demonstrates how to initialize a custom component using the `@smart-chain-fr/dfns-sdk/loader` library.
+This code snippet demonstrates how to initialize a custom component using the `@dfns/web-ui/loader` library.
 
 
 ```ts
-import { defineCustomElements } from "@smart-chain-fr/dfns-sdk/loader";
-import { DfnsSDK } from "@smart-chain-fr/dfns-sdk";
+import { defineCustomElements } from "@dfns/web-ui/loader";
+import { DfnsSDK } from "@dfns/web-ui";
 
 export default async function CustomComponent() {
     // Initialize custom elements
@@ -203,6 +203,3 @@ This HTML and JavaScript code demonstrates how to integrate the DFNS Web Compone
 
 ```
 
-## 🌐 Demo
-
-Explore the demo folder [demo folder](https://github.com/smart-chain-fr/dfns-test/tree/43b8b93706c0c859ffd88f147007069d9b8c3d61) within this repository for various hosted demonstrations tailored to different scenarios.
